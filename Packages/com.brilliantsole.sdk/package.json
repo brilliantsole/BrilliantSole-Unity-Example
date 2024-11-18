@@ -1,0 +1,19 @@
+{
+  "name": "com.brilliantsole.sdk",
+  "version": "0.0.0",
+  "displayName": "Brilliant Sole SDK",
+  "description": "Scan for, connect to, and receive data from Brilliant Sole devices",
+  "unity": "2019.1",
+  "unityRelease": "0b5",
+  "documentationUrl": "https://github.com/brilliantsole/BrilliantSole-Unity-Example",
+  "licensesUrl": "https://github.com/brilliantsole/BrilliantSole-Unity-Example/blob/main/LICENSE",
+  "dependencies": {},
+  "keywords": [
+    "wearables"
+  ],
+  "author": {
+    "name": "Zack Qattan",
+    "email": "zack@brilliantsole.com",
+    "url": "https://www.brilliantsole.com"
+  }
+}
