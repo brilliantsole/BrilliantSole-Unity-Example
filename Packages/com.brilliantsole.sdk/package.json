@@ -15,5 +15,12 @@
     "name": "Zack Qattan",
     "email": "zack@brilliantsole.com",
     "url": "https://www.brilliantsole.com"
-  }
+  },
+  "samples": [
+    {
+      "displayName": "Basic",
+      "description": "Barebones example",
+      "path": "Samples~/Basic"
+    }
+  ]
 }
