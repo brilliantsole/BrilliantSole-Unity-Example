@@ -1,33 +1,9 @@
+using log4net.Core;
 using UnityEngine;
 
-public abstract class BS_BaseScanner<T> where T : BS_BaseScanner<T>, new()
+public abstract class BS_BaseScanner
 {
     private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_BaseScanner", BS_Logger.LogLevel.Log);
-
-    private static readonly BS_ScannerSO ScannerSO = BS_ScannerSO.Instance;
-
-    private static T _instance;
-    public static T Instance
-    {
-        get
-        {
-            if (_instance == null)
-            {
-                _instance = new T();
-                _instance.Initialize();
-            }
-            return _instance;
-        }
-    }
-
-    protected virtual void Initialize() { }
-
-    protected BS_BaseScanner() { }
-
-    public static void DestroyInstance()
-    {
-        _instance = null;
-    }
 
     public virtual bool IsAvailable
     {
@@ -60,6 +36,10 @@ public abstract class BS_BaseScanner<T> where T : BS_BaseScanner<T>, new()
             Logger.Log("Already scanning");
             return;
         }
+        if (!IsAvailable)
+        {
+            Logger.LogError("Scanning is not available");
+        }
         Logger.Log("Starting scan.");
     }
 
@@ -86,4 +66,30 @@ public abstract class BS_BaseScanner<T> where T : BS_BaseScanner<T>, new()
             StartScan();
         }
     }
+
+    protected virtual void Initialize() { }
+}
+
+public abstract class BS_BaseScanner<T> : BS_BaseScanner where T : BS_BaseScanner<T>, new()
+{
+    private static T _instance;
+    public static T Instance
+    {
+        get
+        {
+            if (_instance == null)
+            {
+                _instance = new T();
+                _instance.Initialize();
+            }
+            return _instance;
+        }
+    }
+
+    public static void DestroyInstance()
+    {
+        _instance = null;
+    }
+
+    protected BS_BaseScanner() { }
 }
