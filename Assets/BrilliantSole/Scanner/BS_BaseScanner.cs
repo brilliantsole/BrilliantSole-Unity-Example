@@ -67,6 +67,8 @@ public abstract class BS_BaseScanner
     }
 
     protected virtual void Initialize() { }
+
+    public virtual void Update() { }
 }
 
 public abstract class BS_BaseScanner<T> : BS_BaseScanner where T : BS_BaseScanner<T>, new()
