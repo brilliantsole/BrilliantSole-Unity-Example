@@ -25,18 +25,25 @@ public static class BS_BleUtils
         return (uuid1.ToUpper().Equals(uuid2.ToUpper()));
     }
 
-    static readonly string mainServiceUuid = GenerateUuid("0000");
-    static readonly string rxCharacteristicUuid = GenerateUuid("1000");
-    static readonly string txCharacteristicUuid = GenerateUuid("1001");
+    static public readonly string MainServiceUuid = GenerateUuid("0000");
+    static public readonly string RxCharacteristicUuid = GenerateUuid("1000");
+    static public readonly string TxCharacteristicUuid = GenerateUuid("1001");
 
-    static readonly string batteryServiceUuid = GenerateGenericUuid("180f");
-    static readonly string batteryLevelCharacteristicUuid = GenerateGenericUuid("2a19");
+    static public readonly string[] ServiceUuids;
 
-    static readonly string deviceInformationUuid = GenerateGenericUuid("180a");
-    static readonly string manufacturerNameStringCharacteristicUuid = GenerateGenericUuid("2a29");
-    static readonly string modelNumberStringCharacteristicUuid = GenerateGenericUuid("2a24");
-    static readonly string serialNumberStringCharacteristicUuid = GenerateGenericUuid("2a25");
-    static readonly string hardwareRevisionStringCharacteristicUuid = GenerateGenericUuid("2a27");
-    static readonly string firmwareRevisionCharacteristicUuid = GenerateGenericUuid("2a26");
-    static readonly string softwareRevisionCharacteristicUuid = GenerateGenericUuid("2a28");
+    static public readonly string BatteryServiceUuid = GenerateGenericUuid("180f");
+    static public readonly string BatteryLevelCharacteristicUuid = GenerateGenericUuid("2a19");
+
+    static public readonly string DeviceInformationUuid = GenerateGenericUuid("180a");
+    static public readonly string ManufacturerNameStringCharacteristicUuid = GenerateGenericUuid("2a29");
+    static public readonly string ModelNumberStringCharacteristicUuid = GenerateGenericUuid("2a24");
+    static public readonly string SerialNumberStringCharacteristicUuid = GenerateGenericUuid("2a25");
+    static public readonly string HardwareRevisionStringCharacteristicUuid = GenerateGenericUuid("2a27");
+    static public readonly string FirmwareRevisionCharacteristicUuid = GenerateGenericUuid("2a26");
+    static public readonly string SoftwareRevisionCharacteristicUuid = GenerateGenericUuid("2a28");
+
+    static BS_BleUtils()
+    {
+        ServiceUuids = new[] { MainServiceUuid };
+    }
 }

@@ -9,15 +9,14 @@ public class BS_BleScanner : BS_BaseScanner<BS_BleScanner>
     {
         get
         {
-            // FILL - check if BLE is available
             return true;
         }
     }
 
-    private bool isInitialized = false;
+    private bool _isInitialized = false;
     private void InitializeBle()
     {
-        if (isInitialized)
+        if (_isInitialized)
         {
             Logger.LogWarning("Ble already initialized");
             return;
@@ -29,38 +28,100 @@ public class BS_BleScanner : BS_BaseScanner<BS_BleScanner>
     private void OnBleInitializationSuccess()
     {
         Logger.Log("Ble initialized");
-        isInitialized = true;
+        _isInitialized = true;
+        _scanTimeout = _scanInterval;
         StartScan();
     }
     private void OnBleInitializationError(string error)
     {
         Logger.LogError($"Initialization error: {error}");
-        isInitialized = false;
+        _isInitialized = false;
+        StopScan();
+
+        if (error.Contains("Bluetooth LE Not Enabled"))
+        {
+            BluetoothLEHardwareInterface.BluetoothEnable(true);
+        }
+    }
+
+    private void DeInitializeBle()
+    {
+        if (!_isInitialized)
+        {
+            Logger.LogWarning("Ble already not initialized");
+            return;
+        }
+        Logger.Log("deinitializing Ble");
+        BluetoothLEHardwareInterface.DeInitialize(OnBleDeInitialization);
+    }
+    private void OnBleDeInitialization()
+    {
+        Logger.Log("Ble deInitialized");
+        _isInitialized = false;
         StopScan();
     }
 
-    public override void StartScan()
+    public override bool StartScan()
     {
-        base.StartScan();
-        if (!isInitialized)
+        if (!base.StartScan())
+        {
+            return false;
+        }
+        if (!_isInitialized)
         {
             InitializeBle();
+            return false;
         }
         else
         {
-            // FILL
+            IsScanning = true;
+            return true;
         }
     }
 
-    public override void StopScan()
+    public override bool StopScan()
     {
-        base.StopScan();
+        if (!base.StopScan())
+        {
+            return false;
+        }
+        BluetoothLEHardwareInterface.StopScan();
+        IsScanning = false;
+        return true;
+    }
+
+    private readonly float _scanInterval = 0.5f;
+    private float _scanTimeout = 0;
+    private void Scan()
+    {
+        _scanTimeout -= Time.deltaTime;
+        if (_scanTimeout > 0)
+        {
+            return;
+        }
+        _scanTimeout = _scanInterval;
+        Logger.Log("Scanning for devices...");
+        BluetoothLEHardwareInterface.ScanForPeripheralsWithServices(BS_BleUtils.ServiceUuids, OnDiscoveredDevice, OnDiscoveredDeviceData);
+    }
+
+    private void OnDiscoveredDevice(string address, string name)
+    {
+        Logger.Log($"Discovered device \"{name}\" with address {address}");
+    }
+    private void OnDiscoveredDeviceData(string address, string name, int rssi, byte[] bytes)
+    {
+        Logger.Log($"Discovered device \"{name}\" with address {address}, RSSI {rssi}, and {bytes.Length} bytes");
     }
 
     public override void Update()
     {
         base.Update();
-        // FILL
-        Logger.Log("update ;/");
+
+        if (IsScanning)
+        {
+            Scan();
+        }
+
+        // FILL - connection
     }
 }

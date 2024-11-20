@@ -21,35 +21,38 @@ public abstract class BS_BaseScanner
         {
             if (_isScanning != value)
             {
-                Logger.Log("Updating IsScanning to {value}");
+                Logger.Log($"Updating IsScanning to {value}");
                 _isScanning = value;
                 // FILL - trigger isScanning event
             }
         }
     }
 
-    public virtual void StartScan()
+    public virtual bool StartScan()
     {
         if (IsScanning)
         {
             Logger.Log("Already scanning");
-            return;
+            return false; ;
         }
         if (!IsAvailable)
         {
             Logger.LogError("Scanning is not available");
+            return false;
         }
         Logger.Log("Starting scan.");
+        return true;
     }
 
-    public virtual void StopScan()
+    public virtual bool StopScan()
     {
         if (!IsScanning)
         {
             Logger.Log("Already not scanning");
-            return;
+            return false;
         }
         Logger.Log("Stopping scan");
+        return true;
     }
 
     public void ToggleScan()

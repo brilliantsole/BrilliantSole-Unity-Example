@@ -24,4 +24,6 @@ public class BS_ScannerManager : BS_SingletonMonoBehavior<BS_ScannerManager>
     {
         Scanner.Update();
     }
+
+
 }
