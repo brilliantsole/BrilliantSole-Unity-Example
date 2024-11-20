@@ -107,10 +107,12 @@ public class BS_BleScanner : BS_BaseScanner<BS_BleScanner>
     private void OnDiscoveredDevice(string address, string name)
     {
         Logger.Log($"Discovered device \"{name}\" with address {address}");
+        // FILL
     }
     private void OnDiscoveredDeviceData(string address, string name, int rssi, byte[] bytes)
     {
         Logger.Log($"Discovered device \"{name}\" with address {address}, RSSI {rssi}, and {bytes.Length} bytes");
+        // FILL
     }
 
     public override void Update()

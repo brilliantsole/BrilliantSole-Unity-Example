@@ -1,9 +1,14 @@
 using System;
+using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public abstract class BS_BaseScanner
 {
     private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_BaseScanner", BS_Logger.LogLevel.Log);
+
+    protected virtual void Initialize() { }
+    protected virtual void DeInitialize() { }
 
     public virtual bool IsAvailable
     {
@@ -54,6 +59,7 @@ public abstract class BS_BaseScanner
             Logger.LogError("Scanning is not available");
             return false;
         }
+        _discoveredDevices.Clear();
         Logger.Log("Starting scan.");
         return true;
     }
@@ -83,10 +89,60 @@ public abstract class BS_BaseScanner
         }
     }
 
-    protected virtual void Initialize() { }
-    protected virtual void DeInitialize() { }
+    private readonly Dictionary<string, BS_DiscoveredDevice> _discoveredDevices = new();
+    public IReadOnlyDictionary<string, BS_DiscoveredDevice> DiscoveredDevices => _discoveredDevices;
 
-    public virtual void Update() { }
+    protected void OnDiscoveredDevice(in BS_DiscoveredDevice DiscoveredDevice)
+    {
+        if (_discoveredDevices.ContainsKey(DiscoveredDevice.Id))
+        {
+            Logger.Log("Adding new discovered device");
+            _discoveredDevices[DiscoveredDevice.Id].UpdateRssi(DiscoveredDevice.Rssi);
+            // FILL - dispatch new discovered device event
+        }
+        else
+        {
+            Logger.Log("Updating discovered device");
+            _discoveredDevices[DiscoveredDevice.Id] = DiscoveredDevice;
+            // FILL - dispatch updated discovered device event
+        }
+    }
+    private void OnExpiredDiscoveredDevice(in BS_DiscoveredDevice DiscoveredDevice)
+    {
+        if (_discoveredDevices.ContainsKey(DiscoveredDevice.Id))
+        {
+            Logger.Log("removing discovered device");
+            _discoveredDevices.Remove(DiscoveredDevice.Id);
+            // FILL - dispatch expired device event
+        }
+    }
+
+    public virtual void Update()
+    {
+        if (IsScanning)
+        {
+            RemoveExpiredDiscoveredDevices();
+        }
+    }
+
+    readonly private int DiscoveredDeviceExpirationTime = 5;
+    private void RemoveExpiredDiscoveredDevices()
+    {
+        List<string> devicesToRemove = new();
+
+        foreach (var discoveredDevicePair in _discoveredDevices)
+        {
+            if (discoveredDevicePair.Value.TimeSinceLastRssiUpdate.TotalSeconds > DiscoveredDeviceExpirationTime)
+            {
+                devicesToRemove.Add(discoveredDevicePair.Key);
+            }
+        }
+
+        foreach (var discoveredDeviceId in devicesToRemove)
+        {
+            OnExpiredDiscoveredDevice(_discoveredDevices[discoveredDeviceId]);
+        }
+    }
 }
 
 public abstract class BS_BaseScanner<T> : BS_BaseScanner where T : BS_BaseScanner<T>, new()
