@@ -124,4 +124,10 @@ public class BS_BleScanner : BS_BaseScanner<BS_BleScanner>
 
         // FILL - connection
     }
+
+    protected override void DeInitialize()
+    {
+        base.DeInitialize();
+        DeInitializeBle();
+    }
 }

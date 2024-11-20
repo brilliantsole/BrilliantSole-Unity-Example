@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public abstract class BS_BaseScanner
@@ -12,6 +13,11 @@ public abstract class BS_BaseScanner
         }
     }
 
+    public event Action<bool> OnIsScanning;
+
+    public event Action OnScanStart;
+    public event Action OnScanStop;
+
     [SerializeField]
     private bool _isScanning;
     public bool IsScanning
@@ -23,7 +29,15 @@ public abstract class BS_BaseScanner
             {
                 Logger.Log($"Updating IsScanning to {value}");
                 _isScanning = value;
-                // FILL - trigger isScanning event
+                OnIsScanning?.Invoke(IsScanning);
+                if (IsScanning)
+                {
+                    OnScanStart?.Invoke();
+                }
+                else
+                {
+                    OnScanStop?.Invoke();
+                }
             }
         }
     }
@@ -70,6 +84,7 @@ public abstract class BS_BaseScanner
     }
 
     protected virtual void Initialize() { }
+    protected virtual void DeInitialize() { }
 
     public virtual void Update() { }
 }
@@ -92,6 +107,7 @@ public abstract class BS_BaseScanner<T> : BS_BaseScanner where T : BS_BaseScanne
 
     public static void DestroyInstance()
     {
+        _instance?.DeInitialize();
         _instance = null;
     }
 
