@@ -37,7 +37,6 @@ public class BS_ScannerManager : BS_SingletonMonoBehavior<BS_ScannerManager>
 
     private void OnDisable()
     {
-
         Scanner.OnIsScanning -= _OnIsScanning;
         Scanner.OnScanStart -= _OnScanStart;
         Scanner.OnScanStop -= _OnScanStop;

@@ -42,4 +42,12 @@ public class BS_SingletonMonoBehavior<T> : MonoBehaviour where T : MonoBehaviour
             Destroy(gameObject);
         }
     }
+
+#if UNITY_EDITOR
+    private void OnApplicationQuit()
+    {
+        Logger.Log("destroying self...");
+        Destroy(gameObject);
+    }
+#endif
 }
