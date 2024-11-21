@@ -19,7 +19,6 @@ public abstract class BS_BaseScanner
     }
 
     public event Action<bool> OnIsScanning;
-
     public event Action OnScanStart;
     public event Action OnScanStop;
 
@@ -92,28 +91,30 @@ public abstract class BS_BaseScanner
     private readonly Dictionary<string, BS_DiscoveredDevice> _discoveredDevices = new();
     public IReadOnlyDictionary<string, BS_DiscoveredDevice> DiscoveredDevices => _discoveredDevices;
 
-    protected void OnDiscoveredDevice(in BS_DiscoveredDevice DiscoveredDevice)
+    public event Action<BS_DiscoveredDevice> OnDiscoveredDevice;
+    public event Action<BS_DiscoveredDevice> OnExpiredDevice;
+
+    protected void AddDiscoveredDevice(in BS_DiscoveredDevice DiscoveredDevice)
     {
         if (_discoveredDevices.ContainsKey(DiscoveredDevice.Id))
         {
             Logger.Log("Adding new discovered device");
             _discoveredDevices[DiscoveredDevice.Id].UpdateRssi(DiscoveredDevice.Rssi);
-            // FILL - dispatch new discovered device event
         }
         else
         {
             Logger.Log("Updating discovered device");
             _discoveredDevices[DiscoveredDevice.Id] = DiscoveredDevice;
-            // FILL - dispatch updated discovered device event
         }
+        OnDiscoveredDevice?.Invoke(DiscoveredDevice);
     }
-    private void OnExpiredDiscoveredDevice(in BS_DiscoveredDevice DiscoveredDevice)
+    private void RemoveDiscoveredDevice(in BS_DiscoveredDevice DiscoveredDevice)
     {
         if (_discoveredDevices.ContainsKey(DiscoveredDevice.Id))
         {
-            Logger.Log("removing discovered device");
+            Logger.Log($"removing expired discovered device {DiscoveredDevice.Name}");
             _discoveredDevices.Remove(DiscoveredDevice.Id);
-            // FILL - dispatch expired device event
+            OnExpiredDevice?.Invoke(DiscoveredDevice);
         }
     }
 
@@ -140,7 +141,7 @@ public abstract class BS_BaseScanner
 
         foreach (var discoveredDeviceId in devicesToRemove)
         {
-            OnExpiredDiscoveredDevice(_discoveredDevices[discoveredDeviceId]);
+            RemoveDiscoveredDevice(_discoveredDevices[discoveredDeviceId]);
         }
     }
 }

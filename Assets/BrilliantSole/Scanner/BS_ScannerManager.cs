@@ -8,6 +8,8 @@ public class BS_ScannerManager : BS_SingletonMonoBehavior<BS_ScannerManager>
 
     private static readonly BS_BaseScanner Scanner = BS_BleScanner.Instance;
 
+    public void Update() { Scanner.Update(); }
+
     [System.Serializable]
     public class BoolUnityEvent : UnityEvent<bool> { }
     public BoolUnityEvent OnIsScanning;
@@ -15,18 +17,36 @@ public class BS_ScannerManager : BS_SingletonMonoBehavior<BS_ScannerManager>
     public UnityEvent OnScanStart;
     public UnityEvent OnScanStop;
 
+    [System.Serializable]
+    public class DiscoveredDeviceUnityEvent : UnityEvent<BS_DiscoveredDevice> { }
+    public DiscoveredDeviceUnityEvent OnDiscoveredDevice;
+    public DiscoveredDeviceUnityEvent OnExpiredDevice;
+
     private void OnEnable()
     {
         Scanner.OnIsScanning += _OnIsScanning;
         Scanner.OnScanStart += _OnScanStart;
         Scanner.OnScanStop += _OnScanStop;
+
+        Scanner.OnDiscoveredDevice += _OnDiscoveredDevice;
+        Scanner.OnExpiredDevice += _OnExpiredDevice;
     }
 
     private void OnDisable()
     {
+
         Scanner.OnIsScanning -= _OnIsScanning;
         Scanner.OnScanStart -= _OnScanStart;
         Scanner.OnScanStop -= _OnScanStop;
+        if (IsScanning)
+        {
+            OnScanStop?.Invoke();
+            OnIsScanning?.Invoke(false);
+            Scanner.StopScan();
+        }
+
+        Scanner.OnDiscoveredDevice -= _OnDiscoveredDevice;
+        Scanner.OnExpiredDevice -= _OnExpiredDevice;
     }
 
     private void _OnIsScanning(bool IsScanning) { OnIsScanning?.Invoke(IsScanning); }
@@ -38,5 +58,6 @@ public class BS_ScannerManager : BS_SingletonMonoBehavior<BS_ScannerManager>
     public void StopScan() { Scanner.StopScan(); }
     public void ToggleScan() { Scanner.ToggleScan(); }
 
-    public void Update() { Scanner.Update(); }
+    private void _OnDiscoveredDevice(BS_DiscoveredDevice DiscoveredDevice) { OnDiscoveredDevice?.Invoke(DiscoveredDevice); }
+    private void _OnExpiredDevice(BS_DiscoveredDevice DiscoveredDevice) { OnExpiredDevice?.Invoke(DiscoveredDevice); }
 }

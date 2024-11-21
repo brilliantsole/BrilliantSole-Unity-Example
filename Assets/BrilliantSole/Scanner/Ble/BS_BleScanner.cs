@@ -101,18 +101,18 @@ public class BS_BleScanner : BS_BaseScanner<BS_BleScanner>
         }
         _scanTimeout = _scanInterval;
         Logger.Log("Scanning for devices...");
-        BluetoothLEHardwareInterface.ScanForPeripheralsWithServices(BS_BleUtils.ServiceUuids, OnDiscoveredDevice, OnDiscoveredDeviceData);
+        BluetoothLEHardwareInterface.ScanForPeripheralsWithServices(BS_BleUtils.ServiceUuids, OnDiscoveredBleDevice, OnDiscoveredBleDeviceData, true);
     }
 
-    private void OnDiscoveredDevice(string address, string name)
+    private void OnDiscoveredBleDevice(string address, string name)
     {
         Logger.Log($"Discovered device \"{name}\" with address {address}");
-        // FILL
+        AddDiscoveredDevice(new BS_DiscoveredDevice(name, 0, address));
     }
-    private void OnDiscoveredDeviceData(string address, string name, int rssi, byte[] bytes)
+    private void OnDiscoveredBleDeviceData(string address, string name, int rssi, byte[] bytes)
     {
         Logger.Log($"Discovered device \"{name}\" with address {address}, RSSI {rssi}, and {bytes.Length} bytes");
-        // FILL
+        AddDiscoveredDevice(new BS_DiscoveredDevice(name, rssi, address));
     }
 
     public override void Update()

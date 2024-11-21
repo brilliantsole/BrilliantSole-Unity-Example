@@ -7,7 +7,6 @@ public class BS_SingletonMonoBehavior<T> : MonoBehaviour where T : MonoBehaviour
     private static T _instance;
     private static readonly object _lock = new();
 
-    [System.Obsolete]
     public static T Instance
     {
         get
@@ -16,13 +15,13 @@ public class BS_SingletonMonoBehavior<T> : MonoBehaviour where T : MonoBehaviour
             {
                 lock (_lock)
                 {
-                    _instance = FindObjectOfType<T>();
+                    _instance = FindFirstObjectByType<T>();
 
                     if (_instance == null)
                     {
                         GameObject singletonObject = new(typeof(T).Name);
                         _instance = singletonObject.AddComponent<T>();
-                        //DontDestroyOnLoad(singletonObject);
+                        DontDestroyOnLoad(singletonObject);
                     }
                 }
             }
@@ -35,7 +34,7 @@ public class BS_SingletonMonoBehavior<T> : MonoBehaviour where T : MonoBehaviour
         if (_instance == null)
         {
             _instance = this as T;
-            //DontDestroyOnLoad(gameObject);
+            DontDestroyOnLoad(gameObject);
         }
         else if (_instance != this)
         {
