@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 
+[System.Serializable]
 public struct BS_DiscoveredDevice
 {
     private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_DiscoveredDevice", BS_Logger.LogLevel.Log);

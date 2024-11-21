@@ -51,7 +51,7 @@ public abstract class BS_BaseScanner
         if (IsScanning)
         {
             Logger.Log("Already scanning");
-            return false; ;
+            return false;
         }
         if (!IsAvailable)
         {
@@ -98,15 +98,15 @@ public abstract class BS_BaseScanner
     {
         if (_discoveredDevices.ContainsKey(DiscoveredDevice.Id))
         {
-            Logger.Log("Adding new discovered device");
+            Logger.Log("Updating discovered device");
             _discoveredDevices[DiscoveredDevice.Id].UpdateRssi(DiscoveredDevice.Rssi);
         }
         else
         {
-            Logger.Log("Updating discovered device");
+            Logger.Log("Adding new discovered device");
             _discoveredDevices[DiscoveredDevice.Id] = DiscoveredDevice;
         }
-        OnDiscoveredDevice?.Invoke(DiscoveredDevice);
+        OnDiscoveredDevice?.Invoke(_discoveredDevices[DiscoveredDevice.Id]);
     }
     private void RemoveDiscoveredDevice(in BS_DiscoveredDevice DiscoveredDevice)
     {
