@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public abstract class BS_BaseScanner
@@ -96,23 +95,17 @@ public abstract class BS_BaseScanner
 
     protected void AddDiscoveredDevice(in BS_DiscoveredDevice DiscoveredDevice)
     {
-        if (_discoveredDevices.ContainsKey(DiscoveredDevice.Id))
-        {
-            Logger.Log("Updating discovered device");
-            _discoveredDevices[DiscoveredDevice.Id].UpdateRssi(DiscoveredDevice.Rssi);
-        }
-        else
-        {
-            Logger.Log("Adding new discovered device");
-            _discoveredDevices[DiscoveredDevice.Id] = DiscoveredDevice;
-        }
-        OnDiscoveredDevice?.Invoke(_discoveredDevices[DiscoveredDevice.Id]);
+        Logger.Log($"Adding Discovered Device \"{DiscoveredDevice.Id}\"");
+        _discoveredDevices[DiscoveredDevice.Id] = DiscoveredDevice;
+        OnDiscoveredDevice?.Invoke(DiscoveredDevice);
     }
     private void RemoveDiscoveredDevice(in BS_DiscoveredDevice DiscoveredDevice)
     {
+        Logger.Log($"Removing Discovered Device \"{DiscoveredDevice.Id}\"");
+
         if (_discoveredDevices.ContainsKey(DiscoveredDevice.Id))
         {
-            Logger.Log($"removing expired discovered device {DiscoveredDevice.Name}");
+            Logger.Log($"removing expired discovered device \"{DiscoveredDevice.Name}\"");
             _discoveredDevices.Remove(DiscoveredDevice.Id);
             OnExpiredDevice?.Invoke(DiscoveredDevice);
         }
@@ -133,8 +126,9 @@ public abstract class BS_BaseScanner
 
         foreach (var discoveredDevicePair in _discoveredDevices)
         {
-            if (discoveredDevicePair.Value.TimeSinceLastRssiUpdate.TotalSeconds > DiscoveredDeviceExpirationTime)
+            if (discoveredDevicePair.Value.TimeSinceCreation.TotalSeconds > DiscoveredDeviceExpirationTime)
             {
+                Logger.Log($"too long: {discoveredDevicePair.Value.TimeSinceCreation}");
                 devicesToRemove.Add(discoveredDevicePair.Key);
             }
         }

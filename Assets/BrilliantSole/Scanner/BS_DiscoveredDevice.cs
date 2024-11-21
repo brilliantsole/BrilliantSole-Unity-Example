@@ -10,24 +10,17 @@ public struct BS_DiscoveredDevice
     public int Rssi { get; private set; }
     public readonly string Id;
 
-    public DateTime LastRssiUpdate { get; private set; }
+    private readonly DateTime CreationDate;
 
     public BS_DiscoveredDevice(string name, int rssi, string id)
     {
         Name = name;
         Rssi = rssi;
         Id = id;
-        LastRssiUpdate = DateTime.Now;
+        CreationDate = DateTime.Now;
 
         Logger.Log($"Created device with name \"{Name}\", rssi {Rssi}, and id {Id}");
     }
 
-    public void UpdateRssi(int newRssi)
-    {
-        Logger.Log($"Updating Rssi to {newRssi}");
-        Rssi = newRssi;
-        LastRssiUpdate = DateTime.Now;
-    }
-
-    public readonly TimeSpan TimeSinceLastRssiUpdate => DateTime.Now - LastRssiUpdate;
+    public readonly TimeSpan TimeSinceCreation => DateTime.Now - CreationDate;
 }

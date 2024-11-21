@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -27,30 +28,25 @@ public class BS_ScannerScrollView : MonoBehaviour
     {
         Debug.Log($"updating item for \"{DiscoveredDevice.Name}\"");
 
-        Text[] textComponents;
-        if (instantiatedItems.TryGetValue(DiscoveredDevice.Id, out GameObject item))
+        GameObject item;
+        if (instantiatedItems.ContainsKey(DiscoveredDevice.Id))
         {
-            textComponents = item.GetComponentsInChildren<Text>();
+            item = instantiatedItems[DiscoveredDevice.Id];
         }
         else
         {
-            GameObject newItem = Instantiate(ItemPrefab, Content);
-            textComponents = newItem.GetComponentsInChildren<Text>();
-            instantiatedItems[DiscoveredDevice.Id] = newItem;
+            item = Instantiate(ItemPrefab, Content);
+            instantiatedItems[DiscoveredDevice.Id] = item;
+
+            TextMeshProUGUI nameText = item.transform.Find("Name").GetComponent<TextMeshProUGUI>();
+            nameText.text = DiscoveredDevice.Name;
+
+            // FILL - button 
         }
 
-        foreach (Text text in textComponents)
-        {
-            switch (text.name)
-            {
-                case "Name":
-                    text.text = DiscoveredDevice.Name;
-                    break;
-                case "Rssi":
-                    text.text = DiscoveredDevice.Rssi.ToString();
-                    break;
-            }
-        }
+        TextMeshProUGUI rssiText = item.transform.Find("Rssi").GetComponent<TextMeshProUGUI>();
+        Debug.Log($"updating rssi text to {DiscoveredDevice.Rssi}");
+        rssiText.text = DiscoveredDevice.Rssi.ToString();
 
     }
     public void OnExpiredDevice(BS_DiscoveredDevice DiscoveredDevice)
