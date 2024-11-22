@@ -42,6 +42,10 @@ public class BS_ScannerScrollView : MonoBehaviour
             TextMeshProUGUI nameText = item.transform.Find("Name").GetComponent<TextMeshProUGUI>();
             nameText.text = DiscoveredDevice.Name;
 
+            TextMeshProUGUI deviceTypeText = item.transform.Find("DeviceType").GetComponent<TextMeshProUGUI>();
+            deviceTypeText.text = DiscoveredDevice.DeviceType.ToString();
+
+
             Button toggleConnectionButton = item.transform.Find("ToggleConnection").GetComponent<Button>();
             TextMeshProUGUI toggleConnectionButtonText = item.transform.Find("ToggleConnection").GetComponentInChildren<TextMeshProUGUI>();
             toggleConnectionButton.onClick.AddListener(() =>

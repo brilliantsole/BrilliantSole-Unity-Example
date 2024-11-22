@@ -149,4 +149,5 @@ public abstract class BS_BaseScanner
         // FILL - find existing device with that id from DeviceManager
         return new();
     }
+
 }
