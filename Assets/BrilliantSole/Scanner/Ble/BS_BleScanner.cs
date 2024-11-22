@@ -132,4 +132,11 @@ public class BS_BleScanner : BS_BaseScanner<BS_BleScanner>
         base.DeInitialize();
         DeInitializeBle();
     }
+
+    public override BS_Device ConnectToDiscoveredDevice(BS_DiscoveredDevice DiscoveredDevice)
+    {
+        BS_Device Device = base.ConnectToDiscoveredDevice(DiscoveredDevice);
+        // FILL
+        return Device;
+    }
 }

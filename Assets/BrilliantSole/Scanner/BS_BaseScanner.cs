@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using UnityEditor.PackageManager;
 using UnityEngine;
 
 public abstract class BS_BaseScanner
@@ -128,7 +129,7 @@ public abstract class BS_BaseScanner
         {
             if (discoveredDevicePair.Value.TimeSinceCreation.TotalSeconds > DiscoveredDeviceExpirationTime)
             {
-                Logger.Log($"too long: {discoveredDevicePair.Value.TimeSinceCreation}");
+                Logger.Log($"\"{discoveredDevicePair.Value.Name}\" device has expired");
                 devicesToRemove.Add(discoveredDevicePair.Key);
             }
         }
@@ -138,29 +139,14 @@ public abstract class BS_BaseScanner
             RemoveDiscoveredDevice(_discoveredDevices[discoveredDeviceId]);
         }
     }
-}
 
-public abstract class BS_BaseScanner<T> : BS_BaseScanner where T : BS_BaseScanner<T>, new()
-{
-    private static T _instance;
-    public static T Instance
+    public virtual BS_Device ConnectToDiscoveredDevice(BS_DiscoveredDevice DiscoveredDevice)
     {
-        get
+        if (!_discoveredDevices.ContainsKey(DiscoveredDevice.Id))
         {
-            if (_instance == null)
-            {
-                _instance = new T();
-                _instance.Initialize();
-            }
-            return _instance;
+            throw new ArgumentException($"Invalid DiscoveredDevice \"{DiscoveredDevice.Name}\"");
         }
+        // FILL - find existing device with that id from DeviceManager
+        return new();
     }
-
-    public static void DestroyInstance()
-    {
-        _instance?.DeInitialize();
-        _instance = null;
-    }
-
-    protected BS_BaseScanner() { }
 }
