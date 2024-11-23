@@ -88,7 +88,8 @@ public abstract class BS_BaseScanner
         }
     }
 
-    private readonly Dictionary<string, BS_DiscoveredDevice> _discoveredDevices = new();
+    protected readonly Dictionary<string, BS_DiscoveredDevice> _discoveredDevices = new();
+    protected readonly Dictionary<string, BS_DiscoveredDevice> _allDiscoveredDevices = new();
     public IReadOnlyDictionary<string, BS_DiscoveredDevice> DiscoveredDevices => _discoveredDevices;
 
     public event Action<BS_DiscoveredDevice> OnDiscoveredDevice;
@@ -98,6 +99,7 @@ public abstract class BS_BaseScanner
     {
         Logger.Log($"Adding Discovered Device \"{DiscoveredDevice.Id}\"");
         _discoveredDevices[DiscoveredDevice.Id] = DiscoveredDevice;
+        _allDiscoveredDevices[DiscoveredDevice.Id] = DiscoveredDevice;
         OnDiscoveredDevice?.Invoke(DiscoveredDevice);
     }
     private void RemoveDiscoveredDevice(in BS_DiscoveredDevice DiscoveredDevice)
@@ -123,18 +125,18 @@ public abstract class BS_BaseScanner
     readonly private int DiscoveredDeviceExpirationTime = 5;
     private void RemoveExpiredDiscoveredDevices()
     {
-        List<string> devicesToRemove = new();
+        List<string> deviceIdsToRemove = new();
 
         foreach (var discoveredDevicePair in _discoveredDevices)
         {
-            if (discoveredDevicePair.Value.TimeSinceCreation.TotalSeconds > DiscoveredDeviceExpirationTime)
+            if (discoveredDevicePair.Value.TimeSinceLastUpdate.TotalSeconds > DiscoveredDeviceExpirationTime)
             {
                 Logger.Log($"\"{discoveredDevicePair.Value.Name}\" device has expired");
-                devicesToRemove.Add(discoveredDevicePair.Key);
+                deviceIdsToRemove.Add(discoveredDevicePair.Key);
             }
         }
 
-        foreach (var discoveredDeviceId in devicesToRemove)
+        foreach (var discoveredDeviceId in deviceIdsToRemove)
         {
             RemoveDiscoveredDevice(_discoveredDevices[discoveredDeviceId]);
         }
@@ -149,5 +151,4 @@ public abstract class BS_BaseScanner
         // FILL - find existing device with that id from DeviceManager
         return new();
     }
-
 }

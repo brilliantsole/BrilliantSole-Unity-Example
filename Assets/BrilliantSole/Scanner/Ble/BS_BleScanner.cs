@@ -107,17 +107,36 @@ public class BS_BleScanner : BS_BaseScanner<BS_BleScanner>
     private void OnDiscoveredBleDevice(string address, string name)
     {
         Logger.Log($"Discovered device \"{name}\" with address {address}");
-        AddDiscoveredDevice(new BS_DiscoveredDevice(address, name, BS_DeviceType.LeftInsole, 0));
+        if (_allDiscoveredDevices.TryGetValue(address, out BS_DiscoveredDevice DiscoveredDevice))
+        {
+            DiscoveredDevice.Update(name, null, null);
+            AddDiscoveredDevice(DiscoveredDevice);
+        }
+        else
+        {
+            AddDiscoveredDevice(new BS_DiscoveredDevice(address, name, null, null));
+        }
     }
     private void OnDiscoveredBleDeviceData(string address, string name, int rssi, byte[] bytes)
     {
-        BS_DeviceType deviceType = BS_DeviceType.LeftInsole;
+        Logger.Log($"Discovered \"{name}\" with address {address}, RSSI {rssi}, and {bytes.Length} bytes");
+
+        BS_DeviceType? deviceType = null;
         if (bytes.Length == 1)
         {
             deviceType = (BS_DeviceType)bytes[0];
+            Logger.Log($"Device \"{name}\" is type \"{deviceType}\"");
         }
-        Logger.Log($"Discovered \"{deviceType}\" \"{name}\" with address {address}, RSSI {rssi}, and {bytes.Length} bytes");
-        AddDiscoveredDevice(new BS_DiscoveredDevice(address, name, deviceType, rssi));
+
+        if (_allDiscoveredDevices.TryGetValue(address, out BS_DiscoveredDevice DiscoveredDevice))
+        {
+            DiscoveredDevice.Update(name, deviceType, rssi);
+            AddDiscoveredDevice(DiscoveredDevice);
+        }
+        else
+        {
+            AddDiscoveredDevice(new BS_DiscoveredDevice(address, name, deviceType, rssi));
+        }
     }
 
     public override void Update()
@@ -141,7 +160,10 @@ public class BS_BleScanner : BS_BaseScanner<BS_BleScanner>
     public override BS_Device ConnectToDiscoveredDevice(BS_DiscoveredDevice DiscoveredDevice)
     {
         BS_Device Device = base.ConnectToDiscoveredDevice(DiscoveredDevice);
-        // FILL
+        BS_BleConnectionManager ConnectionManager = new();
+        // FILL - setup connectionManager
+        Device.ConnectionManager = ConnectionManager;
+        Device.Connect();
         return Device;
     }
 }

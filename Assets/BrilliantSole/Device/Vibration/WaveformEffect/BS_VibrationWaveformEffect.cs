@@ -3,7 +3,7 @@ using UnityEngine;
 public enum BS_VibrationWaveformEffect : byte
 {
     [InspectorName("None")]
-    NONE = 0,
+    None = 0,
 
     [InspectorName("Strong Click - 100%")]
     StrongClick_100 = 1,

@@ -42,9 +42,6 @@ public class BS_ScannerScrollView : MonoBehaviour
             TextMeshProUGUI nameText = item.transform.Find("Name").GetComponent<TextMeshProUGUI>();
             nameText.text = DiscoveredDevice.Name;
 
-            TextMeshProUGUI deviceTypeText = item.transform.Find("DeviceType").GetComponent<TextMeshProUGUI>();
-            deviceTypeText.text = DiscoveredDevice.DeviceType.ToString();
-
 
             Button toggleConnectionButton = item.transform.Find("ToggleConnection").GetComponent<Button>();
             TextMeshProUGUI toggleConnectionButtonText = item.transform.Find("ToggleConnection").GetComponentInChildren<TextMeshProUGUI>();
@@ -59,6 +56,17 @@ public class BS_ScannerScrollView : MonoBehaviour
         TextMeshProUGUI rssiText = item.transform.Find("Rssi").GetComponent<TextMeshProUGUI>();
         Debug.Log($"updating rssi text to {DiscoveredDevice.Rssi}");
         rssiText.text = DiscoveredDevice.Rssi.ToString();
+
+        TextMeshProUGUI deviceTypeText = item.transform.Find("DeviceType").GetComponent<TextMeshProUGUI>();
+        Debug.Log($"updating deviceType {DiscoveredDevice.DeviceType}");
+        if (DiscoveredDevice.DeviceType != null)
+        {
+            deviceTypeText.text = DiscoveredDevice.DeviceType.ToString();
+        }
+        else
+        {
+            deviceTypeText.text = "";
+        }
 
     }
     public void OnExpiredDevice(BS_DiscoveredDevice DiscoveredDevice)
