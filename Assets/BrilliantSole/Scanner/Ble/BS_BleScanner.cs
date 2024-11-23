@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -148,7 +149,10 @@ public class BS_BleScanner : BS_BaseScanner<BS_BleScanner>
             Scan();
         }
 
-        // FILL - connection
+        foreach (BS_BleConnectionManager connectionManager in _connectionManagers.Values)
+        {
+            connectionManager.Update();
+        }
     }
 
     protected override void DeInitialize()
@@ -157,11 +161,16 @@ public class BS_BleScanner : BS_BaseScanner<BS_BleScanner>
         DeInitializeBle();
     }
 
+    private readonly Dictionary<string, BS_BleConnectionManager> _connectionManagers = new();
+
     public override BS_Device ConnectToDiscoveredDevice(BS_DiscoveredDevice DiscoveredDevice)
     {
         BS_Device Device = base.ConnectToDiscoveredDevice(DiscoveredDevice);
-        BS_BleConnectionManager ConnectionManager = new();
-        // FILL - setup connectionManager
+        BS_BleConnectionManager ConnectionManager = new()
+        {
+            DiscoveredDevice = DiscoveredDevice
+        };
+        _connectionManagers[DiscoveredDevice.Id] = ConnectionManager;
         Device.ConnectionManager = ConnectionManager;
         Device.Connect();
         return Device;

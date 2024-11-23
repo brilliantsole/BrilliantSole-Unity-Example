@@ -31,14 +31,15 @@ public abstract class BS_BaseConnectionManager
 
     public void Connect()
     {
-        bool Continue = false;
-        Connect(Continue);
+        bool Continue = true;
+        Connect(ref Continue);
     }
-    protected virtual void Connect(in bool Continue)
+    protected virtual void Connect(ref bool Continue)
     {
         if (IsConnected)
         {
             Logger.Log("Already connected");
+            Continue = true;
             return;
         }
         Status = BS_ConnectionStatus.Connecting;
@@ -46,17 +47,20 @@ public abstract class BS_BaseConnectionManager
     }
     public void Disconnect()
     {
-        bool Continue = false;
-        Disconnect(Continue);
+        bool Continue = true;
+        Disconnect(ref Continue);
     }
-    protected virtual void Disconnect(in bool Continue)
+    protected virtual void Disconnect(ref bool Continue)
     {
         if (!IsConnected)
         {
             Logger.Log("Already not connected");
+            Continue = false;
             return;
         }
         Status = BS_ConnectionStatus.Disconnecting;
         Logger.Log("Disconnecting...");
     }
+
+    public virtual void Update() { }
 }
