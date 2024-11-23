@@ -62,4 +62,7 @@ public class BS_ScannerManager : BS_SingletonMonoBehavior<BS_ScannerManager>
 
     private void _OnDiscoveredDevice(BS_DiscoveredDevice DiscoveredDevice) { OnDiscoveredDevice?.Invoke(DiscoveredDevice); }
     private void _OnExpiredDevice(BS_DiscoveredDevice DiscoveredDevice) { OnExpiredDevice?.Invoke(DiscoveredDevice); }
+
+    public BS_Device ConnectToDiscoveredDevice(BS_DiscoveredDevice DiscoveredDevice) { return Scanner.ConnectToDiscoveredDevice(DiscoveredDevice); }
+    public BS_Device DisconnectFromDiscoveredDevice(BS_DiscoveredDevice DiscoveredDevice) { return Scanner.DisconnectFromDiscoveredDevice(DiscoveredDevice); }
 }

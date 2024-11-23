@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 #nullable enable
@@ -27,7 +28,27 @@ public class BS_Device
     }
 
     public BS_ConnectionType? ConnectionType => ConnectionManager?.Type;
-    public BS_ConnectionStatus ConnectionStatus => ConnectionManager?.Status ?? BS_ConnectionStatus.NotConnected;
+    private BS_ConnectionStatus ConnectionManagerStatus => ConnectionManager?.Status ?? BS_ConnectionStatus.NotConnected;
+
+    public event Action<BS_ConnectionStatus>? OnConnectionStatus;
+
+    [SerializeField]
+    private BS_ConnectionStatus _connectionStatus;
+    public BS_ConnectionStatus ConnectionStatus
+    {
+        get => _connectionStatus;
+        private set
+        {
+            if (_connectionStatus != value)
+            {
+                Logger.Log($"Updating Connection Status to {value}");
+                _connectionStatus = value;
+                OnConnectionStatus?.Invoke(ConnectionStatus);
+                // FILL - update 
+            }
+        }
+    }
+
     public void Connect() { ConnectionManager?.Connect(); }
     public void Disconnect() { ConnectionManager?.Disconnect(); }
     // CONNECTION MANAGER END

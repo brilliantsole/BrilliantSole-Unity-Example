@@ -47,9 +47,11 @@ public class BS_ScannerScrollView : MonoBehaviour
             TextMeshProUGUI toggleConnectionButtonText = item.transform.Find("ToggleConnection").GetComponentInChildren<TextMeshProUGUI>();
             toggleConnectionButton.onClick.AddListener(() =>
             {
-                Debug.Log("Click!");
+                // FILL - find device in deviceManager if it exists
+                // FILL - disconnect if it doesn't exist
                 toggleConnectionButtonText.text = "Connecting...";
-                // FILL
+                Debug.Log($"Connecting to \"{DiscoveredDevice.Name}\"");
+                BS_ScannerManager.Instance.ConnectToDiscoveredDevice(DiscoveredDevice);
             });
         }
 

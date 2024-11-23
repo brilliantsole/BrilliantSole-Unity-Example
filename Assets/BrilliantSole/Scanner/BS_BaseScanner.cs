@@ -95,14 +95,14 @@ public abstract class BS_BaseScanner
     public event Action<BS_DiscoveredDevice> OnDiscoveredDevice;
     public event Action<BS_DiscoveredDevice> OnExpiredDevice;
 
-    protected void AddDiscoveredDevice(in BS_DiscoveredDevice DiscoveredDevice)
+    protected void AddDiscoveredDevice(BS_DiscoveredDevice DiscoveredDevice)
     {
         Logger.Log($"Adding Discovered Device \"{DiscoveredDevice.Id}\"");
         _discoveredDevices[DiscoveredDevice.Id] = DiscoveredDevice;
         _allDiscoveredDevices[DiscoveredDevice.Id] = DiscoveredDevice;
         OnDiscoveredDevice?.Invoke(DiscoveredDevice);
     }
-    private void RemoveDiscoveredDevice(in BS_DiscoveredDevice DiscoveredDevice)
+    private void RemoveDiscoveredDevice(BS_DiscoveredDevice DiscoveredDevice)
     {
         Logger.Log($"Removing Discovered Device \"{DiscoveredDevice.Id}\"");
 
@@ -143,6 +143,16 @@ public abstract class BS_BaseScanner
     }
 
     public virtual BS_Device ConnectToDiscoveredDevice(BS_DiscoveredDevice DiscoveredDevice)
+    {
+        if (!_discoveredDevices.ContainsKey(DiscoveredDevice.Id))
+        {
+            throw new ArgumentException($"Invalid DiscoveredDevice \"{DiscoveredDevice.Name}\"");
+        }
+        // FILL - find existing device with that id from DeviceManager
+        return new();
+    }
+
+    public BS_Device DisconnectFromDiscoveredDevice(BS_DiscoveredDevice DiscoveredDevice)
     {
         if (!_discoveredDevices.ContainsKey(DiscoveredDevice.Id))
         {

@@ -20,7 +20,7 @@ public abstract class BS_BaseConnectionManager
         {
             if (_status != value)
             {
-                Logger.Log($"Updating Connection Status to {value}");
+                Logger.Log($"Updating ConnectionManager Status to {value}");
                 _status = value;
                 OnStatus?.Invoke(Status);
             }
