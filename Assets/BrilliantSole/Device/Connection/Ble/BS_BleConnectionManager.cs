@@ -78,6 +78,7 @@ public class BS_BleConnectionManager : BS_BaseConnectionManager
         RequestingMtu,
         ReadingCharacteristics,
         SubscribingToCharacteristics,
+        UnsubscribingFromCharacteristics,
         Disconnecting,
     }
 
@@ -156,7 +157,7 @@ public class BS_BleConnectionManager : BS_BaseConnectionManager
         {
             return;
         }
-        Stage = BleConnectionStage.Disconnecting;
+        Stage = BleConnectionStage.UnsubscribingFromCharacteristics;
         DisconnectPeripheral();
     }
     private void DisconnectPeripheral()
@@ -264,10 +265,6 @@ public class BS_BleConnectionManager : BS_BaseConnectionManager
         Logger.Log($"subscribing to characteristicUuidToSubscribe {characteristicUuidToSubscribe} of serviceUuid {serviceUuid}...");
         BluetoothLEHardwareInterface.SubscribeCharacteristic(Address, serviceUuid, characteristicUuidToSubscribe, OnCharacteristicSubscribed, OnCharacteristicNotify);
     }
-    private void UnsubscribeToCharacteristics()
-    {
-        // FILL
-    }
     private void OnCharacteristicNotify(string characteristicUuid, byte[] bytes)
     {
         Logger.Log($"Was notified {bytes.Length} bytes from characteristicUuid {characteristicUuid} for \"{Name}\"");
@@ -278,6 +275,39 @@ public class BS_BleConnectionManager : BS_BaseConnectionManager
         Logger.Log($"Subscribed to characteristicUuid {characteristicUuid} for \"{Name}\"");
         SubscribedCharacteristicUuids.Add(characteristicUuid);
         SubscribeToCharacteristics();
+    }
+    private string? GetNextCharacteristicUuidToUnsubscribe()
+    {
+        string? nextCharacteristicUuidToUnsubscribe = null;
+        if (SubscribedCharacteristicUuids.Count > 0)
+        {
+            foreach (string characteristicUuidToUnsubscribe in SubscribedCharacteristicUuids)
+            {
+                nextCharacteristicUuidToUnsubscribe = characteristicUuidToUnsubscribe;
+                break;
+            }
+        }
+        return nextCharacteristicUuidToUnsubscribe;
+    }
+    private void UnsubscribeToCharacteristics()
+    {
+        string? characteristicUuidToUnsubscribe = GetNextCharacteristicUuidToUnsubscribe();
+        if (characteristicUuidToUnsubscribe == null)
+        {
+            Logger.Log("Unsubscribed from all Characteristics");
+            Stage = BleConnectionStage.Disconnecting;
+            return;
+        }
+        Logger.Log($"nextCharacteristicUuidToUnsubscribe {characteristicUuidToUnsubscribe}");
+
+        string? serviceUuid = BS_BleUtils.GetServiceUuid(characteristicUuidToUnsubscribe);
+        if (serviceUuid == null)
+        {
+            Logger.LogError($"Unable to find serviceUuid for characteristicUuidToUnsubscribe {characteristicUuidToUnsubscribe}");
+            return;
+        }
+        Logger.Log($"unsubscribing from characteristicUuidToUnsubscribe {characteristicUuidToUnsubscribe} of serviceUuid {serviceUuid}...");
+        BluetoothLEHardwareInterface.UnSubscribeCharacteristic(Address, serviceUuid, characteristicUuidToUnsubscribe, OnCharacteristicUnsubscribed);
     }
     private void OnCharacteristicUnsubscribed(string characteristicUuid)
     {
@@ -308,7 +338,6 @@ public class BS_BleConnectionManager : BS_BaseConnectionManager
         {
             case BleConnectionStage.Connecting:
                 ConnectToPeripheral();
-                //UpdateTimeout();
                 break;
             case BleConnectionStage.Disconnecting:
                 DisconnectPeripheral();
@@ -318,6 +347,9 @@ public class BS_BleConnectionManager : BS_BaseConnectionManager
                 break;
             case BleConnectionStage.ReadingCharacteristics:
                 ReadCharacteristics();
+                break;
+            case BleConnectionStage.UnsubscribingFromCharacteristics:
+                UnsubscribeToCharacteristics();
                 break;
             case BleConnectionStage.SubscribingToCharacteristics:
                 SubscribeToCharacteristics();
