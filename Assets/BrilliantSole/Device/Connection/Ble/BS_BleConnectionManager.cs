@@ -27,6 +27,7 @@ public class BS_BleConnectionManager : BS_BaseConnectionManager
         FoundServiceUuids.Clear();
         FoundCharacteristicUuids.Clear();
         ReadCharacteristicUuids.Clear();
+        SubscribedCharacteristicUuids.Clear();
     }
 
     private bool CheckFoundAllServiceUuids()
@@ -224,28 +225,67 @@ public class BS_BleConnectionManager : BS_BaseConnectionManager
         Logger.Log($"Read {bytes.Length} bytes from characteristicUuid {characteristicUuid} for \"{Name}\"");
         // FILL - dispatch to main device
         ReadCharacteristicUuids.Add(characteristicUuid);
-        // FILL - check if read all device
+        ReadCharacteristics();
     }
-    private void OnCharacteristicNotify(string address, string characteristicUuid, byte[] bytes)
+
+
+    private readonly HashSet<string> SubscribedCharacteristicUuids = new();
+    private string? GetNextCharacteristicUuidToSubscribe()
+    {
+        string? nextCharacteristicUuidToSubscribe = null;
+        foreach (string characteristicUuid in BS_BleUtils.NotifiableCharacteristicUuids)
+        {
+            if (!SubscribedCharacteristicUuids.Contains(characteristicUuid))
+            {
+                nextCharacteristicUuidToSubscribe = characteristicUuid;
+                break;
+            }
+        }
+        return nextCharacteristicUuidToSubscribe;
+    }
+    private void SubscribeToCharacteristics()
+    {
+        string? characteristicUuidToSubscribe = GetNextCharacteristicUuidToSubscribe();
+        if (characteristicUuidToSubscribe == null)
+        {
+            Logger.Log("Subscribed to all Characteristics");
+            Stage = BleConnectionStage.None;
+            Status = BS_ConnectionStatus.Connected;
+            return;
+        }
+        Logger.Log($"nextCharacteristicUuidToSubscribe {characteristicUuidToSubscribe}");
+
+        string? serviceUuid = BS_BleUtils.GetServiceUuid(characteristicUuidToSubscribe);
+        if (serviceUuid == null)
+        {
+            Logger.LogError($"Unable to find serviceUuid for characteristicUuidToSubscribe {characteristicUuidToSubscribe}");
+            return;
+        }
+        Logger.Log($"subscribing to characteristicUuidToSubscribe {characteristicUuidToSubscribe} of serviceUuid {serviceUuid}...");
+        BluetoothLEHardwareInterface.SubscribeCharacteristic(Address, serviceUuid, characteristicUuidToSubscribe, OnCharacteristicSubscribed, OnCharacteristicNotify);
+    }
+    private void UnsubscribeToCharacteristics()
+    {
+        // FILL
+    }
+    private void OnCharacteristicNotify(string characteristicUuid, byte[] bytes)
     {
         Logger.Log($"Was notified {bytes.Length} bytes from characteristicUuid {characteristicUuid} for \"{Name}\"");
         // FILL - dispatch to main device
     }
-    private void OnCharacteristicSubscribed(string address, string characteristicUuid, byte[] bytes)
+    private void OnCharacteristicSubscribed(string characteristicUuid)
     {
         Logger.Log($"Subscribed to characteristicUuid {characteristicUuid} for \"{Name}\"");
-        // FILL - check if subscribed to all
+        SubscribedCharacteristicUuids.Add(characteristicUuid);
+        SubscribeToCharacteristics();
     }
     private void OnCharacteristicUnsubscribed(string characteristicUuid)
     {
         Logger.Log($"Unsubscribed from characteristicUuid {characteristicUuid} for \"{Name}\"");
-        // FILL - check if unsubscribed from all
+        SubscribedCharacteristicUuids.Remove(characteristicUuid);
+        UnsubscribeToCharacteristics();
     }
 
-    private void SubscribeToCharacteristics()
-    {
-        // FILL
-    }
 
     public override void Update()
     {
