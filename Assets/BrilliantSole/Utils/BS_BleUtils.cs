@@ -15,16 +15,8 @@ public static class BS_BleUtils
     }
     static private string GenerateGenericUuid(string value)
     {
-        return string.Format("0000{0}-0000-1000-8000-00805f9b34fb", value).ToUpper();
-    }
-
-    static public string GetLongUuid(string uuid)
-    {
-        if (uuid.Length == 4)
-        {
-            uuid = GenerateGenericUuid(uuid);
-        }
-        return uuid.ToUpper();
+        return value.ToUpper();
+        //return string.Format("0000{0}-0000-1000-8000-00805f9b34fb", value).ToUpper();
     }
 
     static public bool AreUuidsEqual(string uuid1, string uuid2)

@@ -132,22 +132,14 @@ public class BS_BleConnectionManager : BS_BaseConnectionManager
     private void OnPeripheralService(string address, string serviceUuid)
     {
         Logger.Log($"Got Service {serviceUuid}");
-
-        serviceUuid = BS_BleUtils.GetLongUuid(serviceUuid);
         FoundServiceUuids.Add(serviceUuid);
-
         CheckDidFindAllUuids();
     }
     private void OnPeripheralCharacteristic(string address, string serviceUuid, string characteristicUuid)
     {
         Logger.Log($"Got Characteristic {characteristicUuid} for service {serviceUuid}");
-
-        characteristicUuid = BS_BleUtils.GetLongUuid(characteristicUuid);
         FoundCharacteristicUuids.Add(characteristicUuid);
-
-        serviceUuid = BS_BleUtils.GetLongUuid(serviceUuid);
         FoundServiceUuids.Add(serviceUuid);
-
         CheckDidFindAllUuids();
     }
     private void OnPeripheralDisconnect(string address)
@@ -231,7 +223,6 @@ public class BS_BleConnectionManager : BS_BaseConnectionManager
     {
         Logger.Log($"Read {bytes.Length} bytes from characteristicUuid {characteristicUuid} for \"{Name}\"");
         // FILL - dispatch to main device
-        characteristicUuid = BS_BleUtils.GetLongUuid(characteristicUuid);
         ReadCharacteristicUuids.Add(characteristicUuid);
         // FILL - check if read all device
     }
