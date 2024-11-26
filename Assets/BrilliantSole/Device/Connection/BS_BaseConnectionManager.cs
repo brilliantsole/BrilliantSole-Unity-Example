@@ -7,9 +7,7 @@ public abstract class BS_BaseConnectionManager
 
     public abstract BS_ConnectionType Type { get; }
 
-    public delegate void OnStatusDelegate(BS_ConnectionStatus connectionStatus);
-    public OnStatusDelegate OnStatus;
-
+    public Action<BS_BaseConnectionManager, BS_ConnectionStatus> OnStatus;
 
     [SerializeField]
     private BS_ConnectionStatus _status = BS_ConnectionStatus.NotConnected;
@@ -21,7 +19,7 @@ public abstract class BS_BaseConnectionManager
             if (_status == value) { return; }
             Logger.Log($"Updating ConnectionManager Status to {value}");
             _status = value;
-            OnStatus?.Invoke(Status);
+            OnStatus?.Invoke(this, Status);
         }
     }
 
@@ -67,4 +65,18 @@ public abstract class BS_BaseConnectionManager
     }
 
     public virtual void Update() { }
+
+    // FIX RETURN TYPES
+    public Action<BS_BaseConnectionManager, byte> OnBatteryLevel;
+    public Action<BS_BaseConnectionManager> OnRxMessage;
+    public Action<BS_BaseConnectionManager> OnRxMessages;
+    public Action<BS_BaseConnectionManager, BS_DeviceInformationType, byte[]> OnDeviceInformationValue;
+    public Action<BS_BaseConnectionManager> OnSendTxMessage;
+
+    protected void ParseRxData(byte[] bytes)
+    {
+        Logger.Log($"Parsing {bytes.Length} bytes of Rx data...");
+        // FILL
+        OnRxMessages?.Invoke(this);
+    }
 }
