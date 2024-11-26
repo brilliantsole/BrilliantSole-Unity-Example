@@ -9,9 +9,11 @@ public class BS_ScannerScrollView : MonoBehaviour
     public Transform Content;
     private readonly Dictionary<string, GameObject> instantiatedItems = new();
 
+    private BS_ScannerManager ScannerManager => BS_ScannerManager.Instance;
+
     private void OnEnable()
     {
-        foreach (BS_DiscoveredDevice DiscoveredDevice in BS_ScannerManager.Instance.DiscoveredDevices.Values)
+        foreach (BS_DiscoveredDevice DiscoveredDevice in ScannerManager.DiscoveredDevices.Values)
         {
             OnDiscoveredDevice(DiscoveredDevice);
         }
@@ -19,7 +21,7 @@ public class BS_ScannerScrollView : MonoBehaviour
     private void OnDisable()
     {
         if (!gameObject.scene.isLoaded) return;
-        foreach (BS_DiscoveredDevice DiscoveredDevice in BS_ScannerManager.Instance.DiscoveredDevices.Values)
+        foreach (BS_DiscoveredDevice DiscoveredDevice in ScannerManager.DiscoveredDevices.Values)
         {
             OnExpiredDevice(DiscoveredDevice);
         }
@@ -51,7 +53,7 @@ public class BS_ScannerScrollView : MonoBehaviour
                 // FILL - disconnect if it doesn't exist
                 toggleConnectionButtonText.text = "Connecting...";
                 Debug.Log($"Connecting to \"{DiscoveredDevice.Name}\"");
-                BS_ScannerManager.Instance.ConnectToDiscoveredDevice(DiscoveredDevice);
+                ScannerManager.ConnectToDiscoveredDevice(DiscoveredDevice);
             });
         }
 

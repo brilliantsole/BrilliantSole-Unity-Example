@@ -1,3 +1,5 @@
+using NUnit.Framework.Internal;
+
 public abstract class BS_BaseScanner<T> : BS_BaseScanner where T : BS_BaseScanner<T>, new()
 {
     private static T _instance;

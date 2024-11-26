@@ -44,7 +44,7 @@ public class BS_SingletonMonoBehavior<T> : MonoBehaviour where T : MonoBehaviour
     }
 
 #if UNITY_EDITOR
-    private void OnApplicationQuit()
+    protected virtual void OnApplicationQuit()
     {
         Logger.Log("destroying self...");
         Destroy(gameObject);

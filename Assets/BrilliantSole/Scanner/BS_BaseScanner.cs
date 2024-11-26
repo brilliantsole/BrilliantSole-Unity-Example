@@ -7,8 +7,14 @@ public abstract class BS_BaseScanner
 {
     private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_BaseScanner", BS_Logger.LogLevel.Log);
 
-    protected virtual void Initialize() { }
-    protected virtual void DeInitialize() { }
+    protected virtual void Initialize()
+    {
+        Logger.Log("Initializing...");
+    }
+    protected virtual void DeInitialize()
+    {
+        Logger.Log("DeInitializing...");
+    }
 
     public virtual bool IsAvailable
     {
@@ -29,19 +35,17 @@ public abstract class BS_BaseScanner
         get => _isScanning;
         protected set
         {
-            if (_isScanning != value)
+            if (_isScanning == value) { return; }
+            Logger.Log($"Updating IsScanning to {value}");
+            _isScanning = value;
+            OnIsScanning?.Invoke(IsScanning);
+            if (IsScanning)
             {
-                Logger.Log($"Updating IsScanning to {value}");
-                _isScanning = value;
-                OnIsScanning?.Invoke(IsScanning);
-                if (IsScanning)
-                {
-                    OnScanStart?.Invoke();
-                }
-                else
-                {
-                    OnScanStop?.Invoke();
-                }
+                OnScanStart?.Invoke();
+            }
+            else
+            {
+                OnScanStop?.Invoke();
             }
         }
     }
@@ -153,6 +157,16 @@ public abstract class BS_BaseScanner
     }
 
     public BS_Device DisconnectFromDiscoveredDevice(BS_DiscoveredDevice DiscoveredDevice)
+    {
+        if (!_discoveredDevices.ContainsKey(DiscoveredDevice.Id))
+        {
+            throw new ArgumentException($"Invalid DiscoveredDevice \"{DiscoveredDevice.Name}\"");
+        }
+        // FILL - find existing device with that id from DeviceManager
+        return new();
+    }
+
+    public BS_Device ToggleConnectionToDiscoveredDevice(BS_DiscoveredDevice DiscoveredDevice)
     {
         if (!_discoveredDevices.ContainsKey(DiscoveredDevice.Id))
         {

@@ -49,8 +49,12 @@ public class BS_BleScanner : BS_BaseScanner<BS_BleScanner>
     {
         if (!_isInitialized)
         {
-            Logger.LogWarning("Ble already not initialized");
+            Logger.Log("Ble already not initialized");
             return;
+        }
+        foreach (BS_BleConnectionManager connectionManager in _connectionManagers.Values)
+        {
+            connectionManager.Disconnect();
         }
         Logger.Log("deinitializing Ble");
         BluetoothLEHardwareInterface.DeInitialize(OnBleDeInitialization);
@@ -102,7 +106,7 @@ public class BS_BleScanner : BS_BaseScanner<BS_BleScanner>
         }
         _scanTimeout = _scanInterval;
         Logger.Log("Scanning for devices...");
-        BluetoothLEHardwareInterface.ScanForPeripheralsWithServices(BS_BleUtils.ServiceUuids, OnDiscoveredBleDevice, OnDiscoveredBleDeviceData, true);
+        BluetoothLEHardwareInterface.ScanForPeripheralsWithServices(BS_BleUtils.ScanServiceUuids, OnDiscoveredBleDevice, OnDiscoveredBleDeviceData, true);
     }
 
     private void OnDiscoveredBleDevice(string address, string name)

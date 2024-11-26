@@ -65,4 +65,14 @@ public class BS_ScannerManager : BS_SingletonMonoBehavior<BS_ScannerManager>
 
     public BS_Device ConnectToDiscoveredDevice(BS_DiscoveredDevice DiscoveredDevice) { return Scanner.ConnectToDiscoveredDevice(DiscoveredDevice); }
     public BS_Device DisconnectFromDiscoveredDevice(BS_DiscoveredDevice DiscoveredDevice) { return Scanner.DisconnectFromDiscoveredDevice(DiscoveredDevice); }
+    public BS_Device ToggleConnectionToDiscoveredDevice(BS_DiscoveredDevice DiscoveredDevice) { return Scanner.ToggleConnectionToDiscoveredDevice(DiscoveredDevice); }
+
+
+#if UNITY_EDITOR
+    protected override void OnApplicationQuit()
+    {
+        base.OnApplicationQuit();
+        BS_BleScanner.DestroyInstance();
+    }
+#endif
 }

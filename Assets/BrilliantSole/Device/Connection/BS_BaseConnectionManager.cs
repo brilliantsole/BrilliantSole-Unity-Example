@@ -12,18 +12,16 @@ public abstract class BS_BaseConnectionManager
 
 
     [SerializeField]
-    private BS_ConnectionStatus _status;
+    private BS_ConnectionStatus _status = BS_ConnectionStatus.NotConnected;
     public BS_ConnectionStatus Status
     {
         get => _status;
         protected set
         {
-            if (_status != value)
-            {
-                Logger.Log($"Updating ConnectionManager Status to {value}");
-                _status = value;
-                OnStatus?.Invoke(Status);
-            }
+            if (_status == value) { return; }
+            Logger.Log($"Updating ConnectionManager Status to {value}");
+            _status = value;
+            OnStatus?.Invoke(Status);
         }
     }
 
@@ -52,9 +50,15 @@ public abstract class BS_BaseConnectionManager
     }
     protected virtual void Disconnect(ref bool Continue)
     {
-        if (!IsConnected)
+        if (Status == BS_ConnectionStatus.NotConnected)
         {
             Logger.Log("Already not connected");
+            Continue = false;
+            return;
+        }
+        if (Status == BS_ConnectionStatus.Disconnecting)
+        {
+            Logger.Log("Already Disconnecting");
             Continue = false;
             return;
         }

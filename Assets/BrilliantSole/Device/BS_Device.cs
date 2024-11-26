@@ -14,16 +14,14 @@ public class BS_Device
         get => _connectionManager;
         set
         {
-            if (_connectionManager != value)
+            if (_connectionManager == value) { return; }
+            if (_connectionManager != null)
             {
-                if (_connectionManager != null)
-                {
-                    // FILL - remove listeners
-                    _connectionManager.OnStatus = null;
-                }
-                // FILL - add listeners
-                _connectionManager = value;
+                // FILL - remove listeners
+                _connectionManager.OnStatus = null;
             }
+            // FILL - add listeners
+            _connectionManager = value;
         }
     }
 
@@ -39,13 +37,11 @@ public class BS_Device
         get => _connectionStatus;
         private set
         {
-            if (_connectionStatus != value)
-            {
-                Logger.Log($"Updating Connection Status to {value}");
-                _connectionStatus = value;
-                OnConnectionStatus?.Invoke(ConnectionStatus);
-                // FILL - update 
-            }
+            if (_connectionStatus == value) { return; }
+            Logger.Log($"Updating Connection Status to {value}");
+            _connectionStatus = value;
+            OnConnectionStatus?.Invoke(ConnectionStatus);
+            // FILL - update 
         }
     }
 
