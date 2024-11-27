@@ -86,6 +86,7 @@ public partial class BS_Device
 
     public void Connect() { ConnectionManager?.Connect(); }
     public void Disconnect() { ConnectionManager?.Disconnect(); }
+    public void ToggleConnection() { if (IsConnected) { Disconnect(); } else { Connect(); } }
 
     private void OnBatteryLevelUpdate(BS_BaseConnectionManager connectionManager, byte batteryLevel)
     {

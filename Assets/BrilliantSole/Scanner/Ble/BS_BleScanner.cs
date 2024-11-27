@@ -166,17 +166,18 @@ public class BS_BleScanner : BS_BaseScanner<BS_BleScanner>
     }
 
     private readonly Dictionary<string, BS_BleConnectionManager> _connectionManagers = new();
-
-    public override BS_Device ConnectToDiscoveredDevice(BS_DiscoveredDevice DiscoveredDevice)
+    protected override BS_Device CreateDevice(BS_DiscoveredDevice discoveredDevice)
     {
-        BS_Device Device = base.ConnectToDiscoveredDevice(DiscoveredDevice);
+
+        BS_Device Device = base.CreateDevice(discoveredDevice);
         BS_BleConnectionManager ConnectionManager = new()
         {
-            DiscoveredDevice = DiscoveredDevice
+            DiscoveredDevice = discoveredDevice
         };
-        _connectionManagers[DiscoveredDevice.Id] = ConnectionManager;
+        _connectionManagers[discoveredDevice.Id] = ConnectionManager;
         Device.ConnectionManager = ConnectionManager;
-        Device.Connect();
         return Device;
     }
+
+
 }

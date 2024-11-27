@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEditor.PackageManager;
 using UnityEngine;
 
+#nullable enable
+
 public abstract class BS_BaseScanner
 {
     private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_BaseScanner", BS_Logger.LogLevel.Log);
@@ -63,6 +65,7 @@ public abstract class BS_BaseScanner
             return false;
         }
         _discoveredDevices.Clear();
+        _devices.Clear();
         Logger.Log("Starting scan.");
         return true;
     }
@@ -95,6 +98,10 @@ public abstract class BS_BaseScanner
     protected readonly Dictionary<string, BS_DiscoveredDevice> _discoveredDevices = new();
     protected readonly Dictionary<string, BS_DiscoveredDevice> _allDiscoveredDevices = new();
     public IReadOnlyDictionary<string, BS_DiscoveredDevice> DiscoveredDevices => _discoveredDevices;
+
+    protected readonly Dictionary<string, BS_Device> _devices = new();
+    protected readonly Dictionary<string, BS_Device> _allDevices = new();
+    public IReadOnlyDictionary<string, BS_Device> Devices => _devices;
 
     public event Action<BS_DiscoveredDevice> OnDiscoveredDevice;
     public event Action<BS_DiscoveredDevice> OnExpiredDevice;
@@ -146,33 +153,51 @@ public abstract class BS_BaseScanner
         }
     }
 
-    public virtual BS_Device ConnectToDiscoveredDevice(BS_DiscoveredDevice DiscoveredDevice)
+    protected virtual BS_Device CreateDevice(BS_DiscoveredDevice discoveredDevice)
     {
-        if (!_discoveredDevices.ContainsKey(DiscoveredDevice.Id))
-        {
-            throw new ArgumentException($"Invalid DiscoveredDevice \"{DiscoveredDevice.Name}\"");
-        }
-        // FILL - find existing device with that id from DeviceManager
-        return new();
+        BS_Device Device = new();
+        Logger.Log($"creating device for {discoveredDevice.Name}...");
+        _allDevices[discoveredDevice.Id] = Device;
+        return Device;
     }
 
-    public BS_Device DisconnectFromDiscoveredDevice(BS_DiscoveredDevice DiscoveredDevice)
+    private BS_Device? GetDeviceByDiscoveredDevice(BS_DiscoveredDevice discoveredDevice, bool CreateIfNotFound = false)
     {
-        if (!_discoveredDevices.ContainsKey(DiscoveredDevice.Id))
+        if (!_discoveredDevices.ContainsKey(discoveredDevice.Id))
         {
-            throw new ArgumentException($"Invalid DiscoveredDevice \"{DiscoveredDevice.Name}\"");
+            throw new ArgumentException($"Invalid discoveredDevice \"{discoveredDevice.Name}\"");
         }
-        // FILL - find existing device with that id from DeviceManager
-        return new();
+        if (!_allDevices.ContainsKey(discoveredDevice.Id))
+        {
+            Logger.Log($"no device found for {discoveredDevice.Name}");
+            if (CreateIfNotFound)
+            {
+                CreateDevice(discoveredDevice);
+            }
+            else
+            {
+                return null;
+            }
+        }
+        return _allDevices[discoveredDevice.Id];
     }
 
-    public BS_Device ToggleConnectionToDiscoveredDevice(BS_DiscoveredDevice DiscoveredDevice)
+    public virtual BS_Device ConnectToDiscoveredDevice(BS_DiscoveredDevice discoveredDevice)
     {
-        if (!_discoveredDevices.ContainsKey(DiscoveredDevice.Id))
-        {
-            throw new ArgumentException($"Invalid DiscoveredDevice \"{DiscoveredDevice.Name}\"");
-        }
-        // FILL - find existing device with that id from DeviceManager
-        return new();
+        return GetDeviceByDiscoveredDevice(discoveredDevice, true)!;
+    }
+
+    public BS_Device? DisconnectFromDiscoveredDevice(BS_DiscoveredDevice discoveredDevice)
+    {
+        BS_Device? device = GetDeviceByDiscoveredDevice(discoveredDevice);
+        device?.Disconnect();
+        return device;
+    }
+
+    public BS_Device? ToggleConnectionToDiscoveredDevice(BS_DiscoveredDevice discoveredDevice)
+    {
+        BS_Device device = GetDeviceByDiscoveredDevice(discoveredDevice, true)!;
+        device.ToggleConnection();
+        return device;
     }
 }

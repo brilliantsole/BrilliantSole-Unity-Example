@@ -1,8 +1,7 @@
 using System;
 using System.Text;
 
-[Serializable]
-public struct BS_DeviceInformation
+public class BS_DeviceInformation
 {
     private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_DeviceInformation", BS_Logger.LogLevel.Log);
 
@@ -21,12 +20,15 @@ public struct BS_DeviceInformation
         HardwareRevision = null;
         FirmwareRevision = null;
         SoftwareRevision = null;
+
         HasAllInformation = false;
     }
 
     public void UpdateValue(BS_DeviceInformationType deviceInformationType, byte[] bytes)
     {
         string value = Encoding.UTF8.GetString(bytes);
+        Logger.Log($"Received \"{value}\" for {deviceInformationType}");
+
         switch (deviceInformationType)
         {
             case BS_DeviceInformationType.ManufacturerName:
@@ -56,13 +58,36 @@ public struct BS_DeviceInformation
     public bool HasAllInformation { get; private set; }
     private void UpdateDidGetAllInformation()
     {
-        bool newHasAllInformation = true;
-        newHasAllInformation &= ManufacturerName != null;
-        newHasAllInformation &= ModelNumber != null;
-        newHasAllInformation &= SerialNumber != null;
-        newHasAllInformation &= HardwareRevision != null;
-        newHasAllInformation &= FirmwareRevision != null;
-        newHasAllInformation &= SoftwareRevision != null;
+        bool newHasAllInformation = false;
+        if (ManufacturerName == null)
+        {
+            Logger.Log("ManufacturerName is null");
+        }
+        else if (ModelNumber == null)
+        {
+            Logger.Log("ModelNumber is null");
+        }
+        else if (SerialNumber == null)
+        {
+            Logger.Log("SerialNumber is null");
+        }
+        else if (HardwareRevision == null)
+        {
+            Logger.Log("HardwareRevision is null");
+        }
+        else if (FirmwareRevision == null)
+        {
+            Logger.Log("FirmwareRevision is null");
+        }
+        else if (SoftwareRevision == null)
+        {
+            Logger.Log("SoftwareRevision is null");
+        }
+        else
+        {
+            Logger.Log("Got all Device Information");
+            newHasAllInformation = true;
+        }
 
         Logger.Log($"newHasAllInformation: {newHasAllInformation}");
 
