@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public abstract class BS_BaseConnectionManager
@@ -6,6 +7,13 @@ public abstract class BS_BaseConnectionManager
     private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_BaseConnectionManager", BS_Logger.LogLevel.Log);
 
     public abstract BS_ConnectionType Type { get; }
+
+    public Action<BS_BaseConnectionManager, byte> OnBatteryLevel;
+    public Action<BS_BaseConnectionManager, byte, byte[]> OnRxMessage;
+    public Action<BS_BaseConnectionManager> OnRxMessages;
+    public Action<BS_BaseConnectionManager, BS_DeviceInformationType, byte[]> OnDeviceInformationValue;
+    public Action<BS_BaseConnectionManager> OnSendTxMessage;
+
 
     public Action<BS_BaseConnectionManager, BS_ConnectionStatus> OnStatus;
 
@@ -66,17 +74,14 @@ public abstract class BS_BaseConnectionManager
 
     public virtual void Update() { }
 
-    // FIX RETURN TYPES
-    public Action<BS_BaseConnectionManager, byte> OnBatteryLevel;
-    public Action<BS_BaseConnectionManager, byte, byte[]> OnRxMessage;
-    public Action<BS_BaseConnectionManager> OnRxMessages;
-    public Action<BS_BaseConnectionManager, BS_DeviceInformationType, byte[]> OnDeviceInformationValue;
-    public Action<BS_BaseConnectionManager> OnSendTxMessage;
-
     protected void ParseRxData(byte[] data)
     {
         Logger.Log($"Parsing {data.Length} data of Rx data...");
-        // FILL
+        BS_ParseUtils.ParseMessages(data, OnParsedRxMessage);
         OnRxMessages?.Invoke(this);
     }
+
+    private void OnParsedRxMessage(byte messageType, byte[] messageData) { OnRxMessage(this, messageType, messageData); }
+
+    protected virtual void SendTxData(List<byte> Data) { Logger.Log($"Sending {Data.Count} bytes..."); }
 }

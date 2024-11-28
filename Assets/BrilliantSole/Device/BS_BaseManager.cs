@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 public abstract class BS_BaseManager
 {
@@ -9,12 +10,12 @@ public abstract class BS_BaseManager
     public abstract void OnRxMessage(byte messageTypeEnum, byte[] data);
 
     public Action<byte, byte[]> SendTxMessage;
-
-    // FILL - add enum range
 }
 
 public abstract class BS_BaseManager<TEnum> : BS_BaseManager where TEnum : Enum
 {
+    public static readonly Type EnumType = typeof(TEnum);
+
     public BS_BaseManager()
     {
         if (Enum.GetUnderlyingType(typeof(TEnum)) != typeof(byte))
@@ -30,4 +31,17 @@ public abstract class BS_BaseManager<TEnum> : BS_BaseManager where TEnum : Enum
     }
 
     public virtual void OnRxMessage(TEnum messageType, byte[] data) { }
+
+    private static readonly Dictionary<TEnum, byte> EnumToTxRx = new();
+    private static readonly Dictionary<byte, TEnum> TxRxToEnum = new();
+
+    public static void InitTxRxEnum(ref byte offset)
+    {
+        foreach (TEnum value in EnumType.GetEnumValues())
+        {
+            EnumToTxRx.Add(value, offset);
+            TxRxToEnum.Add(offset, value);
+            offset++;
+        }
+    }
 }

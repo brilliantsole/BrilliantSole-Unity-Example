@@ -33,7 +33,7 @@ public class BS_BleConnectionManager : BS_BaseConnectionManager
     private bool CheckFoundAllServiceUuids()
     {
         bool FoundAllServiceUuids = true;
-        foreach (string serviceUuid in BS_BleUtils.AllServiceUuids)
+        foreach (var serviceUuid in BS_BleUtils.AllServiceUuids)
         {
             if (!FoundServiceUuids.Contains(serviceUuid))
             {
@@ -47,7 +47,7 @@ public class BS_BleConnectionManager : BS_BaseConnectionManager
     private bool CheckFoundAllCharacteristicUuids()
     {
         bool FoundAllCharacteristicUuids = true;
-        foreach (string characteristicUuid in BS_BleUtils.AllCharacteristicUuids)
+        foreach (var characteristicUuid in BS_BleUtils.AllCharacteristicUuids)
         {
             if (!FoundCharacteristicUuids.Contains(characteristicUuid))
             {
@@ -190,7 +190,7 @@ public class BS_BleConnectionManager : BS_BaseConnectionManager
     private string? GetNextCharacteristicUuidToRead()
     {
         string? nextCharacteristicUuidToRead = null;
-        foreach (string characteristicUuid in BS_BleUtils.ReadableCharacteristicUuids)
+        foreach (var characteristicUuid in BS_BleUtils.ReadableCharacteristicUuids)
         {
             if (!ReadCharacteristicUuids.Contains(characteristicUuid))
             {
@@ -229,12 +229,18 @@ public class BS_BleConnectionManager : BS_BaseConnectionManager
         ReadCharacteristics();
     }
 
+    private void OnCharacteristicWrite(string characteristicUuid)
+    {
+        Logger.Log($"Wrote to characteristicUuid {characteristicUuid} for \"{Name}\"");
+        OnSendTxMessage?.Invoke(this);
+    }
+
 
     private readonly HashSet<string> SubscribedCharacteristicUuids = new();
     private string? GetNextCharacteristicUuidToSubscribe()
     {
         string? nextCharacteristicUuidToSubscribe = null;
-        foreach (string characteristicUuid in BS_BleUtils.NotifiableCharacteristicUuids)
+        foreach (var characteristicUuid in BS_BleUtils.NotifiableCharacteristicUuids)
         {
             if (!SubscribedCharacteristicUuids.Contains(characteristicUuid))
             {
@@ -281,7 +287,7 @@ public class BS_BleConnectionManager : BS_BaseConnectionManager
         string? nextCharacteristicUuidToUnsubscribe = null;
         if (SubscribedCharacteristicUuids.Count > 0)
         {
-            foreach (string characteristicUuidToUnsubscribe in SubscribedCharacteristicUuids)
+            foreach (var characteristicUuidToUnsubscribe in SubscribedCharacteristicUuids)
             {
                 nextCharacteristicUuidToUnsubscribe = characteristicUuidToUnsubscribe;
                 break;
@@ -370,5 +376,13 @@ public class BS_BleConnectionManager : BS_BaseConnectionManager
             default:
                 break;
         }
+    }
+
+    protected override void SendTxData(List<byte> Data)
+    {
+        base.SendTxData(Data);
+        byte[] data = Data.ToArray();
+        Logger.Log($"Writing {data.Length} bytes to Tx for \"{Name}\"...");
+        BluetoothLEHardwareInterface.WriteCharacteristic(Address, BS_BleUtils.MainServiceUuid, BS_BleUtils.TxCharacteristicUuid, data, data.Length, true, OnCharacteristicWrite);
     }
 }

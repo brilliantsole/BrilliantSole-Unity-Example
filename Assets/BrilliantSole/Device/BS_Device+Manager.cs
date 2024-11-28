@@ -10,7 +10,7 @@ public partial class BS_Device
 
     private void SetupManagers()
     {
-        foreach (BS_BaseManager BaseManager in Managers)
+        foreach (var BaseManager in Managers)
         {
             // FILL - assign delegates
         }

@@ -52,7 +52,7 @@ public class BS_BleScanner : BS_BaseScanner<BS_BleScanner>
             Logger.Log("Ble already not initialized");
             return;
         }
-        foreach (BS_BleConnectionManager connectionManager in _connectionManagers.Values)
+        foreach (var connectionManager in _connectionManagers.Values)
         {
             connectionManager.Disconnect();
         }
@@ -154,7 +154,7 @@ public class BS_BleScanner : BS_BaseScanner<BS_BleScanner>
             Scan();
         }
 
-        foreach (BS_BleConnectionManager connectionManager in _connectionManagers.Values)
+        foreach (var connectionManager in _connectionManagers.Values)
         {
             connectionManager.Update();
         }
