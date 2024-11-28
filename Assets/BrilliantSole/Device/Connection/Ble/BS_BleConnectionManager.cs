@@ -221,10 +221,10 @@ public class BS_BleConnectionManager : BS_BaseConnectionManager
         Logger.Log($"reading characteristicUuidToRead {characteristicUuidToRead} of serviceUuid {serviceUuid}...");
         BluetoothLEHardwareInterface.ReadCharacteristic(Address, serviceUuid, characteristicUuidToRead, OnCharacteristicRead);
     }
-    private void OnCharacteristicRead(string characteristicUuid, byte[] bytes)
+    private void OnCharacteristicRead(string characteristicUuid, byte[] data)
     {
-        Logger.Log($"Read {bytes.Length} bytes from characteristicUuid {characteristicUuid} for \"{Name}\"");
-        OnCharacteristicValue(characteristicUuid, bytes);
+        Logger.Log($"Read {data.Length} data from characteristicUuid {characteristicUuid} for \"{Name}\"");
+        OnCharacteristicValue(characteristicUuid, data);
         ReadCharacteristicUuids.Add(characteristicUuid);
         ReadCharacteristics();
     }
@@ -265,10 +265,10 @@ public class BS_BleConnectionManager : BS_BaseConnectionManager
         Logger.Log($"subscribing to characteristicUuidToSubscribe {characteristicUuidToSubscribe} of serviceUuid {serviceUuid}...");
         BluetoothLEHardwareInterface.SubscribeCharacteristic(Address, serviceUuid, characteristicUuidToSubscribe, OnCharacteristicSubscribed, OnCharacteristicNotify);
     }
-    private void OnCharacteristicNotify(string characteristicUuid, byte[] bytes)
+    private void OnCharacteristicNotify(string characteristicUuid, byte[] data)
     {
-        Logger.Log($"Was notified {bytes.Length} bytes from characteristicUuid {characteristicUuid} for \"{Name}\"");
-        OnCharacteristicValue(characteristicUuid, bytes);
+        Logger.Log($"Was notified {data.Length} data from characteristicUuid {characteristicUuid} for \"{Name}\"");
+        OnCharacteristicValue(characteristicUuid, data);
     }
     private void OnCharacteristicSubscribed(string characteristicUuid)
     {
@@ -316,17 +316,17 @@ public class BS_BleConnectionManager : BS_BaseConnectionManager
         UnsubscribeToCharacteristics();
     }
 
-    private void OnCharacteristicValue(string characteristicUuid, byte[] bytes)
+    private void OnCharacteristicValue(string characteristicUuid, byte[] data)
     {
-        Logger.Log($"Received {bytes.Length} bytes from characteristicUuid {characteristicUuid} for \"{Name}\"");
-        if (characteristicUuid == BS_BleUtils.BatteryLevelCharacteristicUuid) { OnBatteryLevel(this, bytes[0]); }
-        else if (characteristicUuid == BS_BleUtils.ManufacturerNameStringCharacteristicUuid) { OnDeviceInformationValue(this, BS_DeviceInformationType.ManufacturerName, bytes); }
-        else if (characteristicUuid == BS_BleUtils.ModelNumberStringCharacteristicUuid) { OnDeviceInformationValue(this, BS_DeviceInformationType.ModelNumber, bytes); }
-        else if (characteristicUuid == BS_BleUtils.SerialNumberStringCharacteristicUuid) { OnDeviceInformationValue(this, BS_DeviceInformationType.SerialNumber, bytes); }
-        else if (characteristicUuid == BS_BleUtils.HardwareRevisionStringCharacteristicUuid) { OnDeviceInformationValue(this, BS_DeviceInformationType.HardwareRevision, bytes); }
-        else if (characteristicUuid == BS_BleUtils.FirmwareRevisionCharacteristicUuid) { OnDeviceInformationValue(this, BS_DeviceInformationType.FirmwareRevision, bytes); }
-        else if (characteristicUuid == BS_BleUtils.SoftwareRevisionCharacteristicUuid) { OnDeviceInformationValue(this, BS_DeviceInformationType.SoftwareRevision, bytes); }
-        else if (characteristicUuid == BS_BleUtils.RxCharacteristicUuid) { ParseRxData(bytes); }
+        Logger.Log($"Received {data.Length} data from characteristicUuid {characteristicUuid} for \"{Name}\"");
+        if (characteristicUuid == BS_BleUtils.BatteryLevelCharacteristicUuid) { OnBatteryLevel(this, data[0]); }
+        else if (characteristicUuid == BS_BleUtils.ManufacturerNameStringCharacteristicUuid) { OnDeviceInformationValue(this, BS_DeviceInformationType.ManufacturerName, data); }
+        else if (characteristicUuid == BS_BleUtils.ModelNumberStringCharacteristicUuid) { OnDeviceInformationValue(this, BS_DeviceInformationType.ModelNumber, data); }
+        else if (characteristicUuid == BS_BleUtils.SerialNumberStringCharacteristicUuid) { OnDeviceInformationValue(this, BS_DeviceInformationType.SerialNumber, data); }
+        else if (characteristicUuid == BS_BleUtils.HardwareRevisionStringCharacteristicUuid) { OnDeviceInformationValue(this, BS_DeviceInformationType.HardwareRevision, data); }
+        else if (characteristicUuid == BS_BleUtils.FirmwareRevisionCharacteristicUuid) { OnDeviceInformationValue(this, BS_DeviceInformationType.FirmwareRevision, data); }
+        else if (characteristicUuid == BS_BleUtils.SoftwareRevisionCharacteristicUuid) { OnDeviceInformationValue(this, BS_DeviceInformationType.SoftwareRevision, data); }
+        else if (characteristicUuid == BS_BleUtils.RxCharacteristicUuid) { ParseRxData(data); }
         else { Logger.LogError($"Uncaught characteristicUuid {characteristicUuid}"); }
     }
 

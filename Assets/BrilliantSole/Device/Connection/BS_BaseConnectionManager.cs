@@ -73,9 +73,9 @@ public abstract class BS_BaseConnectionManager
     public Action<BS_BaseConnectionManager, BS_DeviceInformationType, byte[]> OnDeviceInformationValue;
     public Action<BS_BaseConnectionManager> OnSendTxMessage;
 
-    protected void ParseRxData(byte[] bytes)
+    protected void ParseRxData(byte[] data)
     {
-        Logger.Log($"Parsing {bytes.Length} bytes of Rx data...");
+        Logger.Log($"Parsing {data.Length} data of Rx data...");
         // FILL
         OnRxMessages?.Invoke(this);
     }

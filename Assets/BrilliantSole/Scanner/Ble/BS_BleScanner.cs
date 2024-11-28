@@ -106,6 +106,7 @@ public class BS_BleScanner : BS_BaseScanner<BS_BleScanner>
         }
         _scanTimeout = _scanInterval;
         Logger.Log("Scanning for devices...");
+        BluetoothLEHardwareInterface.RetrieveListOfPeripheralsWithServices(BS_BleUtils.ScanServiceUuids, OnDiscoveredBleDevice);
         BluetoothLEHardwareInterface.ScanForPeripheralsWithServices(BS_BleUtils.ScanServiceUuids, OnDiscoveredBleDevice, OnDiscoveredBleDeviceData, true);
     }
 
@@ -122,14 +123,14 @@ public class BS_BleScanner : BS_BaseScanner<BS_BleScanner>
             AddDiscoveredDevice(new BS_DiscoveredDevice(address, name, null, null));
         }
     }
-    private void OnDiscoveredBleDeviceData(string address, string name, int rssi, byte[] bytes)
+    private void OnDiscoveredBleDeviceData(string address, string name, int rssi, byte[] data)
     {
-        Logger.Log($"Discovered \"{name}\" with address {address}, RSSI {rssi}, and {bytes.Length} bytes");
+        Logger.Log($"Discovered \"{name}\" with address {address}, RSSI {rssi}, and {data.Length} data");
 
         BS_DeviceType? deviceType = null;
-        if (bytes.Length == 1)
+        if (data.Length == 1)
         {
-            deviceType = (BS_DeviceType)bytes[0];
+            deviceType = (BS_DeviceType)data[0];
             Logger.Log($"Device \"{name}\" is type \"{deviceType}\"");
         }
 

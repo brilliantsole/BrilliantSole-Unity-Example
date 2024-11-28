@@ -5,7 +5,16 @@ public partial class BS_Device
     private void Reset()
     {
         ConnectionStatus = BS_ConnectionStatus.NotConnected;
+
+        _batteryLevel = 0;
+
         DeviceInformation.Clear();
-        // FILL
+
+        // FILL - clear all Managers
+    }
+
+    public BS_Device()
+    {
+        Managers = new BS_BaseManager[] { InformationManager, SensorConfigurationManager, SensorDataManager, VibrationManager };
     }
 }

@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using UnityEditor.PackageManager;
 using UnityEngine;
 
 #nullable enable
@@ -26,9 +25,9 @@ public abstract class BS_BaseScanner
         }
     }
 
-    public event Action<bool> OnIsScanning;
-    public event Action OnScanStart;
-    public event Action OnScanStop;
+    public event Action<bool>? OnIsScanning;
+    public event Action? OnScanStart;
+    public event Action? OnScanStop;
 
     [SerializeField]
     private bool _isScanning;
@@ -103,8 +102,8 @@ public abstract class BS_BaseScanner
     protected readonly Dictionary<string, BS_Device> _allDevices = new();
     public IReadOnlyDictionary<string, BS_Device> Devices => _devices;
 
-    public event Action<BS_DiscoveredDevice> OnDiscoveredDevice;
-    public event Action<BS_DiscoveredDevice> OnExpiredDevice;
+    public event Action<BS_DiscoveredDevice>? OnDiscoveredDevice;
+    public event Action<BS_DiscoveredDevice>? OnExpiredDevice;
 
     protected void AddDiscoveredDevice(BS_DiscoveredDevice DiscoveredDevice)
     {

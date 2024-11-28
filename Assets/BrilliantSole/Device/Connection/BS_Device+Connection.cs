@@ -101,10 +101,10 @@ public partial class BS_Device
     {
         // FILL
     }
-    private void OnDeviceInformationValue(BS_BaseConnectionManager connectionManager, BS_DeviceInformationType deviceInformationType, byte[] bytes)
+    private void OnDeviceInformationValue(BS_BaseConnectionManager connectionManager, BS_DeviceInformationType deviceInformationType, byte[] data)
     {
-        Logger.Log($"Received {bytes.Length} bytes for DeviceInformationType {deviceInformationType}");
-        DeviceInformation.UpdateValue(deviceInformationType, bytes);
+        Logger.Log($"Received {data.Length} data for DeviceInformationType {deviceInformationType}");
+        DeviceInformation.UpdateValue(deviceInformationType, data);
     }
     private void OnSendTxMessage(BS_BaseConnectionManager connectionManager)
     {

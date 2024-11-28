@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class BS_VibrationManager : BS_BaseManager
+public class BS_VibrationManager : BS_BaseManager<BS_VibrationMessageType>
 {
 
 }

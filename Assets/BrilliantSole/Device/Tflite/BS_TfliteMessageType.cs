@@ -1,0 +1,19 @@
+public enum BS_TfliteMessageType : byte
+{
+    GetTfliteName,
+    SetTfliteName,
+    GetTfliteTask,
+    SetTfliteTask,
+    GetTfliteSampleRate,
+    SetTfliteSampleRate,
+    GetTfliteSensorTypes,
+    SetTfliteSensorTypes,
+    IsTfliteReady,
+    GetTfliteCaptureDelay,
+    SetTfliteCaptureDelay,
+    GetTfliteThreshold,
+    SetTfliteThreshold,
+    GetTfliteInferencingEnabled,
+    SetTfliteInferencingEnabled,
+    TfliteInference
+}

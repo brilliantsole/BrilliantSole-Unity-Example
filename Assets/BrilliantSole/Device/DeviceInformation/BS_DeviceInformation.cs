@@ -24,9 +24,9 @@ public class BS_DeviceInformation
         HasAllInformation = false;
     }
 
-    public void UpdateValue(BS_DeviceInformationType deviceInformationType, byte[] bytes)
+    public void UpdateValue(BS_DeviceInformationType deviceInformationType, byte[] data)
     {
-        string value = Encoding.UTF8.GetString(bytes);
+        string value = Encoding.UTF8.GetString(data);
         Logger.Log($"Received \"{value}\" for {deviceInformationType}");
 
         switch (deviceInformationType)
