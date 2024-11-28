@@ -93,7 +93,7 @@ public partial class BS_Device
         Logger.Log($"Received battery level {batteryLevel}%");
         BatteryLevel = batteryLevel;
     }
-    private void OnRxMessage(BS_BaseConnectionManager connectionManager)
+    private void OnRxMessage(BS_BaseConnectionManager connectionManager, byte messageTypeEnum, byte[] messageData)
     {
         // FILL
     }

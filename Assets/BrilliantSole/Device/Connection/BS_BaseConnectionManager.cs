@@ -68,7 +68,7 @@ public abstract class BS_BaseConnectionManager
 
     // FIX RETURN TYPES
     public Action<BS_BaseConnectionManager, byte> OnBatteryLevel;
-    public Action<BS_BaseConnectionManager> OnRxMessage;
+    public Action<BS_BaseConnectionManager, byte, byte[]> OnRxMessage;
     public Action<BS_BaseConnectionManager> OnRxMessages;
     public Action<BS_BaseConnectionManager, BS_DeviceInformationType, byte[]> OnDeviceInformationValue;
     public Action<BS_BaseConnectionManager> OnSendTxMessage;
