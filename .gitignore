@@ -79,3 +79,5 @@ crashlytics-build.properties
 TODO.txt
 
 mono_crash.*
+
+.utmp/

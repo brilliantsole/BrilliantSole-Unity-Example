@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -90,6 +91,7 @@ public class BS_BleScanner : BS_BaseScanner<BS_BleScanner>
         {
             return false;
         }
+        Logger.Log("Stopping Ble Scan...");
         BluetoothLEHardwareInterface.StopScan();
         IsScanning = false;
         return true;
@@ -128,9 +130,9 @@ public class BS_BleScanner : BS_BaseScanner<BS_BleScanner>
         Logger.Log($"Discovered \"{name}\" with address {address}, RSSI {rssi}, and {data.Length} data");
 
         BS_DeviceType? deviceType = null;
-        if (data.Length == 1)
+        if (data.Length > 0)
         {
-            deviceType = (BS_DeviceType)data[0];
+            deviceType = (BS_DeviceType)data.Last();
             Logger.Log($"Device \"{name}\" is type \"{deviceType}\"");
         }
 

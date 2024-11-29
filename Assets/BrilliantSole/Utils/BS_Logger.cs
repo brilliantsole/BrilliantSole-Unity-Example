@@ -11,7 +11,7 @@ public class BS_Logger
         None
     }
 
-    private static readonly Dictionary<string, BS_Logger> instances = new Dictionary<string, BS_Logger>();
+    private static readonly Dictionary<string, BS_Logger> instances = new();
 
     private readonly string category;
     private LogLevel currentLogLevel;
@@ -49,7 +49,7 @@ public class BS_Logger
         }
     }
 
-    [Conditional("UNITY_EDITOR")]
+
     public void Log(string message)
     {
         if (currentLogLevel <= LogLevel.Log)
