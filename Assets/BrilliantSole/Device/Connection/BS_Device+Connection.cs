@@ -20,7 +20,7 @@ public partial class BS_Device
                 _connectionManager.OnRxMessage = null;
                 _connectionManager.OnRxMessages = null;
                 _connectionManager.OnDeviceInformationValue = null;
-                _connectionManager.OnSendTxMessage = null;
+                _connectionManager.OnSendTxData = null;
             }
             if (value != null)
             {
@@ -29,7 +29,7 @@ public partial class BS_Device
                 value.OnRxMessage = OnRxMessage;
                 value.OnRxMessages = OnRxMessages;
                 value.OnDeviceInformationValue = OnDeviceInformationValue;
-                value.OnSendTxMessage = OnSendTxMessage;
+                value.OnSendTxData = OnSendTxData;
             }
 
             _connectionManager = value;
@@ -93,21 +93,9 @@ public partial class BS_Device
         Logger.Log($"Received battery level {batteryLevel}%");
         BatteryLevel = batteryLevel;
     }
-    private void OnRxMessage(BS_BaseConnectionManager connectionManager, byte messageTypeEnum, byte[] messageData)
-    {
-        // FILL
-    }
-    private void OnRxMessages(BS_BaseConnectionManager connectionManager)
-    {
-        // FILL
-    }
     private void OnDeviceInformationValue(BS_BaseConnectionManager connectionManager, BS_DeviceInformationType deviceInformationType, byte[] data)
     {
         Logger.Log($"Received {data.Length} data for DeviceInformationType {deviceInformationType}");
         DeviceInformation.UpdateValue(deviceInformationType, data);
-    }
-    private void OnSendTxMessage(BS_BaseConnectionManager connectionManager)
-    {
-        // FILL
     }
 }

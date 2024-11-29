@@ -203,7 +203,7 @@ public class BS_BleConnectionManager : BS_BaseConnectionManager
 
     private void ReadCharacteristics()
     {
-        string? characteristicUuidToRead = GetNextCharacteristicUuidToRead();
+        var characteristicUuidToRead = GetNextCharacteristicUuidToRead();
         if (characteristicUuidToRead == null)
         {
             Logger.Log("Read all Characteristics");
@@ -212,7 +212,7 @@ public class BS_BleConnectionManager : BS_BaseConnectionManager
         }
         Logger.Log($"nextCharacteristicUuidToRead {characteristicUuidToRead}");
 
-        string? serviceUuid = BS_BleUtils.GetServiceUuid(characteristicUuidToRead);
+        var serviceUuid = BS_BleUtils.GetServiceUuid(characteristicUuidToRead);
         if (serviceUuid == null)
         {
             Logger.LogError($"Unable to find serviceUuid for characteristicUuidToRead {characteristicUuidToRead}");
@@ -232,7 +232,7 @@ public class BS_BleConnectionManager : BS_BaseConnectionManager
     private void OnCharacteristicWrite(string characteristicUuid)
     {
         Logger.Log($"Wrote to characteristicUuid {characteristicUuid} for \"{Name}\"");
-        OnSendTxMessage?.Invoke(this);
+        OnSendTxData?.Invoke(this);
     }
 
 
@@ -252,7 +252,7 @@ public class BS_BleConnectionManager : BS_BaseConnectionManager
     }
     private void SubscribeToCharacteristics()
     {
-        string? characteristicUuidToSubscribe = GetNextCharacteristicUuidToSubscribe();
+        var characteristicUuidToSubscribe = GetNextCharacteristicUuidToSubscribe();
         if (characteristicUuidToSubscribe == null)
         {
             Logger.Log("Subscribed to all Characteristics");
@@ -262,7 +262,7 @@ public class BS_BleConnectionManager : BS_BaseConnectionManager
         }
         Logger.Log($"nextCharacteristicUuidToSubscribe {characteristicUuidToSubscribe}");
 
-        string? serviceUuid = BS_BleUtils.GetServiceUuid(characteristicUuidToSubscribe);
+        var serviceUuid = BS_BleUtils.GetServiceUuid(characteristicUuidToSubscribe);
         if (serviceUuid == null)
         {
             Logger.LogError($"Unable to find serviceUuid for characteristicUuidToSubscribe {characteristicUuidToSubscribe}");
@@ -378,10 +378,10 @@ public class BS_BleConnectionManager : BS_BaseConnectionManager
         }
     }
 
-    protected override void SendTxData(List<byte> Data)
+    public override void SendTxData(List<byte> Data)
     {
         base.SendTxData(Data);
-        byte[] data = Data.ToArray();
+        var data = Data.ToArray();
         Logger.Log($"Writing {data.Length} bytes to Tx for \"{Name}\"...");
         BluetoothLEHardwareInterface.WriteCharacteristic(Address, BS_BleUtils.MainServiceUuid, BS_BleUtils.TxCharacteristicUuid, data, data.Length, true, OnCharacteristicWrite);
     }

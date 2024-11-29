@@ -12,7 +12,7 @@ public abstract class BS_BaseConnectionManager
     public Action<BS_BaseConnectionManager, byte, byte[]> OnRxMessage;
     public Action<BS_BaseConnectionManager> OnRxMessages;
     public Action<BS_BaseConnectionManager, BS_DeviceInformationType, byte[]> OnDeviceInformationValue;
-    public Action<BS_BaseConnectionManager> OnSendTxMessage;
+    public Action<BS_BaseConnectionManager> OnSendTxData;
 
 
     public Action<BS_BaseConnectionManager, BS_ConnectionStatus> OnStatus;
@@ -83,5 +83,5 @@ public abstract class BS_BaseConnectionManager
 
     private void OnParsedRxMessage(byte messageType, byte[] messageData) { OnRxMessage(this, messageType, messageData); }
 
-    protected virtual void SendTxData(List<byte> Data) { Logger.Log($"Sending {Data.Count} bytes..."); }
+    public virtual void SendTxData(List<byte> Data) { Logger.Log($"Sending {Data.Count} bytes..."); }
 }

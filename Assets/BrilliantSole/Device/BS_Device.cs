@@ -8,9 +8,11 @@ public partial class BS_Device
 
         _batteryLevel = 0;
 
-        DeviceInformation.Clear();
+        IsSendingTxData = false;
+        PendingTxMessages.Clear();
 
-        // FILL - clear all Managers
+        DeviceInformation.Clear();
+        foreach (var BaseManager in Managers) { BaseManager.Reset(); }
     }
 
     public BS_Device()

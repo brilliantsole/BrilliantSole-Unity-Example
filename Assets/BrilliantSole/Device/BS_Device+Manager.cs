@@ -1,5 +1,3 @@
-using UnityEngine;
-
 public partial class BS_Device
 {
     private readonly BS_InformationManager InformationManager = new();
@@ -10,10 +8,7 @@ public partial class BS_Device
 
     private void SetupManagers()
     {
-        foreach (var BaseManager in Managers)
-        {
-            // FILL - assign delegates
-        }
+        foreach (var BaseManager in Managers) { BaseManager.SendTxMessages = SendTxMessages; }
     }
 
 }
