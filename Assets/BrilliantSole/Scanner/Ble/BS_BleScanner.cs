@@ -31,7 +31,7 @@ public class BS_BleScanner : BS_BaseScanner<BS_BleScanner>
     {
         Logger.Log("Ble initialized");
         _isInitialized = true;
-        _scanTimeout = _scanInterval;
+        _scanTimeout = _scanTimeoutDuration;
         StartScan();
     }
     private void OnBleInitializationError(string error)
@@ -80,6 +80,7 @@ public class BS_BleScanner : BS_BaseScanner<BS_BleScanner>
         }
         else
         {
+            _didScan = false;
             IsScanning = true;
             return true;
         }
@@ -97,16 +98,15 @@ public class BS_BleScanner : BS_BaseScanner<BS_BleScanner>
         return true;
     }
 
-    private readonly float _scanInterval = 0.5f;
+    private readonly float _scanTimeoutDuration = 0.2f;
     private float _scanTimeout = 0;
+    private bool _didScan = false;
     private void Scan()
     {
+        if (_didScan) { return; }
         _scanTimeout -= Time.deltaTime;
-        if (_scanTimeout > 0)
-        {
-            return;
-        }
-        _scanTimeout = _scanInterval;
+        if (_scanTimeout >= 0) { return; }
+        _didScan = true;
         Logger.Log("Scanning for devices...");
         BluetoothLEHardwareInterface.RetrieveListOfPeripheralsWithServices(BS_BleUtils.ScanServiceUuids, OnDiscoveredBleDevice);
         BluetoothLEHardwareInterface.ScanForPeripheralsWithServices(BS_BleUtils.ScanServiceUuids, OnDiscoveredBleDevice, OnDiscoveredBleDeviceData, true);

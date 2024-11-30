@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 public partial class BS_Device
 {
     private void OnRxMessage(BS_BaseConnectionManager connectionManager, byte messageTypeEnum, byte[] messageData)

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 
 public abstract class BS_BaseManager
 {
@@ -14,6 +15,8 @@ public abstract class BS_BaseManager
 
 public abstract class BS_BaseManager<TEnum> : BS_BaseManager where TEnum : Enum
 {
+    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_BaseManager", BS_Logger.LogLevel.Log);
+
     public static readonly Type EnumType = typeof(TEnum);
 
     public BS_BaseManager()
@@ -44,10 +47,24 @@ public abstract class BS_BaseManager<TEnum> : BS_BaseManager where TEnum : Enum
     {
         foreach (TEnum value in EnumType.GetEnumValues())
         {
+            Logger.Log($"enum {offset}: {value}");
             EnumToTxRx.Add(value, offset);
             TxRxToEnum.Add(offset, value);
-            enumStrings[offset] = value.ToString();
+            enumStrings.Add(value.ToString());
             offset++;
         }
+    }
+
+    public static byte[] ConvertEnumToTxRx(TEnum[] enumArray)
+    {
+
+        byte[] byteArray = new byte[enumArray.Length];
+
+        for (int i = 0; i < enumArray.Length; i++)
+        {
+            byteArray[i] = EnumToTxRx[enumArray[i]];
+        }
+
+        return byteArray;
     }
 }

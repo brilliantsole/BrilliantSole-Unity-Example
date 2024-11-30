@@ -50,6 +50,7 @@ public class BS_Logger
     }
 
 
+    [Conditional("UNITY_EDITOR")]
     public void Log(string message)
     {
         if (currentLogLevel <= LogLevel.Log)

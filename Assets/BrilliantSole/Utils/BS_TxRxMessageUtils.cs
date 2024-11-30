@@ -10,6 +10,8 @@ public static class BS_TxRxMessageUtils
 
     static BS_TxRxMessageUtils()
     {
+        Logger.Log("BS_TxRxMessageUtils constructor");
+
         byte offset = 0;
         BS_InformationManager.InitTxRxEnum(ref offset, _enumStrings);
         BS_SensorConfigurationManager.InitTxRxEnum(ref offset, _enumStrings);
@@ -18,8 +20,22 @@ public static class BS_TxRxMessageUtils
         BS_TfliteManager.InitTxRxEnum(ref offset, _enumStrings);
         BS_FileTransferManager.InitTxRxEnum(ref offset, _enumStrings);
         maxTxRxMessageType = offset;
+
+        SetupRequiredTxMessageTypes();
     }
 
     static private readonly List<string> _enumStrings = new();
     static public IReadOnlyList<string> EnumStrings => _enumStrings.AsReadOnly();
+
+    static private readonly List<byte> requiredTxMessageTypes = new();
+    private static void SetupRequiredTxMessageTypes()
+    {
+        requiredTxMessageTypes.AddRange(
+            BS_InformationManager.ConvertEnumToTxRx(new[] {
+                BS_InformationMessageType.GetBatteryCurrent
+        }));
+        // FILL
+        Logger.Log($"requiredTxMessageTypes: {requiredTxMessageTypes}");
+    }
+    static public IReadOnlyList<byte> RequiredTxMessageTypes => requiredTxMessageTypes;
 }
