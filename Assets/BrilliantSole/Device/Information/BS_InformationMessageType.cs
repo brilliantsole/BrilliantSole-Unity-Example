@@ -1,13 +1,13 @@
 public enum BS_InformationMessageType : byte
 {
-    IsBatteryCharging,
+    GetIsBatteryCharging,
     GetBatteryCurrent,
     GetMtu,
     GetId,
     GetName,
     SetName,
-    GetType,
-    SetType,
+    GetDeviceType,
+    SetDeviceType,
     GetCurrentTime,
     SetCurrentTime
 }

@@ -45,7 +45,7 @@ public partial class BS_Device
             Logger.Log("ConnectionStatus is not connecting - stopping now...");
             return;
         }
-        if (false) // FILL - check if currentTime is not 0
+        if (InformationManager.CurrentTime == 0)
         {
             Logger.Log("Current time is 0 - stopping now...");
             return;

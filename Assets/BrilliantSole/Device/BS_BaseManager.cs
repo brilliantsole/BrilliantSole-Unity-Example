@@ -43,8 +43,8 @@ public abstract class BS_BaseManager<TEnum> : BS_BaseManager where TEnum : Enum
         Logger.Log($"OnRxMessage {messageType} ({data.Length} bytes)");
     }
 
-    private static readonly Dictionary<TEnum, byte> EnumToTxRx = new();
-    private static readonly Dictionary<byte, TEnum> TxRxToEnum = new();
+    protected static readonly Dictionary<TEnum, byte> EnumToTxRx = new();
+    protected static readonly Dictionary<byte, TEnum> TxRxToEnum = new();
 
     public static void InitTxRxEnum(ref byte offset, List<string> enumStrings)
     {
@@ -57,7 +57,8 @@ public abstract class BS_BaseManager<TEnum> : BS_BaseManager where TEnum : Enum
             offset++;
         }
     }
-    protected static byte[] ConvertEnumToTxRx(TEnum[] enumArray)
+
+    protected static byte[] EnumArrayToTxRxArray(TEnum[] enumArray)
     {
         byte[] byteArray = new byte[enumArray.Length];
 
@@ -68,4 +69,7 @@ public abstract class BS_BaseManager<TEnum> : BS_BaseManager where TEnum : Enum
 
         return byteArray;
     }
+
+    protected BS_TxMessage CreateTxMessage(TEnum enumValue, in List<byte> data) { return new(EnumToTxRx[enumValue], data); }
+    protected BS_TxMessage CreateTxMessage(TEnum enumValue) { return new(EnumToTxRx[enumValue]); }
 }
