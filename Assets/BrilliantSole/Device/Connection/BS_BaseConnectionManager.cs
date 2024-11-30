@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using static BS_ConnectionStatus;
 
 public abstract class BS_BaseConnectionManager
 {
@@ -17,7 +18,7 @@ public abstract class BS_BaseConnectionManager
     public Action<BS_BaseConnectionManager, BS_ConnectionStatus> OnStatus;
 
     [SerializeField]
-    private BS_ConnectionStatus _status = BS_ConnectionStatus.NotConnected;
+    private BS_ConnectionStatus _status = NotConnected;
     public BS_ConnectionStatus Status
     {
         get => _status;
@@ -30,7 +31,7 @@ public abstract class BS_BaseConnectionManager
         }
     }
 
-    public bool IsConnected => Status == BS_ConnectionStatus.Connected;
+    public bool IsConnected => Status == Connected;
 
     public void Connect()
     {
@@ -45,7 +46,7 @@ public abstract class BS_BaseConnectionManager
             Continue = true;
             return;
         }
-        Status = BS_ConnectionStatus.Connecting;
+        Status = Connecting;
         Logger.Log("Connecting...");
     }
     public void Disconnect()
@@ -55,19 +56,19 @@ public abstract class BS_BaseConnectionManager
     }
     protected virtual void Disconnect(ref bool Continue)
     {
-        if (Status == BS_ConnectionStatus.NotConnected)
+        if (Status == NotConnected)
         {
             Logger.Log("Already not connected");
             Continue = false;
             return;
         }
-        if (Status == BS_ConnectionStatus.Disconnecting)
+        if (Status == Disconnecting)
         {
             Logger.Log("Already Disconnecting");
             Continue = false;
             return;
         }
-        Status = BS_ConnectionStatus.Disconnecting;
+        Status = Disconnecting;
         Logger.Log("Disconnecting...");
     }
 

@@ -3,8 +3,6 @@ using static BS_FileTransferMessageType;
 
 public class BS_FileTransferManager : BS_BaseManager<BS_FileTransferMessageType>
 {
-    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_FileTransferManager", BS_Logger.LogLevel.Log);
-
     public static readonly BS_FileTransferMessageType[] RequiredMessageTypes = {
         GetMaxFileLength,
         GetFileTransferType,
@@ -13,6 +11,8 @@ public class BS_FileTransferManager : BS_BaseManager<BS_FileTransferMessageType>
         GetFileTransferStatus,
     };
     public static byte[] RequiredTxRxMessageTypes => ConvertEnumToTxRx(RequiredMessageTypes);
+
+    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_FileTransferManager", BS_Logger.LogLevel.Log);
 
     public override void OnRxMessage(BS_FileTransferMessageType messageType, byte[] data)
     {

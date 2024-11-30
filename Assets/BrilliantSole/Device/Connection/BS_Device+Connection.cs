@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using UnityEngine;
+using static BS_ConnectionStatus;
 
 #nullable enable
 
@@ -42,22 +43,22 @@ public partial class BS_Device
         Logger.Log($"ConnectionManagerStatus updated to {_ConnectionManagerStatus}");
         switch (_ConnectionManagerStatus)
         {
-            case BS_ConnectionStatus.Connected:
+            case Connected:
                 SendTxMessages(BS_TxRxMessageUtils.RequiredTxRxMessages);
                 break;
-            case BS_ConnectionStatus.NotConnected:
+            case NotConnected:
                 Reset();
                 break;
         }
 
-        if (_ConnectionManagerStatus != BS_ConnectionStatus.Connected)
+        if (_ConnectionManagerStatus != Connected)
         {
             ConnectionStatus = _ConnectionManagerStatus;
         }
     }
 
     public BS_ConnectionType? ConnectionType => ConnectionManager?.Type;
-    private BS_ConnectionStatus ConnectionManagerStatus => ConnectionManager?.Status ?? BS_ConnectionStatus.NotConnected;
+    private BS_ConnectionStatus ConnectionManagerStatus => ConnectionManager?.Status ?? NotConnected;
 
     public event Action<BS_Device, BS_ConnectionStatus>? OnConnectionStatus;
     public event Action<BS_Device, bool>? OnIsConnected;
@@ -76,14 +77,14 @@ public partial class BS_Device
 
             switch (ConnectionStatus)
             {
-                case BS_ConnectionStatus.Connected:
-                case BS_ConnectionStatus.NotConnected:
+                case Connected:
+                case NotConnected:
                     OnIsConnected?.Invoke(this, IsConnected);
                     break;
             }
         }
     }
-    public bool IsConnected => ConnectionStatus == BS_ConnectionStatus.Connected;
+    public bool IsConnected => ConnectionStatus == Connected;
 
     public void Connect() { ConnectionManager?.Connect(); }
     public void Disconnect() { ConnectionManager?.Disconnect(); }

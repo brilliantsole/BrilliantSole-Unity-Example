@@ -1,6 +1,6 @@
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
+using static BS_ConnectionStatus;
 
 #nullable enable
 
@@ -169,7 +169,7 @@ public class BS_BleConnectionManager : BS_BaseConnectionManager
     private void OnDisconnectPeripheral(string address)
     {
         Logger.Log("Disconnected from \"{Name}\"");
-        Status = BS_ConnectionStatus.NotConnected;
+        Status = NotConnected;
         Stage = BleConnectionStage.None;
     }
 
@@ -257,7 +257,7 @@ public class BS_BleConnectionManager : BS_BaseConnectionManager
         {
             Logger.Log("Subscribed to all Characteristics");
             Stage = BleConnectionStage.None;
-            Status = BS_ConnectionStatus.Connected;
+            Status = Connected;
             return;
         }
         Logger.Log($"nextCharacteristicUuidToSubscribe {characteristicUuidToSubscribe}");

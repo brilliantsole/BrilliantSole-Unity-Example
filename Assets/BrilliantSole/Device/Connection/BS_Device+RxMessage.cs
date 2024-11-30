@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using UnityEngine.iOS;
+using static BS_ConnectionStatus;
 
 public partial class BS_Device
 {
@@ -21,7 +21,7 @@ public partial class BS_Device
     {
         Logger.Log("Parsed Rx Messages");
         SendPendingTxMessages();
-        if (ConnectionStatus == BS_ConnectionStatus.Connecting)
+        if (ConnectionStatus == Connecting)
         {
             CheckIfFullyConnected();
         }
@@ -40,7 +40,7 @@ public partial class BS_Device
             Logger.Log("Don't have all DeviceInformation - stopping now...");
             return;
         }
-        if (ConnectionStatus != BS_ConnectionStatus.Connecting)
+        if (ConnectionStatus != Connecting)
         {
             Logger.Log("ConnectionStatus is not connecting - stopping now...");
             return;
@@ -54,7 +54,7 @@ public partial class BS_Device
         bool receivedAllRequiredTxRxMessages = CheckIfReceivedAllRequiredTxRxMessages();
         Logger.Log($"receivedAllRequiredTxRxMessages? {receivedAllRequiredTxRxMessages}");
         if (!receivedAllRequiredTxRxMessages) { return; }
-        ConnectionStatus = BS_ConnectionStatus.Connected;
+        ConnectionStatus = Connected;
     }
 
     private bool CheckIfReceivedAllRequiredTxRxMessages()
