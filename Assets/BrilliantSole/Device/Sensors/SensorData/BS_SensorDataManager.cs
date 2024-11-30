@@ -1,4 +1,3 @@
-using UnityEngine;
 using static BS_SensorDataMessageType;
 
 public class BS_SensorDataManager : BS_BaseManager<BS_SensorDataMessageType>
@@ -8,4 +7,11 @@ public class BS_SensorDataManager : BS_BaseManager<BS_SensorDataMessageType>
         GetSensorScalars
      };
     public static byte[] RequiredTxRxMessageTypes => EnumArrayToTxRxArray(RequiredMessageTypes);
+
+    public override void Reset()
+    {
+        base.Reset();
+
+        // FILL
+    }
 }
