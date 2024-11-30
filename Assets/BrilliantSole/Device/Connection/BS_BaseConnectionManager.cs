@@ -14,7 +14,6 @@ public abstract class BS_BaseConnectionManager
     public Action<BS_BaseConnectionManager, BS_DeviceInformationType, byte[]> OnDeviceInformationValue;
     public Action<BS_BaseConnectionManager> OnSendTxData;
 
-
     public Action<BS_BaseConnectionManager, BS_ConnectionStatus> OnStatus;
 
     [SerializeField]

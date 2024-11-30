@@ -6,13 +6,11 @@ public partial class BS_Device
     {
         ConnectionStatus = BS_ConnectionStatus.NotConnected;
 
-        _batteryLevel = 0;
-
-        IsSendingTxData = false;
-        PendingTxMessages.Clear();
-
+        ResetBatteryLevel();
+        ResetTxMessaging();
+        ResetRxMessaging();
         DeviceInformation.Clear();
-        foreach (var BaseManager in Managers) { BaseManager.Reset(); }
+        ResetManagers();
     }
 
     public BS_Device()

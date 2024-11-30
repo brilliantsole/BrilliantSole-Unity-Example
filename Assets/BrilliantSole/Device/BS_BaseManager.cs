@@ -38,7 +38,10 @@ public abstract class BS_BaseManager<TEnum> : BS_BaseManager where TEnum : Enum
         return true;
     }
 
-    public virtual void OnRxMessage(TEnum messageType, byte[] data) { }
+    public virtual void OnRxMessage(TEnum messageType, byte[] data)
+    {
+        Logger.Log($"OnRxMessage {messageType} ({data.Length} bytes)");
+    }
 
     private static readonly Dictionary<TEnum, byte> EnumToTxRx = new();
     private static readonly Dictionary<byte, TEnum> TxRxToEnum = new();
@@ -47,7 +50,7 @@ public abstract class BS_BaseManager<TEnum> : BS_BaseManager where TEnum : Enum
     {
         foreach (TEnum value in EnumType.GetEnumValues())
         {
-            Logger.Log($"enum {offset}: {value}");
+            //Logger.Log($"enum {offset}: {value}");
             EnumToTxRx.Add(value, offset);
             TxRxToEnum.Add(offset, value);
             enumStrings.Add(value.ToString());

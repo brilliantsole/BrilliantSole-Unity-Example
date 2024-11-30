@@ -7,5 +7,5 @@ public class BS_SensorDataManager : BS_BaseManager<BS_SensorDataMessageType>
         GetPressurePositions,
         GetSensorScalars
      };
-    public static byte[] RequiredTxMessageTypes => ConvertEnumToTxRx(RequiredMessageTypes);
+    public static byte[] RequiredTxRxMessageTypes => ConvertEnumToTxRx(RequiredMessageTypes);
 }

@@ -1,11 +1,9 @@
 using System.Collections.Generic;
-using System.Linq;
-using UnityEngine;
 
 public partial class BS_Device
 {
-    private readonly List<BS_TxMessage> PendingTxMessages;
-    private readonly List<byte> TxData;
+    private readonly List<BS_TxMessage> PendingTxMessages = new();
+    private readonly List<byte> TxData = new();
     private bool IsSendingTxData = false;
 
     private void OnSendTxData(BS_BaseConnectionManager connectionManager)
@@ -40,12 +38,11 @@ public partial class BS_Device
         TxData.Clear();
 
         var maxMessageLength = InformationManager.MaxTxMessageLength;
-        var pendingTxMessages = PendingTxMessages.ToArray();
 
         byte pendingTxMessageIndex = 0;
         while (pendingTxMessageIndex < PendingTxMessages.Count)
         {
-            ref BS_TxMessage pendingTxMessage = ref pendingTxMessages[pendingTxMessageIndex];
+            BS_TxMessage pendingTxMessage = PendingTxMessages[pendingTxMessageIndex];
             var pendingTxMessageLength = pendingTxMessage.Length();
             var pendingTxMessageType = BS_TxRxMessageUtils.EnumStrings[pendingTxMessage.Type];
             bool shouldAppendTxMessage = maxMessageLength == 0 || TxData.Count + pendingTxMessageLength <= maxMessageLength;
@@ -73,4 +70,10 @@ public partial class BS_Device
     }
 
     private void SendTxData(List<byte> Data) { ConnectionManager?.SendTxData(Data); }
+
+    private void ResetTxMessaging()
+    {
+        IsSendingTxData = false;
+        PendingTxMessages.Clear();
+    }
 }

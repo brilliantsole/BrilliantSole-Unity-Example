@@ -8,7 +8,11 @@ public partial class BS_Device
 
     private void SetupManagers()
     {
-        foreach (var BaseManager in Managers) { BaseManager.SendTxMessages = SendTxMessages; }
+        foreach (var Manager in Managers) { Manager.SendTxMessages = SendTxMessages; }
     }
 
+    private void ResetManagers()
+    {
+        foreach (var Manager in Managers) { Manager.Reset(); }
+    }
 }

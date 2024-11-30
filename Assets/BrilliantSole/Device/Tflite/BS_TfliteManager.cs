@@ -13,5 +13,5 @@ public class BS_TfliteManager : BS_BaseManager<BS_TfliteMessageType>
         GetTfliteThreshold,
         GetTfliteInferencingEnabled,
     };
-    public static byte[] RequiredTxMessageTypes => ConvertEnumToTxRx(RequiredMessageTypes);
+    public static byte[] RequiredTxRxMessageTypes => ConvertEnumToTxRx(RequiredMessageTypes);
 }

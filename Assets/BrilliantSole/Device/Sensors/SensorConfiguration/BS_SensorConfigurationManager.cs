@@ -6,5 +6,5 @@ public class BS_SensorConfigurationManager : BS_BaseManager<BS_SensorConfigurati
     public static readonly BS_SensorConfigurationMessageType[] RequiredMessageTypes = {
         GetSensorConfiguration
      };
-    public static byte[] RequiredTxMessageTypes => ConvertEnumToTxRx(RequiredMessageTypes);
+    public static byte[] RequiredTxRxMessageTypes => ConvertEnumToTxRx(RequiredMessageTypes);
 }

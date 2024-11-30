@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using UnityEngine;
 
 #nullable enable
@@ -42,7 +43,7 @@ public partial class BS_Device
         switch (_ConnectionManagerStatus)
         {
             case BS_ConnectionStatus.Connected:
-                // FILL - send Required Tx Messages
+                SendTxMessages(BS_TxRxMessageUtils.RequiredTxRxMessages);
                 break;
             case BS_ConnectionStatus.NotConnected:
                 Reset();
