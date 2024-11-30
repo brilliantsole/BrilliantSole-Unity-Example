@@ -108,7 +108,7 @@ public class BS_BleScanner : BS_BaseScanner<BS_BleScanner>
         if (_scanTimeout >= 0) { return; }
         _didScan = true;
         Logger.Log("Scanning for devices...");
-        BluetoothLEHardwareInterface.RetrieveListOfPeripheralsWithServices(BS_BleUtils.ScanServiceUuids, OnDiscoveredBleDevice);
+        //BluetoothLEHardwareInterface.RetrieveListOfPeripheralsWithServices(BS_BleUtils.ScanServiceUuids, OnDiscoveredBleDevice);
         BluetoothLEHardwareInterface.ScanForPeripheralsWithServices(BS_BleUtils.ScanServiceUuids, OnDiscoveredBleDevice, OnDiscoveredBleDeviceData, true);
     }
 

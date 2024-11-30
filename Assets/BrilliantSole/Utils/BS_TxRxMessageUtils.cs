@@ -1,16 +1,13 @@
-using System;
 using System.Collections.Generic;
-using UnityEngine;
 
 public static class BS_TxRxMessageUtils
 {
     private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_TxRxMessageUtils", BS_Logger.LogLevel.Log);
 
     private static readonly byte maxTxRxMessageType;
-
     static BS_TxRxMessageUtils()
     {
-        Logger.Log("BS_TxRxMessageUtils constructor");
+        Logger.Log("BS_TxRxMessageUtils static constructor");
 
         byte offset = 0;
         BS_InformationManager.InitTxRxEnum(ref offset, _enumStrings);
@@ -30,12 +27,13 @@ public static class BS_TxRxMessageUtils
     static private readonly List<byte> requiredTxMessageTypes = new();
     private static void SetupRequiredTxMessageTypes()
     {
-        requiredTxMessageTypes.AddRange(
-            BS_InformationManager.ConvertEnumToTxRx(new[] {
-                BS_InformationMessageType.GetBatteryCurrent
-        }));
-        // FILL
-        Logger.Log($"requiredTxMessageTypes: {requiredTxMessageTypes}");
+        requiredTxMessageTypes.AddRange(BS_InformationManager.RequiredTxMessageTypes);
+        requiredTxMessageTypes.AddRange(BS_SensorConfigurationManager.RequiredTxMessageTypes);
+        requiredTxMessageTypes.AddRange(BS_SensorDataManager.RequiredTxMessageTypes);
+        requiredTxMessageTypes.AddRange(BS_VibrationManager.RequiredTxMessageTypes);
+        requiredTxMessageTypes.AddRange(BS_TfliteManager.RequiredTxMessageTypes);
+        requiredTxMessageTypes.AddRange(BS_FileTransferManager.RequiredTxMessageTypes);
+        Logger.Log($"requiredTxMessageTypes: {requiredTxMessageTypes.Count}");
     }
     static public IReadOnlyList<byte> RequiredTxMessageTypes => requiredTxMessageTypes;
 }

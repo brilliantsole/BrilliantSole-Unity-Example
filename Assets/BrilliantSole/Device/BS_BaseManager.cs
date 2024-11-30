@@ -54,10 +54,8 @@ public abstract class BS_BaseManager<TEnum> : BS_BaseManager where TEnum : Enum
             offset++;
         }
     }
-
-    public static byte[] ConvertEnumToTxRx(TEnum[] enumArray)
+    protected static byte[] ConvertEnumToTxRx(TEnum[] enumArray)
     {
-
         byte[] byteArray = new byte[enumArray.Length];
 
         for (int i = 0; i < enumArray.Length; i++)
