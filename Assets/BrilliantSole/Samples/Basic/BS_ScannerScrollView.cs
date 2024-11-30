@@ -51,7 +51,8 @@ public class BS_ScannerScrollView : MonoBehaviour
             {
                 toggleConnectionButtonText.text = "Connecting...";
                 Debug.Log($"Toggling Connection to \"{DiscoveredDevice.Name}\"...");
-                ScannerManager.ToggleConnectionToDiscoveredDevice(DiscoveredDevice);
+                var device = ScannerManager.ToggleConnectionToDiscoveredDevice(DiscoveredDevice);
+                // FILL - update toggleConnectionButtonText
             });
         }
 

@@ -6,7 +6,7 @@ public static class BS_ByteUtils
 {
     private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_ByteUtils", BS_Logger.LogLevel.Log);
 
-    public static T ParseNumber<T>(byte[] data, int offset, bool isLittleEndian) where T : unmanaged
+    public static T ParseNumber<T>(byte[] data, int offset = 0, bool isLittleEndian = false) where T : unmanaged
     {
         Logger.Log($"Parsing {data.Length} data at offset {offset} as {typeof(T).Name} (isLittleEndian: {isLittleEndian})");
 
@@ -28,7 +28,7 @@ public static class BS_ByteUtils
         return MemoryMarshal.Read<T>(buffer);
     }
 
-    public static void WriteNumber<T>(T value, byte[] data, int offset, bool isLittleEndian) where T : unmanaged
+    public static void WriteNumber<T>(T value, byte[] data, int offset = 0, bool isLittleEndian = false) where T : unmanaged
     {
         Logger.Log($"Writing {value} at offset {offset} as {typeof(T).Name} (isLittleEndian: {isLittleEndian})");
 

@@ -88,8 +88,8 @@ public class BS_BleConnectionManager : BS_BaseConnectionManager
     {
         _timeout = _Stage switch
         {
-            BleConnectionStage.Connecting => 0.5f,
-            BleConnectionStage.RequestingMtu => 0.5f,
+            BleConnectionStage.Connecting => 0.1f,
+            BleConnectionStage.RequestingMtu => 0.1f,
             BleConnectionStage.SubscribingToCharacteristics => 0.1f,
             BleConnectionStage.ReadingCharacteristics => 0.1f,
             _ => 0f,

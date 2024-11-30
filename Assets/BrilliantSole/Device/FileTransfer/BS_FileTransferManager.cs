@@ -14,7 +14,7 @@ public class BS_FileTransferManager : BS_BaseManager<BS_FileTransferMessageType>
 
     private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_FileTransferManager", BS_Logger.LogLevel.Log);
 
-    public override void OnRxMessage(BS_FileTransferMessageType messageType, byte[] data)
+    public override void OnRxMessage(BS_FileTransferMessageType messageType, in byte[] data)
     {
         base.OnRxMessage(messageType, data);
         // FILL

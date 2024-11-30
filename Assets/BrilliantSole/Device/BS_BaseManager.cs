@@ -8,7 +8,7 @@ public abstract class BS_BaseManager
 
     public virtual void Reset() { }
     public virtual void OnSendTxData() { }
-    public abstract bool OnRxMessage(byte messageTypeEnum, byte[] data);
+    public abstract bool OnRxMessage(byte messageTypeEnum, in byte[] data);
 
     public Action<BS_TxMessage[], bool> SendTxMessages;
 }
@@ -27,7 +27,7 @@ public abstract class BS_BaseManager<TEnum> : BS_BaseManager where TEnum : Enum
         }
     }
 
-    public override bool OnRxMessage(byte messageTypeEnum, byte[] data)
+    public override bool OnRxMessage(byte messageTypeEnum, in byte[] data)
     {
         if (!TxRxToEnum.ContainsKey(messageTypeEnum))
         {
@@ -38,7 +38,7 @@ public abstract class BS_BaseManager<TEnum> : BS_BaseManager where TEnum : Enum
         return true;
     }
 
-    public virtual void OnRxMessage(TEnum messageType, byte[] data)
+    public virtual void OnRxMessage(TEnum messageType, in byte[] data)
     {
         Logger.Log($"OnRxMessage {messageType} ({data.Length} bytes)");
     }
