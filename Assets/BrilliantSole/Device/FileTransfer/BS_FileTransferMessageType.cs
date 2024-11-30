@@ -1,5 +1,6 @@
 public enum BS_FileTransferMessageType : byte
 {
+    GetMaxFileLength,
     GetFileTransferType,
     SetFileTransferType,
     GetFileLength,
@@ -8,7 +9,6 @@ public enum BS_FileTransferMessageType : byte
     SetFileChecksum,
     SetFileTransferCommand,
     GetFileTransferStatus,
-    SetFileTransferStatus,
     GetFileTransferBlock,
     SetFileTransferBlock,
     FileBytesTransferred
