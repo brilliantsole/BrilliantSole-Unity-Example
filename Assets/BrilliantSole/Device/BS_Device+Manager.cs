@@ -1,5 +1,6 @@
 public partial class BS_Device
 {
+    private readonly BS_BatteryManager BatteryManager = new();
     private readonly BS_InformationManager InformationManager = new();
     private readonly BS_SensorConfigurationManager SensorConfigurationManager = new();
     private readonly BS_SensorDataManager SensorDataManager = new();

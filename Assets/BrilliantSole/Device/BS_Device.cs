@@ -15,7 +15,7 @@ public partial class BS_Device
 
     public BS_Device()
     {
-        Managers = new BS_BaseManager[] { InformationManager, SensorConfigurationManager, SensorDataManager, VibrationManager };
+        Managers = new BS_BaseManager[] { BatteryManager, InformationManager, SensorConfigurationManager, SensorDataManager, VibrationManager };
         SetupManagers();
     }
 }

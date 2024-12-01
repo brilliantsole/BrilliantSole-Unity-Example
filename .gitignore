@@ -81,3 +81,5 @@ TODO.txt
 mono_crash.*
 
 .utmp/
+
+omnisharp.json

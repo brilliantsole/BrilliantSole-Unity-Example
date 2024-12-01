@@ -14,6 +14,7 @@ public static class BS_TxRxMessageUtils
         List<string> _enumStrings = new();
 
         byte offset = 0;
+        BS_BatteryManager.InitTxRxEnum(ref offset, _enumStrings);
         BS_InformationManager.InitTxRxEnum(ref offset, _enumStrings);
         BS_SensorConfigurationManager.InitTxRxEnum(ref offset, _enumStrings);
         BS_SensorDataManager.InitTxRxEnum(ref offset, _enumStrings);
@@ -32,6 +33,7 @@ public static class BS_TxRxMessageUtils
     private static byte[] SetupRequiredTxRxMessageTypes()
     {
         List<byte> requiredTxMessageTypes = new();
+        requiredTxMessageTypes.AddRange(BS_BatteryManager.RequiredTxRxMessageTypes);
         requiredTxMessageTypes.AddRange(BS_InformationManager.RequiredTxRxMessageTypes);
         requiredTxMessageTypes.AddRange(BS_SensorConfigurationManager.RequiredTxRxMessageTypes);
         requiredTxMessageTypes.AddRange(BS_SensorDataManager.RequiredTxRxMessageTypes);

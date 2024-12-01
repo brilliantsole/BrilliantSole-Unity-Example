@@ -6,8 +6,6 @@ using static BS_InformationMessageType;
 public class BS_InformationManager : BS_BaseManager<BS_InformationMessageType>
 {
     public static readonly BS_InformationMessageType[] RequiredMessageTypes = {
-        GetIsBatteryCharging,
-        GetBatteryCurrent,
         GetMtu,
         GetId,
         GetName,
@@ -23,12 +21,6 @@ public class BS_InformationManager : BS_BaseManager<BS_InformationMessageType>
         base.OnRxMessage(messageType, data);
         switch (messageType)
         {
-            case GetIsBatteryCharging:
-                ParseIsBatteryCharging(data);
-                break;
-            case GetBatteryCurrent:
-                ParseBatteryCurrent(data);
-                break;
             case GetMtu:
                 ParseMtu(data);
                 break;
@@ -48,48 +40,6 @@ public class BS_InformationManager : BS_BaseManager<BS_InformationMessageType>
                 ParseCurrentTime(data);
                 break;
         }
-    }
-
-    [SerializeField]
-    private bool? _isBatteryCharging;
-    public bool IsBatteryCharging
-    {
-        get => _isBatteryCharging ?? false;
-        private set
-        {
-            if (_isBatteryCharging == value) { return; }
-            Logger.Log($"Updating IsBatteryCharging to {value}");
-            _isBatteryCharging = value;
-            OnIsBatteryCharging?.Invoke(IsBatteryCharging);
-        }
-    }
-    public event Action<bool> OnIsBatteryCharging;
-    private void ParseIsBatteryCharging(in byte[] data)
-    {
-        bool isBatteryCharging = data[0] == 1;
-        Logger.Log($"parsed isBatteryCharging: {isBatteryCharging}");
-        IsBatteryCharging = isBatteryCharging;
-    }
-
-    [SerializeField]
-    private float? _batteryCurrent;
-    public float BatteryCurrent
-    {
-        get => _batteryCurrent ?? 0.0f;
-        private set
-        {
-            if (_batteryCurrent == value) { return; }
-            Logger.Log($"Updating BatteryCurrent to {value}");
-            _batteryCurrent = value;
-            OnBatteryCurrent?.Invoke(BatteryCurrent);
-        }
-    }
-    public event Action<float> OnBatteryCurrent;
-    private void ParseBatteryCurrent(in byte[] data)
-    {
-        float batteryCurrent = BS_ByteUtils.ParseNumber<float>(data, isLittleEndian: true);
-        Logger.Log($"parsed batteryCurrent: {batteryCurrent}");
-        BatteryCurrent = batteryCurrent;
     }
 
     [SerializeField]
@@ -216,8 +166,6 @@ public class BS_InformationManager : BS_BaseManager<BS_InformationMessageType>
     {
         base.Reset();
 
-        _isBatteryCharging = null;
-        _batteryCurrent = null;
         _mtu = null;
         _id = null;
         _name = null;

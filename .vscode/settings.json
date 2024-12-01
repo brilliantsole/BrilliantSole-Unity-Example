@@ -56,5 +56,9 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "BrilliantSole-Unity-Plugin.sln"
+    "dotnet.defaultSolution": "BrilliantSole-Unity-Plugin.sln",
+    "editor.formatOnSave": true,
+    "[csharp]": {
+        "editor.defaultFormatter": "ms-dotnettools.csharp"
+    },
 }

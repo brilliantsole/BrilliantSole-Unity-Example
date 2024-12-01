@@ -8,7 +8,7 @@ public static class BS_ByteUtils
 
     public static T ParseNumber<T>(byte[] data, int offset = 0, bool isLittleEndian = false) where T : unmanaged
     {
-        Logger.Log($"Parsing {data.Length} data at offset {offset} as {typeof(T).Name} (isLittleEndian: {isLittleEndian})");
+        Logger.Log($"Parsing {typeof(T).Name} (isLittleEndian: {isLittleEndian}) at offset {offset} of {data.Length} bytes");
 
         if (data == null)
             throw new ArgumentNullException(nameof(data));

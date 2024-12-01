@@ -11,8 +11,9 @@ public partial class BS_Device
         ReceivedTxRxMessages.Add(messageTypeEnum);
         foreach (var BaseManager in Managers)
         {
-            if (BaseManager.OnRxMessage(messageTypeEnum, messageData))
+            if (BaseManager.CanParseRxMessage(messageTypeEnum))
             {
+                BaseManager.OnRxMessage(messageTypeEnum, messageData);
                 break;
             }
         }

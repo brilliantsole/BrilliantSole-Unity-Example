@@ -8,7 +8,8 @@ public abstract class BS_BaseManager
 
     public virtual void Reset() { }
     public virtual void OnSendTxData() { }
-    public abstract bool OnRxMessage(byte messageTypeEnum, in byte[] data);
+    public virtual bool CanParseRxMessage(byte messageTypeEnum) { return false; }
+    public abstract void OnRxMessage(byte messageTypeEnum, in byte[] data);
 
     public Action<BS_TxMessage[], bool> SendTxMessages;
 }
@@ -27,15 +28,22 @@ public abstract class BS_BaseManager<TEnum> : BS_BaseManager where TEnum : Enum
         }
     }
 
-    public override bool OnRxMessage(byte messageTypeEnum, in byte[] data)
+    public override bool CanParseRxMessage(byte messageTypeEnum)
     {
-        if (!TxRxToEnum.ContainsKey(messageTypeEnum))
+        return TxRxToEnum.ContainsKey(messageTypeEnum);
+    }
+    private void AssertValidMessageTypeEnum(byte messageTypeEnum)
+    {
+        if (!CanParseRxMessage(messageTypeEnum))
         {
-            return false;
+            throw new ArgumentException($"Invalid messageType {messageTypeEnum}");
         }
-        var messageType = (TEnum)Enum.ToObject(typeof(TEnum), messageTypeEnum);
+    }
+    public override void OnRxMessage(byte messageTypeEnum, in byte[] data)
+    {
+        AssertValidMessageTypeEnum(messageTypeEnum);
+        var messageType = TxRxToEnum[messageTypeEnum];
         OnRxMessage(messageType, data);
-        return true;
     }
 
     public virtual void OnRxMessage(TEnum messageType, in byte[] data)
@@ -50,7 +58,7 @@ public abstract class BS_BaseManager<TEnum> : BS_BaseManager where TEnum : Enum
     {
         foreach (TEnum value in EnumType.GetEnumValues())
         {
-            //Logger.Log($"enum {offset}: {value}");
+            Logger.Log($"enum {offset}: {value}");
             EnumToTxRx.Add(value, offset);
             TxRxToEnum.Add(offset, value);
             enumStrings.Add(value.ToString());
