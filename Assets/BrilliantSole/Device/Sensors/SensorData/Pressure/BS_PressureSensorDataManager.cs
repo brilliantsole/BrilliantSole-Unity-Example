@@ -44,6 +44,7 @@ public class BS_PressureSensorDataManager : BS_BaseSensorDataManager
     private void ParsePressureData(in byte[] data, in ulong timestamp, in float scalar)
     {
         // FILL
+
     }
 
     public override void Reset()

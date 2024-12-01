@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using Unity.Android.Gradle.Manifest;
 using static BS_SensorType;
 
 public class BS_BarometerSensorDataManager : BS_BaseSensorDataManager
@@ -13,7 +15,19 @@ public class BS_BarometerSensorDataManager : BS_BaseSensorDataManager
         base.ParseSensorDataMessage(sensorType, data, timestamp, scalar);
         switch (sensorType)
         {
-            // FILL
+            case Barometer:
+                ParseBarometer(data, timestamp, scalar);
+                break;
         }
+    }
+
+    public Action<float, ulong> OnBarometer;
+
+    private void ParseBarometer(in byte[] data, in ulong timestamp, float scalar)
+    {
+        var barometer = BS_ByteUtils.ParseNumber<float>(data);
+        barometer *= scalar;
+        Logger.Log($"barometer: {barometer}");
+        OnBarometer?.Invoke(barometer, timestamp);
     }
 }

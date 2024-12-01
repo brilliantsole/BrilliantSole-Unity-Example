@@ -27,7 +27,13 @@ public class BS_MotionSensorDataManager : BS_BaseSensorDataManager
     base.ParseSensorDataMessage(sensorType, data, timestamp, scalar);
     switch (sensorType)
     {
-      // FILL
+      case Acceleration:
+      case Gravity:
+      case LinearAcceleration:
+        break;
+      case GameRotation:
+      case Rotation:
+        break;
     }
   }
 }
