@@ -64,7 +64,7 @@ public class BS_BatteryManager : BS_BaseManager<BS_BatteryMessageType>
     public event Action<float> OnBatteryCurrent;
     private void ParseBatteryCurrent(in byte[] data)
     {
-        float batteryCurrent = BS_ByteUtils.ParseNumber<float>(data, isLittleEndian: true);
+        var batteryCurrent = BS_ByteUtils.ParseNumber<float>(data, isLittleEndian: true);
         Logger.Log($"parsed batteryCurrent: {batteryCurrent}");
         BatteryCurrent = batteryCurrent;
     }

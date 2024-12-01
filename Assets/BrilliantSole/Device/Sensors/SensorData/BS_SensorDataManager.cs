@@ -57,7 +57,7 @@ public class BS_SensorDataManager : BS_BaseManager<BS_SensorDataMessageType>
             var sensorType = (BS_SensorType)sensorTypeEnum;
             //Logger.Log($"sensorType: {sensorType}");
 
-            float sensorScalar = BS_ByteUtils.ParseNumber<float>(data, i + 1, true);
+            var sensorScalar = BS_ByteUtils.ParseNumber<float>(data, i + 1, true);
             Logger.Log($"{sensorType} scalar: {sensorScalar}");
 
             sensorScalars.Add(sensorType, sensorScalar);
@@ -68,13 +68,45 @@ public class BS_SensorDataManager : BS_BaseManager<BS_SensorDataMessageType>
 
     private void ParseSensorData(in byte[] data)
     {
-        // https://github.com/brilliantsole/Brilliant-Sole-Unreal/blob/9abf5b05670009c965f9e648ca73f2a270be8d5d/Plugins/BrilliantSoleSDK/Source/BrilliantSoleSDK/Private/BS_SensorDataManager.cpp#L76
+        ushort offset = 0;
+        var timestamp = BS_TimeUtils.ParseTimestamp(data, offset);
+        offset += 2;
+        Logger.Log($"timestamp: {timestamp}ms");
+
+        BS_ParseUtils.ParseMessages(data, (byte sensorTypeEnum, byte[] data) => OnSensorDataMessage(sensorTypeEnum, data, timestamp), offset, false);
     }
+
+    private void OnSensorDataMessage(byte sensorTypeEnum, in byte[] data, in ulong timestamp)
+    {
+        AssertValidSensorTypeEnum(sensorTypeEnum);
+        var sensorType = (BS_SensorType)sensorTypeEnum;
+        Logger.Log($"sensorType: {sensorType}");
+
+        var scalar = sensorScalars.GetValueOrDefault(sensorType, 1.0f);
+        Logger.Log($"scalar: {scalar}");
+
+        foreach (var SensorDataManager in SensorDataManagers)
+        {
+            if (SensorDataManager.CanParseSensorDataMessage(sensorType))
+            {
+                SensorDataManager.ParseSensorDataMessage(sensorType, data, timestamp, scalar);
+                break;
+            }
+        }
+
+    }
+
+    private readonly BS_BaseSensorDataManager[] SensorDataManagers;
 
     public override void Reset()
     {
         base.Reset();
 
-        // FILL
+        foreach (var SensorDataManager in SensorDataManagers) { SensorDataManager.Reset(); }
+    }
+
+    BS_SensorDataManager()
+    {
+        SensorDataManagers = new BS_BaseSensorDataManager[] { PressureSensorDataManager, MotionSensorDataManager, BarometerSensorDataManager };
     }
 }

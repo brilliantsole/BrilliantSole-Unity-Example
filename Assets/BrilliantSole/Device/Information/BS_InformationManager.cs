@@ -59,7 +59,7 @@ public class BS_InformationManager : BS_BaseManager<BS_InformationMessageType>
     public event Action<ushort> OnMtu;
     private void ParseMtu(in byte[] data)
     {
-        ushort mtu = BS_ByteUtils.ParseNumber<ushort>(data, isLittleEndian: true);
+        var mtu = BS_ByteUtils.ParseNumber<ushort>(data, isLittleEndian: true);
         Logger.Log($"Parsed mtu: {mtu}");
         Mtu = mtu;
     }
@@ -149,7 +149,7 @@ public class BS_InformationManager : BS_BaseManager<BS_InformationMessageType>
     }
     private void UpdateCurrentTime()
     {
-        ulong currentTime = (ulong)DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+        var currentTime = BS_TimeUtils.GetMilliseconds();
         Logger.Log($"Updating CurrentTime to {currentTime}");
         BS_TxMessage[] Messages = { CreateTxMessage(SetCurrentTime, BS_ByteUtils.ToByteArray(currentTime, true)) };
         SendTxMessages(Messages, false);
@@ -157,7 +157,7 @@ public class BS_InformationManager : BS_BaseManager<BS_InformationMessageType>
     public event Action<ulong> OnCurrentTime;
     private void ParseCurrentTime(in byte[] data)
     {
-        ulong currentTime = BS_ByteUtils.ParseNumber<ulong>(data, isLittleEndian: true);
+        var currentTime = BS_ByteUtils.ParseNumber<ulong>(data, isLittleEndian: true);
         Logger.Log($"parsed currentTime: {currentTime}");
         CurrentTime = currentTime;
     }

@@ -14,37 +14,36 @@ public static class BS_ParseUtils
         return data.AsSpan(offset, length).ToArray();
     }
 
-    public static void ParseMessages(byte[] data, Action<byte, byte[]> messageCallback, bool parseMessageLengthAs2data = true)
+    public static void ParseMessages(byte[] data, Action<byte, byte[]> messageCallback, ushort offset = 0, bool parseMessageLengthAs2Bytes = true)
     {
         Logger.Log($"parsing {data.Length} data");
 
-        ushort byteOffset = 0;
-        while (byteOffset < data.Length)
+        while (offset < data.Length)
         {
-            Logger.Log($"parsing message at {byteOffset}...");
+            Logger.Log($"parsing message at {offset}...");
 
-            byte messageType = data[byteOffset++];
+            byte messageType = data[offset++];
             // Logger.Log($"messageType: {messageType}");
 
             ushort messageDataLength;
-            if (parseMessageLengthAs2data)
+            if (parseMessageLengthAs2Bytes)
             {
-                messageDataLength = BS_ByteUtils.ParseNumber<ushort>(data, byteOffset, true);
-                byteOffset += 2;
+                messageDataLength = BS_ByteUtils.ParseNumber<ushort>(data, offset, true);
+                offset += 2;
             }
             else
             {
-                messageDataLength = BS_ByteUtils.ParseNumber<byte>(data, byteOffset, true);
-                byteOffset += 1;
+                messageDataLength = BS_ByteUtils.ParseNumber<byte>(data, offset, true);
+                offset += 1;
             }
             // Logger.Log($"messageDataLength: {messageDataLength}");
             Logger.Log($"messageType: {messageType}, messageDataLength: {messageDataLength}");
 
-            byte[] messageData = GetSubarray(data, byteOffset, messageDataLength);
+            byte[] messageData = GetSubarray(data, offset, messageDataLength);
             messageCallback?.Invoke(messageType, messageData);
 
-            byteOffset += messageDataLength;
-            Logger.Log($"new byteOffset: {byteOffset}");
+            offset += messageDataLength;
+            Logger.Log($"new offset: {offset}");
         }
     }
 }
