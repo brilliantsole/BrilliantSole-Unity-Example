@@ -18,6 +18,8 @@ public class BS_PressureSensorDataManager : BS_BaseSensorDataManager
             case Pressure:
                 ParsePressureData(data, timestamp, scalar);
                 break;
+            default:
+                throw new ArgumentException($"uncaught sensorType {sensorType}");
         }
     }
 
@@ -44,7 +46,6 @@ public class BS_PressureSensorDataManager : BS_BaseSensorDataManager
     private void ParsePressureData(in byte[] data, in ulong timestamp, in float scalar)
     {
         // FILL
-
     }
 
     public override void Reset()

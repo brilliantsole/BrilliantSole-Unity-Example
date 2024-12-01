@@ -18,6 +18,8 @@ public class BS_BarometerSensorDataManager : BS_BaseSensorDataManager
             case Barometer:
                 ParseBarometer(data, timestamp, scalar);
                 break;
+            default:
+                throw new ArgumentException($"uncaught sensorType {sensorType}");
         }
     }
 
@@ -25,7 +27,7 @@ public class BS_BarometerSensorDataManager : BS_BaseSensorDataManager
 
     private void ParseBarometer(in byte[] data, in ulong timestamp, float scalar)
     {
-        var barometer = BS_ByteUtils.ParseNumber<float>(data);
+        var barometer = BS_ByteUtils.ParseNumber<float>(data, 0, true);
         barometer *= scalar;
         Logger.Log($"barometer: {barometer}");
         OnBarometer?.Invoke(barometer, timestamp);
