@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 using static BS_SensorType;
 
@@ -30,6 +31,7 @@ public class BS_PressureSensorDataManager : BS_BaseSensorDataManager
     public void ParsePressurePositions(in byte[] data)
     {
         pressurePositions.Clear();
+        pressureSensorRanges.Clear();
 
         for (int i = 0; i < data.Length; i += 2)
         {
@@ -39,25 +41,79 @@ public class BS_PressureSensorDataManager : BS_BaseSensorDataManager
             pressurePosition /= PressurePositionScalar;
             Logger.Log($"pressure position #{pressurePositions.Count}: [{pressurePosition.x}, {pressurePosition.y}]");
             pressurePositions.Add(pressurePosition);
+
+            pressureSensorRanges.Add(new());
         }
         Logger.Log($"Parsed {NumberOfPressureSensors} Pressure positions");
     }
 
+    private readonly List<BS_Range> pressureSensorRanges = new();
+    private readonly BS_CenterOfPressureRange centerOfPressureRange = new();
 
     public Action<BS_PressureData, ulong> OnPressureData;
     private void ParsePressureData(in byte[] data, in ulong timestamp, in float scalar)
     {
-        // https://github.com/brilliantsole/Brilliant-Sole-Unreal/blob/9abf5b05670009c965f9e648ca73f2a270be8d5d/Plugins/BrilliantSoleSDK/Source/BrilliantSoleSDK/Private/BS_PressureSensorDataManager.cpp#L34
-        // FILL
+        if (data.Length != NumberOfPressureSensors * 2)
+        {
+            throw new ArgumentException($"invalid number of pressure sensors (expected {NumberOfPressureSensors * 2}, got {data.Length})");
+        }
 
-        BS_PressureData PressureData = new();
+        BS_PressureSensorData[] Sensors = new BS_PressureSensorData[NumberOfPressureSensors];
+        float ScaledSum = 0.0f;
+        float NormalizedSum = 0.0f;
 
+        for (int i = 0; i < NumberOfPressureSensors; i++)
+        {
+            var RawValue = BS_ByteUtils.ParseNumber<ushort>(data, i * 2, true);
+            Logger.Log($"pressure #{i} RawValue: {RawValue}");
+
+            var ScaledValue = RawValue * scalar;
+            Logger.Log($"pressure #{i} ScaledValue: {RawValue}");
+
+            var NormalizedValue = pressureSensorRanges[i].UpdateAndGetNormalization(ScaledValue, true);
+            Logger.Log($"pressure #{i} NormalizedValue: {NormalizedValue}");
+
+            float WeightedValue = 0.0f;
+
+            Sensors[i] = new(PressurePositions[i], RawValue, ScaledValue, NormalizedValue, WeightedValue);
+            Logger.Log($"PressureSensor #{i}: {Sensors[i]}");
+
+            ScaledSum += ScaledValue;
+            NormalizedSum += NormalizedValue;
+            Logger.Log($"partial (#{i}) ScaledSum: {ScaledSum}, NormalizedSum: {NormalizedSum}");
+        }
+
+        Logger.Log($"final ScaledSum: {ScaledSum}, NormalizedSum: {NormalizedSum}");
+
+        Vector2? CenterOfPressure = null;
+        Vector2? NormalizedCenterOfPressure = null;
+
+        if (ScaledSum > 0)
+        {
+            CenterOfPressure = new();
+            foreach (ref var Sensor in Sensors.AsSpan())
+            {
+                Sensor.WeightedValue = Sensor.ScaledValue / ScaledSum;
+                CenterOfPressure += Sensor.Position * Sensor.WeightedValue;
+            }
+            Logger.Log($"CenterOfPressure: {CenterOfPressure}");
+
+            NormalizedCenterOfPressure = centerOfPressureRange.UpdateAndGetNormalization((Vector2)CenterOfPressure);
+            Logger.Log($"NormalizedCenterOfPressure: {NormalizedCenterOfPressure}");
+        }
+        else
+        {
+            Logger.Log("ScaledSum is 0 - skipping CenterOfPressure calculation");
+        }
+
+        BS_PressureData PressureData = new(Sensors, ScaledSum, NormalizedSum, CenterOfPressure, NormalizedCenterOfPressure);
         OnPressureData?.Invoke(PressureData, timestamp);
     }
 
     public override void Reset()
     {
         base.Reset();
-        pressurePositions.Clear();
+        centerOfPressureRange.Reset();
+        foreach (var PressureSensorRange in pressureSensorRanges) { PressureSensorRange.Reset(); }
     }
 }

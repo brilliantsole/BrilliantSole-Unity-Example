@@ -2,13 +2,23 @@ using System;
 using UnityEngine;
 
 [Serializable]
-public readonly struct BS_PressureSensorData
+public struct BS_PressureSensorData
 {
     public readonly Vector2 Position { get; }
     public readonly int RawValue { get; }
     public readonly float ScaledValue { get; }
     public readonly float NormalizedValue { get; }
-    public readonly float WeightedValue { get; }
+    public float WeightedValue;
+
+
+    public BS_PressureSensorData(in Vector2 position, int rawValue, float scaledValue, float normalizedValue, float weightedValue)
+    {
+        Position = position;
+        RawValue = rawValue;
+        ScaledValue = scaledValue;
+        NormalizedValue = normalizedValue;
+        WeightedValue = weightedValue;
+    }
 
     public override readonly string ToString()
     {
