@@ -1,5 +1,4 @@
 using System;
-using System.Text;
 using UnityEngine;
 using static BS_BatteryMessageType;
 

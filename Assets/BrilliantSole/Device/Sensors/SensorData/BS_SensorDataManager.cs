@@ -10,9 +10,9 @@ public class BS_SensorDataManager : BS_BaseManager<BS_SensorDataMessageType>
      };
     public static byte[] RequiredTxRxMessageTypes => EnumArrayToTxRxArray(RequiredMessageTypes);
 
-    private readonly BS_PressureSensorDataManager PressureSensorDataManager = new();
-    private readonly BS_MotionSensorDataManager MotionSensorDataManager = new();
-    private readonly BS_BarometerSensorDataManager BarometerSensorDataManager = new();
+    public readonly BS_PressureSensorDataManager PressureSensorDataManager = new();
+    public readonly BS_MotionSensorDataManager MotionSensorDataManager = new();
+    public readonly BS_BarometerSensorDataManager BarometerSensorDataManager = new();
 
     private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_SensorDataManager", BS_Logger.LogLevel.Log);
 
@@ -105,7 +105,7 @@ public class BS_SensorDataManager : BS_BaseManager<BS_SensorDataMessageType>
         foreach (var SensorDataManager in SensorDataManagers) { SensorDataManager.Reset(); }
     }
 
-    BS_SensorDataManager()
+    public BS_SensorDataManager()
     {
         SensorDataManagers = new BS_BaseSensorDataManager[] { PressureSensorDataManager, MotionSensorDataManager, BarometerSensorDataManager };
     }

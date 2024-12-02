@@ -10,6 +10,8 @@ public class BS_SensorConfigurationManager : BS_BaseManager<BS_SensorConfigurati
      };
     public static byte[] RequiredTxRxMessageTypes => EnumArrayToTxRxArray(RequiredMessageTypes);
 
+    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_SensorConfigurationManager", BS_Logger.LogLevel.Log);
+
     public override void OnRxMessage(BS_SensorConfigurationMessageType messageType, in byte[] data)
     {
         base.OnRxMessage(messageType, data);
@@ -25,12 +27,15 @@ public class BS_SensorConfigurationManager : BS_BaseManager<BS_SensorConfigurati
     }
 
     private readonly BS_SensorConfiguration sensorConfiguration = new();
+    public BS_SensorRates SensorRates => sensorConfiguration.SensorRates;
 
     public Action<BS_SensorRates> OnSensorRates;
 
     private void ParseSensorConfiguration(in byte[] data)
     {
-        // FILL
+        Logger.Log($"parsing sensor configuration ({data.Length} bytes)");
+        sensorConfiguration.Parse(data);
+        OnSensorRates?.Invoke(SensorRates);
     }
 
     public override void Reset()

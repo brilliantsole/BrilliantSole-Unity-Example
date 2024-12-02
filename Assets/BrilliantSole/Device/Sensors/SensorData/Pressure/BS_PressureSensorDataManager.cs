@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using Unity.Mathematics;
 using UnityEngine;
 using static BS_SensorType;
@@ -25,7 +26,7 @@ public class BS_PressureSensorDataManager : BS_BaseSensorDataManager
     }
 
     private readonly List<Vector2> pressurePositions = new();
-    public IList<Vector2> PressurePositions => pressurePositions;
+    public ReadOnlyCollection<Vector2> PressurePositions => pressurePositions.AsReadOnly();
     public int NumberOfPressureSensors => PressurePositions.Count;
     static readonly float PressurePositionScalar = Mathf.Pow(2, 8);
     public void ParsePressurePositions(in byte[] data)

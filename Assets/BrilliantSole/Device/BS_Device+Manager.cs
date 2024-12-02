@@ -1,14 +1,19 @@
+using System.Collections.Generic;
+
 public partial class BS_Device
 {
-    private readonly BS_BatteryManager BatteryManager = new();
-    private readonly BS_InformationManager InformationManager = new();
-    private readonly BS_SensorConfigurationManager SensorConfigurationManager = new();
-    private readonly BS_SensorDataManager SensorDataManager = new();
-    private readonly BS_VibrationManager VibrationManager = new();
-    private readonly BS_BaseManager[] Managers;
+
+    private readonly HashSet<BS_BaseManager> Managers = new();
 
     private void SetupManagers()
     {
+        SetupBatteryManager();
+        SetupInformationManager();
+        SetupSensorConfigurationManager();
+        SetupSensorDataManager();
+        SetupVibrationManager();
+        SetupTfliteManager();
+        SetupFileTransferManager();
         foreach (var Manager in Managers) { Manager.SendTxMessages = SendTxMessages; }
     }
 

@@ -58,7 +58,7 @@ public abstract class BS_BaseManager<TEnum> : BS_BaseManager where TEnum : Enum
     {
         foreach (TEnum value in EnumType.GetEnumValues())
         {
-            Logger.Log($"enum {offset}: {value}");
+            //Logger.Log($"enum {offset}: {value}");
             EnumToTxRx.Add(value, offset);
             TxRxToEnum.Add(offset, value);
             enumStrings.Add(value.ToString());
