@@ -1,6 +1,8 @@
 using System;
 using static BS_SensorConfigurationMessageType;
 
+using BS_SensorRates = System.Collections.Generic.IReadOnlyDictionary<BS_SensorType, BS_SensorRate>;
+
 public class BS_SensorConfigurationManager : BS_BaseManager<BS_SensorConfigurationMessageType>
 {
     public static readonly BS_SensorConfigurationMessageType[] RequiredMessageTypes = {
@@ -15,17 +17,25 @@ public class BS_SensorConfigurationManager : BS_BaseManager<BS_SensorConfigurati
         {
             case GetSensorConfiguration:
             case SetSensorConfiguration:
-                // FILL
+                ParseSensorConfiguration(data);
                 break;
             default:
                 throw new ArgumentException($"uncaught messageType {messageType}");
         }
     }
 
+    private readonly BS_SensorConfiguration sensorConfiguration = new();
+
+    public Action<BS_SensorRates> OnSensorRates;
+
+    private void ParseSensorConfiguration(in byte[] data)
+    {
+        // FILL
+    }
+
     public override void Reset()
     {
         base.Reset();
-
-        // FILL
+        sensorConfiguration.Clear();
     }
 }
