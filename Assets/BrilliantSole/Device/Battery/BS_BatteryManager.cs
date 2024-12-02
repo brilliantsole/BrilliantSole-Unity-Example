@@ -24,8 +24,12 @@ public class BS_BatteryManager : BS_BaseManager<BS_BatteryMessageType>
             case GetBatteryCurrent:
                 ParseBatteryCurrent(data);
                 break;
+            default:
+                throw new ArgumentException($"uncaught messageType {messageType}");
         }
     }
+
+
 
     [SerializeField]
     private bool? _isBatteryCharging;

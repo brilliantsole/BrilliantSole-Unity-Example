@@ -39,6 +39,8 @@ public class BS_InformationManager : BS_BaseManager<BS_InformationMessageType>
             case SetCurrentTime:
                 ParseCurrentTime(data);
                 break;
+            default:
+                throw new ArgumentException($"uncaught messageType {messageType}");
         }
     }
 

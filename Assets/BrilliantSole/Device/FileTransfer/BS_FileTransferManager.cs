@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using static BS_FileTransferMessageType;
 
@@ -17,6 +18,17 @@ public class BS_FileTransferManager : BS_BaseManager<BS_FileTransferMessageType>
     public override void OnRxMessage(BS_FileTransferMessageType messageType, in byte[] data)
     {
         base.OnRxMessage(messageType, data);
+        switch (messageType)
+        {
+            // FILL
+            default:
+                throw new ArgumentException($"uncaught messageType {messageType}");
+        }
+    }
+
+    public override void Reset()
+    {
+        base.Reset();
         // FILL
     }
 }
