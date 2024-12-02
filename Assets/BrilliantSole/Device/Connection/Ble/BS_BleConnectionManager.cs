@@ -3,7 +3,6 @@ using UnityEngine;
 using static BS_ConnectionStatus;
 
 #nullable enable
-
 public class BS_BleConnectionManager : BS_BaseConnectionManager
 {
     private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_BleConnectionManager", BS_Logger.LogLevel.Log);
@@ -17,7 +16,7 @@ public class BS_BleConnectionManager : BS_BaseConnectionManager
     private void Reset()
     {
         ResetUuids();
-        Stage = BleConnectionStage.None;
+        Stage = BS_BleConnectionStage.None;
     }
 
     private readonly HashSet<string> FoundServiceUuids = new();
@@ -63,23 +62,11 @@ public class BS_BleConnectionManager : BS_BaseConnectionManager
 
     private void CheckDidFindAllUuids()
     {
-        if (Stage == BleConnectionStage.WaitForUuids && DidFindAllUuids)
+        if (Stage == BS_BleConnectionStage.WaitForUuids && DidFindAllUuids)
         {
             Logger.Log("Got all Uuids");
-            Stage = BleConnectionStage.RequestingMtu;
+            Stage = BS_BleConnectionStage.RequestingMtu;
         }
-    }
-
-    enum BleConnectionStage
-    {
-        None,
-        Connecting,
-        WaitForUuids,
-        RequestingMtu,
-        ReadingCharacteristics,
-        SubscribingToCharacteristics,
-        UnsubscribingFromCharacteristics,
-        Disconnecting,
     }
 
     [SerializeField]
@@ -88,24 +75,24 @@ public class BS_BleConnectionManager : BS_BaseConnectionManager
     {
         _timeout = _Stage switch
         {
-            BleConnectionStage.Connecting => 0.1f,
-            BleConnectionStage.RequestingMtu => 0.1f,
-            BleConnectionStage.SubscribingToCharacteristics => 0.1f,
-            BleConnectionStage.ReadingCharacteristics => 0.1f,
+            BS_BleConnectionStage.Connecting => 0.1f,
+            BS_BleConnectionStage.RequestingMtu => 0.1f,
+            BS_BleConnectionStage.SubscribingToCharacteristics => 0.1f,
+            BS_BleConnectionStage.ReadingCharacteristics => 0.1f,
             _ => 0f,
         };
         Logger.Log($"timeout: {_timeout}");
     }
 
     [SerializeField]
-    private BleConnectionStage _Stage = BleConnectionStage.None;
-    private BleConnectionStage Stage
+    private BS_BleConnectionStage _Stage = BS_BleConnectionStage.None;
+    public BS_BleConnectionStage Stage
     {
         get => _Stage;
-        set
+        private set
         {
             if (_Stage == value) { return; }
-            Logger.Log($"Updating BleConnectionStage to {value}");
+            Logger.Log($"Updating BS_BleConnectionStage to {value}");
             _Stage = value;
             UpdateTimeout();
         }
@@ -118,7 +105,7 @@ public class BS_BleConnectionManager : BS_BaseConnectionManager
         {
             return;
         }
-        Stage = BleConnectionStage.Connecting;
+        Stage = BS_BleConnectionStage.Connecting;
     }
     private void ConnectToPeripheral()
     {
@@ -129,7 +116,7 @@ public class BS_BleConnectionManager : BS_BaseConnectionManager
     private void OnConnectToPeripheral(string address)
     {
         Logger.Log($"Connected to peripheral {Address}");
-        Stage = BleConnectionStage.WaitForUuids;
+        Stage = BS_BleConnectionStage.WaitForUuids;
     }
     private void OnPeripheralService(string address, string serviceUuid)
     {
@@ -157,7 +144,7 @@ public class BS_BleConnectionManager : BS_BaseConnectionManager
         {
             return;
         }
-        Stage = BleConnectionStage.UnsubscribingFromCharacteristics;
+        Stage = BS_BleConnectionStage.UnsubscribingFromCharacteristics;
         DisconnectPeripheral();
     }
     private void DisconnectPeripheral()
@@ -182,7 +169,7 @@ public class BS_BleConnectionManager : BS_BaseConnectionManager
     private void OnPeripheralMtu(string address, int mtu)
     {
         Logger.Log($"Updated Mtu of \"{Name}\" to {mtu}");
-        Stage = BleConnectionStage.ReadingCharacteristics;
+        Stage = BS_BleConnectionStage.ReadingCharacteristics;
     }
 
 
@@ -207,7 +194,7 @@ public class BS_BleConnectionManager : BS_BaseConnectionManager
         if (characteristicUuidToRead == null)
         {
             Logger.Log("Read all Characteristics");
-            Stage = BleConnectionStage.SubscribingToCharacteristics;
+            Stage = BS_BleConnectionStage.SubscribingToCharacteristics;
             return;
         }
         Logger.Log($"nextCharacteristicUuidToRead {characteristicUuidToRead}");
@@ -256,7 +243,7 @@ public class BS_BleConnectionManager : BS_BaseConnectionManager
         if (characteristicUuidToSubscribe == null)
         {
             Logger.Log("Subscribed to all Characteristics");
-            Stage = BleConnectionStage.None;
+            Stage = BS_BleConnectionStage.None;
             Status = Connected;
             return;
         }
@@ -301,7 +288,7 @@ public class BS_BleConnectionManager : BS_BaseConnectionManager
         if (characteristicUuidToUnsubscribe == null)
         {
             Logger.Log("Unsubscribed from all Characteristics");
-            Stage = BleConnectionStage.Disconnecting;
+            Stage = BS_BleConnectionStage.Disconnecting;
             return;
         }
         Logger.Log($"nextCharacteristicUuidToUnsubscribe {characteristicUuidToUnsubscribe}");
@@ -355,22 +342,22 @@ public class BS_BleConnectionManager : BS_BaseConnectionManager
 
         switch (Stage)
         {
-            case BleConnectionStage.Connecting:
+            case BS_BleConnectionStage.Connecting:
                 ConnectToPeripheral();
                 break;
-            case BleConnectionStage.Disconnecting:
+            case BS_BleConnectionStage.Disconnecting:
                 DisconnectPeripheral();
                 break;
-            case BleConnectionStage.RequestingMtu:
+            case BS_BleConnectionStage.RequestingMtu:
                 RequestMtu();
                 break;
-            case BleConnectionStage.ReadingCharacteristics:
+            case BS_BleConnectionStage.ReadingCharacteristics:
                 ReadCharacteristics();
                 break;
-            case BleConnectionStage.UnsubscribingFromCharacteristics:
+            case BS_BleConnectionStage.UnsubscribingFromCharacteristics:
                 UnsubscribeToCharacteristics();
                 break;
-            case BleConnectionStage.SubscribingToCharacteristics:
+            case BS_BleConnectionStage.SubscribingToCharacteristics:
                 SubscribeToCharacteristics();
                 break;
             default:

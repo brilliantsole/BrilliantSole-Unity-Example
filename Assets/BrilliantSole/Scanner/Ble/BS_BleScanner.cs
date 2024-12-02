@@ -158,7 +158,11 @@ public class BS_BleScanner : BS_BaseScanner<BS_BleScanner>
 
         foreach (var connectionManager in _connectionManagers.Values)
         {
-            connectionManager.Update();
+            if (connectionManager.Stage != BS_BleConnectionStage.None)
+            {
+                connectionManager.Update();
+                break;
+            }
         }
     }
 
