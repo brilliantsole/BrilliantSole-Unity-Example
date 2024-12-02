@@ -1,4 +1,4 @@
-public enum BS_InsoleSide : byte
+public enum BS_InsoleSide
 {
     Left,
     Right

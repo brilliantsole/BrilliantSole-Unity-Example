@@ -26,6 +26,7 @@ public class BS_PressureSensorDataManager : BS_BaseSensorDataManager
     private readonly List<Vector2> pressurePositions = new();
     public IList<Vector2> PressurePositions => pressurePositions;
     public int NumberOfPressureSensors => PressurePositions.Count;
+    static readonly float PressurePositionScalar = Mathf.Pow(2, 8);
     public void ParsePressurePositions(in byte[] data)
     {
         pressurePositions.Clear();
@@ -42,10 +43,16 @@ public class BS_PressureSensorDataManager : BS_BaseSensorDataManager
         Logger.Log($"Parsed {NumberOfPressureSensors} Pressure positions");
     }
 
-    static readonly float PressurePositionScalar = Mathf.Pow(2, 8);
+
+    public Action<BS_PressureData, ulong> OnPressureData;
     private void ParsePressureData(in byte[] data, in ulong timestamp, in float scalar)
     {
+        // https://github.com/brilliantsole/Brilliant-Sole-Unreal/blob/9abf5b05670009c965f9e648ca73f2a270be8d5d/Plugins/BrilliantSoleSDK/Source/BrilliantSoleSDK/Private/BS_PressureSensorDataManager.cpp#L34
         // FILL
+
+        BS_PressureData PressureData = new();
+
+        OnPressureData?.Invoke(PressureData, timestamp);
     }
 
     public override void Reset()
