@@ -22,7 +22,8 @@ public class BS_FileTransferManager : BS_BaseManager<BS_FileTransferMessageType>
         {
             // FILL
             default:
-                throw new ArgumentException($"uncaught messageType {messageType}");
+                Logger.LogError($"uncaught messageType {messageType}");
+                break;
         }
     }
 

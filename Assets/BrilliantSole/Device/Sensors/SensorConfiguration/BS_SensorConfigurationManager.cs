@@ -22,7 +22,8 @@ public class BS_SensorConfigurationManager : BS_BaseManager<BS_SensorConfigurati
                 ParseSensorConfiguration(data);
                 break;
             default:
-                throw new ArgumentException($"uncaught messageType {messageType}");
+                Logger.LogError($"uncaught messageType {messageType}");
+                break;
         }
     }
 

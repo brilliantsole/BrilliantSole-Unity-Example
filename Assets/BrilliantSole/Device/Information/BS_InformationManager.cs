@@ -40,7 +40,8 @@ public class BS_InformationManager : BS_BaseManager<BS_InformationMessageType>
                 ParseCurrentTime(data);
                 break;
             default:
-                throw new ArgumentException($"uncaught messageType {messageType}");
+                Logger.LogError($"uncaught messageType {messageType}");
+                break;
         }
     }
 

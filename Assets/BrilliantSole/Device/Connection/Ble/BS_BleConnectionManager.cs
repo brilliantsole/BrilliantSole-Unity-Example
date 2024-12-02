@@ -168,7 +168,7 @@ public class BS_BleConnectionManager : BS_BaseConnectionManager
 
     private void OnDisconnectPeripheral(string address)
     {
-        Logger.Log("Disconnected from \"{Name}\"");
+        Logger.Log($"Disconnected from \"{Name}\"");
         Status = NotConnected;
         Stage = BleConnectionStage.None;
     }

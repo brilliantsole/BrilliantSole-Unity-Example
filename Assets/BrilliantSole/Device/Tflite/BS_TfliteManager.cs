@@ -16,6 +16,8 @@ public class BS_TfliteManager : BS_BaseManager<BS_TfliteMessageType>
     };
     public static byte[] RequiredTxRxMessageTypes => EnumArrayToTxRxArray(RequiredMessageTypes);
 
+    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_TfliteManager", BS_Logger.LogLevel.Log);
+
     public override void OnRxMessage(BS_TfliteMessageType messageType, in byte[] data)
     {
         base.OnRxMessage(messageType, data);
@@ -23,7 +25,8 @@ public class BS_TfliteManager : BS_BaseManager<BS_TfliteMessageType>
         {
             // FILL
             default:
-                throw new ArgumentException($"uncaught messageType {messageType}");
+                Logger.LogError($"uncaught messageType {messageType}");
+                break;
         }
     }
 

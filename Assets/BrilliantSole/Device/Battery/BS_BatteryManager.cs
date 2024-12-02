@@ -24,7 +24,8 @@ public class BS_BatteryManager : BS_BaseManager<BS_BatteryMessageType>
                 ParseBatteryCurrent(data);
                 break;
             default:
-                throw new ArgumentException($"uncaught messageType {messageType}");
+                Logger.LogError($"uncaught messageType {messageType}");
+                break;
         }
     }
 

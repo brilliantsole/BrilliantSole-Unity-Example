@@ -12,6 +12,6 @@ public partial class BS_Device
     {
         Managers.Add(SensorConfigurationManager);
 
-        SensorConfigurationManager.OnSensorRates = (BS_SensorRates sensorRates) => OnSensorRates(this, sensorRates);
+        SensorConfigurationManager.OnSensorRates = (BS_SensorRates sensorRates) => OnSensorRates?.Invoke(this, sensorRates);
     }
 }

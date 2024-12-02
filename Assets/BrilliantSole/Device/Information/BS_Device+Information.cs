@@ -19,4 +19,10 @@ public partial class BS_Device
         InformationManager.OnDeviceType += (BS_DeviceType deviceType) => OnDeviceType?.Invoke(this, deviceType);
         InformationManager.OnMtu += (ushort mtu) => OnMtu?.Invoke(this, mtu);
     }
+
+    public string Name => InformationManager.Name;
+    public string Id => InformationManager.Id;
+    public ulong CurrentTime => InformationManager.CurrentTime;
+    public BS_DeviceType DeviceType => InformationManager.DeviceType;
+    public ushort Mtu => InformationManager.Mtu;
 }

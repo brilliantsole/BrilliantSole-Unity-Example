@@ -3,6 +3,8 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+using static BS_ConnectionStatus;
+
 public class BS_ScannerScrollView : MonoBehaviour
 {
     public GameObject ItemPrefab;
@@ -47,12 +49,30 @@ public class BS_ScannerScrollView : MonoBehaviour
 
             Button toggleConnectionButton = item.transform.Find("ToggleConnection").GetComponent<Button>();
             TextMeshProUGUI toggleConnectionButtonText = item.transform.Find("ToggleConnection").GetComponentInChildren<TextMeshProUGUI>();
+            BS_Device device = null;
             toggleConnectionButton.onClick.AddListener(() =>
             {
-                toggleConnectionButtonText.text = "Connecting...";
                 Debug.Log($"Toggling Connection to \"{DiscoveredDevice.Name}\"...");
-                var device = ScannerManager.ToggleConnectionToDiscoveredDevice(DiscoveredDevice);
-                // FILL - update toggleConnectionButtonText
+
+                var _device = ScannerManager.ToggleConnectionToDiscoveredDevice(DiscoveredDevice);
+                if (device == null)
+                {
+                    Debug.Log("first time connecting to device...");
+                    device = _device;
+                    device.OnConnectionStatus += (BS_Device device, BS_ConnectionStatus connectionStatus) =>
+                    {
+                        Debug.Log($"device \"{device.Name}\" updated connectionStatus to {connectionStatus}");
+                        toggleConnectionButtonText.text = connectionStatus switch
+                        {
+                            NotConnected => "Connect",
+                            Connecting => "Connecting...",
+                            Connected => "Disconnect",
+                            Disconnecting => "Disconnecting...",
+                            _ => throw new System.NotImplementedException()
+                        };
+                    };
+                    toggleConnectionButtonText.text = "Connecting...";
+                }
             });
         }
 
