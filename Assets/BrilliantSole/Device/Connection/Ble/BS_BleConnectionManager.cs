@@ -16,13 +16,13 @@ public class BS_BleConnectionManager : BS_BaseConnectionManager
 
     private void Reset()
     {
-        ResetFoundUuids();
+        ResetUuids();
         Stage = BleConnectionStage.None;
     }
 
     private readonly HashSet<string> FoundServiceUuids = new();
     private readonly HashSet<string> FoundCharacteristicUuids = new();
-    private void ResetFoundUuids()
+    private void ResetUuids()
     {
         FoundServiceUuids.Clear();
         FoundCharacteristicUuids.Clear();
@@ -170,7 +170,7 @@ public class BS_BleConnectionManager : BS_BaseConnectionManager
     {
         Logger.Log($"Disconnected from \"{Name}\"");
         Status = NotConnected;
-        Stage = BleConnectionStage.None;
+        Reset();
     }
 
     private void RequestMtu()
