@@ -155,7 +155,7 @@ public class BS_InformationManager : BS_BaseManager<BS_InformationMessageType>
         var currentTime = BS_TimeUtils.GetMilliseconds();
         Logger.Log($"Updating CurrentTime to {currentTime}");
         BS_TxMessage[] Messages = { CreateTxMessage(SetCurrentTime, BS_ByteUtils.ToByteArray(currentTime, true)) };
-        SendTxMessages(Messages, false);
+        SendTxMessages?.Invoke(Messages, false);
     }
     public event Action<ulong> OnCurrentTime;
     private void ParseCurrentTime(in byte[] data)
