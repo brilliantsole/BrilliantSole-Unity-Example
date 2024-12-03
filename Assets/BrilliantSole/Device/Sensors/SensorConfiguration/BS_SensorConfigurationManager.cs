@@ -1,7 +1,7 @@
 using System;
 using static BS_SensorConfigurationMessageType;
 
-using BS_SensorRates = System.Collections.Generic.IReadOnlyDictionary<BS_SensorType, BS_SensorRate>;
+using BS_SensorConfiguration = System.Collections.Generic.IReadOnlyDictionary<BS_SensorType, BS_SensorRate>;
 
 public class BS_SensorConfigurationManager : BS_BaseManager<BS_SensorConfigurationMessageType>
 {
@@ -27,16 +27,16 @@ public class BS_SensorConfigurationManager : BS_BaseManager<BS_SensorConfigurati
         }
     }
 
-    private readonly BS_SensorConfiguration sensorConfiguration = new();
-    public BS_SensorRates SensorRates => sensorConfiguration.SensorRates;
+    private readonly BS_SensorConfigurationContainer sensorConfiguration = new();
+    public BS_SensorConfiguration SensorRates => sensorConfiguration.SensorRates;
 
-    public Action<BS_SensorRates> OnSensorRates;
+    public Action<BS_SensorConfiguration> OnSensorConfiguration;
 
     private void ParseSensorConfiguration(in byte[] data)
     {
         Logger.Log($"parsing sensor configuration ({data.Length} bytes)");
         sensorConfiguration.Parse(data);
-        OnSensorRates?.Invoke(SensorRates);
+        OnSensorConfiguration?.Invoke(SensorRates);
     }
 
     public override void Reset()

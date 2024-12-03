@@ -3,15 +3,15 @@ using System;
 using System.Collections.Generic;
 using static BS_SensorRate;
 
-using BS_SensorRates = System.Collections.Generic.IReadOnlyDictionary<BS_SensorType, BS_SensorRate>;
+using BS_SensorConfiguration = System.Collections.Generic.IReadOnlyDictionary<BS_SensorType, BS_SensorRate>;
 using System.Collections.ObjectModel;
 
-public class BS_SensorConfiguration
+public class BS_SensorConfigurationContainer
 {
-    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_SensorConfiguration", BS_Logger.LogLevel.Log);
+    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_SensorConfigurationContainer", BS_Logger.LogLevel.Log);
 
     private readonly Dictionary<BS_SensorType, BS_SensorRate> sensorRates = new();
-    public BS_SensorRates SensorRates => sensorRates;
+    public BS_SensorConfiguration SensorRates => sensorRates;
 
     public ICollection<BS_SensorType> SensorTypes => sensorRates.Keys;
 
