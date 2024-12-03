@@ -4,12 +4,14 @@ public partial class BS_DevicePair
     {
         AddDeviceConnectionListeners(device);
         AddDeviceSensorConfigurationListeners(device);
+        AddDeviceSensorDataListeners(device);
         // FILL
     }
     private void RemoveDeviceListeners(BS_Device device)
     {
         RemoveDeviceConnectionListeners(device);
         RemoveDeviceSensorConfigurationListeners(device);
+        RemoveDeviceSensorDataListeners(device);
         // FILL
     }
 }
