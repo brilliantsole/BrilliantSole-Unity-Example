@@ -1,4 +1,6 @@
 using System;
+using static BS_DeviceType;
+using static BS_InsoleSide;
 
 public partial class BS_Device
 {
@@ -25,4 +27,17 @@ public partial class BS_Device
     public ulong CurrentTime => InformationManager.CurrentTime;
     public BS_DeviceType DeviceType => InformationManager.DeviceType;
     public ushort Mtu => InformationManager.Mtu;
+
+    public bool IsInsole => DeviceType switch
+    {
+        LeftInsole => true,
+        RightInsole => true,
+        _ => false
+    };
+    public BS_InsoleSide? InsoleSide => DeviceType switch
+    {
+        LeftInsole => Left,
+        RightInsole => Right,
+        _ => null
+    };
 }

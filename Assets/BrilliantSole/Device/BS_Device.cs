@@ -16,5 +16,6 @@ public partial class BS_Device
     public BS_Device()
     {
         SetupManagers();
+        BS_DeviceManager.OnDeviceCreated(this);
     }
 }
