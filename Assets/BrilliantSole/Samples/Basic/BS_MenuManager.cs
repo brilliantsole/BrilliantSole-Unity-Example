@@ -27,4 +27,9 @@ public class BS_MenuManager : MonoBehaviour
         mainMenu.SetActive(true);
         backToMainMenuButton.SetActive(false);
     }
+
+    public void Awake()
+    {
+        ShowMainMenu();
+    }
 }
