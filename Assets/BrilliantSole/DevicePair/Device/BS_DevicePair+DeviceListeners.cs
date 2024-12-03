@@ -5,13 +5,17 @@ public partial class BS_DevicePair
         AddDeviceConnectionListeners(device);
         AddDeviceSensorConfigurationListeners(device);
         AddDeviceSensorDataListeners(device);
-        // FILL
+        AddDeviceVibrationListeners(device);
+        AddDeviceFileTransferListeners(device);
+        AddDeviceTfliteListeners(device);
     }
     private void RemoveDeviceListeners(BS_Device device)
     {
         RemoveDeviceConnectionListeners(device);
         RemoveDeviceSensorConfigurationListeners(device);
         RemoveDeviceSensorDataListeners(device);
-        // FILL
+        RemoveDeviceVibrationListeners(device);
+        RemoveDeviceFileTransferListeners(device);
+        RemoveDeviceTfliteListeners(device);
     }
 }

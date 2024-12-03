@@ -1,10 +1,9 @@
-using UnityEngine;
 using System;
 using System.Collections.Generic;
 using static BS_SensorRate;
+using System.Collections.ObjectModel;
 
 using BS_SensorConfiguration = System.Collections.Generic.Dictionary<BS_SensorType, BS_SensorRate>;
-using System.Collections.ObjectModel;
 
 public class BS_SensorConfigurationContainer
 {
