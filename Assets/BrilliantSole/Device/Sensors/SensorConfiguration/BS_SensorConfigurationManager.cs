@@ -1,7 +1,7 @@
 using System;
 using static BS_SensorConfigurationMessageType;
 
-using BS_SensorConfiguration = System.Collections.Generic.IReadOnlyDictionary<BS_SensorType, BS_SensorRate>;
+using BS_SensorConfiguration = System.Collections.Generic.Dictionary<BS_SensorType, BS_SensorRate>;
 
 public class BS_SensorConfigurationManager : BS_BaseManager<BS_SensorConfigurationMessageType>
 {
