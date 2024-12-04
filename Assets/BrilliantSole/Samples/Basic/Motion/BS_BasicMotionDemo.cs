@@ -1,4 +1,6 @@
+using TMPro;
 using UnityEngine;
+using static BS_SensorType;
 
 public class BS_BasicMotionDemo : MonoBehaviour
 {
@@ -6,6 +8,9 @@ public class BS_BasicMotionDemo : MonoBehaviour
     public GameObject RightInsole;
 
     private BS_DevicePair DevicePair => BS_DevicePair.Instance;
+
+    public TMP_Dropdown positionDropdown;
+    public TMP_Dropdown rotationDropdown;
 
     private void OnEnable()
     {
@@ -18,6 +23,9 @@ public class BS_BasicMotionDemo : MonoBehaviour
         DevicePair.OnDeviceOrientation += OnDeviceEulerAngles;
 
         DevicePair.OnDeviceLinearAcceleration += OnDevicePosition;
+
+        positionDropdown.onValueChanged.AddListener(OnPositionDropdownValueChanged);
+        rotationDropdown.onValueChanged.AddListener(OnRotationDropdownValueChanged);
     }
     private void OnDisable()
     {
@@ -30,6 +38,9 @@ public class BS_BasicMotionDemo : MonoBehaviour
         DevicePair.OnDeviceOrientation -= OnDeviceEulerAngles;
 
         DevicePair.OnDeviceLinearAcceleration -= OnDevicePosition;
+
+        positionDropdown.onValueChanged.RemoveListener(OnPositionDropdownValueChanged);
+        rotationDropdown.onValueChanged.RemoveListener(OnRotationDropdownValueChanged);
 
     }
 
@@ -49,6 +60,35 @@ public class BS_BasicMotionDemo : MonoBehaviour
     }
     private void OnDevicePosition(BS_DevicePair devicePair, BS_InsoleSide insoleSide, BS_Device device, Vector3 position, ulong timestamp)
     {
+        // FILL
+    }
+
+    private void OnRotationDropdownValueChanged(int selectedIndex)
+    {
+        string selectedRotation = rotationDropdown.options[selectedIndex].text;
+        Debug.Log($"selectedRotation: {selectedRotation}");
+        BS_SensorType? sensorType = selectedRotation switch
+        {
+            "Game Rotation" => GameRotation,
+            "Rotation" => Rotation,
+            "Orientation" => Orientation,
+            "Gyroscope" => BS_SensorType.Gyroscope,
+            _ => null
+        };
+        Debug.Log($"sensorType: {sensorType}");
+        // FILL
+    }
+
+    private void OnPositionDropdownValueChanged(int selectedIndex)
+    {
+        string selectedPosition = positionDropdown.options[selectedIndex].text;
+        Debug.Log($"selectedPosition: {selectedPosition}");
+        BS_SensorType? sensorType = selectedPosition switch
+        {
+            "Linear Acceleration" => LinearAcceleration,
+            _ => null
+        };
+        Debug.Log($"sensorType: {sensorType}");
         // FILL
     }
 }

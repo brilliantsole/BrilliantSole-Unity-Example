@@ -957,15 +957,27 @@ MonoBehaviour:
     - m_Text: Rotation
       m_Image: {fileID: 0}
       m_Color: {r: 1, g: 1, b: 1, a: 1}
-    - m_Text: Gyroscope
+    - m_Text: Orientation
       m_Image: {fileID: 0}
       m_Color: {r: 1, g: 1, b: 1, a: 1}
-    - m_Text: Orientation
+    - m_Text: Gyroscope
       m_Image: {fileID: 0}
       m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1274737093}
+        m_TargetAssemblyTypeName: 
+        m_MethodName: 
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_AlphaFadeSpeed: 0.15
 --- !u!114 &396032499
 MonoBehaviour:
@@ -3786,6 +3798,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   LeftInsole: {fileID: 440325879}
   RightInsole: {fileID: 1383269055}
+  positionDropdown: {fileID: 1422291071}
+  rotationDropdown: {fileID: 396032498}
 --- !u!1 &1311880331
 GameObject:
   m_ObjectHideFlags: 0
