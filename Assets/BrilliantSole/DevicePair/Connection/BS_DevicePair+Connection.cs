@@ -24,7 +24,7 @@ public partial class BS_DevicePair
         if (!HasAllDevices)
         {
             newIsFullyConnected = true;
-            foreach (var pair in Insoles)
+            foreach (var pair in Devices)
             {
                 newIsFullyConnected = newIsFullyConnected && pair.Value.IsConnected;
                 if (!newIsFullyConnected) { break; }

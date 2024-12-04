@@ -2,13 +2,13 @@ using System.Collections.Generic;
 
 public partial class BS_DevicePair
 {
-    private readonly Dictionary<BS_InsoleSide, BS_Device> insoles = new();
-    public IReadOnlyDictionary<BS_InsoleSide, BS_Device> Insoles => insoles;
+    private readonly Dictionary<BS_InsoleSide, BS_Device> devices = new();
+    public IReadOnlyDictionary<BS_InsoleSide, BS_Device> Devices => devices;
 
-    public BS_Device Left => Insoles.GetValueOrDefault(BS_InsoleSide.Left, null);
-    public BS_Device Right => Insoles.GetValueOrDefault(BS_InsoleSide.Right, null);
+    public BS_Device Left => Devices.GetValueOrDefault(BS_InsoleSide.Left, null);
+    public BS_Device Right => Devices.GetValueOrDefault(BS_InsoleSide.Right, null);
 
-    public bool HasAllDevices => Insoles.Count == 2;
+    public bool HasAllDevices => Devices.Count == 2;
 
     public void AddDevice(BS_Device device)
     {
@@ -20,9 +20,9 @@ public partial class BS_DevicePair
 
         var insoleSide = (BS_InsoleSide)device.InsoleSide;
 
-        if (insoles.ContainsKey(insoleSide))
+        if (devices.ContainsKey(insoleSide))
         {
-            if (insoles[insoleSide] == device)
+            if (devices[insoleSide] == device)
             {
                 Logger.Log($"already has device");
                 return;
@@ -35,7 +35,7 @@ public partial class BS_DevicePair
 
         Logger.Log($"adding {insoleSide} device \"{device.Name}\"");
 
-        insoles.Add(insoleSide, device);
+        devices.Add(insoleSide, device);
         AddDeviceListeners(device);
         CheckIsFullyConnected();
     }
@@ -48,7 +48,7 @@ public partial class BS_DevicePair
             return;
         }
         var insoleSide = (BS_InsoleSide)device.InsoleSide;
-        if (insoles.ContainsKey(insoleSide) && insoles[insoleSide] == device)
+        if (devices.ContainsKey(insoleSide) && devices[insoleSide] == device)
         {
             RemoveDevice(insoleSide);
         }
@@ -59,11 +59,11 @@ public partial class BS_DevicePair
     }
     public void RemoveDevice(BS_InsoleSide insoleSide)
     {
-        if (insoles.ContainsKey(insoleSide))
+        if (devices.ContainsKey(insoleSide))
         {
-            var device = insoles[insoleSide];
+            var device = devices[insoleSide];
             RemoveDeviceListeners(device);
-            insoles.Remove(insoleSide);
+            devices.Remove(insoleSide);
             CheckIsFullyConnected();
         }
         else

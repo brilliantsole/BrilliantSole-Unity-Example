@@ -367,6 +367,11 @@ public class BS_BleConnectionManager : BS_BaseConnectionManager
 
     public override void SendTxData(List<byte> Data)
     {
+        if (!IsConnected)
+        {
+            Logger.Log($"Not connected");
+            return;
+        }
         base.SendTxData(Data);
         var data = Data.ToArray();
         Logger.Log($"Writing {data.Length} bytes to Tx for \"{Name}\"...");

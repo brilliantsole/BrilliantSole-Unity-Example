@@ -19,8 +19,8 @@ public class BS_SensorConfigurationManager : BS_BaseManager<BS_SensorConfigurati
         base.OnRxMessage(messageType, data);
         switch (messageType)
         {
-            case GetSensorConfiguration:
-            case SetSensorConfiguration:
+            case BS_SensorConfigurationMessageType.GetSensorConfiguration:
+            case BS_SensorConfigurationMessageType.SetSensorConfiguration:
                 ParseSensorConfiguration(data);
                 break;
             default:
@@ -98,9 +98,10 @@ public class BS_SensorConfigurationManager : BS_BaseManager<BS_SensorConfigurati
 
         TempSensorConfiguration.Clear();
         TempSensorConfiguration.Add(sensorType, sensorRate);
-        SetConfiguration(TempSensorConfiguration);
+        SetSensorConfiguration(TempSensorConfiguration);
     }
     public void ToggleSensorRate(BS_SensorType sensorType, BS_SensorRate sensorRate) { SetSensorRate(sensorType, IsSensorRateNonZero(sensorType) ? _0ms : sensorRate); }
+    public void ClearSensorRate(BS_SensorType sensorType) { SetSensorRate(sensorType, _0ms); }
 
     private readonly List<byte> Array = new();
     private List<byte> GetSensorConfigurationArray(in BS_SensorConfiguration sensorConfiguration)
@@ -114,7 +115,7 @@ public class BS_SensorConfigurationManager : BS_BaseManager<BS_SensorConfigurati
         return Array;
     }
 
-    public void SetConfiguration(in BS_SensorConfiguration sensorConfiguration, bool clearRest = false)
+    public void SetSensorConfiguration(in BS_SensorConfiguration sensorConfiguration, bool clearRest = false, bool sendImmediately = true)
     {
         if (AreSensorConfigurationsEqual(SensorConfiguration, sensorConfiguration, false))
         {
@@ -131,8 +132,8 @@ public class BS_SensorConfigurationManager : BS_BaseManager<BS_SensorConfigurati
             }
         }
 
-        BS_TxMessage[] Messages = { CreateTxMessage(SetSensorConfiguration, GetSensorConfigurationArray(TempSensorConfiguration)) };
-        SendTxMessages(Messages, false);
+        BS_TxMessage[] Messages = { CreateTxMessage(BS_SensorConfigurationMessageType.SetSensorConfiguration, GetSensorConfigurationArray(TempSensorConfiguration)) };
+        SendTxMessages(Messages, sendImmediately);
     }
 
     private bool AreSensorConfigurationsEqual(in BS_SensorConfiguration a, in BS_SensorConfiguration b, bool areStrictlyEqual = true)
@@ -164,11 +165,11 @@ public class BS_SensorConfigurationManager : BS_BaseManager<BS_SensorConfigurati
         TempSensorConfiguration.Clear();
     }
 
-    public void ResetSensorConfiguration()
+    public void ClearSensorConfiguration()
     {
         TempSensorConfiguration.Clear();
         foreach (var sensorType in SensorTypes) { TempSensorConfiguration.Add(sensorType, _0ms); }
-        SetConfiguration(TempSensorConfiguration);
+        SetSensorConfiguration(TempSensorConfiguration);
     }
 
     public string PrintSensorConfiguration()

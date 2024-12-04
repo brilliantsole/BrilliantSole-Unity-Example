@@ -20,8 +20,24 @@ public partial class BS_DevicePair
         OnDeviceSensorConfiguration?.Invoke(this, (BS_InsoleSide)device.InsoleSide, device, sensorConfiguration);
     }
 
-    public void SetSensorConfiguration(BS_InsoleSide insoleSide, BS_SensorConfiguration sensorConfiguration)
+    public void SetSensorConfiguration(BS_SensorConfiguration sensorConfiguration, bool clearRest = false)
     {
-        // FILL
+        foreach (var device in devices.Values) { device.SetSensorConfiguration(sensorConfiguration, clearRest); }
+    }
+    public void SetSensorRate(BS_SensorType sensorType, BS_SensorRate sensorRate)
+    {
+        foreach (var device in devices.Values) { device.SetSensorRate(sensorType, sensorRate); }
+    }
+    public void ClearSensorRate(BS_SensorType sensorType)
+    {
+        foreach (var device in devices.Values) { device.ClearSensorRate(sensorType); }
+    }
+    public void ToggleSensorRate(BS_SensorType sensorType, BS_SensorRate sensorRate)
+    {
+        foreach (var device in devices.Values) { device.ToggleSensorRate(sensorType, sensorRate); }
+    }
+    public void ClearSensorConfiguration()
+    {
+        foreach (var device in devices.Values) { device.ClearSensorConfiguration(); }
     }
 }

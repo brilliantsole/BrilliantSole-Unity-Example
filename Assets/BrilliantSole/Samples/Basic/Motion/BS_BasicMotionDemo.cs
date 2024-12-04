@@ -1,6 +1,10 @@
 using TMPro;
 using UnityEngine;
 using static BS_SensorType;
+using static BS_SensorRate;
+
+using BS_SensorConfiguration = System.Collections.Generic.Dictionary<BS_SensorType, BS_SensorRate>;
+using System.Linq;
 
 public class BS_BasicMotionDemo : MonoBehaviour
 {
@@ -15,6 +19,9 @@ public class BS_BasicMotionDemo : MonoBehaviour
     private void OnEnable()
     {
         setActive(true);
+
+        //SetDropdwnActive(DevicePair.IsFullyConnected);
+        DevicePair.OnIsFullyConnected += OnIsFullyConnected;
 
         DevicePair.OnDeviceGameRotation += OnDeviceQuaternion;
         DevicePair.OnDeviceRotation += OnDeviceQuaternion;
@@ -31,6 +38,8 @@ public class BS_BasicMotionDemo : MonoBehaviour
     {
         setActive(false);
 
+        DevicePair.OnIsFullyConnected -= OnIsFullyConnected;
+
         DevicePair.OnDeviceGameRotation -= OnDeviceQuaternion;
         DevicePair.OnDeviceRotation -= OnDeviceQuaternion;
 
@@ -42,6 +51,19 @@ public class BS_BasicMotionDemo : MonoBehaviour
         positionDropdown.onValueChanged.RemoveListener(OnPositionDropdownValueChanged);
         rotationDropdown.onValueChanged.RemoveListener(OnRotationDropdownValueChanged);
 
+        rotationDropdown.SetValueWithoutNotify(0);
+        positionDropdown.SetValueWithoutNotify(0);
+        DevicePair.ClearSensorConfiguration();
+    }
+
+    private void OnIsFullyConnected(BS_DevicePair devicePair, bool isFullyConnected)
+    {
+        //SetDropdwnActive(isFullyConnected);
+    }
+    private void SetDropdwnActive(bool active)
+    {
+        rotationDropdown.interactable = active;
+        positionDropdown.interactable = active;
     }
 
     private void setActive(bool active)
@@ -63,10 +85,18 @@ public class BS_BasicMotionDemo : MonoBehaviour
         // FILL
     }
 
+    private readonly BS_SensorConfiguration rotationSensorConfiguration = new() {
+        {GameRotation, _0ms},
+        {Rotation, _0ms},
+        {Orientation, _0ms},
+        {BS_SensorType.Gyroscope, _0ms},
+    };
     private void OnRotationDropdownValueChanged(int selectedIndex)
     {
         string selectedRotation = rotationDropdown.options[selectedIndex].text;
         Debug.Log($"selectedRotation: {selectedRotation}");
+
+        foreach (var key in rotationSensorConfiguration.Keys.ToList()) { rotationSensorConfiguration[key] = _0ms; }
         BS_SensorType? sensorType = selectedRotation switch
         {
             "Game Rotation" => GameRotation,
@@ -75,8 +105,16 @@ public class BS_BasicMotionDemo : MonoBehaviour
             "Gyroscope" => BS_SensorType.Gyroscope,
             _ => null
         };
-        Debug.Log($"sensorType: {sensorType}");
-        // FILL
+        if (sensorType != null)
+        {
+            Debug.Log($"sensorType: {sensorType}");
+            rotationSensorConfiguration[(BS_SensorType)sensorType] = _20ms;
+        }
+        else
+        {
+            Debug.Log("clearing rotation");
+        }
+        DevicePair.SetSensorConfiguration(rotationSensorConfiguration);
     }
 
     private void OnPositionDropdownValueChanged(int selectedIndex)
