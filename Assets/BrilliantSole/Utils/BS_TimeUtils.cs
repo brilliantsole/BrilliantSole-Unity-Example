@@ -29,7 +29,7 @@ public static class BS_TimeUtils
             timestamp += ushort.MaxValue * (ulong)Mathf.Sign(currentTime - timestamp);
         }
 
-        Logger.Log($"timestamp: {rawTimestamp}ms");
+        Logger.Log($"timestamp: {timestamp}ms");
         return timestamp;
     }
 
