@@ -111,7 +111,7 @@ public class BS_MotionSensorDataManager : BS_BaseSensorDataManager
     var w = BS_ByteUtils.ParseNumber<short>(data, 6, true) * scalar;
     Logger.Log($"raw quaternion: [{x}, {y}, {z}, {w}]");
 
-    Quaternion quaternion = new(x, y, z, w); // FIX
+    Quaternion quaternion = new(x, -y, -z, w); // FIX
     Logger.Log($"{sensorType}: {quaternion}");
 
     switch (sensorType)
@@ -136,7 +136,7 @@ public class BS_MotionSensorDataManager : BS_BaseSensorDataManager
     var roll = BS_ByteUtils.ParseNumber<short>(data, 4, true);
     Logger.Log($"orientation: yaw: {yaw}, pitch: {pitch}, roll: {roll}");
 
-    Vector3 vector3 = new(pitch, roll, yaw); // FIX
+    Vector3 vector3 = new(-pitch, yaw, -roll); // FIX
     vector3 *= scalar;
 
     OnOrientation?.Invoke(vector3, timestamp);

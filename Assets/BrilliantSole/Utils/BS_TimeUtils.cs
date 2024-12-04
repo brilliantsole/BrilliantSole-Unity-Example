@@ -18,8 +18,10 @@ public static class BS_TimeUtils
         var rawTimestamp = BS_ByteUtils.ParseNumber<ushort>(data, offset, true);
         Logger.Log($"rawTimestamp: {rawTimestamp}ms");
 
-        ulong timestamp = currentTime - (currentTime % ushort.MaxValue);
-        Logger.Log($"truncated timestamp: {rawTimestamp}ms");
+        ulong timestamp = currentTime - (currentTime % (ushort.MaxValue + 1));
+        Logger.Log($"truncated timestamp: {timestamp}ms");
+        timestamp += rawTimestamp;
+        Logger.Log($"full timestamp: {timestamp}ms");
 
         ulong timestampDifference = currentTime > timestamp ? currentTime - timestamp : timestamp - currentTime;
         Logger.Log($"timestampDifference: {timestampDifference}ms");
