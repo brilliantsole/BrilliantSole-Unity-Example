@@ -67,7 +67,6 @@ public class BS_BasicPressureDemo : MonoBehaviour
             ref var sensor = ref pressureData.Sensors[index];
             var meshRenderer = GetInsolePressureSensorMeshRenderer(insoleSide, index);
             meshRenderer.material.SetColor("_EmissionColor", Color.Lerp(Color.black, Color.red, sensor.NormalizedValue));
-            Debug.Log($"#{index}: {sensor.NormalizedValue} {meshRenderer != null}");
         }
     }
 

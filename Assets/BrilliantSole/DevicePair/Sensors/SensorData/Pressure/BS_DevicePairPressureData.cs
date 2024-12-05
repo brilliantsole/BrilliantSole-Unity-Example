@@ -1,8 +1,8 @@
-using System;
 using UnityEngine;
+using System;
 
 [Serializable]
-public readonly struct BS_PressureData
+public readonly struct BS_DevicePairPressureData
 {
     public readonly BS_PressureSensorData[] Sensors { get; }
     public readonly float ScaledSum { get; }
@@ -11,7 +11,7 @@ public readonly struct BS_PressureData
     public readonly Vector2? CenterOfPressure { get; }
     public readonly Vector2? NormalizedCenterOfPressure { get; }
 
-    public BS_PressureData(BS_PressureSensorData[] sensors, float scaledSum, float normalizedSum, in Vector2? centerOfPressure, in Vector2? normalizedCenterOfPressure)
+    public BS_DevicePairPressureData(BS_PressureSensorData[] sensors, float scaledSum, float normalizedSum, in Vector2? centerOfPressure, in Vector2? normalizedCenterOfPressure)
     {
         Sensors = sensors;
         ScaledSum = scaledSum;
