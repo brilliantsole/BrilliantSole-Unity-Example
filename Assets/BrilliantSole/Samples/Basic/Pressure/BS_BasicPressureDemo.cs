@@ -6,6 +6,7 @@ using static BS_SensorRate;
 using BS_SensorConfiguration = System.Collections.Generic.Dictionary<BS_SensorType, BS_SensorRate>;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.InputSystem;
 
 public class BS_BasicPressureDemo : MonoBehaviour
 {
@@ -29,8 +30,6 @@ public class BS_BasicPressureDemo : MonoBehaviour
     {
         setActive(true);
 
-        DevicePair.OnIsFullyConnected += OnIsFullyConnected;
-
         TogglePressureDataButton.onClick.AddListener(TogglePressureData);
         DevicePair.OnDevicePressureData += OnDevicePressureData;
     }
@@ -38,19 +37,12 @@ public class BS_BasicPressureDemo : MonoBehaviour
     {
         setActive(false);
 
-        DevicePair.OnIsFullyConnected -= OnIsFullyConnected;
-
         DevicePair.OnDevicePressureData -= OnDevicePressureData;
         TogglePressureDataButton.onClick.RemoveListener(TogglePressureData);
 
         DevicePair.ClearSensorConfiguration();
         IsPressureDataEnabled = false;
         UpdateTogglePressureDataButton();
-    }
-
-    private void OnIsFullyConnected(BS_DevicePair devicePair, bool isFullyConnected)
-    {
-        // FILL
     }
 
     private void setActive(bool active)
@@ -63,18 +55,20 @@ public class BS_BasicPressureDemo : MonoBehaviour
     {
         return GetInsole(insoleSide)?.transform?.Find(path);
     }
-    private Transform GetInsolePositionTransform(BS_InsoleSide insoleSide)
+    private MeshRenderer GetInsolePressureSensorMeshRenderer(BS_InsoleSide insoleSide, int index)
     {
-        return GetInsoleTransform(insoleSide, "Rotation/Position");
-    }
-    private Transform GetInsoleRotationTransform(BS_InsoleSide insoleSide)
-    {
-        return GetInsoleTransform(insoleSide, "Rotation");
+        return GetInsoleTransform(insoleSide, $"InsolePressure/Transform/Sensors/Pressure{index}").gameObject.GetComponent<MeshRenderer>();
     }
 
     private void OnDevicePressureData(BS_DevicePair devicePair, BS_InsoleSide insoleSide, BS_Device device, BS_PressureData pressureData, ulong timetamp)
     {
-        // FILL
+        for (int index = 0; index < pressureData.Sensors.Length; index++)
+        {
+            ref var sensor = ref pressureData.Sensors[index];
+            var meshRenderer = GetInsolePressureSensorMeshRenderer(insoleSide, index);
+            meshRenderer.material.SetColor("_EmissionColor", Color.Lerp(Color.black, Color.red, sensor.NormalizedValue));
+            Debug.Log($"#{index}: {sensor.NormalizedValue} {meshRenderer != null}");
+        }
     }
 
     private bool IsPressureDataEnabled = false;

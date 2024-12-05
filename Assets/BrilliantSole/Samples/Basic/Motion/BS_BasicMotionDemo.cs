@@ -6,7 +6,6 @@ using static BS_InsoleSide;
 
 using BS_SensorConfiguration = System.Collections.Generic.Dictionary<BS_SensorType, BS_SensorRate>;
 using System.Linq;
-using UnityEngine.UI;
 using System.Collections.Generic;
 using System;
 
@@ -33,9 +32,6 @@ public class BS_BasicMotionDemo : MonoBehaviour
     {
         setActive(true);
 
-        //SetDropdwnActive(DevicePair.IsFullyConnected);
-        DevicePair.OnIsFullyConnected += OnIsFullyConnected;
-
         DevicePair.OnDeviceGameRotation += OnDeviceQuaternion;
         DevicePair.OnDeviceRotation += OnDeviceQuaternion;
 
@@ -52,8 +48,6 @@ public class BS_BasicMotionDemo : MonoBehaviour
     {
         setActive(false);
 
-        DevicePair.OnIsFullyConnected -= OnIsFullyConnected;
-
         DevicePair.OnDeviceGameRotation -= OnDeviceQuaternion;
         DevicePair.OnDeviceRotation -= OnDeviceQuaternion;
 
@@ -69,16 +63,6 @@ public class BS_BasicMotionDemo : MonoBehaviour
         rotationDropdown.SetValueWithoutNotify(0);
         positionDropdown.SetValueWithoutNotify(0);
         DevicePair.ClearSensorConfiguration();
-    }
-
-    private void OnIsFullyConnected(BS_DevicePair devicePair, bool isFullyConnected)
-    {
-        //SetDropdwnActive(isFullyConnected);
-    }
-    private void SetDropdwnActive(bool active)
-    {
-        rotationDropdown.interactable = active;
-        positionDropdown.interactable = active;
     }
 
     private void setActive(bool active)
