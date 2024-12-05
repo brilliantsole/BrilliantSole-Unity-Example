@@ -36,9 +36,10 @@ public class BS_BasicMotionDemo : MonoBehaviour
         DevicePair.OnDeviceGameRotation += OnDeviceQuaternion;
         DevicePair.OnDeviceRotation += OnDeviceQuaternion;
 
-        DevicePair.OnDeviceGyroscope += OnDeviceEulerAngles;
+        DevicePair.OnDeviceGyroscope += OnDeviceGyroscope;
         DevicePair.OnDeviceOrientation += OnDeviceEulerAngles;
 
+        DevicePair.OnDeviceAcceleration += OnDevicePosition;
         DevicePair.OnDeviceLinearAcceleration += OnDevicePosition;
 
         positionDropdown.onValueChanged.AddListener(OnPositionDropdownValueChanged);
@@ -53,9 +54,10 @@ public class BS_BasicMotionDemo : MonoBehaviour
         DevicePair.OnDeviceGameRotation -= OnDeviceQuaternion;
         DevicePair.OnDeviceRotation -= OnDeviceQuaternion;
 
-        DevicePair.OnDeviceGyroscope -= OnDeviceEulerAngles;
+        DevicePair.OnDeviceGyroscope -= OnDeviceGyroscope;
         DevicePair.OnDeviceOrientation -= OnDeviceEulerAngles;
 
+        DevicePair.OnDeviceAcceleration -= OnDevicePosition;
         DevicePair.OnDeviceLinearAcceleration -= OnDevicePosition;
 
         positionDropdown.onValueChanged.RemoveListener(OnPositionDropdownValueChanged);
@@ -82,30 +84,44 @@ public class BS_BasicMotionDemo : MonoBehaviour
         if (RightInsole != null) { RightInsole.SetActive(active); }
     }
 
+    private Transform GetInsoleTransform(BS_InsoleSide insoleSide, string path)
+    {
+        return GetInsole(insoleSide)?.transform?.Find(path);
+    }
+    private Transform GetInsolePositionTransform(BS_InsoleSide insoleSide)
+    {
+        return GetInsoleTransform(insoleSide, "Rotation/Position");
+    }
+    private Transform GetInsoleRotationTransform(BS_InsoleSide insoleSide)
+    {
+        return GetInsoleTransform(insoleSide, "Rotation");
+    }
+
     private void OnDeviceQuaternion(BS_DevicePair devicePair, BS_InsoleSide insoleSide, BS_Device device, Quaternion quaternion, ulong timestamp)
     {
-        var insoleTransform = GetInsole(insoleSide)?.transform;
-        if (insoleTransform == null)
-        {
-            return;
-        }
+        var insoleTransform = GetInsoleRotationTransform(insoleSide);
+        if (insoleTransform == null) { return; }
         // FILL - calibration stuff
-        insoleTransform.rotation = quaternion;
+        insoleTransform.localRotation = quaternion;
     }
     private void OnDeviceEulerAngles(BS_DevicePair devicePair, BS_InsoleSide insoleSide, BS_Device device, Vector3 eulerAngles, ulong timestamp)
     {
-        // FILL
-        var insoleTransform = GetInsole(insoleSide)?.transform;
-        if (insoleTransform == null)
-        {
-            return;
-        }
+        var insoleTransform = GetInsoleRotationTransform(insoleSide);
+        if (insoleTransform == null) { return; }
         // FILL - calibration stuff
-        insoleTransform.rotation = Quaternion.Euler(eulerAngles);
+        insoleTransform.localRotation = Quaternion.Euler(eulerAngles);
+    }
+    private void OnDeviceGyroscope(BS_DevicePair devicePair, BS_InsoleSide insoleSide, BS_Device device, Vector3 eulerAngles, ulong timestamp)
+    {
+        var insoleTransform = GetInsoleRotationTransform(insoleSide);
+        if (insoleTransform == null) { return; }
+        insoleTransform.localRotation = Quaternion.Euler(eulerAngles * 0.2f);
     }
     private void OnDevicePosition(BS_DevicePair devicePair, BS_InsoleSide insoleSide, BS_Device device, Vector3 position, ulong timestamp)
     {
-        // FILL
+        var insoleTransform = GetInsolePositionTransform(insoleSide);
+        if (insoleTransform == null) { return; }
+        insoleTransform.localPosition = Vector3.Lerp(insoleTransform.localPosition, position * 100.0f, 0.4f);
     }
 
     private readonly BS_SensorConfiguration rotationSensorConfiguration = new() {
@@ -142,6 +158,7 @@ public class BS_BasicMotionDemo : MonoBehaviour
 
     private readonly BS_SensorConfiguration positionSensorConfiguration = new() {
         {LinearAcceleration, _0ms},
+        {Acceleration, _0ms},
     };
     private void OnPositionDropdownValueChanged(int selectedIndex)
     {
@@ -152,6 +169,7 @@ public class BS_BasicMotionDemo : MonoBehaviour
         BS_SensorType? sensorType = selectedPosition switch
         {
             "Linear Acceleration" => LinearAcceleration,
+            "Acceleration" => Acceleration,
             _ => null
         };
         Debug.Log($"sensorType: {sensorType}");

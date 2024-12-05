@@ -74,7 +74,7 @@ public class BS_MotionSensorDataManager : BS_BaseSensorDataManager
     var z = BS_ByteUtils.ParseNumber<short>(data, 4, true);
     Logger.Log($"raw vector: [{x}, {y}, {z}]");
 
-    Vector3 vector3 = new(x, y, z); // FIX
+    Vector3 vector3 = new(x, y, -z);
     vector3 *= scalar;
     Logger.Log($"{sensorType}: {vector3}");
 
@@ -90,7 +90,8 @@ public class BS_MotionSensorDataManager : BS_BaseSensorDataManager
         OnLinearAcceleration?.Invoke(vector3, timestamp);
         break;
       case BS_SensorType.Gyroscope:
-        OnGyroscope?.Invoke(vector3, timestamp);
+        Vector3 eulerAngles = new(-vector3.x, -vector3.y, -vector3.z);
+        OnGyroscope?.Invoke(eulerAngles, timestamp);
         break;
       case Magnetometer:
         OnMagnetometer?.Invoke(vector3, timestamp);
@@ -111,7 +112,7 @@ public class BS_MotionSensorDataManager : BS_BaseSensorDataManager
     var w = BS_ByteUtils.ParseNumber<short>(data, 6, true) * scalar;
     Logger.Log($"raw quaternion: [{x}, {y}, {z}, {w}]");
 
-    Quaternion quaternion = new(x, -y, -z, w); // FIX
+    Quaternion quaternion = new(-x, -y, z, w);
     Logger.Log($"{sensorType}: {quaternion}");
 
     switch (sensorType)
@@ -136,7 +137,7 @@ public class BS_MotionSensorDataManager : BS_BaseSensorDataManager
     var roll = BS_ByteUtils.ParseNumber<short>(data, 4, true);
     Logger.Log($"orientation: yaw: {yaw}, pitch: {pitch}, roll: {roll}");
 
-    Vector3 vector3 = new(-pitch, yaw, -roll); // FIX
+    Vector3 vector3 = new(pitch, yaw, roll); // FIX
     vector3 *= scalar;
 
     OnOrientation?.Invoke(vector3, timestamp);
