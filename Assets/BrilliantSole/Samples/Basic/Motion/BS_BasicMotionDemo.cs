@@ -6,6 +6,9 @@ using static BS_InsoleSide;
 
 using BS_SensorConfiguration = System.Collections.Generic.Dictionary<BS_SensorType, BS_SensorRate>;
 using System.Linq;
+using UnityEngine.UI;
+using System.Collections.Generic;
+using System;
 
 public class BS_BasicMotionDemo : MonoBehaviour
 {
@@ -101,15 +104,23 @@ public class BS_BasicMotionDemo : MonoBehaviour
     {
         var insoleTransform = GetInsoleRotationTransform(insoleSide);
         if (insoleTransform == null) { return; }
-        // FILL - calibration stuff
+
+        LatestYaw[insoleSide] = quaternion.eulerAngles.y;
         insoleTransform.localRotation = quaternion;
+
+        var offsetYaw = OffsetYaw.GetValueOrDefault(insoleSide, 0.0f);
+        insoleTransform.Rotate(0, -offsetYaw, 0);
     }
     private void OnDeviceEulerAngles(BS_DevicePair devicePair, BS_InsoleSide insoleSide, BS_Device device, Vector3 eulerAngles, ulong timestamp)
     {
         var insoleTransform = GetInsoleRotationTransform(insoleSide);
         if (insoleTransform == null) { return; }
-        // FILL - calibration stuff
+
+        LatestYaw[insoleSide] = eulerAngles.y;
         insoleTransform.localRotation = Quaternion.Euler(eulerAngles);
+
+        var offsetYaw = OffsetYaw.GetValueOrDefault(insoleSide, 0.0f);
+        insoleTransform.Rotate(0, -offsetYaw, 0);
     }
     private void OnDeviceGyroscope(BS_DevicePair devicePair, BS_InsoleSide insoleSide, BS_Device device, Vector3 eulerAngles, ulong timestamp)
     {
@@ -122,6 +133,17 @@ public class BS_BasicMotionDemo : MonoBehaviour
         var insoleTransform = GetInsolePositionTransform(insoleSide);
         if (insoleTransform == null) { return; }
         insoleTransform.localPosition = Vector3.Lerp(insoleTransform.localPosition, position * 100.0f, 0.4f);
+    }
+
+    private readonly Dictionary<BS_InsoleSide, float> LatestYaw = new();
+    private readonly Dictionary<BS_InsoleSide, float> OffsetYaw = new();
+    public void Calibrate()
+    {
+        Debug.Log("Calibrating...");
+        foreach (BS_InsoleSide insoleSide in Enum.GetValues(typeof(BS_InsoleSide)))
+        {
+            OffsetYaw[insoleSide] = LatestYaw.GetValueOrDefault(insoleSide, 0.0f);
+        }
     }
 
     private readonly BS_SensorConfiguration rotationSensorConfiguration = new() {
