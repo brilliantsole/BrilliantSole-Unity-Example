@@ -48,7 +48,7 @@ public class BS_ScannerScrollView : MonoBehaviour
 
 
             Button toggleConnectionButton = item.transform.Find("ToggleConnection").GetComponent<Button>();
-            TextMeshProUGUI toggleConnectionButtonText = item.transform.Find("ToggleConnection").GetComponentInChildren<TextMeshProUGUI>();
+            var toggleConnectionButtonText = item.transform.Find("ToggleConnection").GetComponentInChildren<TextMeshProUGUI>();
             BS_Device device = null;
             toggleConnectionButton.onClick.AddListener(() =>
             {
@@ -76,11 +76,11 @@ public class BS_ScannerScrollView : MonoBehaviour
             });
         }
 
-        TextMeshProUGUI rssiText = item.transform.Find("Rssi").GetComponent<TextMeshProUGUI>();
+        var rssiText = item.transform.Find("Rssi").GetComponent<TextMeshProUGUI>();
         Debug.Log($"updating rssi text to {DiscoveredDevice.Rssi}");
         rssiText.text = $"Rssi: {DiscoveredDevice.Rssi}";
 
-        TextMeshProUGUI deviceTypeText = item.transform.Find("DeviceType").GetComponent<TextMeshProUGUI>();
+        var deviceTypeText = item.transform.Find("DeviceType").GetComponent<TextMeshProUGUI>();
         Debug.Log($"updating deviceType {DiscoveredDevice.DeviceType}");
         if (DiscoveredDevice.DeviceType != null)
         {
@@ -97,7 +97,7 @@ public class BS_ScannerScrollView : MonoBehaviour
         if (instantiatedItems.TryGetValue(DiscoveredDevice.Id, out GameObject item))
         {
             instantiatedItems.Remove(DiscoveredDevice.Id);
-            Button toggleConnectionButton = item.transform.Find("ToggleConnection").GetComponent<Button>();
+            var toggleConnectionButton = item.transform.Find("ToggleConnection").GetComponent<Button>();
             toggleConnectionButton.onClick.RemoveAllListeners();
             Destroy(item);
         }
