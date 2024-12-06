@@ -4,7 +4,7 @@ using System.Runtime.InteropServices;
 
 public static class BS_ByteUtils
 {
-    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_ByteUtils");
+    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_ByteUtils", BS_Logger.LogLevel.Warn);
 
     public static T ParseNumber<T>(byte[] data, int offset = 0, bool isLittleEndian = false) where T : unmanaged
     {

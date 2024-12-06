@@ -4,7 +4,7 @@ using UnityEngine.Events;
 
 public class BS_ScannerManager : BS_SingletonMonoBehavior<BS_ScannerManager>
 {
-    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_ScannerManager");
+    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_ScannerManager", BS_Logger.LogLevel.Warn);
 
     private static BS_BaseScanner Scanner => BS_BleScanner.Instance;
 

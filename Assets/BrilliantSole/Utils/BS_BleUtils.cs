@@ -6,7 +6,7 @@ using System.Linq;
 
 public static class BS_BleUtils
 {
-    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_BleUtils");
+    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_BleUtils", BS_Logger.LogLevel.Warn);
 
     static private string GenerateUuid(string value)
     {

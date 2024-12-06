@@ -12,7 +12,7 @@ public class BS_SensorConfigurationManager : BS_BaseManager<BS_SensorConfigurati
      };
     public static byte[] RequiredTxRxMessageTypes => EnumArrayToTxRxArray(RequiredMessageTypes);
 
-    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_SensorConfigurationManager");
+    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_SensorConfigurationManager", BS_Logger.LogLevel.Warn);
 
     public override void OnRxMessage(BS_SensorConfigurationMessageType messageType, in byte[] data)
     {

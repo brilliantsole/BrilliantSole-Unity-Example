@@ -14,7 +14,7 @@ public class BS_SensorDataManager : BS_BaseManager<BS_SensorDataMessageType>
     public readonly BS_MotionSensorDataManager MotionSensorDataManager = new();
     public readonly BS_BarometerSensorDataManager BarometerSensorDataManager = new();
 
-    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_SensorDataManager");
+    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_SensorDataManager", BS_Logger.LogLevel.Warn);
 
     public override void OnRxMessage(BS_SensorDataMessageType messageType, in byte[] data)
     {

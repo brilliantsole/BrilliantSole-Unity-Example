@@ -3,7 +3,7 @@ using Unity.VisualScripting;
 
 public static class BS_TxRxMessageUtils
 {
-    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_TxRxMessageUtils");
+    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_TxRxMessageUtils", BS_Logger.LogLevel.Warn);
 
     static public readonly string[] EnumStrings;
     private static readonly byte maxTxRxMessageType;

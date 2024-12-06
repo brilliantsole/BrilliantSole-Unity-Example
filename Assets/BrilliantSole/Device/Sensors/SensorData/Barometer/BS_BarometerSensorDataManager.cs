@@ -5,7 +5,7 @@ using static BS_SensorType;
 
 public class BS_BarometerSensorDataManager : BS_BaseSensorDataManager
 {
-    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_BarometerSensorDataManager");
+    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_BarometerSensorDataManager", BS_Logger.LogLevel.Warn);
 
     private readonly HashSet<BS_SensorType> sensorTypes = new() { Barometer };
     protected override HashSet<BS_SensorType> SensorTypes => sensorTypes;

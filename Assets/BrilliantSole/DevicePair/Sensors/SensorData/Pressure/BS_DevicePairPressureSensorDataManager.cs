@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class BS_DevicePairPressureSensorDataManager
 {
-    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_DevicePairPressureSensorDataManager");
+    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_DevicePairPressureSensorDataManager", BS_Logger.LogLevel.Warn);
 
     private readonly Dictionary<BS_InsoleSide, BS_PressureData> devicePressureData = new();
     private bool HasAllData => devicePressureData.Count == 2;
