@@ -101,6 +101,7 @@ public class BS_InformationManager : BS_BaseManager<BS_InformationMessageType>
             OnName?.Invoke(Name);
         }
     }
+    public void InitName(string name) { _name = name; }
     public event Action<string> OnName;
     private void ParseName(in byte[] data)
     {
@@ -122,6 +123,7 @@ public class BS_InformationManager : BS_BaseManager<BS_InformationMessageType>
             OnDeviceType?.Invoke(DeviceType);
         }
     }
+    public void InitDeviceType(BS_DeviceType deviceType) { _deviceType = deviceType; }
     public event Action<BS_DeviceType> OnDeviceType;
     private void ParseDeviceType(in byte[] data)
     {
@@ -170,9 +172,9 @@ public class BS_InformationManager : BS_BaseManager<BS_InformationMessageType>
         base.Reset();
 
         _mtu = null;
-        _id = null;
-        _name = null;
-        _deviceType = null;
+        //_id = null;
+        //_name = null;
+        //_deviceType = null;
         _currentTime = null;
     }
 }

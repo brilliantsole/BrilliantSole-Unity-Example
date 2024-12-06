@@ -11,7 +11,8 @@ public class BS_BleConnectionManager : BS_BaseConnectionManager
 
     public BS_DiscoveredDevice? DiscoveredDevice;
     public string Address => DiscoveredDevice?.Id ?? "";
-    public string Name => DiscoveredDevice?.Name ?? "";
+    public override string? Name => DiscoveredDevice?.Name;
+    public override BS_DeviceType? DeviceType => DiscoveredDevice?.DeviceType;
 
     private void Reset()
     {

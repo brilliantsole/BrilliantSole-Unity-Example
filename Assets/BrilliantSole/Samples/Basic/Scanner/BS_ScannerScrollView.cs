@@ -15,18 +15,12 @@ public class BS_ScannerScrollView : MonoBehaviour
 
     private void OnEnable()
     {
-        foreach (var DiscoveredDevice in ScannerManager.DiscoveredDevices.Values)
-        {
-            OnDiscoveredDevice(DiscoveredDevice);
-        }
+        foreach (var DiscoveredDevice in ScannerManager.DiscoveredDevices.Values) { OnDiscoveredDevice(DiscoveredDevice); }
     }
     private void OnDisable()
     {
         if (!gameObject.scene.isLoaded) return;
-        foreach (var DiscoveredDevice in ScannerManager.DiscoveredDevices.Values)
-        {
-            OnExpiredDevice(DiscoveredDevice);
-        }
+        //foreach (var DiscoveredDevice in ScannerManager.DiscoveredDevices.Values) { OnExpiredDevice(DiscoveredDevice); }
     }
 
     public void OnDiscoveredDevice(BS_DiscoveredDevice DiscoveredDevice)

@@ -32,6 +32,8 @@ public partial class BS_Device
                 value.OnRxMessages = OnRxMessages;
                 value.OnDeviceInformationValue = OnDeviceInformationValue;
                 value.OnSendTxData = OnSendTxData;
+                if (value.Name != null) { InformationManager.InitName(Name); }
+                if (value.DeviceType != null) { InformationManager.InitDeviceType(DeviceType); }
             }
 
             _connectionManager = value;
