@@ -2,7 +2,7 @@ using System;
 
 public static class BS_ParseUtils
 {
-    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_ParseUtils", BS_Logger.LogLevel.Log);
+    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_ParseUtils");
 
     public static byte[] GetSubarray(byte[] data, ushort offset, ushort length)
     {

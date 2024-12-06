@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class BS_CenterOfPressureRange
 {
-    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_CenterOfPressureRange", BS_Logger.LogLevel.Log);
+    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_CenterOfPressureRange");
 
     private readonly BS_Range x = new();
     private readonly BS_Range y = new();

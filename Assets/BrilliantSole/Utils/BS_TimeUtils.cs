@@ -3,7 +3,7 @@ using UnityEngine;
 
 public static class BS_TimeUtils
 {
-    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_TimeUtils", BS_Logger.LogLevel.Log);
+    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_TimeUtils");
 
     public static ulong GetMilliseconds()
     {

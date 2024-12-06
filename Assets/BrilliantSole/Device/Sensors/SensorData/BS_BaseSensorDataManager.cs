@@ -4,7 +4,7 @@ using NUnit.Framework.Internal;
 
 public abstract class BS_BaseSensorDataManager
 {
-    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_BaseSensorDataManager", BS_Logger.LogLevel.Log);
+    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_BaseSensorDataManager");
 
     protected abstract HashSet<BS_SensorType> SensorTypes { get; }
 

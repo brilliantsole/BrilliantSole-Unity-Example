@@ -3,7 +3,7 @@ using System.Text;
 
 public class BS_DeviceInformation
 {
-    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_DeviceInformation", BS_Logger.LogLevel.Log);
+    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_DeviceInformation");
 
     public string ManufacturerName { get; private set; }
     public string ModelNumber { get; private set; }

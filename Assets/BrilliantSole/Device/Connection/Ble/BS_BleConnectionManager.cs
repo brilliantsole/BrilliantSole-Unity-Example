@@ -5,7 +5,7 @@ using static BS_ConnectionStatus;
 #nullable enable
 public class BS_BleConnectionManager : BS_BaseConnectionManager
 {
-    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_BleConnectionManager", BS_Logger.LogLevel.Log);
+    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_BleConnectionManager");
 
     public override BS_ConnectionType Type => BS_ConnectionType.Ble;
 

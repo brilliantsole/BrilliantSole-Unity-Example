@@ -5,7 +5,7 @@ using System;
 [System.Serializable]
 public class BS_DiscoveredDevice
 {
-    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_DiscoveredDevice", BS_Logger.LogLevel.Log);
+    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_DiscoveredDevice");
 
     public readonly string Id;
     public string Name { get; private set; }

@@ -5,7 +5,7 @@ using static BS_ConnectionStatus;
 
 public abstract class BS_BaseConnectionManager
 {
-    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_BaseConnectionManager", BS_Logger.LogLevel.Log);
+    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_BaseConnectionManager");
 
     public abstract BS_ConnectionType Type { get; }
 

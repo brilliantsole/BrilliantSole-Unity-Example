@@ -5,7 +5,7 @@ using static BS_SensorType;
 
 public class BS_MotionSensorDataManager : BS_BaseSensorDataManager
 {
-  private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_MotionSensorDataManager", BS_Logger.LogLevel.Log);
+  private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_MotionSensorDataManager");
 
   private readonly HashSet<BS_SensorType> sensorTypes = new(){
         Acceleration,

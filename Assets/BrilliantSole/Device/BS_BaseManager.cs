@@ -16,7 +16,7 @@ public abstract class BS_BaseManager
 
 public abstract class BS_BaseManager<TEnum> : BS_BaseManager where TEnum : Enum
 {
-    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_BaseManager", BS_Logger.LogLevel.Log);
+    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_BaseManager");
 
     public static readonly Type EnumType = typeof(TEnum);
 

@@ -10,7 +10,7 @@ public class BS_BatteryManager : BS_BaseManager<BS_BatteryMessageType>
      };
     public static byte[] RequiredTxRxMessageTypes => EnumArrayToTxRxArray(RequiredMessageTypes);
 
-    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_BatteryManager", BS_Logger.LogLevel.Log);
+    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_BatteryManager");
 
     public override void OnRxMessage(BS_BatteryMessageType messageType, in byte[] data)
     {
