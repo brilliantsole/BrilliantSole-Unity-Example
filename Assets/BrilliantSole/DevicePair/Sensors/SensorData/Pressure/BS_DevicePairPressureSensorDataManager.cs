@@ -41,8 +41,8 @@ public class BS_DevicePairPressureSensorDataManager
             float centerOfPressureY = 0.0f;
             foreach (var _insoleSide in devicePressureData.Keys)
             {
-                float normalizedSumWeight = normalizedSum / devicePressureData[_insoleSide].NormalizedSum;
-                if (normalizedSumWeight > 0.0f)
+                float normalizedSumWeight = devicePressureData[_insoleSide].NormalizedSum / normalizedSum;
+                if (normalizedSumWeight > 0.0f && devicePressureData[_insoleSide].NormalizedCenterOfPressure != null)
                 {
                     centerOfPressureY += (float)(devicePressureData[_insoleSide].NormalizedCenterOfPressure?.y) * normalizedSumWeight;
                     if (_insoleSide == BS_InsoleSide.Right)
