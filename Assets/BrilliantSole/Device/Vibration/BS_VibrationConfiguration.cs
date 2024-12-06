@@ -26,5 +26,9 @@ public struct BS_VibrationConfiguration
 
     // WAVEFORM END
 
-    // FILL - to array
+    public byte[] ToArray()
+    {
+        // FILL
+        return new byte[] { };
+    }
 }

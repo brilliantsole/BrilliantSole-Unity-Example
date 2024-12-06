@@ -17,8 +17,5 @@ public partial class BS_Device
         foreach (var Manager in Managers) { Manager.SendTxMessages = SendTxMessages; }
     }
 
-    private void ResetManagers()
-    {
-        foreach (var Manager in Managers) { Manager.Reset(); }
-    }
+    private void ResetManagers() { foreach (var Manager in Managers) { Manager.Reset(); } }
 }

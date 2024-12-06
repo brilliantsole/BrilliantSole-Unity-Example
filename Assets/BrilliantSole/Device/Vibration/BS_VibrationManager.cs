@@ -1,6 +1,6 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
-using static BS_VibrationMessageType;
 
 public class BS_VibrationManager : BS_BaseManager<BS_VibrationMessageType>
 {
@@ -20,8 +20,28 @@ public class BS_VibrationManager : BS_BaseManager<BS_VibrationMessageType>
         }
     }
 
-    public override void Reset()
+    public override void Reset() { base.Reset(); }
+
+    public void TriggerVibration(List<BS_VibrationConfiguration> vibrationConfigurations)
     {
-        base.Reset();
+        Logger.Log("triggering vibration...");
+        List<byte> TxData = new();
+        for (int i = 0; i < vibrationConfigurations.Count; i++)
+        {
+            var array = vibrationConfigurations[i].ToArray();
+            if (array.Length == 0)
+            {
+                Logger.Log("empty vibrationConfiguration array - skipping");
+                continue;
+            }
+            TxData.AddRange(array);
+        }
+        if (TxData.Count == 0)
+        {
+            Logger.Log("empty vibration TxData - not sending");
+            return;
+        }
+        BS_TxMessage[] Messages = { CreateTxMessage(BS_VibrationMessageType.TriggerVibration, TxData) };
+        SendTxMessages?.Invoke(Messages, true);
     }
 }

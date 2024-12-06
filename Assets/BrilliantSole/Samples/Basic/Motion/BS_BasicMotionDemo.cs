@@ -162,6 +162,7 @@ public class BS_BasicMotionDemo : MonoBehaviour
         DevicePair.SetSensorConfiguration(rotationSensorConfiguration);
     }
 
+    public BS_SensorRate SensorRate = _20ms;
     private readonly BS_SensorConfiguration positionSensorConfiguration = new() {
         {LinearAcceleration, _0ms},
         {Acceleration, _0ms},
@@ -183,7 +184,7 @@ public class BS_BasicMotionDemo : MonoBehaviour
         if (sensorType != null)
         {
             Debug.Log($"sensorType: {sensorType}");
-            positionSensorConfiguration[(BS_SensorType)sensorType] = _20ms;
+            positionSensorConfiguration[(BS_SensorType)sensorType] = SensorRate;
         }
         else
         {

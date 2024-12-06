@@ -68,11 +68,12 @@ public class BS_BasicPressureDemo : MonoBehaviour
         }
     }
 
+    public BS_SensorRate SensorRate = _20ms;
     private bool IsPressureDataEnabled = false;
     private void TogglePressureData()
     {
         IsPressureDataEnabled = !IsPressureDataEnabled;
-        DevicePair.SetSensorRate(Pressure, IsPressureDataEnabled ? _20ms : _0ms);
+        DevicePair.SetSensorRate(Pressure, IsPressureDataEnabled ? SensorRate : _0ms);
         UpdateTogglePressureDataButton();
     }
 

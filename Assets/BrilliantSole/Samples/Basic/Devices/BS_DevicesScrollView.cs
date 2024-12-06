@@ -11,6 +11,8 @@ public class BS_DevicesScrollView : MonoBehaviour
     public Transform Content;
     private readonly Dictionary<string, GameObject> instantiatedItems = new();
 
+    public List<BS_VibrationConfiguration> VibrationConfigurations = new();
+
     private void OnEnable()
     {
         foreach (var device in BS_DeviceManager.AvailableDevices)
@@ -47,6 +49,9 @@ public class BS_DevicesScrollView : MonoBehaviour
         var toggleConnectionButton = item.transform.Find("ToggleConnection").GetComponent<Button>();
         toggleConnectionButton.onClick.AddListener(() => { device.ToggleConnection(); });
 
+        var vibrateButton = item.transform.Find("Vibrate").GetComponent<Button>();
+        vibrateButton.onClick.AddListener(() => { Debug.Log("Vibrate!"); });
+
         device.OnConnectionStatus += OnDeviceConnectionStatus;
         UpdateToggleConnectionButton(device);
     }
@@ -82,6 +87,8 @@ public class BS_DevicesScrollView : MonoBehaviour
             instantiatedItems.Remove(device.Id);
             var toggleConnectionButton = item.transform.Find("ToggleConnection").GetComponent<Button>();
             toggleConnectionButton.onClick.RemoveAllListeners();
+            var vibrateButton = item.transform.Find("Vibrate").GetComponent<Button>();
+            vibrateButton.onClick.RemoveAllListeners();
             device.OnConnectionStatus -= OnDeviceConnectionStatus;
             Destroy(item);
         }

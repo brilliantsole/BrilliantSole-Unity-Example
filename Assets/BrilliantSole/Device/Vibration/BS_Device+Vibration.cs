@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 public partial class BS_Device
 {
@@ -7,7 +8,10 @@ public partial class BS_Device
     private void SetupVibrationManager()
     {
         Managers.Add(VibrationManager);
+    }
 
-        // FILL
+    public void TriggerVibration(List<BS_VibrationConfiguration> vibrationConfigurations)
+    {
+        VibrationManager.TriggerVibration(vibrationConfigurations);
     }
 }
