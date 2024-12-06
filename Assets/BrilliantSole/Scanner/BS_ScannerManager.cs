@@ -66,6 +66,8 @@ public class BS_ScannerManager : BS_SingletonMonoBehavior<BS_ScannerManager>
     public BS_Device DisconnectFromDiscoveredDevice(BS_DiscoveredDevice DiscoveredDevice) { return Scanner.DisconnectFromDiscoveredDevice(DiscoveredDevice); }
     public BS_Device ToggleConnectionToDiscoveredDevice(BS_DiscoveredDevice DiscoveredDevice) { return Scanner.ToggleConnectionToDiscoveredDevice(DiscoveredDevice); }
 
+    public IReadOnlyDictionary<string, BS_Device> Devices => Scanner.Devices;
+
 
 #if UNITY_EDITOR
     protected override void OnApplicationQuit()

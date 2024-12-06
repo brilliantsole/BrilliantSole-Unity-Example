@@ -43,13 +43,24 @@ public class BS_ScannerScrollView : MonoBehaviour
             item = Instantiate(ItemPrefab, Content);
             instantiatedItems[DiscoveredDevice.Id] = item;
 
-            TextMeshProUGUI nameText = item.transform.Find("Name").GetComponent<TextMeshProUGUI>();
+            var nameText = item.transform.Find("Name").GetComponent<TextMeshProUGUI>();
             nameText.text = DiscoveredDevice.Name;
 
 
-            Button toggleConnectionButton = item.transform.Find("ToggleConnection").GetComponent<Button>();
+            var toggleConnectionButton = item.transform.Find("ToggleConnection").GetComponent<Button>();
             var toggleConnectionButtonText = item.transform.Find("ToggleConnection").GetComponentInChildren<TextMeshProUGUI>();
             BS_Device device = null;
+            if (ScannerManager.Devices.ContainsKey(DiscoveredDevice.Id))
+            {
+                toggleConnectionButtonText.text = ScannerManager.Devices[DiscoveredDevice.Id].ConnectionStatus switch
+                {
+                    NotConnected => "Connect",
+                    Connecting => "Connecting...",
+                    Connected => "Disconnect",
+                    Disconnecting => "Disconnecting...",
+                    _ => throw new System.NotImplementedException()
+                };
+            }
             toggleConnectionButton.onClick.AddListener(() =>
             {
                 Debug.Log($"Toggling Connection to \"{DiscoveredDevice.Name}\"...");
