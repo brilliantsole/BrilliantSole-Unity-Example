@@ -3,10 +3,8 @@ using static BS_InsoleSide;
 using static BS_SensorType;
 using static BS_SensorRate;
 
-using BS_SensorConfiguration = System.Collections.Generic.Dictionary<BS_SensorType, BS_SensorRate>;
 using UnityEngine.UI;
 using TMPro;
-using UnityEngine.InputSystem;
 
 public class BS_BasicPressureDemo : MonoBehaviour
 {
