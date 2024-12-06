@@ -79,6 +79,7 @@ public class BS_BleConnectionManager : BS_BaseConnectionManager
             BS_BleConnectionStage.RequestingMtu => 0.1f,
             BS_BleConnectionStage.SubscribingToCharacteristics => 0.1f,
             BS_BleConnectionStage.ReadingCharacteristics => 0.1f,
+            BS_BleConnectionStage.WritingTxCharacteristic => 0.1f,
             _ => 0f,
         };
         Logger.Log($"timeout: {_timeout}");
@@ -219,9 +220,9 @@ public class BS_BleConnectionManager : BS_BaseConnectionManager
     private void OnCharacteristicWrite(string characteristicUuid)
     {
         Logger.Log($"Wrote to characteristicUuid {characteristicUuid} for \"{Name}\"");
+        Stage = BS_BleConnectionStage.None;
         OnSendTxData?.Invoke(this);
     }
-
 
     private readonly HashSet<string> SubscribedCharacteristicUuids = new();
     private string? GetNextCharacteristicUuidToSubscribe()
@@ -360,11 +361,15 @@ public class BS_BleConnectionManager : BS_BaseConnectionManager
             case BS_BleConnectionStage.SubscribingToCharacteristics:
                 SubscribeToCharacteristics();
                 break;
+            case BS_BleConnectionStage.WritingTxCharacteristic:
+                WriteTxData();
+                break;
             default:
                 break;
         }
     }
 
+    private List<byte>? TxData = null;
     public override void SendTxData(List<byte> Data)
     {
         if (!IsConnected)
@@ -373,8 +378,16 @@ public class BS_BleConnectionManager : BS_BaseConnectionManager
             return;
         }
         base.SendTxData(Data);
-        var data = Data.ToArray();
+        TxData = Data;
+        Stage = BS_BleConnectionStage.WritingTxCharacteristic;
+    }
+
+    private void WriteTxData()
+    {
+        if (TxData == null) { return; }
+        var data = TxData.ToArray();
         Logger.Log($"Writing {data.Length} bytes to Tx for \"{Name}\"...");
         BluetoothLEHardwareInterface.WriteCharacteristic(Address, BS_BleUtils.MainServiceUuid, BS_BleUtils.TxCharacteristicUuid, data, data.Length, true, OnCharacteristicWrite);
+        TxData = null;
     }
 }

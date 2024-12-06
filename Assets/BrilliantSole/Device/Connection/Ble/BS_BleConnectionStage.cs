@@ -5,6 +5,7 @@ public enum BS_BleConnectionStage
     WaitForUuids,
     RequestingMtu,
     ReadingCharacteristics,
+    WritingTxCharacteristic,
     SubscribingToCharacteristics,
     UnsubscribingFromCharacteristics,
     Disconnecting,
