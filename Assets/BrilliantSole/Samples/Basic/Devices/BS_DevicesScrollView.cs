@@ -50,7 +50,7 @@ public class BS_DevicesScrollView : MonoBehaviour
         toggleConnectionButton.onClick.AddListener(() => { device.ToggleConnection(); });
 
         var vibrateButton = item.transform.Find("Vibrate").GetComponent<Button>();
-        vibrateButton.onClick.AddListener(() => { Debug.Log("Vibrate!"); });
+        vibrateButton.onClick.AddListener(() => { device.TriggerVibration(VibrationConfigurations); });
 
         device.OnConnectionStatus += OnDeviceConnectionStatus;
         UpdateToggleConnectionButton(device);
