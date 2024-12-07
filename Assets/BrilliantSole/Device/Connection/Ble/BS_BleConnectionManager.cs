@@ -104,10 +104,7 @@ public class BS_BleConnectionManager : BS_BaseConnectionManager
     protected override void Connect(ref bool Continue)
     {
         base.Connect(ref Continue);
-        if (!Continue)
-        {
-            return;
-        }
+        if (!Continue) { return; }
         Stage = BS_BleConnectionStage.Connecting;
     }
     private void ConnectToPeripheral()
@@ -174,7 +171,6 @@ public class BS_BleConnectionManager : BS_BaseConnectionManager
         Logger.Log($"Updated Mtu of \"{Name}\" to {mtu}");
         Stage = BS_BleConnectionStage.ReadingCharacteristics;
     }
-
 
     private readonly HashSet<string> ReadCharacteristicUuids = new();
     private string? GetNextCharacteristicUuidToRead()

@@ -12,8 +12,9 @@ public static class BS_BleUtils
     {
         return string.Format("ea6da725-{0}-4f9b-893d-c3913e33b39f", value).ToUpper();
     }
-    static public string GenerateGenericUuid(string value)
+    static public string GenerateGenericUuid(string value, bool shorten = true)
     {
+        if (shorten) { return value.ToUpper(); }
         return string.Format("0000{0}-0000-1000-8000-00805f9b34fb", value).ToUpper();
     }
     static public bool AreUuidsEqual(string uuid1, string uuid2)
@@ -34,8 +35,8 @@ public static class BS_BleUtils
             }
         }
 
-        if (uuid1.Length == 4) { uuid1 = GenerateGenericUuid(uuid1); }
-        if (uuid2.Length == 4) { uuid2 = GenerateGenericUuid(uuid2); }
+        if (uuid1.Length == 4) { uuid1 = GenerateGenericUuid(uuid1, false); }
+        if (uuid2.Length == 4) { uuid2 = GenerateGenericUuid(uuid2, false); }
 
         return uuid1.ToUpper().Equals(uuid2.ToUpper());
     }
