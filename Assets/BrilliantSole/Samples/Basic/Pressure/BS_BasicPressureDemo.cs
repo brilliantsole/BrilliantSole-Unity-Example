@@ -5,6 +5,7 @@ using static BS_SensorRate;
 
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.iOS;
 
 public class BS_BasicPressureDemo : MonoBehaviour
 {
@@ -21,6 +22,7 @@ public class BS_BasicPressureDemo : MonoBehaviour
     }
 
     public Button TogglePressureDataButton;
+    public Slider DevicePairPressureSlider;
 
     private BS_DevicePair DevicePair => BS_DevicePair.Instance;
 
@@ -30,6 +32,8 @@ public class BS_BasicPressureDemo : MonoBehaviour
 
         TogglePressureDataButton.onClick.AddListener(TogglePressureData);
         DevicePair.OnDevicePressureData += OnDevicePressureData;
+
+        DevicePair.OnPressureData += OnPressureData;
     }
     private void OnDisable()
     {
@@ -41,6 +45,8 @@ public class BS_BasicPressureDemo : MonoBehaviour
         DevicePair.ClearSensorConfiguration();
         IsPressureDataEnabled = false;
         UpdateTogglePressureDataButton();
+
+        DevicePair.OnPressureData -= OnPressureData;
     }
 
     private void setActive(bool active)
@@ -81,5 +87,11 @@ public class BS_BasicPressureDemo : MonoBehaviour
     {
         var togglePressureDataButtonText = TogglePressureDataButton.transform.Find("Text").GetComponentInChildren<TextMeshProUGUI>();
         togglePressureDataButtonText.text = IsPressureDataEnabled ? "disable pressure" : "enable pressure";
+    }
+
+    private void OnPressureData(BS_DevicePair devicePair, BS_DevicePairPressureData pressureData, ulong timestamp)
+    {
+        if (pressureData.NormalizedCenterOfPressure == null) { return; }
+        DevicePairPressureSlider.value = (float)pressureData.NormalizedCenterOfPressure?.x;
     }
 }

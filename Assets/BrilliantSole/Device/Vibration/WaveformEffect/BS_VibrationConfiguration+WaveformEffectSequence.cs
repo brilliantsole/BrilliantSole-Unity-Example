@@ -1,7 +1,4 @@
-using System;
 using System.Collections.Generic;
-using Unity.Android.Gradle;
-using UnityEngine;
 
 public partial struct BS_VibrationConfiguration
 {
