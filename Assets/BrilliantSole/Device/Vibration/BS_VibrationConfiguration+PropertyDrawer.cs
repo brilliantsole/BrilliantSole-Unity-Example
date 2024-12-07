@@ -34,7 +34,7 @@ public class BS_VibrationConfigurationPropertyDrawer : PropertyDrawer
         }
         else if ((BS_VibrationType)typeProperty.enumValueIndex == BS_VibrationType.WaveformEffect)
         {
-            var loopCountLabel = new GUIContent($"Loop Count (0-{BS_VibrationConfiguration.MaxWaveformEffectSequenceLoopCount})");
+            var loopCountLabel = new GUIContent($"Loop Count");
             EditorGUI.PropertyField(position, waveformEffectSequenceLoopCountProperty, loopCountLabel);
             position.y += EditorGUIUtility.singleLineHeight + EditorGUIUtility.standardVerticalSpacing;
 

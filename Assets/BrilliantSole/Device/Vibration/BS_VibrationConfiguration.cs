@@ -5,8 +5,10 @@ using UnityEngine;
 #nullable enable
 
 [Serializable]
-public struct BS_VibrationConfiguration : ISerializationCallbackReceiver
+public partial struct BS_VibrationConfiguration : ISerializationCallbackReceiver
 {
+    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_VibrationConfiguration", BS_Logger.LogLevel.Warn);
+
     public BS_VibrationType Type;
     public BS_VibrationLocationFlag Locations;
 
@@ -28,10 +30,33 @@ public struct BS_VibrationConfiguration : ISerializationCallbackReceiver
 
     // WAVEFORM END
 
-    public byte[] ToArray()
+    public List<byte> ToArray()
     {
-        // FILL
-        return new byte[] { };
+        List<byte> Data = new()
+        {
+            (byte)Locations,
+            (byte)Type
+        };
+        var VibrationData = GetVibrationData();
+        if (VibrationData.Count == 0)
+        {
+            Logger.Log("no data in vibration data");
+            Data.Clear();
+            return Data;
+        }
+        Data.Add((byte)VibrationData.Count);
+        Data.AddRange(VibrationData);
+        return Data;
+    }
+
+    private List<byte> GetVibrationData()
+    {
+        return Type switch
+        {
+            BS_VibrationType.WaveformEffect => GetWaveformEffectSequenceToArray(),
+            BS_VibrationType.Waveform => GetWaveformSequenceToArray(),
+            _ => throw new NotImplementedException()
+        };
     }
 
     public BS_VibrationConfiguration(BS_VibrationLocationFlag locations, List<BS_VibrationWaveformEffectSegment> waveformEffectSequence, byte waveformEffectSequenceLoopCount = 0)
@@ -42,6 +67,8 @@ public struct BS_VibrationConfiguration : ISerializationCallbackReceiver
         Locations = locations;
 
         WaveformEffectSequenceLoopCount = waveformEffectSequenceLoopCount;
+
+        OnBeforeSerialize();
     }
     public BS_VibrationConfiguration(BS_VibrationLocationFlag locations, List<BS_VibrationWaveformSegment> waveformSequence)
     {
@@ -51,14 +78,13 @@ public struct BS_VibrationConfiguration : ISerializationCallbackReceiver
 
         WaveformEffectSequence = new();
         WaveformEffectSequenceLoopCount = 0;
+
+        OnBeforeSerialize();
     }
 
     public void OnBeforeSerialize()
     {
-        if (WaveformEffectSequenceLoopCount > MaxWaveformEffectSequenceLoopCount)
-        {
-            WaveformEffectSequenceLoopCount = MaxWaveformEffectSequenceLoopCount;
-        }
+        WaveformEffectSequenceLoopCount = Math.Min(WaveformEffectSequenceLoopCount, MaxWaveformEffectSequenceLoopCount);
 
         if (WaveformEffectSequence != null)
         {

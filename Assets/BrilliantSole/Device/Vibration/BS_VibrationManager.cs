@@ -29,7 +29,7 @@ public class BS_VibrationManager : BS_BaseManager<BS_VibrationMessageType>
         for (int i = 0; i < vibrationConfigurations.Count; i++)
         {
             var array = vibrationConfigurations[i].ToArray();
-            if (array.Length == 0)
+            if (array.Count == 0)
             {
                 Logger.Log("empty vibrationConfiguration array - skipping");
                 continue;
