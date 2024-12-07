@@ -21,21 +21,10 @@ public static class BS_BleUtils
     {
         Logger.Log($"{uuid1} == {uuid2}?");
 
-        if (iOS_UuidMap.ContainsKey(uuid1))
-        {
-            uuid1 = iOS_UuidMap[uuid1];
-            if (iOS_UuidMap.ContainsKey(uuid2))
-            {
-                uuid2 = iOS_UuidMap[uuid2];
-                return uuid1 == uuid2;
-            }
-            else
-            {
-                return false;
-            }
-        }
-
+        if (iOS_UuidMap.ContainsKey(uuid1.ToUpper())) { uuid1 = iOS_UuidMap[uuid1.ToUpper()]; }
         if (uuid1.Length == 4) { uuid1 = GenerateGenericUuid(uuid1, false); }
+
+        if (iOS_UuidMap.ContainsKey(uuid2.ToUpper())) { uuid2 = iOS_UuidMap[uuid2.ToUpper()]; }
         if (uuid2.Length == 4) { uuid2 = GenerateGenericUuid(uuid2, false); }
 
         return uuid1.ToUpper().Equals(uuid2.ToUpper());
@@ -78,18 +67,17 @@ public static class BS_BleUtils
 
     public static readonly Dictionary<string, string> iOS_UuidMap = new()
     {
-        {"Battery", BatteryServiceUuid},
-        {"Battery Level", BatteryLevelCharacteristicUuid},
+        {"BATTERY", BatteryServiceUuid},
+        {"BATTERY LEVEL", BatteryLevelCharacteristicUuid},
 
-        {"Device Information", DeviceInformationServiceUuid},
-        {"Model Number String", ModelNumberStringCharacteristicUuid},
-        {"Manufacturer Name String", ManufacturerNameStringCharacteristicUuid},
-        {"Serial Number String", SerialNumberStringCharacteristicUuid},
-        {"Firmware Revision String", FirmwareRevisionCharacteristicUuid},
-        {"Hardware Revision String", HardwareRevisionStringCharacteristicUuid},
-        {"Software Revision String", SoftwareRevisionCharacteristicUuid},
+        {"DEVICE INFORMATION", DeviceInformationServiceUuid},
+        {"MODEL NUMBER STRING", ModelNumberStringCharacteristicUuid},
+        {"MANUFACTURER NAME STRING", ManufacturerNameStringCharacteristicUuid},
+        {"SERIAL NUMBER STRING", SerialNumberStringCharacteristicUuid},
+        {"FIRMWARE REVISION STRING", FirmwareRevisionCharacteristicUuid},
+        {"HARDWARE REVISION STRING", HardwareRevisionStringCharacteristicUuid},
+        {"SOFTWARE REVISION STRING", SoftwareRevisionCharacteristicUuid},
     };
-
 
     static public string? GetServiceUuid(string characteristicUuid)
     {

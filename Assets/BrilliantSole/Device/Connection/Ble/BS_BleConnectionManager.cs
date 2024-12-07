@@ -205,6 +205,7 @@ public class BS_BleConnectionManager : BS_BaseConnectionManager
             return;
         }
         Logger.Log($"reading characteristicUuidToRead {characteristicUuidToRead} of serviceUuid {serviceUuid}...");
+        // FIX
         BluetoothLEHardwareInterface.ReadCharacteristic(Address, serviceUuid, characteristicUuidToRead, OnCharacteristicRead);
     }
     private void OnCharacteristicRead(string characteristicUuid, byte[] data)
@@ -386,6 +387,7 @@ public class BS_BleConnectionManager : BS_BaseConnectionManager
         if (TxData == null) { return; }
         var data = TxData.ToArray();
         Logger.Log($"Writing {data.Length} bytes to Tx for \"{Name}\"...");
+        // FIX
         BluetoothLEHardwareInterface.WriteCharacteristic(Address, BS_BleUtils.MainServiceUuid, BS_BleUtils.TxCharacteristicUuid, data, data.Length, true, OnCharacteristicWrite);
         TxData = null;
     }
