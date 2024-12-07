@@ -172,6 +172,7 @@ MonoBehaviour:
   LeftInsole: {fileID: 738868616}
   RightInsole: {fileID: 2004023842}
   TogglePressureDataButton: {fileID: 610806607}
+  SensorRate: 20
 --- !u!4 &26709169 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4401107653745760218, guid: 306b86271aad0494fb6e0b38e0950c96, type: 3}
@@ -2630,8 +2631,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 386406187}
   m_HandleRect: {fileID: 386406186}
   m_Direction: 0
-  m_Value: 0
-  m_Size: 0.99999994
+  m_Value: 1
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -4737,6 +4738,7 @@ MonoBehaviour:
   RightInsole: {fileID: 458288763}
   positionDropdown: {fileID: 1422291071}
   rotationDropdown: {fileID: 396032498}
+  SensorRate: 20
 --- !u!1 &1311880331
 GameObject:
   m_ObjectHideFlags: 0
@@ -6557,6 +6559,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ItemPrefab: {fileID: 7521304212649258391, guid: 4bcc36ba4391640c090681d4877964d9, type: 3}
   Content: {fileID: 121807809}
+  VibrationConfigurations:
+  - Type: 0
+    Locations: 255
+    WaveformEffectSequence:
+    - Type: 0
+      Effect: 14
+      Delay: 0
+      LoopCount: 0
+    WaveformEffectSequenceLoopCount: 0
+    WaveformSequence: []
 --- !u!114 &1526544095
 MonoBehaviour:
   m_ObjectHideFlags: 0
