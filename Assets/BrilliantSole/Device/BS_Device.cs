@@ -1,6 +1,6 @@
 public partial class BS_Device
 {
-    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_Device", BS_Logger.LogLevel.Warn);
+    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_Device");
 
     private void Reset()
     {

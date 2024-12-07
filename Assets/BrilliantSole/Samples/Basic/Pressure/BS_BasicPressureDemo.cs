@@ -5,7 +5,6 @@ using static BS_SensorRate;
 
 using UnityEngine.UI;
 using TMPro;
-using UnityEngine.iOS;
 
 public class BS_BasicPressureDemo : MonoBehaviour
 {

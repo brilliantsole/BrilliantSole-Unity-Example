@@ -1,11 +1,12 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using static BS_ConnectionStatus;
 
 #nullable enable
 public class BS_BleConnectionManager : BS_BaseConnectionManager
 {
-    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_BleConnectionManager", BS_Logger.LogLevel.Warn);
+    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_BleConnectionManager");
 
     public override BS_ConnectionType Type => BS_ConnectionType.Ble;
 
@@ -35,7 +36,7 @@ public class BS_BleConnectionManager : BS_BaseConnectionManager
         bool FoundAllServiceUuids = true;
         foreach (var serviceUuid in BS_BleUtils.AllServiceUuids)
         {
-            if (!FoundServiceUuids.Contains(serviceUuid))
+            if (!FoundServiceUuids.Any((string foundServiceId) => BS_BleUtils.AreUuidsEqual(foundServiceId, serviceUuid)))
             {
                 FoundAllServiceUuids = false;
                 Logger.Log($"Didn't find serviceUuid {serviceUuid}");
@@ -49,7 +50,7 @@ public class BS_BleConnectionManager : BS_BaseConnectionManager
         bool FoundAllCharacteristicUuids = true;
         foreach (var characteristicUuid in BS_BleUtils.AllCharacteristicUuids)
         {
-            if (!FoundCharacteristicUuids.Contains(characteristicUuid))
+            if (!FoundCharacteristicUuids.Any((string foundCharacteristicId) => BS_BleUtils.AreUuidsEqual(foundCharacteristicId, characteristicUuid)))
             {
                 FoundAllCharacteristicUuids = false;
                 Logger.Log($"Didn't find characteristicUuid {characteristicUuid}");
@@ -77,7 +78,7 @@ public class BS_BleConnectionManager : BS_BaseConnectionManager
         _timeout = _Stage switch
         {
             BS_BleConnectionStage.Connecting => 0.1f,
-            BS_BleConnectionStage.RequestingMtu => 0.1f,
+            BS_BleConnectionStage.RequestingMtu => 0.5f,
             BS_BleConnectionStage.SubscribingToCharacteristics => 0.1f,
             BS_BleConnectionStage.ReadingCharacteristics => 0.1f,
             BS_BleConnectionStage.WritingTxCharacteristic => 0.1f,
@@ -181,7 +182,7 @@ public class BS_BleConnectionManager : BS_BaseConnectionManager
         string? nextCharacteristicUuidToRead = null;
         foreach (var characteristicUuid in BS_BleUtils.ReadableCharacteristicUuids)
         {
-            if (!ReadCharacteristicUuids.Contains(characteristicUuid))
+            if (!ReadCharacteristicUuids.Any((string readCharacteristicUuid) => BS_BleUtils.AreUuidsEqual(readCharacteristicUuid, characteristicUuid)))
             {
                 nextCharacteristicUuidToRead = characteristicUuid;
                 break;
@@ -231,7 +232,7 @@ public class BS_BleConnectionManager : BS_BaseConnectionManager
         string? nextCharacteristicUuidToSubscribe = null;
         foreach (var characteristicUuid in BS_BleUtils.NotifiableCharacteristicUuids)
         {
-            if (!SubscribedCharacteristicUuids.Contains(characteristicUuid))
+            if (!SubscribedCharacteristicUuids.Any((string subscribedCharacteristicUuid) => BS_BleUtils.AreUuidsEqual(subscribedCharacteristicUuid, characteristicUuid)))
             {
                 nextCharacteristicUuidToSubscribe = characteristicUuid;
                 break;
@@ -313,15 +314,16 @@ public class BS_BleConnectionManager : BS_BaseConnectionManager
 
     private void OnCharacteristicValue(string characteristicUuid, byte[] data)
     {
+
         Logger.Log($"Received {data.Length} data from characteristicUuid {characteristicUuid} for \"{Name}\"");
-        if (characteristicUuid == BS_BleUtils.BatteryLevelCharacteristicUuid) { OnBatteryLevel(this, data[0]); }
-        else if (characteristicUuid == BS_BleUtils.ManufacturerNameStringCharacteristicUuid) { OnDeviceInformationValue(this, BS_DeviceInformationType.ManufacturerName, data); }
-        else if (characteristicUuid == BS_BleUtils.ModelNumberStringCharacteristicUuid) { OnDeviceInformationValue(this, BS_DeviceInformationType.ModelNumber, data); }
-        else if (characteristicUuid == BS_BleUtils.SerialNumberStringCharacteristicUuid) { OnDeviceInformationValue(this, BS_DeviceInformationType.SerialNumber, data); }
-        else if (characteristicUuid == BS_BleUtils.HardwareRevisionStringCharacteristicUuid) { OnDeviceInformationValue(this, BS_DeviceInformationType.HardwareRevision, data); }
-        else if (characteristicUuid == BS_BleUtils.FirmwareRevisionCharacteristicUuid) { OnDeviceInformationValue(this, BS_DeviceInformationType.FirmwareRevision, data); }
-        else if (characteristicUuid == BS_BleUtils.SoftwareRevisionCharacteristicUuid) { OnDeviceInformationValue(this, BS_DeviceInformationType.SoftwareRevision, data); }
-        else if (characteristicUuid == BS_BleUtils.RxCharacteristicUuid) { ParseRxData(data); }
+        if (BS_BleUtils.AreUuidsEqual(characteristicUuid, BS_BleUtils.BatteryLevelCharacteristicUuid)) { OnBatteryLevel(this, data[0]); }
+        else if (BS_BleUtils.AreUuidsEqual(characteristicUuid, BS_BleUtils.ManufacturerNameStringCharacteristicUuid)) { OnDeviceInformationValue(this, BS_DeviceInformationType.ManufacturerName, data); }
+        else if (BS_BleUtils.AreUuidsEqual(characteristicUuid, BS_BleUtils.ModelNumberStringCharacteristicUuid)) { OnDeviceInformationValue(this, BS_DeviceInformationType.ModelNumber, data); }
+        else if (BS_BleUtils.AreUuidsEqual(characteristicUuid, BS_BleUtils.SerialNumberStringCharacteristicUuid)) { OnDeviceInformationValue(this, BS_DeviceInformationType.SerialNumber, data); }
+        else if (BS_BleUtils.AreUuidsEqual(characteristicUuid, BS_BleUtils.HardwareRevisionStringCharacteristicUuid)) { OnDeviceInformationValue(this, BS_DeviceInformationType.HardwareRevision, data); }
+        else if (BS_BleUtils.AreUuidsEqual(characteristicUuid, BS_BleUtils.FirmwareRevisionCharacteristicUuid)) { OnDeviceInformationValue(this, BS_DeviceInformationType.FirmwareRevision, data); }
+        else if (BS_BleUtils.AreUuidsEqual(characteristicUuid, BS_BleUtils.SoftwareRevisionCharacteristicUuid)) { OnDeviceInformationValue(this, BS_DeviceInformationType.SoftwareRevision, data); }
+        else if (BS_BleUtils.AreUuidsEqual(characteristicUuid, BS_BleUtils.RxCharacteristicUuid)) { ParseRxData(data); }
         else { Logger.LogError($"Uncaught characteristicUuid {characteristicUuid}"); }
     }
 

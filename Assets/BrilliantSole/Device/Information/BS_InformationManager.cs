@@ -14,7 +14,7 @@ public class BS_InformationManager : BS_BaseManager<BS_InformationMessageType>
      };
     public static byte[] RequiredTxRxMessageTypes => EnumArrayToTxRxArray(RequiredMessageTypes);
 
-    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_InformationManager", BS_Logger.LogLevel.Warn);
+    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_InformationManager");
 
     public override void OnRxMessage(BS_InformationMessageType messageType, in byte[] data)
     {

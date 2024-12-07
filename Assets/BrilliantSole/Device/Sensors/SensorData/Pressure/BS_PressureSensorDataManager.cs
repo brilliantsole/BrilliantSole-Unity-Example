@@ -7,7 +7,7 @@ using static BS_SensorType;
 
 public class BS_PressureSensorDataManager : BS_BaseSensorDataManager
 {
-    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_PressureSensorDataManager", BS_Logger.LogLevel.Warn);
+    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_PressureSensorDataManager");
 
     private readonly HashSet<BS_SensorType> sensorTypes = new() { Pressure };
     protected override HashSet<BS_SensorType> SensorTypes => sensorTypes;

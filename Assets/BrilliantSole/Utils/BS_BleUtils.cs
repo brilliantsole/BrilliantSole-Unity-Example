@@ -6,16 +6,16 @@ using System.Linq;
 
 public static class BS_BleUtils
 {
-    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_BleUtils", BS_Logger.LogLevel.Warn);
+    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_BleUtils");
 
-    static private string GenerateUuid(string value)
+    static public string GenerateUuid(string value)
     {
         return string.Format("ea6da725-{0}-4f9b-893d-c3913e33b39f", value).ToUpper();
     }
-    static private string GenerateGenericUuid(string value)
+    static public string GenerateGenericUuid(string value)
     {
-        return value.ToUpper();
-        //return string.Format("0000{0}-0000-1000-8000-00805f9b34fb", value).ToUpper();
+        //return value.ToUpper();
+        return string.Format("0000{0}-0000-1000-8000-00805f9b34fb", value).ToUpper();
     }
 
     static public bool AreUuidsEqual(string uuid1, string uuid2)

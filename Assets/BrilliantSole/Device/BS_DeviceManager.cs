@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 public static class BS_DeviceManager
 {
-    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_DeviceManager", BS_Logger.LogLevel.Warn);
+    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_DeviceManager");
 
     private static readonly HashSet<BS_Device> availableDevices = new();
     public static IReadOnlyCollection<BS_Device> AvailableDevices => availableDevices;

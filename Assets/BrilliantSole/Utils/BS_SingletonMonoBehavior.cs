@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class BS_SingletonMonoBehavior<T> : MonoBehaviour where T : MonoBehaviour
 {
-    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_SingletonMonoBehavior", BS_Logger.LogLevel.Warn);
+    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_SingletonMonoBehavior");
 
     private static T _instance;
     private static readonly object _lock = new();

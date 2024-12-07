@@ -173,6 +173,7 @@ MonoBehaviour:
   LeftInsole: {fileID: 738868616}
   RightInsole: {fileID: 2004023842}
   TogglePressureDataButton: {fileID: 610806607}
+  DevicePairPressureSlider: {fileID: 0}
   SensorRate: 20
 --- !u!4 &26709169 stripped
 Transform:
@@ -2931,7 +2932,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &738868617
 Transform:
   m_ObjectHideFlags: 0
@@ -6693,7 +6694,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.000061035156, y: -95.00003}
+  m_AnchoredPosition: {x: 0, y: -95}
   m_SizeDelta: {x: 0, y: -187.3646}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1526544094
@@ -7879,7 +7880,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2004023843
 Transform:
   m_ObjectHideFlags: 0
@@ -8885,7 +8886,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.806641}
   m_AnchorMax: {x: 1, y: 0.90533674}
-  m_AnchoredPosition: {x: -0.000061035156, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2126809662

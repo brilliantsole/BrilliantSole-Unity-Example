@@ -1,6 +1,6 @@
 public partial class BS_DevicePair
 {
-    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_DevicePair", BS_Logger.LogLevel.Warn);
+    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_DevicePair");
     public static readonly BS_DevicePair Instance;
     public bool IsInstance => Instance == this;
 

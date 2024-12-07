@@ -7,7 +7,7 @@ using UnityEngine;
 [Serializable]
 public partial struct BS_VibrationConfiguration : ISerializationCallbackReceiver
 {
-    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_VibrationConfiguration", BS_Logger.LogLevel.Warn);
+    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_VibrationConfiguration");
 
     public BS_VibrationType Type;
     public BS_VibrationLocationFlag Locations;

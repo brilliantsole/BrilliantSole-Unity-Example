@@ -6,7 +6,7 @@ using UnityEngine;
 
 public abstract class BS_BaseScanner
 {
-    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_BaseScanner", BS_Logger.LogLevel.Warn);
+    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_BaseScanner");
 
     protected virtual void Initialize()
     {

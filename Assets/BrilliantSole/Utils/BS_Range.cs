@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class BS_Range
 {
-    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_Range", BS_Logger.LogLevel.Warn);
+    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_Range");
 
     public float Min { get; private set; }
     public float Max { get; private set; }
