@@ -40,17 +40,17 @@ public class BS_ScannerScrollView : MonoBehaviour
             var nameText = item.transform.Find("Name").GetComponent<TextMeshProUGUI>();
             nameText.text = DiscoveredDevice.Name;
 
-            var toggleConnectionButton = item.transform.Find("ToggleConnection").GetComponent<Button>();
-            var toggleConnectionButtonText = item.transform.Find("ToggleConnection").GetComponentInChildren<TextMeshProUGUI>();
+            var toggleConnectionButton = item.transform.Find("ToggleConnection/Button").GetComponent<Button>();
+            var toggleConnectionButtonText = toggleConnectionButton.transform.GetComponentInChildren<TextMeshProUGUI>();
             BS_Device device = null;
             if (ScannerManager.Devices.ContainsKey(DiscoveredDevice.Id))
             {
                 toggleConnectionButtonText.text = ScannerManager.Devices[DiscoveredDevice.Id].ConnectionStatus switch
                 {
                     NotConnected => "Connect",
-                    Connecting => "Connecting...",
+                    Connecting => "Connecting",
                     Connected => "Disconnect",
-                    Disconnecting => "Disconnecting...",
+                    Disconnecting => "Disconnecting",
                     _ => throw new System.NotImplementedException()
                 };
             }
@@ -69,9 +69,9 @@ public class BS_ScannerScrollView : MonoBehaviour
                         toggleConnectionButtonText.text = connectionStatus switch
                         {
                             NotConnected => "Connect",
-                            Connecting => "Connecting...",
+                            Connecting => "Connecting",
                             Connected => "Disconnect",
-                            Disconnecting => "Disconnecting...",
+                            Disconnecting => "Disconnecting",
                             _ => throw new System.NotImplementedException()
                         };
                     };
@@ -101,7 +101,7 @@ public class BS_ScannerScrollView : MonoBehaviour
         if (instantiatedItems.TryGetValue(DiscoveredDevice.Id, out GameObject item))
         {
             instantiatedItems.Remove(DiscoveredDevice.Id);
-            var toggleConnectionButton = item.transform.Find("ToggleConnection").GetComponent<Button>();
+            var toggleConnectionButton = item.transform.Find("ToggleConnection/Button").GetComponent<Button>();
             toggleConnectionButton.onClick.RemoveAllListeners();
             Destroy(item);
         }

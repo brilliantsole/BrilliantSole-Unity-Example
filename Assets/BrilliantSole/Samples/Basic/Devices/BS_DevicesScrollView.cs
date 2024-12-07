@@ -46,10 +46,10 @@ public class BS_DevicesScrollView : MonoBehaviour
         Debug.Log($"updating deviceType {device.DeviceType}");
         deviceTypeText.text = device.DeviceType.ToString();
 
-        var toggleConnectionButton = item.transform.Find("ToggleConnection").GetComponent<Button>();
+        var toggleConnectionButton = item.transform.Find("ToggleConnection/Button").GetComponent<Button>();
         toggleConnectionButton.onClick.AddListener(() => { device.ToggleConnection(); });
 
-        var vibrateButton = item.transform.Find("Vibrate").GetComponent<Button>();
+        var vibrateButton = item.transform.Find("Vibrate/Button").GetComponent<Button>();
         vibrateButton.onClick.AddListener(() => { device.TriggerVibration(VibrationConfigurations); });
 
         device.OnConnectionStatus += OnDeviceConnectionStatus;
@@ -69,13 +69,13 @@ public class BS_DevicesScrollView : MonoBehaviour
             return;
         }
         GameObject item = instantiatedItems[device.Id];
-        var toggleConnectionButtonText = item.transform.Find("ToggleConnection").GetComponentInChildren<TextMeshProUGUI>();
+        var toggleConnectionButtonText = item.transform.Find("ToggleConnection/Button").GetComponentInChildren<TextMeshProUGUI>();
         toggleConnectionButtonText.text = device.ConnectionStatus switch
         {
-            NotConnected => "connect",
-            Connecting => "connecting",
-            Connected => "disconnect",
-            Disconnecting => "disconnecting",
+            NotConnected => "Connect",
+            Connecting => "Connecting",
+            Connected => "Disconnect",
+            Disconnecting => "Disconnecting",
             _ => ""
         };
     }
@@ -85,9 +85,9 @@ public class BS_DevicesScrollView : MonoBehaviour
         if (instantiatedItems.TryGetValue(device.Id, out GameObject item))
         {
             instantiatedItems.Remove(device.Id);
-            var toggleConnectionButton = item.transform.Find("ToggleConnection").GetComponent<Button>();
+            var toggleConnectionButton = item.transform.Find("ToggleConnection/Button").GetComponent<Button>();
             toggleConnectionButton.onClick.RemoveAllListeners();
-            var vibrateButton = item.transform.Find("Vibrate").GetComponent<Button>();
+            var vibrateButton = item.transform.Find("Vibrate/Button").GetComponent<Button>();
             vibrateButton.onClick.RemoveAllListeners();
             device.OnConnectionStatus -= OnDeviceConnectionStatus;
             Destroy(item);
