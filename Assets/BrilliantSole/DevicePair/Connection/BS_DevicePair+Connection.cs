@@ -21,7 +21,7 @@ public partial class BS_DevicePair
     private void CheckIsFullyConnected()
     {
         bool newIsFullyConnected;
-        if (!HasAllDevices)
+        if (HasAllDevices)
         {
             newIsFullyConnected = true;
             foreach (var pair in Devices)
