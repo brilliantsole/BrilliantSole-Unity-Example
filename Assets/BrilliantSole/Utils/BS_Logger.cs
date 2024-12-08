@@ -22,7 +22,7 @@ public class BS_Logger
         currentLogLevel = logLevel;
     }
 
-    public static BS_Logger GetLogger(string category, LogLevel logLevel = LogLevel.Log)
+    public static BS_Logger GetLogger(string category, LogLevel logLevel = LogLevel.Error)
     {
         if (!instances.TryGetValue(category, out var logger))
         {
@@ -50,7 +50,7 @@ public class BS_Logger
     }
 
 
-    //[Conditional("UNITY_EDITOR")]
+    [Conditional("UNITY_EDITOR")]
     public void Log(string message)
     {
         if (currentLogLevel <= LogLevel.Log)
@@ -59,7 +59,7 @@ public class BS_Logger
         }
     }
 
-    //[Conditional("UNITY_EDITOR")]
+    [Conditional("UNITY_EDITOR")]
     public void LogWarning(string message)
     {
         if (currentLogLevel <= LogLevel.Warn)
@@ -68,7 +68,7 @@ public class BS_Logger
         }
     }
 
-    //[Conditional("UNITY_EDITOR")]
+    [Conditional("UNITY_EDITOR")]
     public void LogError(string message)
     {
         if (currentLogLevel <= LogLevel.Error)

@@ -6,6 +6,6 @@ public partial class BS_Device
     {
         Managers.Add(FileTransferManager);
 
-        OnMtu += (BS_Device device, ushort mtu) => { FileTransferManager.MTU = mtu; };
+        OnMtu += (device, mtu) => { FileTransferManager.MTU = mtu; };
     }
 }

@@ -63,7 +63,7 @@ public class BS_ScannerScrollView : MonoBehaviour
                 {
                     Debug.Log("first time connecting to device...");
                     device = _device;
-                    device.OnConnectionStatus += (BS_Device device, BS_ConnectionStatus connectionStatus) =>
+                    device.OnConnectionStatus += (device, connectionStatus) =>
                     {
                         Debug.Log($"device \"{device.Name}\" updated connectionStatus to {connectionStatus}");
                         toggleConnectionButtonText.text = connectionStatus switch

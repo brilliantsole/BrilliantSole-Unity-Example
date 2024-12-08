@@ -22,7 +22,29 @@ public class BS_BleConnectionManager : BS_BaseConnectionManager
     }
 
     private readonly HashSet<string> FoundServiceUuids = new();
+    private string GetFoundServiceUuid(string serviceUuid)
+    {
+        foreach (var _serviceUuid in FoundServiceUuids)
+        {
+            if (BS_BleUtils.AreUuidsEqual(serviceUuid, _serviceUuid))
+            {
+                return _serviceUuid;
+            }
+        }
+        return serviceUuid;
+    }
     private readonly HashSet<string> FoundCharacteristicUuids = new();
+    private string GetFoundCharacteristicUuid(string characteristicUuid)
+    {
+        foreach (var _characteristicUuid in FoundCharacteristicUuids)
+        {
+            if (BS_BleUtils.AreUuidsEqual(characteristicUuid, _characteristicUuid))
+            {
+                return _characteristicUuid;
+            }
+        }
+        return characteristicUuid;
+    }
     private void ResetUuids()
     {
         FoundServiceUuids.Clear();
@@ -36,7 +58,7 @@ public class BS_BleConnectionManager : BS_BaseConnectionManager
         bool FoundAllServiceUuids = true;
         foreach (var serviceUuid in BS_BleUtils.AllServiceUuids)
         {
-            if (!FoundServiceUuids.Any((string foundServiceId) => BS_BleUtils.AreUuidsEqual(foundServiceId, serviceUuid)))
+            if (!FoundServiceUuids.Any((foundServiceId) => BS_BleUtils.AreUuidsEqual(foundServiceId, serviceUuid)))
             {
                 FoundAllServiceUuids = false;
                 Logger.Log($"Didn't find serviceUuid {serviceUuid}");
@@ -50,7 +72,7 @@ public class BS_BleConnectionManager : BS_BaseConnectionManager
         bool FoundAllCharacteristicUuids = true;
         foreach (var characteristicUuid in BS_BleUtils.AllCharacteristicUuids)
         {
-            if (!FoundCharacteristicUuids.Any((string foundCharacteristicId) => BS_BleUtils.AreUuidsEqual(foundCharacteristicId, characteristicUuid)))
+            if (!FoundCharacteristicUuids.Any((foundCharacteristicId) => BS_BleUtils.AreUuidsEqual(foundCharacteristicId, characteristicUuid)))
             {
                 FoundAllCharacteristicUuids = false;
                 Logger.Log($"Didn't find characteristicUuid {characteristicUuid}");
@@ -178,7 +200,7 @@ public class BS_BleConnectionManager : BS_BaseConnectionManager
         string? nextCharacteristicUuidToRead = null;
         foreach (var characteristicUuid in BS_BleUtils.ReadableCharacteristicUuids)
         {
-            if (!ReadCharacteristicUuids.Any((string readCharacteristicUuid) => BS_BleUtils.AreUuidsEqual(readCharacteristicUuid, characteristicUuid)))
+            if (!ReadCharacteristicUuids.Any((readCharacteristicUuid) => BS_BleUtils.AreUuidsEqual(readCharacteristicUuid, characteristicUuid)))
             {
                 nextCharacteristicUuidToRead = characteristicUuid;
                 break;
@@ -204,8 +226,9 @@ public class BS_BleConnectionManager : BS_BaseConnectionManager
             Logger.LogError($"Unable to find serviceUuid for characteristicUuidToRead {characteristicUuidToRead}");
             return;
         }
+        //serviceUuid = GetFoundServiceUuid(serviceUuid);
+        //characteristicUuidToRead = GetFoundCharacteristicUuid(characteristicUuidToRead);
         Logger.Log($"reading characteristicUuidToRead {characteristicUuidToRead} of serviceUuid {serviceUuid}...");
-        // FIX
         BluetoothLEHardwareInterface.ReadCharacteristic(Address, serviceUuid, characteristicUuidToRead, OnCharacteristicRead);
     }
     private void OnCharacteristicRead(string characteristicUuid, byte[] data)
@@ -229,7 +252,7 @@ public class BS_BleConnectionManager : BS_BaseConnectionManager
         string? nextCharacteristicUuidToSubscribe = null;
         foreach (var characteristicUuid in BS_BleUtils.NotifiableCharacteristicUuids)
         {
-            if (!SubscribedCharacteristicUuids.Any((string subscribedCharacteristicUuid) => BS_BleUtils.AreUuidsEqual(subscribedCharacteristicUuid, characteristicUuid)))
+            if (!SubscribedCharacteristicUuids.Any((subscribedCharacteristicUuid) => BS_BleUtils.AreUuidsEqual(subscribedCharacteristicUuid, characteristicUuid)))
             {
                 nextCharacteristicUuidToSubscribe = characteristicUuid;
                 break;
@@ -387,8 +410,9 @@ public class BS_BleConnectionManager : BS_BaseConnectionManager
         if (TxData == null) { return; }
         var data = TxData.ToArray();
         Logger.Log($"Writing {data.Length} bytes to Tx for \"{Name}\"...");
-        // FIX
-        BluetoothLEHardwareInterface.WriteCharacteristic(Address, BS_BleUtils.MainServiceUuid, BS_BleUtils.TxCharacteristicUuid, data, data.Length, true, OnCharacteristicWrite);
+        var mainCharacteristicUuid = GetFoundServiceUuid(BS_BleUtils.MainServiceUuid);
+        var txCharacteristicUuid = GetFoundCharacteristicUuid(BS_BleUtils.TxCharacteristicUuid);
+        BluetoothLEHardwareInterface.WriteCharacteristic(Address, mainCharacteristicUuid, txCharacteristicUuid, data, data.Length, true, OnCharacteristicWrite);
         TxData = null;
     }
 }

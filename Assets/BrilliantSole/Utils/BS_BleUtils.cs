@@ -40,12 +40,12 @@ public static class BS_BleUtils
     static public readonly string BatteryLevelCharacteristicUuid = GenerateGenericUuid("2a19");
 
     static public readonly string DeviceInformationServiceUuid = GenerateGenericUuid("180a");
-    static public readonly string ManufacturerNameStringCharacteristicUuid = GenerateGenericUuid("2a29");
     static public readonly string ModelNumberStringCharacteristicUuid = GenerateGenericUuid("2a24");
     static public readonly string SerialNumberStringCharacteristicUuid = GenerateGenericUuid("2a25");
-    static public readonly string HardwareRevisionStringCharacteristicUuid = GenerateGenericUuid("2a27");
     static public readonly string FirmwareRevisionCharacteristicUuid = GenerateGenericUuid("2a26");
+    static public readonly string HardwareRevisionStringCharacteristicUuid = GenerateGenericUuid("2a27");
     static public readonly string SoftwareRevisionCharacteristicUuid = GenerateGenericUuid("2a28");
+    static public readonly string ManufacturerNameStringCharacteristicUuid = GenerateGenericUuid("2a29");
 
     static public readonly string[] AllCharacteristicUuids;
     static public readonly string[] ReadableCharacteristicUuids;
@@ -72,11 +72,12 @@ public static class BS_BleUtils
 
         {"DEVICE INFORMATION", DeviceInformationServiceUuid},
         {"MODEL NUMBER STRING", ModelNumberStringCharacteristicUuid},
-        {"MANUFACTURER NAME STRING", ManufacturerNameStringCharacteristicUuid},
         {"SERIAL NUMBER STRING", SerialNumberStringCharacteristicUuid},
         {"FIRMWARE REVISION STRING", FirmwareRevisionCharacteristicUuid},
         {"HARDWARE REVISION STRING", HardwareRevisionStringCharacteristicUuid},
         {"SOFTWARE REVISION STRING", SoftwareRevisionCharacteristicUuid},
+        {"MANUFACTURER NAME STRING", ManufacturerNameStringCharacteristicUuid},
+
     };
 
     static public string? GetServiceUuid(string characteristicUuid)

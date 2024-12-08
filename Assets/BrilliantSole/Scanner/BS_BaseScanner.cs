@@ -157,7 +157,7 @@ public abstract class BS_BaseScanner
         BS_Device Device = new();
         Logger.Log($"creating device for {discoveredDevice.Name}...");
         _allDevices[discoveredDevice.Id] = Device;
-        Device.OnIsConnected += (BS_Device device, bool isConnected) =>
+        Device.OnIsConnected += (device, isConnected) =>
         {
             if (isConnected) { _devices[discoveredDevice.Id] = device; }
             else { _devices.Remove(discoveredDevice.Id); }

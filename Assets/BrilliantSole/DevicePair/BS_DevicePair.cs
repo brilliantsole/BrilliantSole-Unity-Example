@@ -7,7 +7,7 @@ public partial class BS_DevicePair
     static BS_DevicePair()
     {
         Instance = new();
-        BS_DeviceManager.OnDeviceConnected += (BS_Device device) => Instance.AddDevice(device);
+        BS_DeviceManager.OnDeviceConnected += (device) => Instance.AddDevice(device);
     }
 
     public BS_DevicePair()

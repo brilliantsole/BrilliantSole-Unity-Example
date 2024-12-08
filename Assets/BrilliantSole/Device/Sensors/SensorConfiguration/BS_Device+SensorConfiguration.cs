@@ -12,7 +12,7 @@ public partial class BS_Device
     {
         Managers.Add(SensorConfigurationManager);
 
-        SensorConfigurationManager.OnSensorConfiguration = (BS_SensorConfiguration sensorRates) => OnSensorConfiguration?.Invoke(this, sensorRates);
+        SensorConfigurationManager.OnSensorConfiguration = (sensorRates) => OnSensorConfiguration?.Invoke(this, sensorRates);
     }
 
     public void SetSensorConfiguration(BS_SensorConfiguration sensorConfiguration, bool clearRest = false) { SensorConfigurationManager.SetSensorConfiguration(sensorConfiguration, clearRest); }

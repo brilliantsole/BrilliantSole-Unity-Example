@@ -73,7 +73,7 @@ public class BS_SensorDataManager : BS_BaseManager<BS_SensorDataMessageType>
         offset += 2;
         Logger.Log($"timestamp: {timestamp}ms");
 
-        BS_ParseUtils.ParseMessages(data, (byte sensorTypeEnum, byte[] data) => OnSensorDataMessage(sensorTypeEnum, data, timestamp), offset, false);
+        BS_ParseUtils.ParseMessages(data, (sensorTypeEnum, data) => OnSensorDataMessage(sensorTypeEnum, data, timestamp), offset, false);
     }
 
     private void OnSensorDataMessage(byte sensorTypeEnum, in byte[] data, in ulong timestamp)

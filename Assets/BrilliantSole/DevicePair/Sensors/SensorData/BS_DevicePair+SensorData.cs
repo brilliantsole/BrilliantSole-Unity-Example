@@ -8,6 +8,6 @@ public partial class BS_DevicePair
 
     private void SetupSensorDataManager()
     {
-        SensorDataManager.PressureSensorDataManager.OnPressureData = (BS_DevicePairPressureData pressureData, ulong timestamp) => OnPressureData?.Invoke(this, pressureData, timestamp);
+        SensorDataManager.PressureSensorDataManager.OnPressureData = (pressureData, timestamp) => OnPressureData?.Invoke(this, pressureData, timestamp);
     }
 }

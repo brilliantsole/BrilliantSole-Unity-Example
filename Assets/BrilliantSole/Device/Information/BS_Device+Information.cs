@@ -15,11 +15,11 @@ public partial class BS_Device
     {
         Managers.Add(InformationManager);
 
-        InformationManager.OnName += (string name) => OnName?.Invoke(this, name);
-        InformationManager.OnId += (string id) => OnId?.Invoke(this, id);
-        InformationManager.OnCurrentTime += (ulong currentTime) => OnCurrentTime?.Invoke(this, currentTime);
-        InformationManager.OnDeviceType += (BS_DeviceType deviceType) => OnDeviceType?.Invoke(this, deviceType);
-        InformationManager.OnMtu += (ushort mtu) => OnMtu?.Invoke(this, mtu);
+        InformationManager.OnName += (name) => OnName?.Invoke(this, name);
+        InformationManager.OnId += (id) => OnId?.Invoke(this, id);
+        InformationManager.OnCurrentTime += (currentTime) => OnCurrentTime?.Invoke(this, currentTime);
+        InformationManager.OnDeviceType += (deviceType) => OnDeviceType?.Invoke(this, deviceType);
+        InformationManager.OnMtu += (mtu) => OnMtu?.Invoke(this, mtu);
     }
 
     public string Name => InformationManager.Name;

@@ -90,10 +90,11 @@ public class BS_BasicMotionDemo : MonoBehaviour
         if (insoleTransform == null) { return; }
 
         LatestYaw[insoleSide] = quaternion.eulerAngles.y;
-        insoleTransform.localRotation = quaternion;
 
         var offsetYaw = OffsetYaw.GetValueOrDefault(insoleSide, 0.0f);
-        insoleTransform.Rotate(0, -offsetYaw, 0);
+        var yawAdjustment = Quaternion.Euler(0, -offsetYaw, 0);
+
+        insoleTransform.localRotation = quaternion * yawAdjustment;
     }
     private void OnDeviceEulerAngles(BS_DevicePair devicePair, BS_InsoleSide insoleSide, BS_Device device, Vector3 eulerAngles, ulong timestamp)
     {
