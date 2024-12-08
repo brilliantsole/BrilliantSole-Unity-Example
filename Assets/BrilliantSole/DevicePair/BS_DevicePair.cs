@@ -6,12 +6,14 @@ public partial class BS_DevicePair
 
     static BS_DevicePair()
     {
+        Logger.Log("initializing Instance...");
         Instance = new();
-        BS_DeviceManager.OnDeviceConnected += (device) => Instance.AddDevice(device);
+        //BS_DeviceManager.OnDeviceConnected += (device) => { Instance.AddDevice(device); };
     }
 
     public BS_DevicePair()
     {
+        Logger.Log("initializing DevicePair...");
         SetupSensorDataManager();
     }
 

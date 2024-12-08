@@ -37,6 +37,7 @@ public static class BS_DeviceManager
                 OnAvailableDevice?.Invoke(device);
             }
             OnDeviceConnected?.Invoke(device);
+            BS_DevicePair.Instance.AddDevice(device);
         }
         else
         {

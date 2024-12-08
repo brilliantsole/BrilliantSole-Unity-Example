@@ -94,7 +94,7 @@ public class BS_BasicMotionDemo : MonoBehaviour
         var offsetYaw = OffsetYaw.GetValueOrDefault(insoleSide, 0.0f);
         var yawAdjustment = Quaternion.Euler(0, -offsetYaw, 0);
 
-        insoleTransform.localRotation = quaternion * yawAdjustment;
+        insoleTransform.localRotation = yawAdjustment * quaternion;
     }
     private void OnDeviceEulerAngles(BS_DevicePair devicePair, BS_InsoleSide insoleSide, BS_Device device, Vector3 eulerAngles, ulong timestamp)
     {
@@ -102,10 +102,11 @@ public class BS_BasicMotionDemo : MonoBehaviour
         if (insoleTransform == null) { return; }
 
         LatestYaw[insoleSide] = eulerAngles.y;
-        insoleTransform.localRotation = Quaternion.Euler(eulerAngles);
 
         var offsetYaw = OffsetYaw.GetValueOrDefault(insoleSide, 0.0f);
-        insoleTransform.Rotate(0, -offsetYaw, 0);
+        var yawAdjustment = Quaternion.Euler(0, -offsetYaw, 0);
+
+        insoleTransform.localRotation = yawAdjustment * Quaternion.Euler(eulerAngles);
     }
     private void OnDeviceGyroscope(BS_DevicePair devicePair, BS_InsoleSide insoleSide, BS_Device device, Vector3 eulerAngles, ulong timestamp)
     {
@@ -154,7 +155,7 @@ public class BS_BasicMotionDemo : MonoBehaviour
         if (sensorType != null)
         {
             Debug.Log($"sensorType: {sensorType}");
-            rotationSensorConfiguration[(BS_SensorType)sensorType] = _20ms;
+            rotationSensorConfiguration[(BS_SensorType)sensorType] = SensorRate;
         }
         else
         {
