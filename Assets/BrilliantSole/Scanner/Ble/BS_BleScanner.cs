@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class BS_BleScanner : BS_BaseScanner<BS_BleScanner>
 {
-    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_BleScanner", BS_Logger.LogLevel.Log);
+    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_BleScanner");
 
     public override bool IsAvailable
     {
@@ -129,7 +129,7 @@ public class BS_BleScanner : BS_BaseScanner<BS_BleScanner>
         Logger.Log($"Discovered \"{name}\" with address {address}, RSSI {rssi}, and {data.Length} data");
 
         BS_DeviceType? deviceType = null;
-        if (data.Length > 0)
+        if (data.Length > 4)
         {
             deviceType = (BS_DeviceType)data.Last();
             Logger.Log($"Device \"{name}\" is type \"{deviceType}\"");
