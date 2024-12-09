@@ -9,7 +9,7 @@ public partial class BS_Device
     {
         Managers.Add(BatteryManager);
 
-        BatteryManager.OnBatteryCurrent += (batteryCurrent) => { OnBatteryCurrent?.Invoke(this, batteryCurrent); };
-        BatteryManager.OnIsBatteryCharging += (isBatteryCharging) => { OnIsBatteryCharging?.Invoke(this, isBatteryCharging); };
+        BatteryManager.OnBatteryCurrent += batteryCurrent => { OnBatteryCurrent?.Invoke(this, batteryCurrent); };
+        BatteryManager.OnIsBatteryCharging += isBatteryCharging => { OnIsBatteryCharging?.Invoke(this, isBatteryCharging); };
     }
 }

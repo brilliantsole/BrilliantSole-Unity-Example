@@ -27,6 +27,15 @@ public class BS_FileTransferManager : BS_BaseManager<BS_FileTransferMessageType>
     private uint BytesTransferred = 0;
     public ushort? MTU;
 
+    public event Action<ushort> OnMaxFileLength;
+    public event Action<BS_FileTransferStatus> OnFileTransferStatus;
+    public event Action<uint> OnFileChecksum;
+    public event Action<uint> OnFileLength;
+    public event Action<BS_FileType> OnFileType;
+    public event Action<BS_FileType, BS_FileTransferDirection, float> OnFileTransferProgress;
+    public event Action<BS_FileType, BS_FileTransferDirection> OnFileTransferComplete;
+    public event Action<BS_FileType, List<byte>> OnFileReceived;
+
     public override void OnRxMessage(BS_FileTransferMessageType messageType, in byte[] data)
     {
         base.OnRxMessage(messageType, data);
@@ -78,7 +87,6 @@ public class BS_FileTransferManager : BS_BaseManager<BS_FileTransferMessageType>
             OnMaxFileLength?.Invoke(MaxFileLength);
         }
     }
-    public event Action<ushort> OnMaxFileLength;
     private void ParseMaxFileLength(in byte[] data)
     {
         var maxFileLength = BS_ByteUtils.ParseNumber<ushort>(data, isLittleEndian: true);
@@ -101,7 +109,7 @@ public class BS_FileTransferManager : BS_BaseManager<BS_FileTransferMessageType>
             OnFileType?.Invoke(FileType);
         }
     }
-    public event Action<BS_FileType> OnFileType;
+
     private void ParseFileTransferType(in byte[] data)
     {
         var fileType = (BS_FileType)data[0];
@@ -143,7 +151,7 @@ public class BS_FileTransferManager : BS_BaseManager<BS_FileTransferMessageType>
             }
         }
     }
-    public event Action<uint> OnFileLength;
+
     private void ParseFileLength(in byte[] data)
     {
         var fileLength = BS_ByteUtils.ParseNumber<uint>(data, isLittleEndian: true);
@@ -178,7 +186,7 @@ public class BS_FileTransferManager : BS_BaseManager<BS_FileTransferMessageType>
             OnFileChecksum?.Invoke(FileChecksum);
         }
     }
-    public event Action<uint> OnFileChecksum;
+
     private void ParseFileChecksum(in byte[] data)
     {
         var fileChecksum = BS_ByteUtils.ParseNumber<uint>(data, isLittleEndian: true);
@@ -238,7 +246,7 @@ public class BS_FileTransferManager : BS_BaseManager<BS_FileTransferMessageType>
             }
         }
     }
-    public event Action<BS_FileTransferStatus> OnFileTransferStatus;
+
     private void ParseFileTransferStatus(in byte[] data)
     {
         var fileTransferStatus = (BS_FileTransferStatus)data[0];
@@ -276,9 +284,6 @@ public class BS_FileTransferManager : BS_BaseManager<BS_FileTransferMessageType>
         SetFileTransferCommand(Receive);
     }
 
-    public event Action<BS_FileType, BS_FileTransferDirection, float> OnFileTransferProgress;
-    public event Action<BS_FileType, BS_FileTransferDirection> OnFileTransferComplete;
-    public event Action<BS_FileType, List<byte>> OnFileReceived;
     private void SendFileBlock(bool sendImmediately)
     {
         if (FileTransferStatus != Sending)
@@ -380,7 +385,6 @@ public class BS_FileTransferManager : BS_BaseManager<BS_FileTransferMessageType>
 
     private void ParseFileBytesTransferred(in byte[] data)
     {
-        // FILL
         if (FileTransferStatus != Sending)
         {
             Logger.LogError($"Currently not sending file");
