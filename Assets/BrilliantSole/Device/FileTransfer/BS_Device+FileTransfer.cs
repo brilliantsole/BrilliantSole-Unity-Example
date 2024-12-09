@@ -8,4 +8,6 @@ public partial class BS_Device
 
         OnMtu += (device, mtu) => { FileTransferManager.MTU = mtu; };
     }
+
+
 }

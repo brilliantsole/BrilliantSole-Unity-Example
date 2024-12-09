@@ -38,27 +38,27 @@ public class BS_SensorConfigurationManager : BS_BaseManager<BS_SensorConfigurati
     {
         BS_SensorConfiguration ParsedSensorConfiguration = new();
 
-        Logger.Log("parsing sensorConfiguration");
+        Logger.Log("parsing sensorConfiguration...");
         for (int i = 0; i < data.Length; i += 3)
         {
             var sensorTypeEnum = data[i];
             BS_SensorDataManager.AssertValidSensorTypeEnum(sensorTypeEnum);
             var sensorType = (BS_SensorType)sensorTypeEnum;
-            Logger.Log($"sensorType: {sensorType}");
+            //Logger.Log($"sensorType: {sensorType}");
 
             var rawSensorRate = BS_ByteUtils.ParseNumber<ushort>(data, i + 1, true);
-            Logger.Log($"rawSensorRate: {rawSensorRate}ms");
+            //Logger.Log($"rawSensorRate: {rawSensorRate}ms");
 
             var sensorRate = GetClosestSensorRate(rawSensorRate);
-            Logger.Log($"sensorRate: {sensorRate}");
+            //Logger.Log($"sensorRate: {sensorRate}");
             rawSensorRate = (ushort)sensorRate;
 
-            Logger.Log($"{sensorType}: {sensorRate} ({rawSensorRate}ms)");
+            //Logger.Log($"{sensorType}: {sensorRate} ({rawSensorRate}ms)");
             ParsedSensorConfiguration.Add(sensorType, sensorRate);
         }
 
         SensorConfiguration = ParsedSensorConfiguration;
-        Logger.Log($"updated sensorConfiguration:\n{PrintSensorConfiguration()}");
+        Logger.Log($"updated sensorConfiguration:\n{PrintSensorConfiguration(SensorConfiguration)}");
         OnSensorConfiguration?.Invoke(SensorConfiguration);
     }
 
@@ -115,7 +115,7 @@ public class BS_SensorConfigurationManager : BS_BaseManager<BS_SensorConfigurati
         return Array;
     }
 
-    public void SetSensorConfiguration(in BS_SensorConfiguration sensorConfiguration, bool clearRest = false, bool sendImmediately = true)
+    public void SetSensorConfiguration(BS_SensorConfiguration sensorConfiguration, bool clearRest = false, bool sendImmediately = true)
     {
         if (AreSensorConfigurationsEqual(SensorConfiguration, sensorConfiguration, false))
         {
@@ -128,9 +128,12 @@ public class BS_SensorConfigurationManager : BS_BaseManager<BS_SensorConfigurati
         {
             foreach (var sensorType in SensorTypes)
             {
+                Logger.Log($"setting {sensorType} to {_0ms}");
                 if (!TempSensorConfiguration.ContainsKey(sensorType)) { TempSensorConfiguration.Add(sensorType, _0ms); }
             }
         }
+
+        Logger.Log($"setting sensorConfiguration to {PrintSensorConfiguration(TempSensorConfiguration)}");
 
         BS_TxMessage[] Messages = { CreateTxMessage(BS_SensorConfigurationMessageType.SetSensorConfiguration, GetSensorConfigurationArray(TempSensorConfiguration)) };
         SendTxMessages(Messages, sendImmediately);
@@ -172,10 +175,10 @@ public class BS_SensorConfigurationManager : BS_BaseManager<BS_SensorConfigurati
         SetSensorConfiguration(TempSensorConfiguration);
     }
 
-    public string PrintSensorConfiguration()
+    public string PrintSensorConfiguration(in BS_SensorConfiguration sensorConfiguration)
     {
         string _string = "";
-        foreach (var pair in SensorConfiguration) { _string += $"{pair.Key}: {pair.Value}, "; }
+        foreach (var pair in sensorConfiguration) { _string += $"{pair.Key}: {pair.Value}, "; }
         return _string;
     }
 }

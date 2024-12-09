@@ -100,7 +100,7 @@ public class BS_BleConnectionManager : BS_BaseConnectionManager
         _timeout = _Stage switch
         {
             BS_BleConnectionStage.Connecting => 0.1f,
-            BS_BleConnectionStage.RequestingMtu => 0.5f,
+            BS_BleConnectionStage.RequestingMtu => 0.1f,
             BS_BleConnectionStage.SubscribingToCharacteristics => 0.1f,
             BS_BleConnectionStage.ReadingCharacteristics => 0.1f,
             BS_BleConnectionStage.WritingTxCharacteristic => 0.1f,
@@ -137,17 +137,20 @@ public class BS_BleConnectionManager : BS_BaseConnectionManager
 
     private void OnConnectToPeripheral(string address)
     {
+        if (address != Address) { return; }
         Logger.Log($"Connected to peripheral {Address}");
         Stage = BS_BleConnectionStage.WaitForUuids;
     }
     private void OnPeripheralService(string address, string serviceUuid)
     {
+        if (address != Address) { return; }
         Logger.Log($"Got Service {serviceUuid}");
         FoundServiceUuids.Add(serviceUuid);
         CheckDidFindAllUuids();
     }
     private void OnPeripheralCharacteristic(string address, string serviceUuid, string characteristicUuid)
     {
+        if (address != Address) { return; }
         Logger.Log($"Got Characteristic {characteristicUuid} for service {serviceUuid}");
         FoundCharacteristicUuids.Add(characteristicUuid);
         FoundServiceUuids.Add(serviceUuid);
@@ -155,6 +158,7 @@ public class BS_BleConnectionManager : BS_BaseConnectionManager
     }
     private void OnPeripheralDisconnect(string address)
     {
+        if (address != Address) { return; }
         Logger.Log("disconnected from peripheral");
         OnDisconnectPeripheral(address);
     }
@@ -162,10 +166,7 @@ public class BS_BleConnectionManager : BS_BaseConnectionManager
     protected override void Disconnect(ref bool Continue)
     {
         base.Disconnect(ref Continue);
-        if (!Continue)
-        {
-            return;
-        }
+        if (!Continue) { return; }
         Stage = BS_BleConnectionStage.UnsubscribingFromCharacteristics;
         DisconnectPeripheral();
     }
@@ -177,6 +178,7 @@ public class BS_BleConnectionManager : BS_BaseConnectionManager
 
     private void OnDisconnectPeripheral(string address)
     {
+        if (address != Address) { return; }
         Logger.Log($"Disconnected from \"{Name}\"");
         Status = NotConnected;
         Reset();
@@ -190,6 +192,7 @@ public class BS_BleConnectionManager : BS_BaseConnectionManager
 
     private void OnPeripheralMtu(string address, int mtu)
     {
+        if (address != Address) { return; }
         Logger.Log($"Updated Mtu of \"{Name}\" to {mtu}");
         Stage = BS_BleConnectionStage.ReadingCharacteristics;
     }
@@ -226,8 +229,10 @@ public class BS_BleConnectionManager : BS_BaseConnectionManager
             Logger.LogError($"Unable to find serviceUuid for characteristicUuidToRead {characteristicUuidToRead}");
             return;
         }
-        //serviceUuid = GetFoundServiceUuid(serviceUuid);
-        //characteristicUuidToRead = GetFoundCharacteristicUuid(characteristicUuidToRead);
+#if !UNITY_IOS
+        serviceUuid = GetFoundServiceUuid(serviceUuid);
+        characteristicUuidToRead = GetFoundCharacteristicUuid(characteristicUuidToRead);
+#endif
         Logger.Log($"reading characteristicUuidToRead {characteristicUuidToRead} of serviceUuid {serviceUuid}...");
         BluetoothLEHardwareInterface.ReadCharacteristic(Address, serviceUuid, characteristicUuidToRead, OnCharacteristicRead);
     }

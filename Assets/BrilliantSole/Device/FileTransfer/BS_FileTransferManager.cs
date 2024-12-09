@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using static BS_FileTransferMessageType;
 
@@ -15,6 +16,13 @@ public class BS_FileTransferManager : BS_BaseManager<BS_FileTransferMessageType>
 
     private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_FileTransferManager", BS_Logger.LogLevel.Log);
 
+    private readonly List<byte> FileToReceive = new();
+    private List<byte> FileToSend;
+    private readonly List<byte> FileBlockToSend = new();
+
+    private bool WaitingToSendMoreData = false;
+    private ushort BytesTransferred = 0;
+
     public override void OnRxMessage(BS_FileTransferMessageType messageType, in byte[] data)
     {
         base.OnRxMessage(messageType, data);
@@ -24,15 +32,15 @@ public class BS_FileTransferManager : BS_BaseManager<BS_FileTransferMessageType>
                 ParseMaxFileLength(data);
                 break;
             case GetFileTransferType:
-            case SetFileTransferType:
+            case BS_FileTransferMessageType.SetFileTransferType:
                 ParseFileTransferType(data);
                 break;
             case GetFileLength:
-            case SetFileLength:
+            case BS_FileTransferMessageType.SetFileLength:
                 ParseFileLength(data);
                 break;
             case GetFileChecksum:
-            case SetFileChecksum:
+            case BS_FileTransferMessageType.SetFileChecksum:
                 ParseFileChecksum(data);
                 break;
             case GetFileTransferStatus:
@@ -95,6 +103,19 @@ public class BS_FileTransferManager : BS_BaseManager<BS_FileTransferMessageType>
         Logger.Log($"Parsed fileType: {fileType}");
         FileType = fileType;
     }
+    private void SetFileTransferType(BS_FileType newFileType, bool sendImmediately = true)
+    {
+        if (newFileType == FileType)
+        {
+            Logger.Log($"redundant fileType {newFileType}");
+            return;
+        }
+        Logger.Log($"setting fileType to {newFileType}...");
+
+        List<byte> data = new() { (byte)newFileType };
+        BS_TxMessage[] Messages = { CreateTxMessage(BS_FileTransferMessageType.SetFileTransferType, data) };
+        SendTxMessages(Messages, sendImmediately);
+    }
 
     [SerializeField]
     private uint? _fileLength;
@@ -108,11 +129,11 @@ public class BS_FileTransferManager : BS_BaseManager<BS_FileTransferMessageType>
             _fileLength = value;
             OnFileLength?.Invoke(FileLength);
 
-            // FILL
-            // if (FileTransferStatus == EBS_FileTransferStatus::RECEIVING)
-            // {
-            //     FileToReceive.Reset(FileLength);
-            // }
+            if (FileTransferStatus == BS_FileTransferStatus.Receiving)
+            {
+                FileToReceive.Clear();
+                FileToReceive.Capacity = (int)FileLength;
+            }
         }
     }
     public event Action<uint> OnFileLength;
@@ -121,6 +142,18 @@ public class BS_FileTransferManager : BS_BaseManager<BS_FileTransferMessageType>
         var fileLength = BS_ByteUtils.ParseNumber<uint>(data, isLittleEndian: true);
         Logger.Log($"Parsed fileLength: {fileLength}");
         FileLength = fileLength;
+    }
+    private void SetFileLength(uint newFileLength, bool sendImmediately = true)
+    {
+        if (newFileLength == FileLength)
+        {
+            Logger.Log($"redundant fileLength {newFileLength}");
+            return;
+        }
+        Logger.Log($"setting fileLength to {newFileLength}...");
+
+        BS_TxMessage[] Messages = { CreateTxMessage(BS_FileTransferMessageType.SetFileLength, BS_ByteUtils.ToByteArray(newFileLength)) };
+        SendTxMessages(Messages, sendImmediately);
     }
 
     [SerializeField]
@@ -143,6 +176,27 @@ public class BS_FileTransferManager : BS_BaseManager<BS_FileTransferMessageType>
         Logger.Log($"Parsed fileChecksum: {fileChecksum}");
         FileChecksum = fileChecksum;
     }
+    private void SetFileChecksum(uint newFileChecksum, bool sendImmediately = true)
+    {
+        if (newFileChecksum == FileChecksum)
+        {
+            Logger.Log($"redundant fileChecksum {newFileChecksum}");
+            return;
+        }
+        Logger.Log($"setting fileChecksum to {newFileChecksum}...");
+
+        BS_TxMessage[] Messages = { CreateTxMessage(BS_FileTransferMessageType.SetFileChecksum, BS_ByteUtils.ToByteArray(newFileChecksum)) };
+        SendTxMessages(Messages, sendImmediately);
+    }
+
+    private void SetFileTransferCommand(BS_FileTransferCommand fileTransferCommand, bool sendImmediately = true)
+    {
+        Logger.Log($"setting fileTransferCommand {fileTransferCommand}...");
+
+        List<byte> data = new() { (byte)fileTransferCommand };
+        BS_TxMessage[] Messages = { CreateTxMessage(BS_FileTransferMessageType.SetFileTransferCommand, data) };
+        SendTxMessages(Messages, sendImmediately);
+    }
 
     [SerializeField]
     private BS_FileTransferStatus? _fileTransferStatus;
@@ -156,13 +210,13 @@ public class BS_FileTransferManager : BS_BaseManager<BS_FileTransferMessageType>
             _fileTransferStatus = value;
             OnFileTransferStatus?.Invoke(FileTransferStatus);
 
-            // BytesTransferred = 0;
+            BytesTransferred = 0;
 
-            // if (FileTransferStatus == EBS_FileTransferStatus::SENDING)
-            // {
-            //     UE_LOGFMT(LogBS_FileTransferManager, Verbose, "Starting to send file...");
-            //     SendFileBlock(true);
-            // }
+            if (FileTransferStatus == BS_FileTransferStatus.Sending)
+            {
+                Logger.Log($"Starting to send file...");
+                SendFileBlock(true);
+            }
         }
     }
     public event Action<BS_FileTransferStatus> OnFileTransferStatus;
@@ -173,6 +227,41 @@ public class BS_FileTransferManager : BS_BaseManager<BS_FileTransferMessageType>
         FileTransferStatus = fileTransferStatus;
     }
 
+    private uint GetCrc32(in List<byte> bytes)
+    {
+        var checksum = BS_CRC32.Compute(bytes);
+        Logger.Log($"checksum: {checksum}");
+        return checksum;
+    }
+    public void SendFile(BS_FileType fileType, in List<byte> file)
+    {
+        if (FileTransferStatus != BS_FileTransferStatus.Idle)
+        {
+            Logger.LogWarning($"cannot send file - transferStatus is {FileTransferStatus}");
+            return;
+        }
+
+        Logger.Log($"Requesting to find file with {file.Count} bytes");
+
+        FileToSend = file;
+
+        SetFileTransferType(fileType, false);
+        SetFileLength((uint)FileToSend.Count, false);
+        SetFileChecksum(GetCrc32(FileToSend), false);
+        SetFileTransferCommand(BS_FileTransferCommand.Send);
+    }
+    public void ReceiveFile(BS_FileType fileType)
+    {
+        // FILL
+    }
+    private void SendFileBlock(bool sendImmediately)
+    {
+        // FILL
+    }
+    public void CancelFileTransfer()
+    {
+        // FILL
+    }
     private void ParseFileTransferBlock(in byte[] data)
     {
         // FILL
@@ -193,6 +282,12 @@ public class BS_FileTransferManager : BS_BaseManager<BS_FileTransferMessageType>
         _fileChecksum = null;
         _fileTransferStatus = null;
         MTU = null;
-        // FILL
+
+        FileToReceive.Clear();
+        FileToSend = null;
+        FileBlockToSend.Clear();
+
+        BytesTransferred = 0;
+        WaitingToSendMoreData = false;
     }
 }
