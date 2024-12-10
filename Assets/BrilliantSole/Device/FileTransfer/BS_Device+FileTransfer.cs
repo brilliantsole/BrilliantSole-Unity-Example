@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using UnityEditor.Build.Content;
 
 public partial class BS_Device
 {
@@ -28,5 +29,21 @@ public partial class BS_Device
         FileTransferManager.OnFileTransferProgress += (fileType, fileTransferDirection, progress) => OnFileTransferProgress?.Invoke(this, fileType, fileTransferDirection, progress);
         FileTransferManager.OnFileTransferComplete += (fileType, fileTransferDirection) => OnFileTransferComplete?.Invoke(this, fileType, fileTransferDirection);
         FileTransferManager.OnFileReceived += (fileType, fileReceived) => OnFileReceived?.Invoke(this, fileType, fileReceived);
+    }
+
+    public void CancelFileTransfer()
+    {
+        FileTransferManager.CancelFileTransfer();
+    }
+    public BS_FileTransferStatus FileTransferStatus => FileTransferManager.FileTransferStatus;
+
+    public void SendFile(BS_FileMetadata fileMetadata)
+    {
+        var fileData = fileMetadata.GetFileData();
+        FileTransferManager.SendFile(fileMetadata.FileType, fileData);
+    }
+    public void ReceiveFile(BS_FileType fileType)
+    {
+        FileTransferManager.ReceiveFile(fileType);
     }
 }

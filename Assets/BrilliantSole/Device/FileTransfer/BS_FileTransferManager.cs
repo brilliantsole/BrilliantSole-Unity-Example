@@ -20,7 +20,7 @@ public class BS_FileTransferManager : BS_BaseManager<BS_FileTransferMessageType>
     private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_FileTransferManager", BS_Logger.LogLevel.Log);
 
     private readonly List<byte> FileToReceive = new();
-    private List<byte> FileToSend;
+    private byte[] FileToSend;
     private List<byte> FileBlockToSend;
 
     private bool WaitingToSendMoreData = false;
@@ -205,7 +205,7 @@ public class BS_FileTransferManager : BS_BaseManager<BS_FileTransferMessageType>
         BS_TxMessage[] Messages = { CreateTxMessage(BS_FileTransferMessageType.SetFileChecksum, BS_ByteUtils.ToByteArray(newFileChecksum)) };
         SendTxMessages(Messages, sendImmediately);
     }
-    private uint GetCrc32(in List<byte> bytes)
+    private uint GetCrc32(IEnumerable<byte> bytes)
     {
         var checksum = BS_CRC32.Compute(bytes);
         Logger.Log($"checksum: {checksum}");
@@ -256,7 +256,7 @@ public class BS_FileTransferManager : BS_BaseManager<BS_FileTransferMessageType>
     // FILE TRANSFER STATUS END
 
     // FILE BLOCK START
-    public void SendFile(BS_FileType fileType, in List<byte> file)
+    public void SendFile(BS_FileType fileType, in byte[] fileData)
     {
         if (FileTransferStatus != Idle)
         {
@@ -264,12 +264,12 @@ public class BS_FileTransferManager : BS_BaseManager<BS_FileTransferMessageType>
             return;
         }
 
-        Logger.Log($"Requesting to find file with {file.Count} bytes");
+        Logger.Log($"Requesting to find file with {fileData.Length} bytes");
 
-        FileToSend = file;
+        FileToSend = fileData;
 
         SetFileTransferType(fileType, false);
-        SetFileLength((uint)FileToSend.Count, false);
+        SetFileLength((uint)FileToSend.Length, false);
         SetFileChecksum(GetCrc32(FileToSend), false);
         SetFileTransferCommand(Send);
     }
@@ -317,7 +317,7 @@ public class BS_FileTransferManager : BS_BaseManager<BS_FileTransferMessageType>
         uint fileBlockLength = Math.Min(remainingBytes, maxMessageLength);
         Logger.Log($"maxMessageLength: {maxMessageLength}, fileBlockLength: {fileBlockLength}");
 
-        FileBlockToSend = FileToSend.GetRange((int)BytesTransferred, (int)fileBlockLength);
+        FileBlockToSend = new List<byte>(new ArraySegment<byte>(FileToSend, (int)BytesTransferred, (int)fileBlockLength));
         BytesTransferred += (ushort)fileBlockLength;
         Logger.Log($"BytesTransferred: {BytesTransferred}");
 

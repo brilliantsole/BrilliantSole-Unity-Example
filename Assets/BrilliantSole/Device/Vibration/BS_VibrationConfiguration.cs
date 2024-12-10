@@ -30,7 +30,7 @@ public partial struct BS_VibrationConfiguration : ISerializationCallbackReceiver
 
     // WAVEFORM END
 
-    public List<byte> ToArray()
+    public readonly List<byte> ToArray()
     {
         List<byte> Data = new()
         {
@@ -49,7 +49,7 @@ public partial struct BS_VibrationConfiguration : ISerializationCallbackReceiver
         return Data;
     }
 
-    private List<byte> GetVibrationData()
+    private readonly List<byte> GetVibrationData()
     {
         return Type switch
         {
@@ -102,5 +102,5 @@ public partial struct BS_VibrationConfiguration : ISerializationCallbackReceiver
         }
     }
 
-    public void OnAfterDeserialize() { }
+    public readonly void OnAfterDeserialize() { }
 }

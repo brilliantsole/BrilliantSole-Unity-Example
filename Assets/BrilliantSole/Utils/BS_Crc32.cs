@@ -23,7 +23,7 @@ public static class BS_CRC32
         }
     }
 
-    public static uint Compute(List<byte> bytes)
+    public static uint Compute(in IEnumerable<byte> bytes)
     {
         uint crc = 0xffffffff;
         foreach (var b in bytes)
