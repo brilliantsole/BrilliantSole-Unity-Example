@@ -187,7 +187,7 @@ public class BS_BleConnectionManager : BS_BaseConnectionManager
     private void RequestMtu()
     {
         Logger.Log($"Requesting Mtu from \"{Name}\"");
-        BluetoothLEHardwareInterface.RequestMtu(Address, 498, OnPeripheralMtu);
+        BluetoothLEHardwareInterface.RequestMtu(Address, 512, OnPeripheralMtu);
     }
 
     private void OnPeripheralMtu(string address, int mtu)

@@ -4,7 +4,7 @@ using UnityEngine;
 using static BS_TfliteSensorTypeFlag;
 
 [CreateAssetMenu(fileName = "NewModelMetadata", menuName = "Brilliant Sole/TfliteModelMetadata")]
-public class BS_TfliteModelMetadata : BS_FileMetadata, ISerializationCallbackReceiver
+public class BS_TfliteModelMetadata : BS_FileMetadata
 {
     public override BS_FileType FileType => BS_FileType.Tflite;
 
@@ -39,20 +39,11 @@ public class BS_TfliteModelMetadata : BS_FileMetadata, ISerializationCallbackRec
 
     public BS_TfliteTask Task;
 
-    [Range(5, 100)]
-    public ushort SensorRate;
+    public BS_SensorRate SensorRate;
 
     [Range(0, 5000)]
     public uint CaptureDelay;
 
     [Range(0, 1)]
     public float Threshold;
-
-    public void OnBeforeSerialize()
-    {
-        SensorRate -= (ushort)(SensorRate % 5);
-        SensorRate = Math.Max(SensorRate, (ushort)5);
-    }
-
-    public void OnAfterDeserialize() { }
 }

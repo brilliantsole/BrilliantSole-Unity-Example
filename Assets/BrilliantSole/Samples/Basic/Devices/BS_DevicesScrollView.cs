@@ -13,12 +13,15 @@ public class BS_DevicesScrollView : MonoBehaviour
 
     public List<BS_VibrationConfiguration> VibrationConfigurations = new();
 
+    public BS_TfliteModelMetadata TfliteModelMetadata;
+
     private void OnEnable()
     {
         foreach (var device in BS_DeviceManager.AvailableDevices)
         {
             OnDevice(device);
         }
+        BS_DeviceManager.OnAvailableDevice += OnAvailableDevice;
     }
     private void OnDisable()
     {
@@ -27,6 +30,12 @@ public class BS_DevicesScrollView : MonoBehaviour
         {
             RemoveDevice(device);
         }
+        BS_DeviceManager.OnAvailableDevice -= OnAvailableDevice;
+    }
+
+    private void OnAvailableDevice(BS_Device device)
+    {
+        OnDevice(device);
     }
 
     public void OnDevice(BS_Device device)
@@ -52,6 +61,29 @@ public class BS_DevicesScrollView : MonoBehaviour
         var vibrateButton = item.transform.Find("Vibrate/Button").GetComponent<Button>();
         vibrateButton.onClick.AddListener(() => { device.TriggerVibration(VibrationConfigurations); });
 
+        var toggleTfliteTransfer = item.transform.Find("ToggleTfliteTransfer/Button").GetComponent<Button>();
+        toggleTfliteTransfer.onClick.AddListener(() =>
+        {
+            if (device.FileTransferStatus == BS_FileTransferStatus.Idle)
+            {
+                if (TfliteModelMetadata != null)
+                {
+                    Debug.Log("sending tflite model...");
+                    device.SendFile(TfliteModelMetadata);
+                }
+                else
+                {
+                    Debug.Log("null TfliteModelMetadata");
+                }
+            }
+            else
+            {
+                device.CancelFileTransfer();
+            }
+        });
+        device.OnFileTransferStatus += OnDeviceFileTransferStatus;
+        OnDeviceFileTransferStatus(device, device.FileTransferStatus);
+
         device.OnConnectionStatus += OnDeviceConnectionStatus;
         UpdateToggleConnectionButton(device);
     }
@@ -63,12 +95,8 @@ public class BS_DevicesScrollView : MonoBehaviour
 
     private void UpdateToggleConnectionButton(BS_Device device)
     {
-        if (!instantiatedItems.ContainsKey(device.Id))
-        {
-            Debug.LogError($"no item found for device \"{device.Name}\"");
-            return;
-        }
-        GameObject item = instantiatedItems[device.Id];
+        GameObject item = GetItemByDevice(device);
+        if (item == null) { return; }
         var toggleConnectionButtonText = item.transform.Find("ToggleConnection/Button").GetComponentInChildren<TextMeshProUGUI>();
         toggleConnectionButtonText.text = device.ConnectionStatus switch
         {
@@ -82,16 +110,47 @@ public class BS_DevicesScrollView : MonoBehaviour
 
     public void RemoveDevice(BS_Device device)
     {
-        if (instantiatedItems.TryGetValue(device.Id, out GameObject item))
+        GameObject item = GetItemByDevice(device);
+        if (item == null) { return; }
+
+        instantiatedItems.Remove(device.Id);
+
+        var toggleConnectionButton = item.transform.Find("ToggleConnection/Button").GetComponent<Button>();
+        toggleConnectionButton.onClick.RemoveAllListeners();
+
+        var vibrateButton = item.transform.Find("Vibrate/Button").GetComponent<Button>();
+        vibrateButton.onClick.RemoveAllListeners();
+
+        var toggleTfliteTransferButton = item.transform.Find("ToggleTfliteTransfer/Button").GetComponent<Button>();
+        toggleTfliteTransferButton.onClick.RemoveAllListeners();
+
+        device.OnConnectionStatus -= OnDeviceConnectionStatus;
+        device.OnFileTransferStatus -= OnDeviceFileTransferStatus;
+        Destroy(item);
+    }
+
+    private void OnDeviceFileTransferStatus(BS_Device device, BS_FileTransferStatus fileTransferStatus)
+    {
+        GameObject item = GetItemByDevice(device);
+        if (item == null) { return; }
+
+        var toggleTfliteTransferButtonText = item.transform.Find("ToggleTfliteTransfer/Button").GetComponentInChildren<TextMeshProUGUI>();
+        toggleTfliteTransferButtonText.text = fileTransferStatus switch
         {
-            instantiatedItems.Remove(device.Id);
-            var toggleConnectionButton = item.transform.Find("ToggleConnection/Button").GetComponent<Button>();
-            toggleConnectionButton.onClick.RemoveAllListeners();
-            var vibrateButton = item.transform.Find("Vibrate/Button").GetComponent<Button>();
-            vibrateButton.onClick.RemoveAllListeners();
-            device.OnConnectionStatus -= OnDeviceConnectionStatus;
-            Destroy(item);
+            BS_FileTransferStatus.Idle => "Send Tflite",
+            _ => "Cancel"
+        };
+    }
+
+    private GameObject GetItemByDevice(BS_Device device)
+    {
+        if (!instantiatedItems.ContainsKey(device.Id))
+        {
+            Debug.LogError($"no item found for device \"{device.Name}\"");
+            return null;
         }
+        GameObject item = instantiatedItems[device.Id];
+        return item;
     }
 
 

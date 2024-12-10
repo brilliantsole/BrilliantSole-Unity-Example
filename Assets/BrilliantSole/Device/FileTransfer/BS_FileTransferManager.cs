@@ -167,7 +167,7 @@ public class BS_FileTransferManager : BS_BaseManager<BS_FileTransferMessageType>
         }
         Logger.Log($"setting fileLength to {newFileLength}...");
 
-        BS_TxMessage[] Messages = { CreateTxMessage(BS_FileTransferMessageType.SetFileLength, BS_ByteUtils.ToByteArray(newFileLength)) };
+        BS_TxMessage[] Messages = { CreateTxMessage(BS_FileTransferMessageType.SetFileLength, BS_ByteUtils.ToByteArray(newFileLength, true)) };
         SendTxMessages(Messages, sendImmediately);
     }
     // FILE LENGTH END
@@ -202,7 +202,7 @@ public class BS_FileTransferManager : BS_BaseManager<BS_FileTransferMessageType>
         }
         Logger.Log($"setting fileChecksum to {newFileChecksum}...");
 
-        BS_TxMessage[] Messages = { CreateTxMessage(BS_FileTransferMessageType.SetFileChecksum, BS_ByteUtils.ToByteArray(newFileChecksum)) };
+        BS_TxMessage[] Messages = { CreateTxMessage(BS_FileTransferMessageType.SetFileChecksum, BS_ByteUtils.ToByteArray(newFileChecksum, true)) };
         SendTxMessages(Messages, sendImmediately);
     }
     private uint GetCrc32(IEnumerable<byte> bytes)
@@ -242,7 +242,7 @@ public class BS_FileTransferManager : BS_BaseManager<BS_FileTransferMessageType>
             if (FileTransferStatus == Sending)
             {
                 Logger.Log($"Starting to send file...");
-                SendFileBlock(true);
+                SendFileBlock(false);
             }
         }
     }
@@ -291,16 +291,16 @@ public class BS_FileTransferManager : BS_BaseManager<BS_FileTransferMessageType>
             Logger.LogError($"cannot send block - status ({FileTransferStatus}) is not {Sending}");
             return;
         }
-        if (FileBlockToSend.Count == 0)
+        if (FileToSend.Length == 0)
         {
-            Logger.LogError("FileBlockToSend is Empty");
+            Logger.LogError("FileToSend is Empty");
             return;
         }
 
-        uint remainingBytes = (uint)(FileBlockToSend.Count - BytesTransferred);
+        uint remainingBytes = (uint)(FileToSend.Length - BytesTransferred);
         Logger.Log($"remainingBytes: {remainingBytes}");
 
-        var progress = BytesTransferred / (float)FileBlockToSend.Count;
+        var progress = BytesTransferred / (float)FileToSend.Length;
         Logger.Log($"progress: {progress}");
         OnFileTransferProgress?.Invoke(FileType, BS_FileTransferDirection.Sending, progress);
 
@@ -377,7 +377,7 @@ public class BS_FileTransferManager : BS_BaseManager<BS_FileTransferMessageType>
         }
         else
         {
-            var messageData = BS_ByteUtils.ToByteArray(currentFileLength);
+            var messageData = BS_ByteUtils.ToByteArray(currentFileLength, true);
             BS_TxMessage[] Messages = { CreateTxMessage(FileBytesTransferred, messageData) };
             SendTxMessages(Messages, false);
         }
@@ -407,7 +407,7 @@ public class BS_FileTransferManager : BS_BaseManager<BS_FileTransferMessageType>
         }
 
         Logger.Log("Sending next file block...");
-        SendFileBlock(true);
+        SendFileBlock(false);
     }
 
     // FILE BLOCK END

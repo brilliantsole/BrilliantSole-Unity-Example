@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using UnityEditor.Build.Content;
 
 public partial class BS_Device
 {
@@ -40,6 +39,7 @@ public partial class BS_Device
     public void SendFile(BS_FileMetadata fileMetadata)
     {
         var fileData = fileMetadata.GetFileData();
+        Logger.Log($"sending {fileMetadata.FileType} file with {fileData.Length} bytes");
         FileTransferManager.SendFile(fileMetadata.FileType, fileData);
     }
     public void ReceiveFile(BS_FileType fileType)
