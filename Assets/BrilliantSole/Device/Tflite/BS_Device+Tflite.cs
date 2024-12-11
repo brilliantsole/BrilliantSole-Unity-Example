@@ -28,6 +28,10 @@ public partial class BS_Device
         TfliteManager.SendTfliteModel(tfliteModelMetadata, false);
         SendFile(tfliteModelMetadata);
     }
+    public void SetTfliteInferencingEnabled(bool inferencingEnabled) { TfliteManager.SetInferencingEnabled(inferencingEnabled); }
+    public void ToggleTfliteInferencingEnabled() { TfliteManager.ToggleInferencingEnabled(); }
+
+    public BS_TfliteModelMetadata TfliteModelMetadata => TfliteManager.TfliteModelMetadata;
 
     private void onIsTfliteReady(bool isTfliteReady)
     {

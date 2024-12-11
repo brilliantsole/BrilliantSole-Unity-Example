@@ -358,7 +358,7 @@ public class BS_TfliteManager : BS_BaseManager<BS_TfliteMessageType>
         Logger.Log($"parsed inferencingEnabled: {inferencingEnabled}");
         InferencingEnabled = inferencingEnabled;
     }
-    private void SetInferencingEnabled(bool newInferencingEnabled, bool sendImmediately = true)
+    public void SetInferencingEnabled(bool newInferencingEnabled, bool sendImmediately = true)
     {
         if (newInferencingEnabled == InferencingEnabled)
         {
@@ -371,6 +371,7 @@ public class BS_TfliteManager : BS_BaseManager<BS_TfliteMessageType>
         BS_TxMessage[] Messages = { CreateTxMessage(SetTfliteInferencingEnabled, data) };
         SendTxMessages(Messages, sendImmediately);
     }
+    public void ToggleInferencingEnabled() { SetInferencingEnabled(!InferencingEnabled); }
     // INFERENCING ENABLED END
 
     // INFERENCE START

@@ -58,6 +58,8 @@ public class BS_DevicesScrollView : MonoBehaviour
 
         var toggleConnectionButton = item.transform.Find("ToggleConnection/Button").GetComponent<Button>();
         toggleConnectionButton.onClick.AddListener(() => { device.ToggleConnection(); });
+        device.OnConnectionStatus += OnDeviceConnectionStatus;
+        UpdateToggleConnectionButton(device);
 
         var vibrateButton = item.transform.Find("Vibrate/Button").GetComponent<Button>();
         vibrateButton.onClick.AddListener(() => { device.TriggerVibration(VibrationConfigurations); });
@@ -84,11 +86,16 @@ public class BS_DevicesScrollView : MonoBehaviour
         });
         device.OnFileTransferStatus += OnDeviceFileTransferStatus;
         OnDeviceFileTransferStatus(device, device.FileTransferStatus);
-
         device.OnFileTransferProgress += OnDeviceFileTransferProgress;
 
-        device.OnConnectionStatus += OnDeviceConnectionStatus;
-        UpdateToggleConnectionButton(device);
+        device.OnIsTfliteReady += OnIsDeviceTfliteReady;
+
+        var toggleTfliteButton = item.transform.Find("ToggleTflite/Button").GetComponent<Button>();
+        toggleTfliteButton.onClick.AddListener(() => { device.ToggleTfliteInferencingEnabled(); });
+        device.OnTfliteInferencingEnabled += OnDeviceTfliteInferencingEnabled;
+        UpdateToggleTfliteButton(device);
+
+        device.OnTfliteClassification += OnDeviceTfliteClassification;
     }
 
     private void OnDeviceConnectionStatus(BS_Device device, BS_ConnectionStatus connectionStatus)
@@ -130,6 +137,9 @@ public class BS_DevicesScrollView : MonoBehaviour
         device.OnConnectionStatus -= OnDeviceConnectionStatus;
         device.OnFileTransferStatus -= OnDeviceFileTransferStatus;
         device.OnFileTransferProgress -= OnDeviceFileTransferProgress;
+        device.OnTfliteInferencingEnabled -= OnDeviceTfliteInferencingEnabled;
+        device.OnIsTfliteReady -= OnIsDeviceTfliteReady;
+        device.OnTfliteClassification -= OnDeviceTfliteClassification;
         Destroy(item);
     }
 
@@ -156,6 +166,49 @@ public class BS_DevicesScrollView : MonoBehaviour
 
         var fileTransferProgressText = item.transform.Find("FileTransferProgress").GetComponentInChildren<TextMeshProUGUI>();
         fileTransferProgressText.text = $"{Math.Floor(progress * 100)}%";
+    }
+
+    private void UpdateToggleTfliteButton(BS_Device device)
+    {
+        GameObject item = GetItemByDevice(device);
+        if (item == null) { return; }
+
+        var toggleTfliteGameObject = item.transform.Find("ToggleTflite").gameObject;
+        toggleTfliteGameObject.SetActive(device.IsTfliteReady);
+
+        var toggleTfliteButton = item.transform.Find("ToggleTflite/Button").GetComponent<Button>();
+        toggleTfliteButton.interactable = device.IsTfliteReady;
+
+        var toggleTfliteButtonText = item.transform.Find("ToggleTflite/Button").GetComponentInChildren<TextMeshProUGUI>();
+        toggleTfliteButtonText.text = device.TfliteInferencingEnabled ? "Disable Tflite" : "Enable Tflite";
+    }
+
+    private void OnIsDeviceTfliteReady(BS_Device device, bool isReady)
+    {
+        GameObject item = GetItemByDevice(device);
+        if (item == null) { return; }
+
+        UpdateToggleTfliteButton(device);
+    }
+
+    private void OnDeviceTfliteInferencingEnabled(BS_Device device, bool isEnabled)
+    {
+        GameObject item = GetItemByDevice(device);
+        if (item == null) { return; }
+
+        UpdateToggleTfliteButton(device);
+
+        var tfliteClassificationGameObject = item.transform.Find("TfliteClassification").gameObject;
+        tfliteClassificationGameObject.SetActive(isEnabled);
+    }
+
+    private void OnDeviceTfliteClassification(BS_Device device, string className, float classValue, ulong timestamp)
+    {
+        GameObject item = GetItemByDevice(device);
+        if (item == null) { return; }
+
+        var tfliteClassificationText = item.transform.Find("TfliteClassification").GetComponentInChildren<TextMeshProUGUI>();
+        tfliteClassificationText.text = $"{className} ({Math.Floor(classValue * 100)}%)";
     }
 
     private GameObject GetItemByDevice(BS_Device device)
