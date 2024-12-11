@@ -9,4 +9,10 @@ public partial class BS_Device
 
         // FILL
     }
+
+    public void SendTfliteModel(BS_TfliteModelMetadata tfliteModelMetadata)
+    {
+        TfliteManager.SendTfliteModel(tfliteModelMetadata, false);
+        SendFile(tfliteModelMetadata);
+    }
 }

@@ -45,6 +45,7 @@ public class BS_InformationManager : BS_BaseManager<BS_InformationMessageType>
         }
     }
 
+    // MTU START
     [SerializeField]
     private ushort? _mtu;
     public ushort Mtu
@@ -66,7 +67,9 @@ public class BS_InformationManager : BS_BaseManager<BS_InformationMessageType>
         Logger.Log($"Parsed mtu: {mtu}");
         Mtu = mtu;
     }
+    // MTU END
 
+    // ID START
     [SerializeField]
     private string _id;
     public string Id
@@ -87,7 +90,9 @@ public class BS_InformationManager : BS_BaseManager<BS_InformationMessageType>
         Logger.Log($"parsed id: {id}");
         Id = id;
     }
+    // ID END
 
+    // NAME START
     [SerializeField]
     private string _name;
     public string Name
@@ -105,11 +110,13 @@ public class BS_InformationManager : BS_BaseManager<BS_InformationMessageType>
     public event Action<string> OnName;
     private void ParseName(in byte[] data)
     {
-        string name = Encoding.UTF8.GetString(data);
+        var name = Encoding.UTF8.GetString(data);
         Logger.Log($"parsed name: {name}");
         Name = name;
     }
+    // NAME END
 
+    // DEVICE TYPE START
     [SerializeField]
     private BS_DeviceType? _deviceType;
     public BS_DeviceType DeviceType
@@ -127,11 +134,13 @@ public class BS_InformationManager : BS_BaseManager<BS_InformationMessageType>
     public event Action<BS_DeviceType> OnDeviceType;
     private void ParseDeviceType(in byte[] data)
     {
-        BS_DeviceType deviceType = (BS_DeviceType)data[0];
+        var deviceType = (BS_DeviceType)data[0];
         Logger.Log($"parsed deviceType: {deviceType}");
         DeviceType = deviceType;
     }
+    // DEVICE TYPE END
 
+    // CURRENT TIME START
     [SerializeField]
     private ulong? _currentTime;
     public ulong CurrentTime
@@ -166,6 +175,7 @@ public class BS_InformationManager : BS_BaseManager<BS_InformationMessageType>
         Logger.Log($"parsed currentTime: {currentTime}");
         CurrentTime = currentTime;
     }
+    // CURRENT TIME END
 
     public override void Reset()
     {

@@ -19,14 +19,6 @@ public class BS_FileTransferManager : BS_BaseManager<BS_FileTransferMessageType>
 
     private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_FileTransferManager", BS_Logger.LogLevel.Log);
 
-    private readonly List<byte> FileToReceive = new();
-    private byte[] FileToSend;
-    private List<byte> FileBlockToSend;
-
-    private bool WaitingToSendMoreData = false;
-    private uint BytesTransferred = 0;
-    public ushort? MTU;
-
     public event Action<ushort> OnMaxFileLength;
     public event Action<BS_FileTransferStatus> OnFileTransferStatus;
     public event Action<uint> OnFileChecksum;
@@ -35,6 +27,33 @@ public class BS_FileTransferManager : BS_BaseManager<BS_FileTransferMessageType>
     public event Action<BS_FileType, BS_FileTransferDirection, float> OnFileTransferProgress;
     public event Action<BS_FileType, BS_FileTransferDirection> OnFileTransferComplete;
     public event Action<BS_FileType, List<byte>> OnFileReceived;
+
+    private readonly List<byte> FileToReceive = new();
+    private byte[] FileToSend;
+    private List<byte> FileBlockToSend;
+
+    private bool WaitingToSendMoreData = false;
+    private uint BytesTransferred = 0;
+    public ushort? MTU;
+
+    public override void Reset()
+    {
+        base.Reset();
+
+        _maxFileLength = null;
+        _fileType = null;
+        _fileLength = null;
+        _fileChecksum = null;
+        _fileTransferStatus = null;
+        MTU = null;
+
+        FileToReceive.Clear();
+        FileToSend = null;
+        FileBlockToSend = null;
+
+        BytesTransferred = 0;
+        WaitingToSendMoreData = false;
+    }
 
     public override void OnRxMessage(BS_FileTransferMessageType messageType, in byte[] data)
     {
@@ -256,7 +275,7 @@ public class BS_FileTransferManager : BS_BaseManager<BS_FileTransferMessageType>
     // FILE TRANSFER STATUS END
 
     // FILE BLOCK START
-    public void SendFile(BS_FileType fileType, in byte[] fileData)
+    public void SendFile(BS_FileMetadata fileMetadata)
     {
         if (FileTransferStatus != Idle)
         {
@@ -264,11 +283,12 @@ public class BS_FileTransferManager : BS_BaseManager<BS_FileTransferMessageType>
             return;
         }
 
-        Logger.Log($"Requesting to find file with {fileData.Length} bytes");
+        var fileData = fileMetadata.GetFileData();
+        Logger.Log($"sending {fileMetadata.FileType} file with {fileData.Length} bytes");
 
         FileToSend = fileData;
 
-        SetFileTransferType(fileType, false);
+        SetFileTransferType(fileMetadata.FileType, false);
         SetFileLength((uint)FileToSend.Length, false);
         SetFileChecksum(GetCrc32(FileToSend), false);
         SetFileTransferCommand(Send);
@@ -411,23 +431,4 @@ public class BS_FileTransferManager : BS_BaseManager<BS_FileTransferMessageType>
     }
 
     // FILE BLOCK END
-
-    public override void Reset()
-    {
-        base.Reset();
-
-        _maxFileLength = null;
-        _fileType = null;
-        _fileLength = null;
-        _fileChecksum = null;
-        _fileTransferStatus = null;
-        MTU = null;
-
-        FileToReceive.Clear();
-        FileToSend = null;
-        FileBlockToSend = null;
-
-        BytesTransferred = 0;
-        WaitingToSendMoreData = false;
-    }
 }

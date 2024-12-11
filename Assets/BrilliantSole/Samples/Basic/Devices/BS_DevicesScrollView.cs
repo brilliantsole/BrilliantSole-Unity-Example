@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -69,7 +70,7 @@ public class BS_DevicesScrollView : MonoBehaviour
                 if (TfliteModelMetadata != null)
                 {
                     Debug.Log("sending tflite model...");
-                    device.SendFile(TfliteModelMetadata);
+                    device.SendTfliteModel(TfliteModelMetadata);
                 }
                 else
                 {
@@ -83,6 +84,8 @@ public class BS_DevicesScrollView : MonoBehaviour
         });
         device.OnFileTransferStatus += OnDeviceFileTransferStatus;
         OnDeviceFileTransferStatus(device, device.FileTransferStatus);
+
+        device.OnFileTransferProgress += OnDeviceFileTransferProgress;
 
         device.OnConnectionStatus += OnDeviceConnectionStatus;
         UpdateToggleConnectionButton(device);
@@ -126,6 +129,7 @@ public class BS_DevicesScrollView : MonoBehaviour
 
         device.OnConnectionStatus -= OnDeviceConnectionStatus;
         device.OnFileTransferStatus -= OnDeviceFileTransferStatus;
+        device.OnFileTransferProgress -= OnDeviceFileTransferProgress;
         Destroy(item);
     }
 
@@ -140,6 +144,18 @@ public class BS_DevicesScrollView : MonoBehaviour
             BS_FileTransferStatus.Idle => "Send Tflite",
             _ => "Cancel"
         };
+
+        var fileTransferProgressContainer = item.transform.Find("FileTransferProgress").gameObject;
+        fileTransferProgressContainer.SetActive(fileTransferStatus != BS_FileTransferStatus.Idle);
+    }
+
+    private void OnDeviceFileTransferProgress(BS_Device device, BS_FileType fileType, BS_FileTransferDirection fileTransferDirection, float progress)
+    {
+        GameObject item = GetItemByDevice(device);
+        if (item == null) { return; }
+
+        var fileTransferProgressText = item.transform.Find("FileTransferProgress").GetComponentInChildren<TextMeshProUGUI>();
+        fileTransferProgressText.text = $"{Math.Floor(progress * 100)}%";
     }
 
     private GameObject GetItemByDevice(BS_Device device)

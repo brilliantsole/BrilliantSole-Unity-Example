@@ -62,7 +62,7 @@ public class BS_SensorConfigurationManager : BS_BaseManager<BS_SensorConfigurati
         OnSensorConfiguration?.Invoke(SensorConfiguration);
     }
 
-    private BS_SensorRate GetClosestSensorRate(ushort rawSensorRate)
+    static public BS_SensorRate GetClosestSensorRate(ushort rawSensorRate)
     {
         var sensorRate = _0ms;
         if (rawSensorRate > 0)

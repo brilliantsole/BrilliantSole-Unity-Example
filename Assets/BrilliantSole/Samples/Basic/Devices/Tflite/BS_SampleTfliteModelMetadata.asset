@@ -15,7 +15,12 @@ MonoBehaviour:
   FilePath: BrilliantSole/Samples/Basic/Devices/Tflite/SampleTfliteModel.tflite
   Name: Sample Model
   SensorTypes: 6
-  Task: 1
+  Task: 0
   SensorRate: 20
-  CaptureDelay: 500
+  CaptureDelay: 1000
   Threshold: 0
+  Classes:
+  - idle
+  - kick
+  - stomp
+  - tap

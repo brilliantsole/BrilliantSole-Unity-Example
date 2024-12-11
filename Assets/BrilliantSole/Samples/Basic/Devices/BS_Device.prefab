@@ -885,7 +885,7 @@ GameObject:
   - component: {fileID: 5610546875555164841}
   - component: {fileID: 3068055037078143963}
   m_Layer: 5
-  m_Name: TfliteProgress
+  m_Name: FileTransferProgress
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

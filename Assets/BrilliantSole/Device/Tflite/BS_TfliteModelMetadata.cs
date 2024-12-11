@@ -10,9 +10,9 @@ public class BS_TfliteModelMetadata : BS_FileMetadata
 
     public string Name;
     public BS_TfliteSensorTypeFlag SensorTypes;
-    public List<BS_SensorType> GetSensorTypes()
+    public HashSet<BS_SensorType> GetSensorTypes()
     {
-        List<BS_SensorType> sensorTypes = new();
+        HashSet<BS_SensorType> sensorTypes = new();
         foreach (BS_TfliteSensorTypeFlag value in Enum.GetValues(typeof(BS_TfliteSensorTypeFlag)))
         {
             if (SensorTypes.HasFlag(value) && value != None)
@@ -42,8 +42,10 @@ public class BS_TfliteModelMetadata : BS_FileMetadata
     public BS_SensorRate SensorRate;
 
     [Range(0, 5000)]
-    public uint CaptureDelay;
+    public ushort CaptureDelay;
 
     [Range(0, 1)]
     public float Threshold;
+
+    public List<string> Classes;
 }

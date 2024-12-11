@@ -103,7 +103,7 @@ public class BS_BleConnectionManager : BS_BaseConnectionManager
             BS_BleConnectionStage.RequestingMtu => 0.1f,
             BS_BleConnectionStage.SubscribingToCharacteristics => 0.1f,
             BS_BleConnectionStage.ReadingCharacteristics => 0.1f,
-            BS_BleConnectionStage.WritingTxCharacteristic => 0.1f,
+            BS_BleConnectionStage.WritingTxCharacteristic => 0.01f,
             _ => 0f,
         };
         Logger.Log($"timeout: {_timeout}");
