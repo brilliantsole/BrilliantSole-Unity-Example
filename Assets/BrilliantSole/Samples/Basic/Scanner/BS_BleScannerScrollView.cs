@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 using static BS_ConnectionStatus;
 
-public class BS_ScannerScrollView : MonoBehaviour
+public class BS_BleScannerScrollView : MonoBehaviour
 {
     public GameObject ItemPrefab;
     public Transform Content;
