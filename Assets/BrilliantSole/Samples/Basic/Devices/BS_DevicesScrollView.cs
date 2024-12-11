@@ -208,7 +208,7 @@ public class BS_DevicesScrollView : MonoBehaviour
         if (item == null) { return; }
 
         var tfliteClassificationText = item.transform.Find("TfliteClassification").GetComponentInChildren<TextMeshProUGUI>();
-        tfliteClassificationText.text = $"{className} ({Math.Floor(classValue * 100)}%)";
+        tfliteClassificationText.text = $"{className}";
     }
 
     private GameObject GetItemByDevice(BS_Device device)

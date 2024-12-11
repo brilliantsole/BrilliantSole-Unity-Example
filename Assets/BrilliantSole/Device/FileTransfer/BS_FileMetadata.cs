@@ -3,7 +3,7 @@ using UnityEngine;
 
 public abstract class BS_FileMetadata : ScriptableObject
 {
-    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_FileMetadata", BS_Logger.LogLevel.Log);
+    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_FileMetadata");
 
     public abstract BS_FileType FileType { get; }
     public string FilePath;
