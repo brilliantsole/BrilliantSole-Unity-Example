@@ -17,7 +17,7 @@ MonoBehaviour:
   SensorTypes: 6
   Task: 0
   SensorRate: 20
-  CaptureDelay: 500
+  CaptureDelay: 1000
   Threshold: 0
   Classes:
   - idle
