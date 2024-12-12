@@ -211,14 +211,14 @@ public class BS_DevicesScrollView : MonoBehaviour
         var tfliteClassificationText = item.transform.Find("TfliteClassification").GetComponentInChildren<TextMeshProUGUI>();
         tfliteClassificationText.text = $"{className}";
 
-        StartCoroutine(ClearTfliteClassification(device, device.TfliteModelMetadata.CaptureDelay / 1000f));
+        StartCoroutine(ClearTfliteClassification(device));
     }
-    private IEnumerator ClearTfliteClassification(BS_Device device, float delay)
+    private IEnumerator ClearTfliteClassification(BS_Device device)
     {
         GameObject item = GetItemByDevice(device);
         if (item == null) { yield break; }
 
-        delay = Math.Max(delay, 1f);
+        var delay = Math.Max(device.TfliteModelMetadata.CaptureDelay / 1000f, 1f);
         yield return new WaitForSeconds(delay);
 
         var tfliteClassificationText = item.transform.Find("TfliteClassification").GetComponentInChildren<TextMeshProUGUI>();

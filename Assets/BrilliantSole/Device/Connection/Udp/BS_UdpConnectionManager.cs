@@ -7,19 +7,13 @@ public class BS_UdpConnectionManager : BS_BaseConnectionManager
     protected override void Connect(ref bool Continue)
     {
         base.Connect(ref Continue);
-        if (!Continue)
-        {
-            return;
-        }
+        if (!Continue) { return; }
         // FILL
     }
     protected override void Disconnect(ref bool Continue)
     {
         base.Disconnect(ref Continue);
-        if (!Continue)
-        {
-            return;
-        }
+        if (!Continue) { return; }
         // FILL
     }
 }

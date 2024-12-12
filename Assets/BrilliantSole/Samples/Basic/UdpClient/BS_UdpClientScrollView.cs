@@ -2,20 +2,18 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-
 using static BS_ConnectionStatus;
 
-public class BS_UdpScannerScrollView : MonoBehaviour
+public class BS_UdpClientScrollView : MonoBehaviour
 {
     public GameObject ItemPrefab;
     public Transform Content;
     private readonly Dictionary<string, GameObject> instantiatedItems = new();
-
-    private BS_ScannerManager ScannerManager => BS_ScannerManager.Instance;
+    private BS_UdpClientManager UdpClientManager => BS_UdpClientManager.Instance;
 
     private void OnEnable()
     {
-        foreach (var DiscoveredDevice in ScannerManager.DiscoveredDevices.Values) { OnDiscoveredDevice(DiscoveredDevice); }
+        //foreach (var DiscoveredDevice in ScannerManager.DiscoveredDevices.Values) { OnDiscoveredDevice(DiscoveredDevice); }
     }
     private void OnDisable()
     {
@@ -43,22 +41,14 @@ public class BS_UdpScannerScrollView : MonoBehaviour
             var toggleConnectionButton = item.transform.Find("ToggleConnection/Button").GetComponent<Button>();
             var toggleConnectionButtonText = toggleConnectionButton.transform.GetComponentInChildren<TextMeshProUGUI>();
             BS_Device device = null;
-            if (ScannerManager.Devices.ContainsKey(DiscoveredDevice.Id))
-            {
-                toggleConnectionButtonText.text = ScannerManager.Devices[DiscoveredDevice.Id].ConnectionStatus switch
-                {
-                    NotConnected => "Connect",
-                    Connecting => "Connecting",
-                    Connected => "Disconnect",
-                    Disconnecting => "Disconnecting",
-                    _ => throw new System.NotImplementedException()
-                };
-            }
+            // FILL - check if UdpClientManager already has it
             toggleConnectionButton.onClick.AddListener(() =>
             {
                 Debug.Log($"Toggling Connection to \"{DiscoveredDevice.Name}\"...");
 
-                var _device = ScannerManager.ToggleConnectionToDiscoveredDevice(DiscoveredDevice);
+                // FIX
+                //var _device = ScannerManager.ToggleConnectionToDiscoveredDevice(DiscoveredDevice);
+                BS_Device _device = null;
                 if (device == null)
                 {
                     Debug.Log("first time connecting to device...");

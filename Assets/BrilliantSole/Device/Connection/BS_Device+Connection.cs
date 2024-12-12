@@ -90,7 +90,19 @@ public partial class BS_Device
 
     public void Connect() { ConnectionManager?.Connect(); }
     public void Disconnect() { ConnectionManager?.Disconnect(); }
-    public void ToggleConnection() { if (IsConnected) { Disconnect(); } else { Connect(); } }
+    public void ToggleConnection()
+    {
+        switch (ConnectionManagerStatus)
+        {
+            case Connected:
+            case Connecting:
+                Disconnect();
+                break;
+            default:
+                Connect();
+                break;
+        }
+    }
 
     private void OnBatteryLevelUpdate(BS_BaseConnectionManager connectionManager, byte batteryLevel)
     {
