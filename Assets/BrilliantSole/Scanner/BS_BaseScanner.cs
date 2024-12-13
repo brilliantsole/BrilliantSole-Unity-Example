@@ -154,7 +154,7 @@ public abstract class BS_BaseScanner
 
     protected virtual BS_Device CreateDevice(BS_DiscoveredDevice discoveredDevice)
     {
-        BS_Device Device = new();
+        BS_Device Device = new(discoveredDevice);
         Logger.Log($"creating device for {discoveredDevice.Name}...");
         _allDevices[discoveredDevice.Id] = Device;
         Device.OnIsConnected += (device, isConnected) =>

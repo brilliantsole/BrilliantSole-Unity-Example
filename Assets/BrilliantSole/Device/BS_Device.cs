@@ -18,4 +18,12 @@ public partial class BS_Device
         SetupManagers();
         BS_DeviceManager.OnDeviceCreated(this);
     }
+
+    public BS_Device(string name, BS_DeviceType? deviceType) : this()
+    {
+        InformationManager.InitName(name);
+        if (deviceType != null) { InformationManager.InitDeviceType((BS_DeviceType)deviceType); }
+    }
+
+    public BS_Device(BS_DiscoveredDevice discoveredDevice) : this(discoveredDevice.Name, discoveredDevice.DeviceType) { }
 }

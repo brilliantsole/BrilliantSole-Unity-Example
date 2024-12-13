@@ -1,17 +1,18 @@
+using System;
 using System.Collections.Generic;
 
-public readonly struct BS_TxMessage
+public readonly struct BS_Message<T> where T : unmanaged, Enum
 {
-    public readonly byte Type;
+    public readonly T Type;
     public readonly List<byte> Data;
 
-    public BS_TxMessage(byte type, List<byte> data)
+    public BS_Message(T type, List<byte> data)
     {
         Type = type;
         Data = data;
     }
 
-    public BS_TxMessage(byte type)
+    public BS_Message(T type)
     {
         Type = type;
         Data = null;
@@ -29,7 +30,7 @@ public readonly struct BS_TxMessage
 
     public readonly void AppendTo(List<byte> array)
     {
-        array.Add(Type);
+        array.Add(Convert.ToByte(Type));
 
         ushort dataLength = DataLength();
 
