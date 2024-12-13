@@ -24,8 +24,12 @@ public partial class BS_BaseClient
                 case Connected:
                 case NotConnected:
                     OnIsConnected?.Invoke(this, IsConnected);
+                    if (ConnectionStatus == Connected) { SendRequiredMessages(); }
+                    else { Reset(); }
                     break;
             }
+
+
         }
     }
     public bool IsConnected => ConnectionStatus == Connected;

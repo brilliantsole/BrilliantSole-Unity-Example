@@ -1,4 +1,6 @@
 using System;
+using System.Text;
+using UnityEngine;
 
 #nullable enable
 
@@ -24,6 +26,7 @@ public class BS_DiscoveredDevice
 
         Logger.Log($"Created \"{DeviceType}\" with name \"{Name}\", rssi {Rssi}, and id {Id}");
     }
+    public BS_DiscoveredDevice(BS_DiscoveredDeviceJson discoveredDeviceJson) : this(discoveredDeviceJson.bluetoothId, discoveredDeviceJson.name, discoveredDeviceJson.DeviceType, discoveredDeviceJson.rssi) { }
 
     public void Update(string? name, BS_DeviceType? deviceType, int? rssi)
     {
@@ -42,6 +45,20 @@ public class BS_DiscoveredDevice
         LastTimeUpdated = DateTime.Now;
         Logger.Log($"Updated \"{Name}\"");
     }
+    public void Update(BS_DiscoveredDeviceJson discoveredDeviceJson) { Update(discoveredDeviceJson.name, discoveredDeviceJson.DeviceType, discoveredDeviceJson.rssi); }
+
+    // public static BS_DiscoveredDevice? ParseJson(in byte[] data)
+    // {
+    //     var nullableDiscoveredDeviceJson = BS_DiscoveredDeviceJson.Parse(data);
+    //     if (nullableDiscoveredDeviceJson == null)
+    //     {
+    //         Logger.LogError("failed to parse discoveredDevice");
+    //         return null;
+    //     }
+
+    //     var discoveredDeviceJson = (BS_DiscoveredDeviceJson)nullableDiscoveredDeviceJson;
+    //     return new(discoveredDeviceJson.bluetoothId, discoveredDeviceJson.name, discoveredDeviceJson.DeviceType, discoveredDeviceJson.rssi);
+    // }
 
 
     public TimeSpan TimeSinceLastUpdate => DateTime.Now - LastTimeUpdated;
