@@ -1,13 +1,13 @@
 using System;
-using System.Collections;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
-using UnityEngine;
 
 public partial class BS_UdpClient : BS_BaseClient<BS_UdpClient>
 {
     private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_UdpClient", BS_Logger.LogLevel.Log);
+
+    private bool IsRunning = false;
 
     protected override void Connect(ref bool Continue)
     {
@@ -15,13 +15,15 @@ public partial class BS_UdpClient : BS_BaseClient<BS_UdpClient>
         if (!Continue) { return; }
 
         Logger.Log($"listening to {ServerIp}:{ListeningPort}...");
-        UdpClient ??= new();
-        UdpClient.Connect(ServerIp, ListeningPort);
+        UdpClient = new(ListeningPort);
+        UdpClient.Connect(ServerIp, SendingPort);
 
-        runReceiveThread = true;
+        IsRunning = true;
+
         receiveThread ??= new(new ThreadStart(ListenForMessages)) { IsBackground = true };
         receiveThread.Start();
 
+        Ping();
         PingTimer.Start();
     }
     protected override void Disconnect(ref bool Continue)
@@ -29,21 +31,28 @@ public partial class BS_UdpClient : BS_BaseClient<BS_UdpClient>
         base.Disconnect(ref Continue);
         if (!Continue) { return; }
 
+        IsRunning = false;
+
         PingTimer.Stop();
 
-        runReceiveThread = false;
-        if (receiveThread?.IsAlive == true) { receiveThread.Join(); }
+        UdpClient?.Close();
+        UdpClient = null;
 
-        UdpClient.Close();
+        if (receiveThread != null)
+        {
+            if (receiveThread.IsAlive) { receiveThread.Join(); }
+            receiveThread = null;
+        }
+
+        ConnectionStatus = BS_ConnectionStatus.NotConnected;
     }
 
     private UdpClient UdpClient;
 
     private Thread receiveThread;
-    private bool runReceiveThread = false;
     private void ListenForMessages()
     {
-        while (runReceiveThread)
+        while (IsRunning)
         {
             try
             {

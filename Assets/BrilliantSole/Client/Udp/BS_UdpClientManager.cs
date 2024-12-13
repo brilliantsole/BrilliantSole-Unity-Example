@@ -1,4 +1,7 @@
+using System;
 using System.Net;
+using UnityEngine.Events;
+using static BS_ConnectionStatus;
 
 public class BS_UdpClientManager : BS_SingletonMonoBehavior<BS_UdpClientManager>
 {
@@ -50,13 +53,51 @@ public class BS_UdpClientManager : BS_SingletonMonoBehavior<BS_UdpClientManager>
     public void Connect() { Client.Connect(); }
     public void Disconnect() { Client.Disconnect(); }
 
+    [Serializable]
+    public class BoolUnityEvent : UnityEvent<bool> { }
+    public BoolUnityEvent OnIsConnected;
+
+    [Serializable]
+    public class ConnectionStatusUnityEvent : UnityEvent<BS_ConnectionStatus> { }
+    public ConnectionStatusUnityEvent OnConnectionStatus;
+
+    public UnityEvent OnNotConnected;
+    public UnityEvent OnConnecting;
+    public UnityEvent OnConnected;
+    public UnityEvent OnDisconnecting;
+
     private void OnEnable()
     {
-        // Add Listeners
+        Client.OnConnectionStatus += onConnectionStatus;
+        Client.OnIsConnected += onIsConnected;
+        // FILL - Add Listeners
     }
 
     private void OnDisable()
     {
-        // Remove Listeners
+        Client.OnConnectionStatus -= onConnectionStatus;
+        Client.OnIsConnected -= onIsConnected;
+        // FILL - Remove Listeners
     }
+
+    private void onConnectionStatus(BS_BaseClient client, BS_ConnectionStatus connectionStatus)
+    {
+        OnConnectionStatus?.Invoke(connectionStatus);
+        switch (connectionStatus)
+        {
+            case NotConnected:
+                OnNotConnected?.Invoke();
+                break;
+            case Connecting:
+                OnConnecting?.Invoke();
+                break;
+            case Connected:
+                OnConnected?.Invoke();
+                break;
+            case Disconnecting:
+                OnDisconnecting?.Invoke();
+                break;
+        }
+    }
+    private void onIsConnected(BS_BaseClient client, bool isConnected) { OnIsConnected?.Invoke(isConnected); }
 }

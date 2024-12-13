@@ -14,11 +14,13 @@ public class BS_UdpClientScrollView : MonoBehaviour
     private void OnEnable()
     {
         //foreach (var DiscoveredDevice in ScannerManager.DiscoveredDevices.Values) { OnDiscoveredDevice(DiscoveredDevice); }
+        // FILL - add listeners
     }
     private void OnDisable()
     {
         if (!gameObject.scene.isLoaded) return;
         //foreach (var DiscoveredDevice in ScannerManager.DiscoveredDevices.Values) { OnExpiredDevice(DiscoveredDevice); }
+        // FILL - remove listeners
     }
 
     public void OnDiscoveredDevice(BS_DiscoveredDevice DiscoveredDevice)

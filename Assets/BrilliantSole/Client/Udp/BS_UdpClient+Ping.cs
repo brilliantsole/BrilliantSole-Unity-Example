@@ -4,6 +4,7 @@ using UnityEngine;
 
 public partial class BS_UdpClient
 {
+    private static readonly double PingInterval = 1000;
     private Timer _pingTimer;
     private Timer PingTimer
     {
@@ -11,7 +12,7 @@ public partial class BS_UdpClient
         {
             if (_pingTimer == null)
             {
-                _pingTimer = new(1000) { AutoReset = true };
+                _pingTimer = new(PingInterval) { AutoReset = true };
                 _pingTimer.Elapsed += (sender, e) => Ping();
             }
             return _pingTimer;
@@ -20,6 +21,7 @@ public partial class BS_UdpClient
 
     private void Ping()
     {
+        Logger.Log("Pinging server");
         // FILL
     }
 }

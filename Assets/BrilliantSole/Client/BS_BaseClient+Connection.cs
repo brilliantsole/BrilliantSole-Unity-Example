@@ -12,7 +12,7 @@ public partial class BS_BaseClient
     public BS_ConnectionStatus ConnectionStatus
     {
         get => _connectionStatus;
-        private set
+        protected set
         {
             if (_connectionStatus == value) { return; }
             Logger.Log($"Updating Connection Status to {value}");
@@ -68,5 +68,17 @@ public partial class BS_BaseClient
         ConnectionStatus = Disconnecting;
         Logger.Log("Disconnecting...");
     }
-    public void ToggleConnection() { if (IsConnected) { Disconnect(); } else { Connect(); } }
+    public void ToggleConnection()
+    {
+        switch (ConnectionStatus)
+        {
+            case Connected:
+            case Connecting:
+                Disconnect();
+                break;
+            default:
+                Connect();
+                break;
+        }
+    }
 }
