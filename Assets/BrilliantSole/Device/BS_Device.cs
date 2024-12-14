@@ -4,13 +4,12 @@ public partial class BS_Device
 
     private void Reset()
     {
-        ConnectionStatus = BS_ConnectionStatus.NotConnected;
-
         ResetBatteryLevel();
         ResetTxMessaging();
         ResetRxMessaging();
         DeviceInformation.Clear();
         ResetManagers();
+        _connectionStatus = BS_ConnectionStatus.NotConnected;
     }
 
     public BS_Device()

@@ -46,11 +46,12 @@ public abstract class BS_BaseConnectionManager
         if (IsConnected)
         {
             Logger.Log("Already connected");
-            Continue = true;
+            Continue = false;
             return;
         }
         Status = Connecting;
         Logger.Log("Connecting...");
+        Continue = true;
     }
     public void Disconnect()
     {
@@ -73,6 +74,7 @@ public abstract class BS_BaseConnectionManager
         }
         Status = Disconnecting;
         Logger.Log("Disconnecting...");
+        Continue = true;
     }
 
     public virtual void Update() { }

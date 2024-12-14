@@ -11,7 +11,7 @@ public partial class BS_UdpClient
         DidSetRemoteReceivePort = false;
 
         Logger.Log($"connecting to {ServerIp}:{SendPort}...");
-        UdpClient = new();
+        UdpClient = new(ReceivePort);
         UdpClient.Connect(ServerIp, SendPort);
 
         IsRunning = true;

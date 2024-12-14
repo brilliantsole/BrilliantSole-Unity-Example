@@ -16,4 +16,6 @@ public abstract partial class BS_BaseClient
             // FILL - set device connectionManager as not connected
         }
     }
+
+    public virtual void Update() { }
 }

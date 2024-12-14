@@ -8,19 +8,27 @@ using static BS_ConnectionStatus;
 public partial class BS_UdpClient
 {
     private Thread receiveThread;
+    private readonly Queue<byte[]> messageQueue = new();
+    private readonly object queueLock = new();
     private void ListenForMessages()
     {
         while (IsRunning)
         {
             try
             {
-                var remoteEndPoint = new IPEndPoint(IPAddress.Any, ReceivePort);
-                byte[] receivedData = UdpClient.Receive(ref remoteEndPoint);
+                Logger.Log($"listening on {ReceivePort}...");
+                var remoteEndPoint = new IPEndPoint(IPAddress.Any, 0);
+                var receivedData = UdpClient.Receive(ref remoteEndPoint);
+                Logger.Log($"received {receivedData.Length} bytes");
                 if (receivedData.Length > 0)
                 {
-                    Logger.Log($"received {receivedData.Length} bytes");
-                    OnUdpData(receivedData);
+                    lock (queueLock) { messageQueue.Enqueue(receivedData); }
                 }
+            }
+            catch (SocketException e)
+            {
+                // 10004 thrown when socket is closed
+                if (e.ErrorCode != 10004) { Logger.LogError($"Socket exception while receiving data from udp client: {e.Message}"); }
             }
             catch (Exception e)
             {
@@ -29,7 +37,18 @@ public partial class BS_UdpClient
         }
     }
 
-    // https://github.com/brilliantsole/Brilliant-Sole-Unreal/blob/c273625334a365a519b771b8fd2ea4b563514713/Plugins/BrilliantSoleSDK/Source/BrilliantSoleSDK/Private/BS_BaseUDP_Client.cpp#L179C26-L179C39
+    private void ParseReceivedMessages()
+    {
+        lock (queueLock)
+        {
+            while (messageQueue.Count > 0)
+            {
+                var messageData = messageQueue.Dequeue();
+                OnUdpData(messageData);
+            }
+        }
+    }
+
     private void OnUdpData(in byte[] data)
     {
         Logger.Log($"parsing {data.Length} bytes...");
@@ -37,7 +56,7 @@ public partial class BS_UdpClient
     }
     private void OnUdpMessage(byte udpMessageTypeByte, byte[] data)
     {
-        if (Enum.IsDefined(typeof(BS_UdpMessageType), udpMessageTypeByte))
+        if (!Enum.IsDefined(typeof(BS_UdpMessageType), udpMessageTypeByte))
         {
             Logger.LogError($"invalid udpMessageTypeByte {udpMessageTypeByte}");
             return;

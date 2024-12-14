@@ -28,8 +28,6 @@ public partial class BS_BaseClient
                     else { Reset(); }
                     break;
             }
-
-
         }
     }
     public bool IsConnected => ConnectionStatus == Connected;
@@ -44,11 +42,12 @@ public partial class BS_BaseClient
         if (IsConnected)
         {
             Logger.Log("Already connected");
-            Continue = true;
+            Continue = false;
             return;
         }
         ConnectionStatus = Connecting;
         Logger.Log("Connecting...");
+        Continue = true;
     }
     public void Disconnect()
     {
@@ -71,6 +70,7 @@ public partial class BS_BaseClient
         }
         ConnectionStatus = Disconnecting;
         Logger.Log("Disconnecting...");
+        Continue = true;
     }
     public void ToggleConnection()
     {

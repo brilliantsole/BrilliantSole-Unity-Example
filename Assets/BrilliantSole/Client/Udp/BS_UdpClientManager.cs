@@ -7,6 +7,7 @@ public class BS_UdpClientManager : BS_SingletonMonoBehavior<BS_UdpClientManager>
 {
     private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_UdpClientManager", BS_Logger.LogLevel.Log);
     private static BS_UdpClient Client => BS_UdpClient.Instance;
+    public void Update() { Client.Update(); }
 
     public string ServerIp => Client.ServerIp;
     public void SetServerIp(string newServerIp)

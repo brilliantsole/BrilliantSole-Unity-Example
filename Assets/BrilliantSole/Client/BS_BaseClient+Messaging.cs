@@ -17,7 +17,7 @@ public partial class BS_BaseClient
     }
     private void OnParsedServerMessage(byte serverMessageTypeByte, byte[] messageData)
     {
-        if (Enum.IsDefined(typeof(BS_ServerMessageType), serverMessageTypeByte))
+        if (!Enum.IsDefined(typeof(BS_ServerMessageType), serverMessageTypeByte))
         {
             Logger.LogError($"invalid serverMessageTypeByte {serverMessageTypeByte}");
             return;

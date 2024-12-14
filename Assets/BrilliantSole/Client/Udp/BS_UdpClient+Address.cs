@@ -48,13 +48,13 @@ public partial class BS_UdpClient
     }
 
     [SerializeField]
-    private int _listeningPort = 3001;
+    private int _receivePort = 3001;
     public int ReceivePort
     {
-        get => _listeningPort;
+        get => _receivePort;
         set
         {
-            if (value == _listeningPort)
+            if (value == _receivePort)
             {
                 Logger.Log($"redundant listeningPort address {value}");
                 return;
@@ -64,7 +64,7 @@ public partial class BS_UdpClient
                 Logger.Log($"can only set listeningPort address when not connected");
                 return;
             }
-            _listeningPort = value;
+            _receivePort = value;
             Logger.Log($"updated ListeningPort to {ReceivePort}");
         }
     }

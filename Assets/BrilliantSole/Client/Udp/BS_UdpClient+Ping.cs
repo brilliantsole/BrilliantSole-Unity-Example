@@ -30,18 +30,20 @@ public partial class BS_UdpClient
         else
         {
             Logger.Log("setting remote receive port");
-            message = new(BS_UdpMessageType.SetRemoteReceivePort, BS_ByteUtils.ToByteArray((ushort)ReceivePort, true));
+            message = new(BS_UdpMessageType.SetRemoteReceivePort, BS_ByteUtils.ToByteArray((ushort)ReceivePort));
         }
         SendUdpMessages(new() { message });
     }
 
     public void StartPinging(bool startImmediately = true)
     {
+        Logger.Log("StartPinging");
         if (startImmediately) { Ping(); }
         PingTimer.Start();
     }
     public void StopPinging()
     {
+        Logger.Log("StopPinging");
         PingTimer.Stop();
     }
 }
