@@ -2,7 +2,7 @@ using System.Timers;
 
 public partial class BS_UdpClient
 {
-    private static readonly double PingInterval = 1000;
+    private static readonly double PingInterval = 2000;
     private Timer _pingTimer;
     private Timer PingTimer
     {
