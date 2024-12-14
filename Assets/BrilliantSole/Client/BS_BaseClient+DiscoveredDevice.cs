@@ -58,7 +58,7 @@ public partial class BS_BaseClient
     {
         Logger.Log($"parsing ExpiredDiscoveredDevice ({data.Length} bytes)");
 
-        var bluetoothId = Encoding.UTF8.GetString(data);
+        var bluetoothId = BS_StringUtils.GetString(data, true);
         Logger.Log($"expired bluetoothId {bluetoothId}");
 
         if (_discoveredDevices.TryGetValue(bluetoothId, out BS_DiscoveredDevice discoveredDevice))

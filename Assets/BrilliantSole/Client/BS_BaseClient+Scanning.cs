@@ -22,7 +22,8 @@ public partial class BS_BaseClient
 
             if (IsScanningAvailable)
             {
-                // FILL - check if IsScanning
+                Logger.Log("checking if is scanning...");
+                SendMessages(new() { new(BS_ServerMessageType.IsScanning) });
             }
         }
     }
@@ -70,8 +71,8 @@ public partial class BS_BaseClient
             Logger.Log("already scanning");
             return;
         }
-        // FILL - reset DiscoveredDevices
-        // FILL - Send StartScan Message
+        _discoveredDevices.Clear();
+        SendMessages(new() { new(BS_ServerMessageType.StartScan) });
     }
     public void StopScan()
     {
@@ -80,7 +81,7 @@ public partial class BS_BaseClient
             Logger.Log("already not scanning");
             return;
         }
-        // FILL - Send StopScan Message
+        SendMessages(new() { new(BS_ServerMessageType.StopScan) });
     }
     public void ToggleScan() { if (IsScanning) { StopScan(); } else { StartScan(); } }
 }

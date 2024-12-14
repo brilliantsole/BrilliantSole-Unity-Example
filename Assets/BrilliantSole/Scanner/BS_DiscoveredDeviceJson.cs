@@ -24,7 +24,7 @@ public readonly struct BS_DiscoveredDeviceJson
     public static BS_DiscoveredDeviceJson? Parse(in byte[] data)
     {
         Logger.Log($"parsing json ({data.Length} bytes)...");
-        var jsonString = Encoding.UTF8.GetString(data);
+        var jsonString = BS_StringUtils.GetString(data, true);
 
         if (jsonString == null)
         {

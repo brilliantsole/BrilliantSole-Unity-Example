@@ -69,7 +69,7 @@ public partial class BS_BaseClient
     private void SendRequiredMessages() { SendMessages(RequiredMessages); }
     private static readonly List<BS_ServerMessageType> RequiredMessageTypes = new(){
         BS_ServerMessageType.IsScanningAvailable,
-        DiscoveredDevices,
+        BS_ServerMessageType.DiscoveredDevices,
         ConnectedDevices
     };
     private static readonly List<BS_ServerMessage> RequiredMessages = RequiredMessageTypes.Select(messageType => new BS_ServerMessage(messageType)).ToList();

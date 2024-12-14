@@ -86,7 +86,7 @@ public class BS_InformationManager : BS_BaseManager<BS_InformationMessageType>
     public event Action<string> OnId;
     private void ParseId(in byte[] data)
     {
-        string id = Encoding.UTF8.GetString(data);
+        string id = BS_StringUtils.GetString(data);
         Logger.Log($"parsed id: {id}");
         Id = id;
     }
@@ -110,7 +110,7 @@ public class BS_InformationManager : BS_BaseManager<BS_InformationMessageType>
     public event Action<string> OnName;
     private void ParseName(in byte[] data)
     {
-        var name = Encoding.UTF8.GetString(data);
+        var name = BS_StringUtils.GetString(data);
         Logger.Log($"parsed name: {name}");
         Name = name;
     }

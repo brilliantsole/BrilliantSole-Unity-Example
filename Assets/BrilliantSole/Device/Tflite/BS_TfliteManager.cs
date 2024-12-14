@@ -113,7 +113,7 @@ public class BS_TfliteManager : BS_BaseManager<BS_TfliteMessageType>
     public event Action<string> OnName;
     private void ParseName(in byte[] data)
     {
-        string name = Encoding.UTF8.GetString(data);
+        string name = BS_StringUtils.GetString(data);
         Logger.Log($"parsed name: {name}");
         Name = name;
     }

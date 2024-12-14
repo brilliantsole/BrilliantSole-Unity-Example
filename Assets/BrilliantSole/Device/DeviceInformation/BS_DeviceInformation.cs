@@ -26,7 +26,7 @@ public class BS_DeviceInformation
 
     public void UpdateValue(BS_DeviceInformationType deviceInformationType, byte[] data)
     {
-        string value = Encoding.UTF8.GetString(data);
+        string value = BS_StringUtils.GetString(data);
         Logger.Log($"Received \"{value}\" for {deviceInformationType}");
 
         switch (deviceInformationType)
