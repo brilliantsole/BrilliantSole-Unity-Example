@@ -27,6 +27,7 @@ public partial class BS_UdpClient : BS_BaseClient<BS_UdpClient>
     {
         base.Update();
         ParseReceivedMessages();
+        CheckPongTimeout();
     }
 
 #if UNITY_EDITOR

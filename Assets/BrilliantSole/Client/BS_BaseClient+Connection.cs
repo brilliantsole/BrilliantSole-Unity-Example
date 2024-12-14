@@ -14,9 +14,13 @@ public partial class BS_BaseClient
         get => _connectionStatus;
         protected set
         {
-            if (_connectionStatus == value) { return; }
-            Logger.Log($"Updating Connection Status to {value}");
+            if (_connectionStatus == value)
+            {
+                Logger.Log($"redundant connectionStatus {value}");
+                return;
+            }
             _connectionStatus = value;
+            Logger.Log($"Updated ConnectionStatus to {ConnectionStatus}");
             OnConnectionStatus?.Invoke(this, ConnectionStatus);
 
             switch (ConnectionStatus)

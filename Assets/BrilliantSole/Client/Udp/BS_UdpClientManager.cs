@@ -83,6 +83,7 @@ public class BS_UdpClientManager : BS_SingletonMonoBehavior<BS_UdpClientManager>
 
     private void onConnectionStatus(BS_BaseClient client, BS_ConnectionStatus connectionStatus)
     {
+        Logger.Log($"ConnectionStatus: {connectionStatus}");
         OnConnectionStatus?.Invoke(connectionStatus);
         switch (connectionStatus)
         {

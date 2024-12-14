@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Text;
 using UnityEngine;
 
 public partial class BS_BaseClient
@@ -15,6 +14,7 @@ public partial class BS_BaseClient
         var connectedDeviceBluetoothIdsString = BS_StringUtils.GetString(data, true);
         Logger.Log($"connectedDeviceBluetoothIdsString: {connectedDeviceBluetoothIdsString}");
 
+        // FIX
         var connectedDeviceBluetoothIds = JsonUtility.FromJson<BS_StringArrayJson>(connectedDeviceBluetoothIdsString).strings;
         foreach (var connectedDeviceBluetoothId in connectedDeviceBluetoothIds)
         {

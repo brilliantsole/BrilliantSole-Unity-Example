@@ -39,6 +39,16 @@ public partial class BS_UdpClient
     private void PongTimeout()
     {
         Logger.Log($"PongTimeout");
-        Disconnect();
+        DidPongTimeout = true;
+    }
+
+    private bool DidPongTimeout = false;
+    private void CheckPongTimeout()
+    {
+        if (DidPongTimeout)
+        {
+            Disconnect();
+            DidPongTimeout = false;
+        }
     }
 }
