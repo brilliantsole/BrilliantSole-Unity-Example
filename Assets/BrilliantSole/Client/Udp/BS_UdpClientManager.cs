@@ -33,20 +33,20 @@ public class BS_UdpClientManager : BS_SingletonMonoBehavior<BS_UdpClientManager>
         }
     }
 
-    public int SendingPort => Client.SendingPort;
-    public void SetSendingPort(int newSendingPort) { Client.SendingPort = newSendingPort; }
-    public void SetSendingPort(string newSendingPortString)
+    public int SendPort => Client.SendPort;
+    public void SetSendPort(int newSendPort) { Client.SendPort = newSendPort; }
+    public void SetSendPort(string newSendPortString)
     {
-        var newSendingPort = ParsePortString(newSendingPortString);
-        if (newSendingPort != null) { SetSendingPort((int)newSendingPort); }
+        var newSendPort = ParsePortString(newSendPortString);
+        if (newSendPort != null) { SetSendPort((int)newSendPort); }
     }
 
-    public int ListeningPort => Client.ListeningPort;
-    public void SetListeningPort(int newListeningPort) { Client.ListeningPort = newListeningPort; }
-    public void SetListeningPort(string newListeningPortString)
+    public int ReceivePort => Client.ReceivePort;
+    public void SetReceivePort(int newReceivePort) { Client.ReceivePort = newReceivePort; }
+    public void SetReceivePort(string newReceivePortString)
     {
-        var newListeningPort = ParsePortString(newListeningPortString);
-        if (newListeningPort != null) { SetSendingPort((int)newListeningPort); }
+        var newReceivePort = ParsePortString(newReceivePortString);
+        if (newReceivePort != null) { SetSendPort((int)newReceivePort); }
     }
 
     public void ToggleConnection() { Client.ToggleConnection(); }

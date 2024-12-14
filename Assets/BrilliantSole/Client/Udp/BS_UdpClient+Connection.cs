@@ -1,5 +1,3 @@
-using System;
-using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 
@@ -10,17 +8,18 @@ public partial class BS_UdpClient
         base.Connect(ref Continue);
         if (!Continue) { return; }
 
-        Logger.Log($"listening to {ServerIp}:{ListeningPort}...");
-        UdpClient = new(ListeningPort);
-        UdpClient.Connect(ServerIp, SendingPort);
+        DidSetRemoteReceivePort = false;
+
+        Logger.Log($"connecting to {ServerIp}:{SendPort}...");
+        UdpClient = new();
+        UdpClient.Connect(ServerIp, SendPort);
 
         IsRunning = true;
 
         receiveThread ??= new(new ThreadStart(ListenForMessages)) { IsBackground = true };
         receiveThread.Start();
 
-        Ping();
-        PingTimer.Start();
+        StartPinging();
     }
     protected override void Disconnect(ref bool Continue)
     {
@@ -29,7 +28,9 @@ public partial class BS_UdpClient
 
         IsRunning = false;
 
-        PingTimer.Stop();
+        Reset();
+        StopPinging();
+        StopWaitingForPong();
 
         UdpClient?.Close();
         UdpClient = null;

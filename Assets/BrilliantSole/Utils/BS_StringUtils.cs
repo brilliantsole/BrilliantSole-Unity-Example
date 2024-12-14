@@ -1,9 +1,8 @@
 using System.Text;
-using UnityEngine;
 
 public static class BS_StringUtils
 {
-    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_StringUtils", BS_Logger.LogLevel.Log);
+    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_StringUtils");
 
     public static string GetString(in byte[] data, bool includesLength = false)
     {

@@ -1,6 +1,4 @@
-using System.Collections;
 using System.Timers;
-using UnityEngine;
 
 public partial class BS_UdpClient
 {
@@ -19,9 +17,31 @@ public partial class BS_UdpClient
         }
     }
 
+    private bool DidSetRemoteReceivePort = false;
+    static private readonly BS_UdpMessage PingMessage = new(BS_UdpMessageType.Ping);
     private void Ping()
     {
-        Logger.Log("Pinging server");
-        // FILL
+        BS_UdpMessage message;
+        if (DidSetRemoteReceivePort)
+        {
+            Logger.Log("Pinging server");
+            message = PingMessage;
+        }
+        else
+        {
+            Logger.Log("setting remote receive port");
+            message = new(BS_UdpMessageType.SetRemoteReceivePort, BS_ByteUtils.ToByteArray((ushort)ReceivePort, true));
+        }
+        SendUdpMessages(new() { message });
+    }
+
+    public void StartPinging(bool startImmediately = true)
+    {
+        if (startImmediately) { Ping(); }
+        PingTimer.Start();
+    }
+    public void StopPinging()
+    {
+        PingTimer.Stop();
     }
 }

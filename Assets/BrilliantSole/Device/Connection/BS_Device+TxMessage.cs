@@ -42,7 +42,7 @@ public partial class BS_Device
         byte pendingTxMessageIndex = 0;
         while (pendingTxMessageIndex < PendingTxMessages.Count)
         {
-            BS_TxMessage pendingTxMessage = PendingTxMessages[pendingTxMessageIndex];
+            var pendingTxMessage = PendingTxMessages[pendingTxMessageIndex];
             var pendingTxMessageLength = pendingTxMessage.Length();
             var pendingTxMessageType = BS_TxRxMessageUtils.EnumStrings[pendingTxMessage.Type];
             bool shouldAppendTxMessage = maxMessageLength == 0 || TxData.Count + pendingTxMessageLength <= maxMessageLength;

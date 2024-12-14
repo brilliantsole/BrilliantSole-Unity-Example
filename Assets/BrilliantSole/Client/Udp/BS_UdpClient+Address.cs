@@ -26,30 +26,30 @@ public partial class BS_UdpClient
     }
 
     [SerializeField]
-    private int _sendingPort = 3000;
-    public int SendingPort
+    private int _sendPort = 3000;
+    public int SendPort
     {
-        get => _sendingPort;
+        get => _sendPort;
         set
         {
-            if (value == _sendingPort)
+            if (value == _sendPort)
             {
-                Logger.Log($"redundant sendingPort address {value}");
+                Logger.Log($"redundant sendPort address {value}");
                 return;
             }
             if (ConnectionStatus != NotConnected)
             {
-                Logger.Log($"can only set sendingPort address when not connected");
+                Logger.Log($"can only set sendPort address when not connected");
                 return;
             }
-            _sendingPort = value;
-            Logger.Log($"updated SendingPort to {SendingPort}");
+            _sendPort = value;
+            Logger.Log($"updated SendPort to {SendPort}");
         }
     }
 
     [SerializeField]
     private int _listeningPort = 3001;
-    public int ListeningPort
+    public int ReceivePort
     {
         get => _listeningPort;
         set
@@ -65,7 +65,7 @@ public partial class BS_UdpClient
                 return;
             }
             _listeningPort = value;
-            Logger.Log($"updated ListeningPort to {ListeningPort}");
+            Logger.Log($"updated ListeningPort to {ReceivePort}");
         }
     }
 }

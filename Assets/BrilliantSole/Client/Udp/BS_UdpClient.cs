@@ -6,4 +6,10 @@ public partial class BS_UdpClient : BS_BaseClient<BS_UdpClient>
 
     private UdpClient UdpClient;
     private bool IsRunning = false;
+
+    protected override void Reset()
+    {
+        base.Reset();
+        DidSetRemoteReceivePort = false;
+    }
 }
