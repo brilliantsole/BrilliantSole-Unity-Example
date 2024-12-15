@@ -14,8 +14,7 @@ public partial class BS_BaseClient
         var connectedDeviceBluetoothIdsString = BS_StringUtils.GetString(data, true);
         Logger.Log($"connectedDeviceBluetoothIdsString: {connectedDeviceBluetoothIdsString}");
 
-        // FIX
-        var connectedDeviceBluetoothIds = JsonUtility.FromJson<BS_StringArrayJson>(connectedDeviceBluetoothIdsString).strings;
+        var connectedDeviceBluetoothIds = JsonUtility.FromJson<BS_ConnectedDevicesJson>(connectedDeviceBluetoothIdsString).connectedDevices;
         foreach (var connectedDeviceBluetoothId in connectedDeviceBluetoothIds)
         {
             Logger.Log($"connectedDeviceBluetoothId: {connectedDeviceBluetoothId}");
