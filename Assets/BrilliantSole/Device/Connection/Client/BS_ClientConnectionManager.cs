@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using static BS_ConnectionStatus;
 
 public class BS_ClientConnectionManager : BS_BaseConnectionManager
@@ -12,15 +13,13 @@ public class BS_ClientConnectionManager : BS_BaseConnectionManager
     {
         base.Connect(ref Continue);
         if (!Continue) { return; }
-        // FILL
-        // Client.SendConnectToDeviceMessage();
+        Client.SendConnectToDeviceMessage(bluetoothId);
     }
     protected override void Disconnect(ref bool Continue)
     {
         base.Disconnect(ref Continue);
         if (!Continue) { return; }
-        // FILL
-        // Client.SendDisconnectFromDeviceMessage();
+        Client.SendDisconnectFromDeviceMessage(bluetoothId);
     }
 
     public BS_BaseClient Client;
@@ -44,6 +43,62 @@ public class BS_ClientConnectionManager : BS_BaseConnectionManager
         }
     }
 
+    public override bool IsConnected => isConnected;
+
+    public override void SendTxData(List<byte> data)
+    {
+        base.SendTxData(data);
+        if (Client == null)
+        {
+            Logger.LogError("Client is not defined");
+            return;
+        }
+        Client.SendDeviceMessages(bluetoothId, new() { BS_ConnectionMessageUtils.CreateMessage(BS_MetaConnectionMessageType.Tx.ToString(), data) });
+        OnSendTxData?.Invoke(this);
+    }
+
+    public void OnDeviceEvent(byte deviceEventTypeByte, in byte[] deviceEventData)
+    {
+        if (deviceEventTypeByte >= BS_DeviceEventMessageUtils.EnumStrings.Count)
+        {
+            Logger.LogError($"invalid deviceEventTypeByte {deviceEventTypeByte}");
+            return;
+        }
+        var deviceEventType = BS_DeviceEventMessageUtils.EnumStrings[deviceEventTypeByte];
+        Logger.Log($"deviceEventType: {deviceEventType}");
+
+        if (deviceEventType == BS_ConnectionEventType.IsConnected.ToString())
+        {
+            var isConnected = deviceEventData[0] == 1;
+            Logger.Log($"Received IsConnected Message {isConnected}");
+            SetIsConnected(isConnected);
+        }
+        else
+        {
+            Logger.Log($"miscellaneous deviceEventType {deviceEventType}");
+            if (BS_TxRxMessageUtils.EnumStringMap.TryGetValue(deviceEventType, out byte txRxMessageType))
+            {
+                OnRxMessage?.Invoke(this, txRxMessageType, deviceEventData);
+                OnRxMessages?.Invoke(this);
+            }
+            else
+            {
+                Logger.LogError($"uncaught deviceEventType {deviceEventType}");
+            }
+        }
+    }
+
+    private static readonly string[] RequiredDeviceInformationMessageTypes = new[] {
+        BS_BatteryLevelMessageType.BatteryLevel.ToString(),
+
+        BS_DeviceInformationType.ManufacturerName.ToString(),
+        BS_DeviceInformationType.ModelNumber.ToString(),
+        BS_DeviceInformationType.SerialNumber.ToString(),
+        BS_DeviceInformationType.SoftwareRevision.ToString(),
+        BS_DeviceInformationType.HardwareRevision.ToString(),
+        BS_DeviceInformationType.FirmwareRevision.ToString(),
+    };
+    private static readonly List<BS_ConnectionMessage> RequiredDeviceInformationMessages = RequiredDeviceInformationMessageTypes.Select(messageType => BS_ConnectionMessageUtils.CreateMessage(messageType)).ToList();
     private void RequestDeviceInformation()
     {
         if (Client == null)
@@ -52,59 +107,6 @@ public class BS_ClientConnectionManager : BS_BaseConnectionManager
             return;
         }
         Logger.Log($"request device information");
-        // FILL
-        // Client.SendDeviceMessages();
-    }
-
-    public override bool IsConnected => isConnected;
-
-    public override void SendTxData(List<byte> Data)
-    {
-        base.SendTxData(Data);
-        if (Client == null)
-        {
-            Logger.LogError("Client is not defined");
-            return;
-        }
-        // FILL
-        // Client.SendDeviceMessages();
-        OnSendTxData?.Invoke(this);
-    }
-
-    public void OnDeviceEvent(byte deviceEventByte, in byte[] deviceEventData)
-    {
-        if (!Enum.IsDefined(typeof(BS_ServerMessageType), deviceEventByte))
-        {
-            Logger.LogError($"invalid deviceEventByte {deviceEventByte}");
-            return;
-        }
-        // FIX
-        // var serverMessageType = (BS_ServerMessageType)serverMessageTypeByte;
-        // Logger.Log($"serverMessageType: {serverMessageType}");
-
-        // switch (serverMessageType)
-        // {
-        //     case BS_ServerMessageType.IsScanningAvailable:
-        //         ParseIsScanningAvailable(messageData);
-        //         break;
-        //     case BS_ServerMessageType.IsScanning:
-        //         ParseIsScanning(messageData);
-        //         break;
-        //     case DiscoveredDevice:
-        //         ParseDiscoveredDevice(messageData);
-        //         break;
-        //     case ExpiredDiscoveredDevice:
-        //         ParseExpiredDiscoveredDevice(messageData);
-        //         break;
-        //     case ConnectedDevices:
-        //         ParseConnectedDevices(messageData);
-        //         break;
-        //     case DeviceMessage:
-        //         ParseDeviceMessage(messageData);
-        //         break;
-        //     default:
-        //         Logger.LogError($"Uncaught serverMessageType {serverMessageType}");
-        //         break;
-        // }
+        Client.SendDeviceMessages(bluetoothId, RequiredDeviceInformationMessages);
     }
 }

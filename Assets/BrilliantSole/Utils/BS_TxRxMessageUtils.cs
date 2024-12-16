@@ -1,16 +1,20 @@
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using Unity.VisualScripting;
 
 public static class BS_TxRxMessageUtils
 {
     private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_TxRxMessageUtils");
 
-    static public readonly string[] EnumStrings;
+    static public readonly ReadOnlyCollection<string> EnumStrings;
+    static public readonly ReadOnlyDictionary<string, byte> EnumStringMap;
     private static readonly byte maxTxRxMessageType;
     static BS_TxRxMessageUtils()
     {
         Logger.Log("static constructor");
 
         List<string> _enumStrings = new();
+        Dictionary<string, byte> _enumStringMap = new();
 
         byte offset = 0;
         BS_BatteryManager.InitTxRxEnum(ref offset, _enumStrings);
@@ -22,7 +26,10 @@ public static class BS_TxRxMessageUtils
         BS_FileTransferManager.InitTxRxEnum(ref offset, _enumStrings);
         maxTxRxMessageType = offset;
 
-        EnumStrings = _enumStrings.ToArray();
+        EnumStrings = new(_enumStrings);
+
+        for (byte i = 0; i < _enumStrings.Count; i++) { _enumStringMap[_enumStrings[i]] = i; }
+        EnumStringMap = new(_enumStringMap);
 
         RequiredTxRxMessageTypes = SetupRequiredTxRxMessageTypes();
         RequiredTxRxMessages = SetupRequiredTxRxMessages();
@@ -52,5 +59,4 @@ public static class BS_TxRxMessageUtils
         }
         return requiredTxMessages.ToArray();
     }
-
 }

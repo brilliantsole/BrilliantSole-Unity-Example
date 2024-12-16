@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Text;
 
 public static class BS_StringUtils
@@ -12,5 +13,13 @@ public static class BS_StringUtils
         var parsedString = Encoding.UTF8.GetString(data, offset, stringLength);
         Logger.Log($"parsed string: {parsedString}");
         return parsedString;
+    }
+
+    public static List<byte> ToBytes(string _string, bool includeLength = false)
+    {
+        List<byte> bytes = new();
+        if (includeLength) { bytes.Add((byte)_string.Length); }
+        bytes.AddRange(Encoding.UTF8.GetBytes(_string));
+        return bytes;
     }
 }

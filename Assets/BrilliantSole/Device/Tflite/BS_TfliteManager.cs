@@ -126,8 +126,8 @@ public class BS_TfliteManager : BS_BaseManager<BS_TfliteMessageType>
         }
         Logger.Log($"setting name to {newName}...");
 
-        List<byte> data = new(Encoding.UTF8.GetBytes(newName));
-        BS_TxMessage[] Messages = { CreateTxMessage(SetTfliteName, data) };
+        List<byte> data = new(BS_StringUtils.ToBytes(newName));
+        BS_TxMessage[] Messages = { CreateMessage(SetTfliteName, data) };
         SendTxMessages(Messages, sendImmediately);
     }
     // NAME END
@@ -163,7 +163,7 @@ public class BS_TfliteManager : BS_BaseManager<BS_TfliteMessageType>
         Logger.Log($"setting fileType to {newTask}...");
 
         List<byte> data = new() { (byte)newTask };
-        BS_TxMessage[] Messages = { CreateTxMessage(SetTfliteTask, data) };
+        BS_TxMessage[] Messages = { CreateMessage(SetTfliteTask, data) };
         SendTxMessages(Messages, sendImmediately);
     }
     // TASK END
@@ -201,7 +201,7 @@ public class BS_TfliteManager : BS_BaseManager<BS_TfliteMessageType>
         Logger.Log($"setting sensorRate to {newSensorRate}...");
 
         List<byte> data = new() { (byte)newSensorRate };
-        BS_TxMessage[] Messages = { CreateTxMessage(SetTfliteSensorRate, data) };
+        BS_TxMessage[] Messages = { CreateMessage(SetTfliteSensorRate, data) };
         SendTxMessages(Messages, sendImmediately);
     }
     // SENSOR RATE END
@@ -237,7 +237,7 @@ public class BS_TfliteManager : BS_BaseManager<BS_TfliteMessageType>
     {
         Logger.Log($"setting sensorTypes to {string.Join(", ", newSensorTypes)}...");
         List<byte> data = newSensorTypes.Select(e => (byte)e).ToList();
-        BS_TxMessage[] Messages = { CreateTxMessage(SetTfliteSensorTypes, data) };
+        BS_TxMessage[] Messages = { CreateMessage(SetTfliteSensorTypes, data) };
         SendTxMessages(Messages, sendImmediately);
     }
     // SENSOR TYPES END
@@ -296,7 +296,7 @@ public class BS_TfliteManager : BS_BaseManager<BS_TfliteMessageType>
         Logger.Log($"setting captureDelay to {newCaptureDelay}...");
 
         List<byte> data = BS_ByteUtils.ToByteArray(newCaptureDelay, true);
-        BS_TxMessage[] Messages = { CreateTxMessage(SetTfliteCaptureDelay, data) };
+        BS_TxMessage[] Messages = { CreateMessage(SetTfliteCaptureDelay, data) };
         SendTxMessages(Messages, sendImmediately);
     }
     // CAPTURE DELAY END
@@ -332,7 +332,7 @@ public class BS_TfliteManager : BS_BaseManager<BS_TfliteMessageType>
         Logger.Log($"setting threshold to {newThreshold}...");
 
         List<byte> data = BS_ByteUtils.ToByteArray(newThreshold, true);
-        BS_TxMessage[] Messages = { CreateTxMessage(SetTfliteThreshold, data) };
+        BS_TxMessage[] Messages = { CreateMessage(SetTfliteThreshold, data) };
         SendTxMessages(Messages, sendImmediately);
     }
     // THRESHOLD END
@@ -368,7 +368,7 @@ public class BS_TfliteManager : BS_BaseManager<BS_TfliteMessageType>
         Logger.Log($"setting inferencingEnabled to {newInferencingEnabled}...");
 
         List<byte> data = new() { (byte)(newInferencingEnabled ? 1 : 0) };
-        BS_TxMessage[] Messages = { CreateTxMessage(SetTfliteInferencingEnabled, data) };
+        BS_TxMessage[] Messages = { CreateMessage(SetTfliteInferencingEnabled, data) };
         SendTxMessages(Messages, sendImmediately);
     }
     public void ToggleInferencingEnabled() { SetInferencingEnabled(!InferencingEnabled); }

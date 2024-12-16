@@ -145,7 +145,7 @@ public class BS_FileTransferManager : BS_BaseManager<BS_FileTransferMessageType>
         Logger.Log($"setting fileType to {newFileType}...");
 
         List<byte> data = new() { (byte)newFileType };
-        BS_TxMessage[] Messages = { CreateTxMessage(BS_FileTransferMessageType.SetFileTransferType, data) };
+        BS_TxMessage[] Messages = { CreateMessage(BS_FileTransferMessageType.SetFileTransferType, data) };
         SendTxMessages(Messages, sendImmediately);
     }
     // FILE TRANSFER TYPE END
@@ -186,7 +186,7 @@ public class BS_FileTransferManager : BS_BaseManager<BS_FileTransferMessageType>
         }
         Logger.Log($"setting fileLength to {newFileLength}...");
 
-        BS_TxMessage[] Messages = { CreateTxMessage(BS_FileTransferMessageType.SetFileLength, BS_ByteUtils.ToByteArray(newFileLength, true)) };
+        BS_TxMessage[] Messages = { CreateMessage(BS_FileTransferMessageType.SetFileLength, BS_ByteUtils.ToByteArray(newFileLength, true)) };
         SendTxMessages(Messages, sendImmediately);
     }
     // FILE LENGTH END
@@ -221,7 +221,7 @@ public class BS_FileTransferManager : BS_BaseManager<BS_FileTransferMessageType>
         }
         Logger.Log($"setting fileChecksum to {newFileChecksum}...");
 
-        BS_TxMessage[] Messages = { CreateTxMessage(BS_FileTransferMessageType.SetFileChecksum, BS_ByteUtils.ToByteArray(newFileChecksum, true)) };
+        BS_TxMessage[] Messages = { CreateMessage(BS_FileTransferMessageType.SetFileChecksum, BS_ByteUtils.ToByteArray(newFileChecksum, true)) };
         SendTxMessages(Messages, sendImmediately);
     }
     private uint GetCrc32(IEnumerable<byte> bytes)
@@ -238,7 +238,7 @@ public class BS_FileTransferManager : BS_BaseManager<BS_FileTransferMessageType>
         Logger.Log($"setting fileTransferCommand {fileTransferCommand}...");
 
         List<byte> data = new() { (byte)fileTransferCommand };
-        BS_TxMessage[] Messages = { CreateTxMessage(BS_FileTransferMessageType.SetFileTransferCommand, data) };
+        BS_TxMessage[] Messages = { CreateMessage(BS_FileTransferMessageType.SetFileTransferCommand, data) };
         SendTxMessages(Messages, sendImmediately);
     }
     // FILE TRANSFER COMMAND END
@@ -341,7 +341,7 @@ public class BS_FileTransferManager : BS_BaseManager<BS_FileTransferMessageType>
         BytesTransferred += (ushort)fileBlockLength;
         Logger.Log($"BytesTransferred: {BytesTransferred}");
 
-        BS_TxMessage[] Messages = { CreateTxMessage(SetFileTransferBlock, FileBlockToSend) };
+        BS_TxMessage[] Messages = { CreateMessage(SetFileTransferBlock, FileBlockToSend) };
         SendTxMessages(Messages, sendImmediately);
     }
     public void CancelFileTransfer(bool sendImmediately = true)
@@ -398,7 +398,7 @@ public class BS_FileTransferManager : BS_BaseManager<BS_FileTransferMessageType>
         else
         {
             var messageData = BS_ByteUtils.ToByteArray(currentFileLength, true);
-            BS_TxMessage[] Messages = { CreateTxMessage(FileBytesTransferred, messageData) };
+            BS_TxMessage[] Messages = { CreateMessage(FileBytesTransferred, messageData) };
             SendTxMessages(Messages, false);
         }
     }

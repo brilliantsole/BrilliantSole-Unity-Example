@@ -77,6 +77,6 @@ public abstract class BS_BaseManager<TEnum> : BS_BaseManager where TEnum : Enum
         return byteArray;
     }
 
-    protected BS_TxMessage CreateTxMessage(TEnum enumValue, in List<byte> data) { return new(EnumToTxRx[enumValue], data); }
-    protected BS_TxMessage CreateTxMessage(TEnum enumValue) { return new(EnumToTxRx[enumValue]); }
+    protected BS_TxMessage CreateMessage(TEnum enumValue, in List<byte> data) { return new(EnumToTxRx[enumValue], data); }
+    protected BS_TxMessage CreateMessage(TEnum enumValue) { return new(EnumToTxRx[enumValue]); }
 }

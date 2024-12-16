@@ -1,6 +1,31 @@
+using System.Collections.Generic;
+
 public partial class BS_BaseClient
 {
-    // FILL
+    public void SendConnectToDeviceMessage(string bluetoothId, bool sendImmediately = true)
+    {
+        Logger.Log($"requesting connection to {bluetoothId}");
+        List<byte> serverMessage = new(BS_StringUtils.ToBytes(bluetoothId));
+        SendMessages(new() { new(BS_ServerMessageType.ConnectToDevice, serverMessage) }, sendImmediately);
+    }
+    public void SendDisconnectFromDeviceMessage(string bluetoothId, bool sendImmediately = true)
+    {
+        Logger.Log($"requesting disconnection from {bluetoothId}");
+        List<byte> serverMessage = new(BS_StringUtils.ToBytes(bluetoothId));
+        SendMessages(new() { new(BS_ServerMessageType.DisconnectFromDevice, serverMessage) }, sendImmediately);
+    }
+    public void SendDeviceMessages(string bluetoothId, List<BS_ConnectionMessage> messages, bool sendImmediately = true)
+    {
+        Logger.Log($"sending {messages.Count} messages to {bluetoothId}");
+        List<byte> serverMessage = new();
+        serverMessage.AddRange(BS_StringUtils.ToBytes(bluetoothId, true));
+        for (int i = 0; i < messages.Count; i++)
+        {
+            Logger.Log($"Appending {messages[i].Type} ({messages[i].DataLength()} bytes) to message");
+            messages[i].AppendTo(serverMessage);
+        }
+        SendMessages(new() { new(BS_ServerMessageType.DeviceMessage, serverMessage) }, sendImmediately);
+    }
 
     private void ParseDeviceMessage(in byte[] data)
     {

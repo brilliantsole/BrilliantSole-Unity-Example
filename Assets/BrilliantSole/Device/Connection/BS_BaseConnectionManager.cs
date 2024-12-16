@@ -88,5 +88,5 @@ public abstract class BS_BaseConnectionManager
 
     private void OnParsedRxMessage(byte messageType, byte[] messageData) { OnRxMessage(this, messageType, messageData); }
 
-    public virtual void SendTxData(List<byte> Data) { Logger.Log($"Sending {Data.Count} bytes..."); }
+    public virtual void SendTxData(List<byte> data) { Logger.Log($"Sending {data.Count} bytes..."); }
 }

@@ -135,7 +135,7 @@ public class BS_SensorConfigurationManager : BS_BaseManager<BS_SensorConfigurati
 
         Logger.Log($"setting sensorConfiguration to {PrintSensorConfiguration(TempSensorConfiguration)}");
 
-        BS_TxMessage[] Messages = { CreateTxMessage(BS_SensorConfigurationMessageType.SetSensorConfiguration, GetSensorConfigurationArray(TempSensorConfiguration)) };
+        BS_TxMessage[] Messages = { CreateMessage(BS_SensorConfigurationMessageType.SetSensorConfiguration, GetSensorConfigurationArray(TempSensorConfiguration)) };
         SendTxMessages(Messages, sendImmediately);
     }
 

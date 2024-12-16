@@ -41,7 +41,7 @@ public class BS_VibrationManager : BS_BaseManager<BS_VibrationMessageType>
             Logger.Log("empty vibration TxData - not sending");
             return;
         }
-        BS_TxMessage[] Messages = { CreateTxMessage(BS_VibrationMessageType.TriggerVibration, TxData) };
+        BS_TxMessage[] Messages = { CreateMessage(BS_VibrationMessageType.TriggerVibration, TxData) };
         SendTxMessages?.Invoke(Messages, true);
     }
 }

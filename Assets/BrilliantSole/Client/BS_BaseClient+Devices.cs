@@ -20,7 +20,7 @@ public partial class BS_BaseClient
         {
             Logger.Log($"connectedDeviceBluetoothId: {connectedDeviceBluetoothId}");
             var device = CreateDevice(connectedDeviceBluetoothId);
-            // FILL - should set device's ConnectionStatus to "Connecting"?
+            // FILL - set device's ConnectionStatus to "Connecting"?
             if (device.ConnectionManager is BS_ClientConnectionManager connectionManager)
             {
                 connectionManager.SetIsConnected(true);
