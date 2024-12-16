@@ -1,5 +1,7 @@
 public partial class BS_BaseClient
 {
+    // FILL
+
     private void ParseDeviceMessage(in byte[] data)
     {
         Logger.Log($"parsing device message ({data.Length} bytes)...");
@@ -15,8 +17,7 @@ public partial class BS_BaseClient
             var messageData = BS_ParseUtils.GetSubarray(data, (ushort)offset, (ushort)messageDataLength);
 
             Logger.Log($"parsing {messageDataLength} bytes for device...");
-            var connectionManager = device.ConnectionManager as BS_ClientConnectionManager;
-            if (connectionManager != null)
+            if (device.ConnectionManager is BS_ClientConnectionManager connectionManager)
             {
                 BS_ParseUtils.ParseMessages(messageData, (deviceEventByte, deviceEventData) => connectionManager.OnDeviceEvent(deviceEventByte, deviceEventData));
             }

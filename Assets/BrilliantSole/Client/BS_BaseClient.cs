@@ -15,7 +15,14 @@ public abstract partial class BS_BaseClient
 
         foreach (var pair in _devices)
         {
-            // FILL - set device connectionManager as not connected
+            if (pair.Value.ConnectionManager is BS_ClientConnectionManager connectionManager)
+            {
+                connectionManager.SetIsConnected(false);
+            }
+            else
+            {
+                Logger.LogError("failed to cast ConnectionManager to BS_ClientConnectionManager");
+            }
         }
     }
 

@@ -20,8 +20,15 @@ public partial class BS_BaseClient
         {
             Logger.Log($"connectedDeviceBluetoothId: {connectedDeviceBluetoothId}");
             var device = CreateDevice(connectedDeviceBluetoothId);
-            // FILL - assign connectionManager to connected
-            // https://github.com/brilliantsole/Brilliant-Sole-Unreal/blob/c273625334a365a519b771b8fd2ea4b563514713/Plugins/BrilliantSoleSDK/Source/BrilliantSoleSDK/Private/BS_BaseClient.cpp#L418
+            // FILL - should set device's ConnectionStatus to "Connecting"?
+            if (device.ConnectionManager is BS_ClientConnectionManager connectionManager)
+            {
+                connectionManager.SetIsConnected(true);
+            }
+            else
+            {
+                Logger.LogError("failed to cast ConnectionManager to BS_ClientConnectionManager");
+            }
         }
     }
 }
