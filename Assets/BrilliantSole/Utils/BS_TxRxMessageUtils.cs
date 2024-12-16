@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Unity.VisualScripting;
 
 public static class BS_TxRxMessageUtils
 {
@@ -9,7 +8,7 @@ public static class BS_TxRxMessageUtils
     private static readonly byte maxTxRxMessageType;
     static BS_TxRxMessageUtils()
     {
-        Logger.Log("BS_TxRxMessageUtils static constructor");
+        Logger.Log("static constructor");
 
         List<string> _enumStrings = new();
 

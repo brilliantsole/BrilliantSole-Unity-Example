@@ -28,8 +28,12 @@ public partial class BS_BaseClient
             if (isConnected) { _devices[bluetoothId] = device; }
             else { _devices.Remove(bluetoothId); }
         };
-        // FILL - add connectionManager
-        // https://github.com/brilliantsole/Brilliant-Sole-Unreal/blob/c273625334a365a519b771b8fd2ea4b563514713/Plugins/BrilliantSoleSDK/Source/BrilliantSoleSDK/Private/BS_BaseClient.cpp#L352
+        var connectionManager = new BS_ClientConnectionManager
+        {
+            Client = this,
+            bluetoothId = bluetoothId
+        };
+        device.ConnectionManager = connectionManager;
     }
 
     private BS_Device? GetDeviceByDiscoveredDevice(BS_DiscoveredDevice discoveredDevice, bool CreateIfNotFound = false)

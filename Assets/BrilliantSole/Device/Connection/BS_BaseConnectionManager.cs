@@ -34,7 +34,7 @@ public abstract class BS_BaseConnectionManager
     public virtual string Name => null;
     public virtual BS_DeviceType? DeviceType => null;
 
-    public bool IsConnected => Status == Connected;
+    public virtual bool IsConnected => Status == Connected;
 
     public void Connect()
     {

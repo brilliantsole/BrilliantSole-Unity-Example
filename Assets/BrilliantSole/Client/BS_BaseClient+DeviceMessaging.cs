@@ -15,8 +15,15 @@ public partial class BS_BaseClient
             var messageData = BS_ParseUtils.GetSubarray(data, (ushort)offset, (ushort)messageDataLength);
 
             Logger.Log($"parsing {messageDataLength} bytes for device...");
-            // FILL - send data to connectionManager
-            // https://github.com/brilliantsole/Brilliant-Sole-Unreal/blob/c273625334a365a519b771b8fd2ea4b563514713/Plugins/BrilliantSoleSDK/Source/BrilliantSoleSDK/Private/BS_BaseClient.cpp#L485
+            var connectionManager = device.ConnectionManager as BS_ClientConnectionManager;
+            if (connectionManager != null)
+            {
+                BS_ParseUtils.ParseMessages(messageData, (deviceEventByte, deviceEventData) => connectionManager.OnDeviceEvent(deviceEventByte, deviceEventData));
+            }
+            else
+            {
+                Logger.LogError($"failed to cast connectionManager as BS_ClientConnectionManager");
+            }
         }
         else
         {

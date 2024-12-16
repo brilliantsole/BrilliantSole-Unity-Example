@@ -57,6 +57,9 @@ public class BS_DevicesScrollView : MonoBehaviour
         Debug.Log($"updating deviceType {device.DeviceType}");
         deviceTypeText.text = device.DeviceType.ToString();
 
+        device.OnBatteryLevel += OnDeviceBatteryLevel;
+        OnDeviceBatteryLevel(device, device.BatteryLevel);
+
         var toggleConnectionButton = item.transform.Find("ToggleConnection/Button").GetComponent<Button>();
         toggleConnectionButton.onClick.AddListener(() => { device.ToggleConnection(); });
         device.OnConnectionStatus += OnDeviceConnectionStatus;
@@ -141,7 +144,18 @@ public class BS_DevicesScrollView : MonoBehaviour
         device.OnTfliteInferencingEnabled -= OnDeviceTfliteInferencingEnabled;
         device.OnIsTfliteReady -= OnIsDeviceTfliteReady;
         device.OnTfliteClassification -= OnDeviceTfliteClassification;
+        device.OnBatteryLevel -= OnDeviceBatteryLevel;
         Destroy(item);
+    }
+
+    private void OnDeviceBatteryLevel(BS_Device device, byte batteryLevel)
+    {
+        GameObject item = GetItemByDevice(device);
+        if (item == null) { return; }
+
+        var batteryLevelText = item.transform.Find("BatteryLevel").GetComponent<TextMeshProUGUI>();
+        Debug.Log($"updating batteryLevel {device.BatteryLevel}");
+        batteryLevelText.text = $"Battery: {device.BatteryLevel}%";
     }
 
     private void OnDeviceFileTransferStatus(BS_Device device, BS_FileTransferStatus fileTransferStatus)
