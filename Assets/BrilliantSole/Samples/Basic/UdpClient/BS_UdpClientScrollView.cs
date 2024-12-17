@@ -48,9 +48,7 @@ public class BS_UdpClientScrollView : MonoBehaviour
             {
                 Debug.Log($"Toggling Connection to \"{DiscoveredDevice.Name}\"...");
 
-                // FIX
-                //var _device = ScannerManager.ToggleConnectionToDiscoveredDevice(DiscoveredDevice);
-                BS_Device _device = null;
+                var _device = UdpClientManager.ToggleConnectionToDiscoveredDevice(DiscoveredDevice);
                 if (device == null)
                 {
                     Debug.Log("first time connecting to device...");

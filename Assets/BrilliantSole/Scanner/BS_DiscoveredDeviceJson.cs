@@ -1,20 +1,17 @@
 using System;
-using System.Text;
 using UnityEngine;
 using static BS_DeviceType;
 
-#nullable enable
-
 [Serializable]
-public readonly struct BS_DiscoveredDeviceJson
+public struct BS_DiscoveredDeviceJson
 {
-    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_DiscoveredDeviceJson");
+    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_DiscoveredDeviceJson", BS_Logger.LogLevel.Log);
 
-    public readonly string bluetoothId;
-    public readonly string name;
-    public readonly int rssi;
-    public readonly string? deviceType;
-    public BS_DeviceType? DeviceType => deviceType switch
+    public string bluetoothId;
+    public string name;
+    public int rssi;
+    public string deviceType;
+    public readonly BS_DeviceType? DeviceType => deviceType switch
     {
         "leftInsole" => LeftInsole,
         "rightInsole" => RightInsole,
@@ -31,9 +28,23 @@ public readonly struct BS_DiscoveredDeviceJson
             Logger.LogError($"failed to parse json string");
             return null;
         }
-        Logger.Log($"parsing json string {jsonString}...");
-        var discoveredDeviceJson = JsonUtility.FromJson<BS_DiscoveredDeviceJson>(jsonString);
-        return discoveredDeviceJson;
+        Logger.Log($"parsing json string {jsonString}");
+        try
+        {
+            var discoveredDeviceJson = JsonUtility.FromJson<BS_DiscoveredDeviceJson>(jsonString);
+            Logger.Log($"successfully parsed discoveredDevice {discoveredDeviceJson}");
+            return discoveredDeviceJson;
+        }
+        catch (Exception e)
+        {
+            Logger.LogError($"JSON parsing failed: {e.Message}");
+            return null;
+        }
+    }
+
+    public override readonly string ToString()
+    {
+        return $"bluetoothId: {bluetoothId}, name: {name}, deviceType: {DeviceType}, rssi: {rssi}";
     }
 }
 

@@ -18,6 +18,9 @@ public abstract partial class BS_BaseClientManager<TClientManager, TClient> : BS
 
         Client.OnDiscoveredDevice += onDiscoveredDevice;
         Client.OnExpiredDevice += onExpiredDevice;
+
+        Client.OnScanStart += onScanStart;
+        Client.OnScanStop += onScanStop;
     }
 
     protected virtual void OnDisable()
@@ -30,5 +33,15 @@ public abstract partial class BS_BaseClientManager<TClientManager, TClient> : BS
 
         Client.OnDiscoveredDevice -= onDiscoveredDevice;
         Client.OnExpiredDevice -= onExpiredDevice;
+
+        Client.OnScanStart -= onScanStart;
+        Client.OnScanStop -= onScanStop;
+
+        if (IsScanning)
+        {
+            OnScanStop?.Invoke();
+            OnIsScanning?.Invoke(false);
+            Client.StopScan();
+        }
     }
 }

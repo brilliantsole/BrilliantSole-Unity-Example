@@ -37,6 +37,8 @@ public partial class BS_BaseClient
     [SerializeField]
     private bool _isScanning = false;
     public event Action<BS_BaseClient, bool> OnIsScanning;
+    public event Action<BS_BaseClient> OnScanStart;
+    public event Action<BS_BaseClient> OnScanStop;
     public bool IsScanning
     {
         get => _isScanning;
@@ -50,6 +52,14 @@ public partial class BS_BaseClient
             _isScanning = value;
             Logger.Log($"updated IsScanning to {IsScanning}");
             OnIsScanning?.Invoke(this, IsScanning);
+            if (IsScanning)
+            {
+                OnScanStart?.Invoke(this);
+            }
+            else
+            {
+                OnScanStop?.Invoke(this);
+            }
         }
     }
     private void ParseIsScanning(in byte[] data)

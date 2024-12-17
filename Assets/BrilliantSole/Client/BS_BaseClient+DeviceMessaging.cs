@@ -5,13 +5,13 @@ public partial class BS_BaseClient
     public void SendConnectToDeviceMessage(string bluetoothId, bool sendImmediately = true)
     {
         Logger.Log($"requesting connection to {bluetoothId}");
-        List<byte> serverMessage = new(BS_StringUtils.ToBytes(bluetoothId));
+        List<byte> serverMessage = new(BS_StringUtils.ToBytes(bluetoothId, true));
         SendMessages(new() { new(BS_ServerMessageType.ConnectToDevice, serverMessage) }, sendImmediately);
     }
     public void SendDisconnectFromDeviceMessage(string bluetoothId, bool sendImmediately = true)
     {
         Logger.Log($"requesting disconnection from {bluetoothId}");
-        List<byte> serverMessage = new(BS_StringUtils.ToBytes(bluetoothId));
+        List<byte> serverMessage = new(BS_StringUtils.ToBytes(bluetoothId, true));
         SendMessages(new() { new(BS_ServerMessageType.DisconnectFromDevice, serverMessage) }, sendImmediately);
     }
     public void SendDeviceMessages(string bluetoothId, List<BS_ConnectionMessage> messages, bool sendImmediately = true)
@@ -36,7 +36,7 @@ public partial class BS_BaseClient
         offset += 1 + bluetoothId.Length;
 
         Logger.Log($"received device message from {bluetoothId}");
-        if (_devices.TryGetValue(bluetoothId, out BS_Device device))
+        if (_allDevices.TryGetValue(bluetoothId, out BS_Device device))
         {
             var messageDataLength = data.Length - offset;
             var messageData = BS_ParseUtils.GetSubarray(data, (ushort)offset, (ushort)messageDataLength);

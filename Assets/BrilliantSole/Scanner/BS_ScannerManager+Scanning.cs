@@ -3,8 +3,6 @@ using UnityEngine.Events;
 
 public partial class BS_ScannerManager : BS_SingletonMonoBehavior<BS_ScannerManager>
 {
-    [Serializable]
-    public class BoolUnityEvent : UnityEvent<bool> { }
     public BoolUnityEvent OnIsScanning;
 
     public UnityEvent OnScanStart;

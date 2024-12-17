@@ -1,6 +1,12 @@
+using System;
+using UnityEngine.Events;
+
 public partial class BS_ScannerManager : BS_SingletonMonoBehavior<BS_ScannerManager>
 {
     private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_ScannerManager");
+
+    [Serializable]
+    public class BoolUnityEvent : UnityEvent<bool> { }
 
     private static BS_BaseScanner Scanner => BS_BleScanner.Instance;
 
