@@ -5,5 +5,6 @@ public enum BS_DeviceInformationType
     SoftwareRevision,
     HardwareRevision,
     FirmwareRevision,
-    SerialNumber
+    PnpId,
+    SerialNumber,
 }

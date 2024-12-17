@@ -24,7 +24,7 @@ public partial class BS_UdpClient
         BS_UdpMessage message;
         if (DidSetRemoteReceivePort)
         {
-            Logger.Log("Pinging server");
+            //Logger.Log("Pinging server");
             message = PingMessage;
         }
         else

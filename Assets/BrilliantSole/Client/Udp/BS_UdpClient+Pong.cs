@@ -20,19 +20,19 @@ public partial class BS_UdpClient
     static private readonly BS_UdpMessage PongMessage = new(BS_UdpMessageType.Pong);
     private void Pong()
     {
-        Logger.Log("Ponging server...");
+        //Logger.Log("Ponging server...");
         SendUdpMessages(new() { PongMessage });
     }
 
     private void WaitForPong()
     {
-        Logger.Log("WaitForPong");
+        //Logger.Log("WaitForPong");
         PongTimer.Start();
     }
 
     private void StopWaitingForPong()
     {
-        Logger.Log("StopWaitingForPong");
+        //Logger.Log("StopWaitingForPong");
         PongTimer.Stop();
     }
 

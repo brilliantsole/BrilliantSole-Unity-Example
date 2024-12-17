@@ -14,7 +14,6 @@ public static class BS_DeviceEventMessageUtils
         Logger.Log("static constructor");
 
         List<string> _enumStrings = new();
-        Dictionary<string, byte> _enumStringMap = new();
 
         byte offset = 0;
         AppendEnum<BS_ConnectionMessageType>(ref offset, _enumStrings);
@@ -22,6 +21,7 @@ public static class BS_DeviceEventMessageUtils
         AppendEnum<BS_ConnectionEventType>(ref offset, _enumStrings);
         AppendEnum<BS_MetaConnectionMessageType>(ref offset, _enumStrings);
         AppendEnum<BS_BatteryLevelMessageType>(ref offset, _enumStrings);
+        AppendEnum<BS_BatteryMessageType>(ref offset, _enumStrings);
         AppendEnum<BS_InformationMessageType>(ref offset, _enumStrings);
         AppendEnum<BS_DeviceInformationType>(ref offset, _enumStrings);
         AppendEnum<BS_DeviceInformationEventType>(ref offset, _enumStrings);
@@ -37,9 +37,7 @@ public static class BS_DeviceEventMessageUtils
         maxDeviceEventMessageType = offset;
 
         EnumStrings = new(_enumStrings);
-
-        for (byte i = 0; i < _enumStrings.Count; i++) { _enumStringMap[_enumStrings[i]] = i; }
-        EnumStringMap = new(_enumStringMap);
+        EnumStringMap = new(stringToByte);
     }
 
     private static void AppendEnum<TEnum>(ref byte offset, List<string> enumStrings) where TEnum : Enum
@@ -52,6 +50,7 @@ public static class BS_DeviceEventMessageUtils
     {
         foreach (var name in names)
         {
+            Logger.Log($"#{offset}: {name}");
             enumStrings.Add(name);
             stringToByte[name] = offset;
             offset++;

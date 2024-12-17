@@ -88,6 +88,8 @@ public partial class BS_Device
     }
     public bool IsConnected => ConnectionStatus == Connected;
 
+    public void _SetConnectionStatus(BS_ConnectionStatus connectionStatus) { ConnectionStatus = connectionStatus; }
+
     public void Connect() { ConnectionManager?.Connect(); }
     public void Disconnect() { ConnectionManager?.Disconnect(); }
     public void ToggleConnection()

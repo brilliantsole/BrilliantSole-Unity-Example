@@ -1,11 +1,11 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using static BS_ConnectionStatus;
+using static BS_DeviceInformationType;
 
 public class BS_ClientConnectionManager : BS_BaseConnectionManager
 {
-    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_ClientConnectionManager");
+    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_ClientConnectionManager", BS_Logger.LogLevel.Log);
 
     public override BS_ConnectionType Type => BS_ConnectionType.Udp;
 
@@ -65,13 +65,48 @@ public class BS_ClientConnectionManager : BS_BaseConnectionManager
             return;
         }
         var deviceEventType = BS_DeviceEventMessageUtils.EnumStrings[deviceEventTypeByte];
-        Logger.Log($"deviceEventType: {deviceEventType}");
+        Logger.Log($"deviceEventType {deviceEventTypeByte}: {deviceEventType} ({deviceEventData.Length} bytes)");
 
         if (deviceEventType == BS_ConnectionEventType.IsConnected.ToString())
         {
             var isConnected = deviceEventData[0] == 1;
-            Logger.Log($"Received IsConnected Message {isConnected}");
+            Logger.Log($"Received IsConnected message {isConnected}");
             SetIsConnected(isConnected);
+        }
+        else if (deviceEventType == BS_MetaConnectionMessageType.Rx.ToString())
+        {
+            Logger.Log("received RX message");
+            ParseRxData(deviceEventData);
+        }
+        else if (deviceEventType == BS_BatteryLevelMessageType.BatteryLevel.ToString())
+        {
+            Logger.Log("Received Battery Level message");
+            var batteryLevel = deviceEventData[0];
+            OnBatteryLevel?.Invoke(this, batteryLevel);
+        }
+        else if (deviceEventType == ManufacturerName.ToString())
+        {
+            OnDeviceInformationValue?.Invoke(this, ManufacturerName, deviceEventData);
+        }
+        else if (deviceEventType == ModelNumber.ToString())
+        {
+            OnDeviceInformationValue?.Invoke(this, ModelNumber, deviceEventData);
+        }
+        else if (deviceEventType == SoftwareRevision.ToString())
+        {
+            OnDeviceInformationValue?.Invoke(this, SoftwareRevision, deviceEventData);
+        }
+        else if (deviceEventType == HardwareRevision.ToString())
+        {
+            OnDeviceInformationValue?.Invoke(this, HardwareRevision, deviceEventData);
+        }
+        else if (deviceEventType == FirmwareRevision.ToString())
+        {
+            OnDeviceInformationValue?.Invoke(this, FirmwareRevision, deviceEventData);
+        }
+        else if (deviceEventType == SerialNumber.ToString())
+        {
+            OnDeviceInformationValue?.Invoke(this, SerialNumber, deviceEventData);
         }
         else
         {
@@ -91,12 +126,12 @@ public class BS_ClientConnectionManager : BS_BaseConnectionManager
     private static readonly string[] RequiredDeviceInformationMessageTypes = new[] {
         BS_BatteryLevelMessageType.BatteryLevel.ToString(),
 
-        BS_DeviceInformationType.ManufacturerName.ToString(),
-        BS_DeviceInformationType.ModelNumber.ToString(),
-        BS_DeviceInformationType.SerialNumber.ToString(),
-        BS_DeviceInformationType.SoftwareRevision.ToString(),
-        BS_DeviceInformationType.HardwareRevision.ToString(),
-        BS_DeviceInformationType.FirmwareRevision.ToString(),
+        ManufacturerName.ToString(),
+        ModelNumber.ToString(),
+        SerialNumber.ToString(),
+        SoftwareRevision.ToString(),
+        HardwareRevision.ToString(),
+        FirmwareRevision.ToString(),
     };
     private static readonly List<BS_ConnectionMessage> RequiredDeviceInformationMessages = RequiredDeviceInformationMessageTypes.Select(messageType => BS_ConnectionMessageUtils.CreateMessage(messageType)).ToList();
     private void RequestDeviceInformation()
@@ -106,7 +141,7 @@ public class BS_ClientConnectionManager : BS_BaseConnectionManager
             Logger.LogError("Client is not defined");
             return;
         }
-        Logger.Log($"request device information");
+        Logger.Log("request device information");
         Client.SendDeviceMessages(bluetoothId, RequiredDeviceInformationMessages);
     }
 }

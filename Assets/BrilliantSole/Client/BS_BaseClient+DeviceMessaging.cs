@@ -21,7 +21,7 @@ public partial class BS_BaseClient
         serverMessage.AddRange(BS_StringUtils.ToBytes(bluetoothId, true));
         for (int i = 0; i < messages.Count; i++)
         {
-            Logger.Log($"Appending {messages[i].Type} ({messages[i].DataLength()} bytes) to message");
+            Logger.Log($"Appending connectionMessageType {messages[i].Type} ({messages[i].DataLength()} bytes) to message");
             messages[i].AppendTo(serverMessage);
         }
         SendMessages(new() { new(BS_ServerMessageType.DeviceMessage, serverMessage) }, sendImmediately);

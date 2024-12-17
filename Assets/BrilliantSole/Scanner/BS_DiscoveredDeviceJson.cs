@@ -5,7 +5,7 @@ using static BS_DeviceType;
 [Serializable]
 public struct BS_DiscoveredDeviceJson
 {
-    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_DiscoveredDeviceJson", BS_Logger.LogLevel.Log);
+    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_DiscoveredDeviceJson");
 
     public string bluetoothId;
     public string name;

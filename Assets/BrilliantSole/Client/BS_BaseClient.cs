@@ -7,8 +7,8 @@ public abstract partial class BS_BaseClient
     {
         Logger.Log("Resetting");
 
-        _isScanning = false;
-        _isScanningAvailable = false;
+        IsScanning = false;
+        IsScanningAvailable = false;
 
         _discoveredDevices.Clear();
         //_devices.Clear();

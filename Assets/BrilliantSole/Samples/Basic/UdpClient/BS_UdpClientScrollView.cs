@@ -14,13 +14,11 @@ public class BS_UdpClientScrollView : MonoBehaviour
     private void OnEnable()
     {
         foreach (var DiscoveredDevice in UdpClientManager.DiscoveredDevices.Values) { OnDiscoveredDevice(DiscoveredDevice); }
-        // FILL - add listeners
     }
     private void OnDisable()
     {
         if (!gameObject.scene.isLoaded) return;
         foreach (var DiscoveredDevice in UdpClientManager.DiscoveredDevices.Values) { OnExpiredDevice(DiscoveredDevice); }
-        // FILL - remove listeners
     }
 
     public void OnDiscoveredDevice(BS_DiscoveredDevice DiscoveredDevice)
@@ -43,7 +41,17 @@ public class BS_UdpClientScrollView : MonoBehaviour
             var toggleConnectionButton = item.transform.Find("ToggleConnection/Button").GetComponent<Button>();
             var toggleConnectionButtonText = toggleConnectionButton.transform.GetComponentInChildren<TextMeshProUGUI>();
             BS_Device device = null;
-            // FILL - check if UdpClientManager already has it
+            if (UdpClientManager.Devices.ContainsKey(DiscoveredDevice.Id))
+            {
+                toggleConnectionButtonText.text = UdpClientManager.Devices[DiscoveredDevice.Id].ConnectionStatus switch
+                {
+                    NotConnected => "Connect",
+                    Connecting => "Connecting",
+                    Connected => "Disconnect",
+                    Disconnecting => "Disconnecting",
+                    _ => throw new System.NotImplementedException()
+                };
+            }
             toggleConnectionButton.onClick.AddListener(() =>
             {
                 Debug.Log($"Toggling Connection to \"{DiscoveredDevice.Name}\"...");

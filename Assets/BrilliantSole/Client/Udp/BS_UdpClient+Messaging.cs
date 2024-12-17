@@ -121,7 +121,7 @@ public partial class BS_UdpClient
     {
         if (PendingUdpMessages.Count == 0)
         {
-            Logger.Log("PendingUdpMessages is empty");
+            //Logger.Log("PendingUdpMessages is empty");
             return;
         }
         IsSendingUdpData = true;
