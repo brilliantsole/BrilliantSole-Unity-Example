@@ -11,7 +11,6 @@ public partial class BS_BaseClient
     {
         Logger.Log($"parsing connected devices ({data.Length} bytes...)");
 
-
         var connectedDeviceBluetoothIdsString = BS_StringUtils.GetString(data, true);
         Logger.Log($"connectedDeviceBluetoothIdsString: {connectedDeviceBluetoothIdsString}");
 

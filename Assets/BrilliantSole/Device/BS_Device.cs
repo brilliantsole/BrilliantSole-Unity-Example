@@ -9,7 +9,7 @@ public partial class BS_Device
         ResetRxMessaging();
         DeviceInformation.Clear();
         ResetManagers();
-        _connectionStatus = BS_ConnectionStatus.NotConnected;
+        ConnectionStatus = BS_ConnectionStatus.NotConnected;
     }
 
     public BS_Device()

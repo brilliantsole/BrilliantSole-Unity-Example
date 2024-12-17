@@ -7,7 +7,13 @@ public partial class BS_BaseClient
 {
     private BS_Device CreateDevice(string bluetoothId)
     {
-        BS_Device device = new();
+        var device = GetDeviceByBluetoothId(bluetoothId);
+        if (device != null)
+        {
+            Logger.Log($"already created device for {bluetoothId}");
+            return device;
+        }
+        device = new();
         Logger.Log($"creating device for bluetoothId {bluetoothId}...");
         SetupDevice(device, bluetoothId);
         return device;
@@ -55,6 +61,19 @@ public partial class BS_BaseClient
             }
         }
         return _allDevices[discoveredDevice.Id];
+    }
+    private BS_Device? GetDeviceByBluetoothId(string bluetoothId)
+    {
+        BS_Device? foundDevice = null;
+        foreach (var pair in _allDevices)
+        {
+            if (pair.Key == bluetoothId)
+            {
+                foundDevice = pair.Value;
+                break;
+            }
+        }
+        return foundDevice;
     }
 
     public BS_Device ConnectToDiscoveredDevice(BS_DiscoveredDevice discoveredDevice)
