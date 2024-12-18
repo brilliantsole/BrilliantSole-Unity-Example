@@ -7,16 +7,16 @@ public abstract partial class BS_BaseClientManager<TClientManager, TClient> : BS
     public bool IsScanning => Client.IsScanning;
 
     [field: SerializeField]
-    public ScannerBoolUnityEvent OnIsScanning { get; private set; } = new();
+    public ScannerManagerBoolUnityEvent OnIsScanning { get; private set; } = new();
 
     [field: SerializeField]
-    public ScannerUnityEvent OnScanStart { get; private set; } = new();
+    public ScannerManagerUnityEvent OnScanStart { get; private set; } = new();
     [field: SerializeField]
-    public ScannerUnityEvent OnScanStop { get; private set; } = new();
+    public ScannerManagerUnityEvent OnScanStop { get; private set; } = new();
 
-    private void onIsScanning(IBS_Scanner scanner, bool isScanning) { OnIsScanning?.Invoke(scanner, isScanning); }
-    private void onScanStart(IBS_Scanner scanner) { OnScanStart?.Invoke(scanner); }
-    private void onScanStop(IBS_Scanner scanner) { OnScanStop?.Invoke(scanner); }
+    private void onIsScanning(IBS_Scanner scanner, bool isScanning) { OnIsScanning?.Invoke(this, isScanning); }
+    private void onScanStart(IBS_Scanner scanner) { OnScanStart?.Invoke(this); }
+    private void onScanStop(IBS_Scanner scanner) { OnScanStop?.Invoke(this); }
 
     public void StartScan() { Client.StartScan(); }
     public void StopScan() { Client.StopScan(); }
@@ -25,15 +25,15 @@ public abstract partial class BS_BaseClientManager<TClientManager, TClient> : BS
     public bool IsScanningAvailable => Client.IsScanningAvailable;
 
     [field: SerializeField]
-    public ScannerBoolUnityEvent OnIsScanningAvailable { get; private set; } = new();
+    public ScannerManagerBoolUnityEvent OnIsScanningAvailable { get; private set; } = new();
 
     [field: SerializeField]
-    public ScannerUnityEvent OnScanningIsAvailable { get; private set; } = new();
+    public ScannerManagerUnityEvent OnScanningIsAvailable { get; private set; } = new();
     [field: SerializeField]
-    public ScannerUnityEvent OnScanningIsUnavailable { get; private set; } = new();
+    public ScannerManagerUnityEvent OnScanningIsUnavailable { get; private set; } = new();
 
-    private void onIsScanningAvailable(IBS_Scanner scanner, bool isScanningAvailable) { OnIsScanningAvailable?.Invoke(scanner, isScanningAvailable); }
-    private void onScanningIsAvailable(IBS_Scanner scanner) { OnScanningIsAvailable?.Invoke(scanner); }
-    private void onScanningIsUnavailable(IBS_Scanner scanner) { OnScanningIsUnavailable?.Invoke(scanner); }
+    private void onIsScanningAvailable(IBS_Scanner scanner, bool isScanningAvailable) { OnIsScanningAvailable?.Invoke(this, isScanningAvailable); }
+    private void onScanningIsAvailable(IBS_Scanner scanner) { OnScanningIsAvailable?.Invoke(this); }
+    private void onScanningIsUnavailable(IBS_Scanner scanner) { OnScanningIsUnavailable?.Invoke(this); }
 
 }

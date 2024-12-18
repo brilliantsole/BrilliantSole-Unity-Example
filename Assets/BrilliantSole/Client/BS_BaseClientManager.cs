@@ -37,8 +37,8 @@ public abstract partial class BS_BaseClientManager<TClientManager, TClient> : BS
         Client.OnScanStop -= onScanStop;
         if (IsScanning)
         {
-            OnScanStop?.Invoke(Scanner);
-            OnIsScanning?.Invoke(Scanner, false);
+            OnScanStop?.Invoke(this);
+            OnIsScanning?.Invoke(this, false);
             Client.StopScan();
         }
 
@@ -48,8 +48,8 @@ public abstract partial class BS_BaseClientManager<TClientManager, TClient> : BS
 
         if (IsScanningAvailable)
         {
-            OnScanningIsUnavailable?.Invoke(Scanner);
-            OnIsScanningAvailable?.Invoke(Scanner, false);
+            OnScanningIsUnavailable?.Invoke(this);
+            OnIsScanningAvailable?.Invoke(this, false);
         }
 
         Client.OnDiscoveredDevice -= onDiscoveredDevice;

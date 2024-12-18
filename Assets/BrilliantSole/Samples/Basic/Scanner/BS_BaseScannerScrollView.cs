@@ -36,16 +36,14 @@ public abstract class BS_BaseScannerScrollView : MonoBehaviour
         //foreach (var DiscoveredDevice in ScannerManager.DiscoveredDevices.Values) { OnExpiredDevice(DiscoveredDevice); }
     }
 
-    private void OnIsScanningAvailable(IBS_Scanner scanner, bool IsScanningAvailable)
+    private void OnIsScanningAvailable(IBS_ScannerManager scannerManager, bool IsScanningAvailable)
     {
         ToggleScanButton.interactable = IsScanningAvailable;
     }
-    private void OnIsScanning(IBS_Scanner scanner, bool isScanning)
+    private void OnIsScanning(IBS_ScannerManager scannerManager, bool isScanning)
     {
         var toggleScanButtonText = ToggleScanButton.transform.GetComponentInChildren<TextMeshProUGUI>();
         toggleScanButtonText.text = isScanning ? "Stop Scan" : "Start Scan";
-        Debug.Log($"fuck {isScanning}");
-
         if (isScanning)
         {
             Clear();

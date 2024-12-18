@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using UnityEngine.Events;
 
 [Serializable]
-public class ScannerUnityEvent : UnityEvent<IBS_Scanner> { }
+public class ScannerManagerUnityEvent : UnityEvent<IBS_ScannerManager> { }
 [Serializable]
-public class ScannerBoolUnityEvent : UnityEvent<IBS_Scanner, bool> { }
+public class ScannerManagerBoolUnityEvent : UnityEvent<IBS_ScannerManager, bool> { }
 [Serializable]
 public class DiscoveredDeviceUnityEvent : UnityEvent<BS_DiscoveredDevice> { }
 
@@ -16,17 +16,17 @@ public interface IBS_ScannerManager
     bool IsScanning { get; }
     bool IsScanningAvailable { get; }
 
-    ScannerBoolUnityEvent OnIsScanning { get; }
-    ScannerUnityEvent OnScanStart { get; }
-    ScannerUnityEvent OnScanStop { get; }
+    ScannerManagerBoolUnityEvent OnIsScanning { get; }
+    ScannerManagerUnityEvent OnScanStart { get; }
+    ScannerManagerUnityEvent OnScanStop { get; }
 
     void StartScan();
     void StopScan();
     void ToggleScan();
 
-    ScannerBoolUnityEvent OnIsScanningAvailable { get; }
-    ScannerUnityEvent OnScanningIsAvailable { get; }
-    ScannerUnityEvent OnScanningIsUnavailable { get; }
+    ScannerManagerBoolUnityEvent OnIsScanningAvailable { get; }
+    ScannerManagerUnityEvent OnScanningIsAvailable { get; }
+    ScannerManagerUnityEvent OnScanningIsUnavailable { get; }
 
     IReadOnlyDictionary<string, BS_DiscoveredDevice> DiscoveredDevices { get; }
 

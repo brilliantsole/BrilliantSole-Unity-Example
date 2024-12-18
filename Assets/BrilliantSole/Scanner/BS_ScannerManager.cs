@@ -27,8 +27,8 @@ public partial class BS_ScannerManager : BS_SingletonMonoBehavior<BS_ScannerMana
         Scanner.OnScanStop -= onScanStop;
         if (IsScanning)
         {
-            OnScanStop?.Invoke(Scanner);
-            OnIsScanning?.Invoke(Scanner, false);
+            OnScanStop?.Invoke(this);
+            OnIsScanning?.Invoke(this, false);
             Scanner.StopScan();
         }
 
@@ -38,8 +38,8 @@ public partial class BS_ScannerManager : BS_SingletonMonoBehavior<BS_ScannerMana
 
         if (IsScanningAvailable)
         {
-            OnScanningIsUnavailable?.Invoke(Scanner);
-            OnIsScanningAvailable?.Invoke(Scanner, false);
+            OnScanningIsUnavailable?.Invoke(this);
+            OnIsScanningAvailable?.Invoke(this, false);
         }
 
         Scanner.OnDiscoveredDevice -= onDiscoveredDevice;
