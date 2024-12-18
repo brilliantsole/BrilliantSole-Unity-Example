@@ -20,7 +20,9 @@ public partial class BS_UdpClient : BS_BaseClient<BS_UdpClient>
 
     public BS_UdpClient()
     {
+#if UNITY_EDITOR
         EditorApplication.playModeStateChanged += OnPlayModeStateChanged;
+#endif
     }
 
     public override void Update()
