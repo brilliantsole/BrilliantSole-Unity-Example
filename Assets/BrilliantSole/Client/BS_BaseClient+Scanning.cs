@@ -5,7 +5,9 @@ public partial class BS_BaseClient
 {
     [SerializeField]
     private bool _isScanningAvailable = false;
-    public event Action<BS_BaseClient, bool> OnIsScanningAvailable;
+    public event Action<IBS_Scanner, bool> OnIsScanningAvailable;
+    public event Action<IBS_Scanner> OnScanningIsAvailable;
+    public event Action<IBS_Scanner> OnScanningIsUnavailable;
     public bool IsScanningAvailable
     {
         get => _isScanningAvailable;
@@ -25,6 +27,15 @@ public partial class BS_BaseClient
                 Logger.Log("checking if is scanning...");
                 SendMessages(new() { new(BS_ServerMessageType.IsScanning) });
             }
+
+            if (IsScanningAvailable)
+            {
+                OnScanningIsAvailable?.Invoke(this);
+            }
+            else
+            {
+                OnScanningIsUnavailable?.Invoke(this);
+            }
         }
     }
     private void ParseIsScanningAvailable(in byte[] data)
@@ -36,9 +47,9 @@ public partial class BS_BaseClient
 
     [SerializeField]
     private bool _isScanning = false;
-    public event Action<BS_BaseClient, bool> OnIsScanning;
-    public event Action<BS_BaseClient> OnScanStart;
-    public event Action<BS_BaseClient> OnScanStop;
+    public event Action<IBS_Scanner, bool> OnIsScanning;
+    public event Action<IBS_Scanner> OnScanStart;
+    public event Action<IBS_Scanner> OnScanStop;
     public bool IsScanning
     {
         get => _isScanning;
@@ -69,29 +80,31 @@ public partial class BS_BaseClient
         IsScanning = newIsScanning;
     }
 
-    public void StartScan()
+    public bool StartScan()
     {
         if (!IsScanningAvailable)
         {
             Logger.Log("scanning is not available");
-            return;
+            return false;
         }
         if (IsScanning)
         {
             Logger.Log("already scanning");
-            return;
+            return false;
         }
         _discoveredDevices.Clear();
         SendMessages(new() { new(BS_ServerMessageType.StartScan) });
+        return true;
     }
-    public void StopScan()
+    public bool StopScan()
     {
         if (!IsScanning)
         {
             Logger.Log("already not scanning");
-            return;
+            return false;
         }
         SendMessages(new() { new(BS_ServerMessageType.StopScan) });
+        return true;
     }
     public void ToggleScan() { if (IsScanning) { StopScan(); } else { StartScan(); } }
 }

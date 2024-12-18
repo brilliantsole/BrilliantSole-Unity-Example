@@ -11,10 +11,6 @@ public partial class BS_ScannerManager : BS_SingletonMonoBehavior<BS_ScannerMana
     public DiscoveredDeviceUnityEvent OnDiscoveredDevice;
     public DiscoveredDeviceUnityEvent OnExpiredDevice;
 
-    public BS_Device ConnectToDiscoveredDevice(BS_DiscoveredDevice DiscoveredDevice) { return Scanner.ConnectToDiscoveredDevice(DiscoveredDevice); }
-    public BS_Device DisconnectFromDiscoveredDevice(BS_DiscoveredDevice DiscoveredDevice) { return Scanner.DisconnectFromDiscoveredDevice(DiscoveredDevice); }
-    public BS_Device ToggleConnectionToDiscoveredDevice(BS_DiscoveredDevice DiscoveredDevice) { return Scanner.ToggleConnectionToDiscoveredDevice(DiscoveredDevice); }
-
     public IReadOnlyDictionary<string, BS_Device> Devices => Scanner.Devices;
 
     private void onDiscoveredDevice(BS_DiscoveredDevice DiscoveredDevice) { OnDiscoveredDevice?.Invoke(DiscoveredDevice); }

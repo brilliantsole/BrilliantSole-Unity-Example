@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -5,22 +6,26 @@ public abstract partial class BS_BaseClientManager<TClientManager, TClient> : BS
     where TClientManager : MonoBehaviour
     where TClient : BS_BaseClient
 {
-    public BoolUnityEvent OnIsScanning;
-    public BoolUnityEvent OnIsScanningAvailable;
+    [Serializable]
+    public class ScannerUnityEvent : UnityEvent<IBS_Scanner> { }
 
+    [Serializable]
+    public class ScannerBoolUnityEvent : UnityEvent<IBS_Scanner, bool> { }
 
+    public ScannerBoolUnityEvent OnIsScanning;
+    public ScannerBoolUnityEvent OnIsScanningAvailable;
 
-    public UnityEvent OnScanStart;
-    public UnityEvent OnScanStop;
+    public ScannerUnityEvent OnScanStart;
+    public ScannerUnityEvent OnScanStop;
 
-    private void onScanStart(BS_BaseClient client) { OnScanStart?.Invoke(); }
-    private void onScanStop(BS_BaseClient client) { OnScanStop?.Invoke(); }
+    private void onScanStart(IBS_Scanner scanner) { OnScanStart?.Invoke(scanner); }
+    private void onScanStop(IBS_Scanner scanner) { OnScanStop?.Invoke(scanner); }
 
     public bool IsScanning => Client.IsScanning;
     public bool IsScanningAvailable => Client.IsScanningAvailable;
 
-    private void onIsScanningAvailable(BS_BaseClient client, bool isScanningAvailable) { OnIsScanningAvailable?.Invoke(isScanningAvailable); }
-    private void onIsScanning(BS_BaseClient client, bool isScanning) { OnIsScanning?.Invoke(isScanning); }
+    private void onIsScanningAvailable(IBS_Scanner scanner, bool isScanningAvailable) { OnIsScanningAvailable?.Invoke(scanner, isScanningAvailable); }
+    private void onIsScanning(IBS_Scanner scanner, bool isScanning) { OnIsScanning?.Invoke(scanner, isScanning); }
 
     public void StartScan() { Client.StartScan(); }
     public void StopScan() { Client.StopScan(); }

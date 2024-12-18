@@ -1,14 +1,17 @@
 using System;
 using UnityEngine.Events;
 
-public partial class BS_ScannerManager : BS_SingletonMonoBehavior<BS_ScannerManager>
+public partial class BS_ScannerManager : BS_SingletonMonoBehavior<BS_ScannerManager>, IBS_ScannerManager
 {
     private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_ScannerManager");
 
     [Serializable]
-    public class BoolUnityEvent : UnityEvent<bool> { }
+    public class ScannerUnityEvent : UnityEvent<IBS_Scanner> { }
 
-    private static BS_BaseScanner Scanner => BS_BleScanner.Instance;
+    [Serializable]
+    public class ScannerBoolUnityEvent : UnityEvent<IBS_Scanner, bool> { }
+
+    public BS_BaseScanner Scanner => BS_BleScanner.Instance;
 
     public void Update() { Scanner.Update(); }
 
@@ -29,8 +32,8 @@ public partial class BS_ScannerManager : BS_SingletonMonoBehavior<BS_ScannerMana
         Scanner.OnScanStop -= onScanStop;
         if (IsScanning)
         {
-            OnScanStop?.Invoke();
-            OnIsScanning?.Invoke(false);
+            OnScanStop?.Invoke(Scanner);
+            OnIsScanning?.Invoke(Scanner, false);
             Scanner.StopScan();
         }
 

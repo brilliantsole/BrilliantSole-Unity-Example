@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-
 using static BS_ConnectionStatus;
 
 public class BS_BleScannerScrollView : MonoBehaviour
@@ -10,7 +9,6 @@ public class BS_BleScannerScrollView : MonoBehaviour
     public GameObject ItemPrefab;
     public Transform Content;
     private readonly Dictionary<string, GameObject> instantiatedItems = new();
-
     private BS_ScannerManager ScannerManager => BS_ScannerManager.Instance;
 
     private void OnEnable()
@@ -42,10 +40,10 @@ public class BS_BleScannerScrollView : MonoBehaviour
 
             var toggleConnectionButton = item.transform.Find("ToggleConnection/Button").GetComponent<Button>();
             var toggleConnectionButtonText = toggleConnectionButton.transform.GetComponentInChildren<TextMeshProUGUI>();
-            BS_Device device = null;
-            if (ScannerManager.Devices.ContainsKey(DiscoveredDevice.Id))
+            BS_Device device = DiscoveredDevice.Device;
+            if (device != null)
             {
-                toggleConnectionButtonText.text = ScannerManager.Devices[DiscoveredDevice.Id].ConnectionStatus switch
+                toggleConnectionButtonText.text = device.ConnectionStatus switch
                 {
                     NotConnected => "Connect",
                     Connecting => "Connecting",
@@ -58,7 +56,7 @@ public class BS_BleScannerScrollView : MonoBehaviour
             {
                 Debug.Log($"Toggling Connection to \"{DiscoveredDevice.Name}\"...");
 
-                var _device = ScannerManager.ToggleConnectionToDiscoveredDevice(DiscoveredDevice);
+                var _device = DiscoveredDevice.ToggleConnection();
                 if (device == null)
                 {
                     Debug.Log("first time connecting to device...");
@@ -94,7 +92,6 @@ public class BS_BleScannerScrollView : MonoBehaviour
         {
             deviceTypeText.text = "";
         }
-
     }
     public void OnExpiredDevice(BS_DiscoveredDevice DiscoveredDevice)
     {

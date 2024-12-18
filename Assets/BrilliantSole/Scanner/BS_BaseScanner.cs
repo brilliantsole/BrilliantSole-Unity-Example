@@ -4,7 +4,7 @@ using UnityEngine;
 
 #nullable enable
 
-public abstract class BS_BaseScanner
+public abstract class BS_BaseScanner : IBS_Scanner
 {
     private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_BaseScanner");
 
@@ -17,7 +17,7 @@ public abstract class BS_BaseScanner
         Logger.Log("DeInitializing...");
     }
 
-    public virtual bool IsAvailable
+    public virtual bool IsScanningAvailable
     {
         get
         {
@@ -25,9 +25,12 @@ public abstract class BS_BaseScanner
         }
     }
 
-    public event Action<bool>? OnIsScanning;
-    public event Action? OnScanStart;
-    public event Action? OnScanStop;
+    public event Action<IBS_Scanner, bool>? OnIsScanning;
+    public event Action<IBS_Scanner, bool>? OnIsScanningAvailable;
+    public event Action<IBS_Scanner>? OnScanningIsAvailable;
+    public event Action<IBS_Scanner>? OnScanningIsUnavailable;
+    public event Action<IBS_Scanner>? OnScanStart;
+    public event Action<IBS_Scanner>? OnScanStop;
 
     [SerializeField]
     private bool _isScanning;
@@ -39,14 +42,14 @@ public abstract class BS_BaseScanner
             if (_isScanning == value) { return; }
             Logger.Log($"Updating IsScanning to {value}");
             _isScanning = value;
-            OnIsScanning?.Invoke(IsScanning);
+            OnIsScanning?.Invoke(this, IsScanning);
             if (IsScanning)
             {
-                OnScanStart?.Invoke();
+                OnScanStart?.Invoke(this);
             }
             else
             {
-                OnScanStop?.Invoke();
+                OnScanStop?.Invoke(this);
             }
         }
     }
@@ -58,7 +61,7 @@ public abstract class BS_BaseScanner
             Logger.Log("Already scanning");
             return false;
         }
-        if (!IsAvailable)
+        if (!IsScanningAvailable)
         {
             Logger.LogError("Scanning is not available");
             return false;
@@ -203,5 +206,18 @@ public abstract class BS_BaseScanner
         BS_Device device = GetDeviceByDiscoveredDevice(discoveredDevice, true)!;
         device.ToggleConnection();
         return device;
+    }
+
+    public BS_BaseScanner()
+    {
+        OnIsScanningAvailable?.Invoke(this, IsScanningAvailable);
+        if (IsScanningAvailable)
+        {
+            OnScanningIsAvailable?.Invoke(this);
+        }
+        else
+        {
+            OnScanningIsUnavailable?.Invoke(this);
+        }
     }
 }

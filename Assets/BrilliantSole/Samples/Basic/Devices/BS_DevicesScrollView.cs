@@ -20,16 +20,14 @@ public class BS_DevicesScrollView : MonoBehaviour
     private void OnEnable()
     {
         foreach (var device in BS_DeviceManager.AvailableDevices) { OnDevice(device); }
-        BS_DeviceManager.OnAvailableDevice += OnAvailableDevice;
+        BS_DeviceManager.OnAvailableDevice += OnDevice;
     }
     private void OnDisable()
     {
         if (!gameObject.scene.isLoaded) return;
         foreach (var device in BS_DeviceManager.AvailableDevices) { RemoveDevice(device); }
-        BS_DeviceManager.OnAvailableDevice -= OnAvailableDevice;
+        BS_DeviceManager.OnAvailableDevice -= OnDevice;
     }
-
-    private void OnAvailableDevice(BS_Device device) { OnDevice(device); }
 
     public void OnDevice(BS_Device device)
     {

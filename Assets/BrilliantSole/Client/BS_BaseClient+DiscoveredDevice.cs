@@ -1,7 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
-using UnityEngine;
 
 public partial class BS_BaseClient
 {
@@ -50,7 +48,7 @@ public partial class BS_BaseClient
         }
         else
         {
-            AddDiscoveredDevice(new BS_DiscoveredDevice(discoveredDeviceJson));
+            AddDiscoveredDevice(new BS_DiscoveredDevice(this, discoveredDeviceJson));
         }
     }
 

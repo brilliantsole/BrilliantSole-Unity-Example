@@ -14,10 +14,6 @@ public abstract partial class BS_BaseClientManager<TClientManager, TClient> : BS
     public DiscoveredDeviceUnityEvent OnDiscoveredDevice;
     public DiscoveredDeviceUnityEvent OnExpiredDevice;
 
-    public BS_Device ConnectToDiscoveredDevice(BS_DiscoveredDevice DiscoveredDevice) { return Client.ConnectToDiscoveredDevice(DiscoveredDevice); }
-    public BS_Device DisconnectFromDiscoveredDevice(BS_DiscoveredDevice DiscoveredDevice) { return Client.DisconnectFromDiscoveredDevice(DiscoveredDevice); }
-    public BS_Device ToggleConnectionToDiscoveredDevice(BS_DiscoveredDevice DiscoveredDevice) { return Client.ToggleConnectionToDiscoveredDevice(DiscoveredDevice); }
-
     public IReadOnlyDictionary<string, BS_Device> Devices => Client.Devices;
 
     private void onDiscoveredDevice(BS_DiscoveredDevice DiscoveredDevice) { OnDiscoveredDevice?.Invoke(DiscoveredDevice); }

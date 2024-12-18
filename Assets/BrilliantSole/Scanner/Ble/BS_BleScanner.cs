@@ -6,7 +6,7 @@ public class BS_BleScanner : BS_BaseScanner<BS_BleScanner>
 {
     private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_BleScanner");
 
-    public override bool IsAvailable
+    public override bool IsScanningAvailable
     {
         get
         {
@@ -121,7 +121,7 @@ public class BS_BleScanner : BS_BaseScanner<BS_BleScanner>
         }
         else
         {
-            AddDiscoveredDevice(new BS_DiscoveredDevice(address, name, null, null));
+            AddDiscoveredDevice(new BS_DiscoveredDevice(this, address, name, null, null));
         }
     }
     private void OnDiscoveredBleDeviceData(string address, string name, int rssi, byte[] data)
@@ -142,7 +142,7 @@ public class BS_BleScanner : BS_BaseScanner<BS_BleScanner>
         }
         else
         {
-            AddDiscoveredDevice(new BS_DiscoveredDevice(address, name, deviceType, rssi));
+            AddDiscoveredDevice(new BS_DiscoveredDevice(this, address, name, deviceType, rssi));
         }
     }
 

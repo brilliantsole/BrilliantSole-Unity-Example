@@ -1,5 +1,3 @@
-using UnityEngine;
-
 public abstract class BS_BaseClient<T> : BS_BaseClient where T : BS_BaseClient<T>, new()
 {
     private static T _instance;

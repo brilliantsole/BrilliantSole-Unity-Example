@@ -1,6 +1,6 @@
-public abstract partial class BS_BaseClient
+public abstract partial class BS_BaseClient : IBS_Scanner
 {
-    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_BaseClient", BS_Logger.LogLevel.Log);
+    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_BaseClient");
 
     protected virtual void Reset()
     {

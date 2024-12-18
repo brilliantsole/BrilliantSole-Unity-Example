@@ -1,10 +1,9 @@
 using System;
-using System.Text;
-using UnityEngine;
+using UnityEditor.PackageManager;
 
 #nullable enable
 
-[System.Serializable]
+[Serializable]
 public class BS_DiscoveredDevice
 {
     private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_DiscoveredDevice");
@@ -16,8 +15,9 @@ public class BS_DiscoveredDevice
 
     private DateTime LastTimeUpdated;
 
-    public BS_DiscoveredDevice(string id, string name, BS_DeviceType? deviceType, int? rssi)
+    public BS_DiscoveredDevice(IBS_Scanner scanner, string id, string name, BS_DeviceType? deviceType, int? rssi)
     {
+        Scanner = scanner;
         Name = name;
         DeviceType = deviceType;
         Id = id;
@@ -26,7 +26,7 @@ public class BS_DiscoveredDevice
 
         Logger.Log($"Created \"{DeviceType}\" with name \"{Name}\", rssi {Rssi}, and id {Id}");
     }
-    public BS_DiscoveredDevice(BS_DiscoveredDeviceJson discoveredDeviceJson) : this(discoveredDeviceJson.bluetoothId, discoveredDeviceJson.name, discoveredDeviceJson.DeviceType, discoveredDeviceJson.rssi) { }
+    public BS_DiscoveredDevice(IBS_Scanner scanner, BS_DiscoveredDeviceJson discoveredDeviceJson) : this(scanner, discoveredDeviceJson.bluetoothId, discoveredDeviceJson.name, discoveredDeviceJson.DeviceType, discoveredDeviceJson.rssi) { }
 
     public void Update(string? name, BS_DeviceType? deviceType, int? rssi)
     {
@@ -47,19 +47,12 @@ public class BS_DiscoveredDevice
     }
     public void Update(BS_DiscoveredDeviceJson discoveredDeviceJson) { Update(discoveredDeviceJson.name, discoveredDeviceJson.DeviceType, discoveredDeviceJson.rssi); }
 
-    // public static BS_DiscoveredDevice? ParseJson(in byte[] data)
-    // {
-    //     var nullableDiscoveredDeviceJson = BS_DiscoveredDeviceJson.Parse(data);
-    //     if (nullableDiscoveredDeviceJson == null)
-    //     {
-    //         Logger.LogError("failed to parse discoveredDevice");
-    //         return null;
-    //     }
-
-    //     var discoveredDeviceJson = (BS_DiscoveredDeviceJson)nullableDiscoveredDeviceJson;
-    //     return new(discoveredDeviceJson.bluetoothId, discoveredDeviceJson.name, discoveredDeviceJson.DeviceType, discoveredDeviceJson.rssi);
-    // }
-
-
     public TimeSpan TimeSinceLastUpdate => DateTime.Now - LastTimeUpdated;
+
+    public readonly IBS_Scanner Scanner;
+    public BS_Device Connect() { return Scanner.ConnectToDiscoveredDevice(this); }
+    public BS_Device? Disconnect() { return Scanner.DisconnectFromDiscoveredDevice(this); }
+    public BS_Device? ToggleConnection() { return Scanner.ToggleConnectionToDiscoveredDevice(this); }
+
+    public BS_Device? Device => Scanner.Devices.ContainsKey(Id) ? Scanner.Devices[Id] : null;
 }

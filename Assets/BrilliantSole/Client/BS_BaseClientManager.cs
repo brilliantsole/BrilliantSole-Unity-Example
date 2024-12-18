@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public abstract partial class BS_BaseClientManager<TClientManager, TClient> : BS_SingletonMonoBehavior<TClientManager>
+public abstract partial class BS_BaseClientManager<TClientManager, TClient> : BS_SingletonMonoBehavior<TClientManager>, IBS_ScannerManager
     where TClientManager : MonoBehaviour
     where TClient : BS_BaseClient
 {
@@ -39,8 +39,8 @@ public abstract partial class BS_BaseClientManager<TClientManager, TClient> : BS
 
         if (IsScanning)
         {
-            OnScanStop?.Invoke();
-            OnIsScanning?.Invoke(false);
+            OnScanStop?.Invoke(Client);
+            OnIsScanning?.Invoke(Client, false);
             Client.StopScan();
         }
     }
