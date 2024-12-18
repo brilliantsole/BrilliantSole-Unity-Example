@@ -1,17 +1,8 @@
-using System;
-using UnityEngine.Events;
-
 public partial class BS_ScannerManager : BS_SingletonMonoBehavior<BS_ScannerManager>, IBS_ScannerManager
 {
     private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_ScannerManager");
 
-    [Serializable]
-    public class ScannerUnityEvent : UnityEvent<IBS_Scanner> { }
-
-    [Serializable]
-    public class ScannerBoolUnityEvent : UnityEvent<IBS_Scanner, bool> { }
-
-    public BS_BaseScanner Scanner => BS_BleScanner.Instance;
+    public IBS_Scanner Scanner => BS_BleScanner.Instance;
 
     public void Update() { Scanner.Update(); }
 
@@ -20,6 +11,10 @@ public partial class BS_ScannerManager : BS_SingletonMonoBehavior<BS_ScannerMana
         Scanner.OnIsScanning += onIsScanning;
         Scanner.OnScanStart += onScanStart;
         Scanner.OnScanStop += onScanStop;
+
+        Scanner.OnIsScanningAvailable += onIsScanningAvailable;
+        Scanner.OnScanningIsAvailable += onScanningIsAvailable;
+        Scanner.OnScanningIsUnavailable += onScanningIsUnavailable;
 
         Scanner.OnDiscoveredDevice += onDiscoveredDevice;
         Scanner.OnExpiredDevice += onExpiredDevice;
@@ -35,6 +30,16 @@ public partial class BS_ScannerManager : BS_SingletonMonoBehavior<BS_ScannerMana
             OnScanStop?.Invoke(Scanner);
             OnIsScanning?.Invoke(Scanner, false);
             Scanner.StopScan();
+        }
+
+        Scanner.OnIsScanningAvailable -= onIsScanningAvailable;
+        Scanner.OnScanningIsAvailable -= onScanningIsAvailable;
+        Scanner.OnScanningIsUnavailable -= onScanningIsUnavailable;
+
+        if (IsScanningAvailable)
+        {
+            OnScanningIsUnavailable?.Invoke(Scanner);
+            OnIsScanningAvailable?.Invoke(Scanner, false);
         }
 
         Scanner.OnDiscoveredDevice -= onDiscoveredDevice;

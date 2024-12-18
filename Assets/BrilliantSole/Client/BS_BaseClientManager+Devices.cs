@@ -9,10 +9,11 @@ public abstract partial class BS_BaseClientManager<TClientManager, TClient> : BS
 {
     public IReadOnlyDictionary<string, BS_DiscoveredDevice> DiscoveredDevices => Client.DiscoveredDevices;
 
-    [Serializable]
-    public class DiscoveredDeviceUnityEvent : UnityEvent<BS_DiscoveredDevice> { }
-    public DiscoveredDeviceUnityEvent OnDiscoveredDevice;
-    public DiscoveredDeviceUnityEvent OnExpiredDevice;
+    [field: SerializeField]
+    public DiscoveredDeviceUnityEvent OnDiscoveredDevice { get; private set; } = new();
+
+    [field: SerializeField]
+    public DiscoveredDeviceUnityEvent OnExpiredDevice { get; private set; } = new();
 
     public IReadOnlyDictionary<string, BS_Device> Devices => Client.Devices;
 

@@ -90,7 +90,6 @@ public class BS_DevicesScrollView : MonoBehaviour
 
         device.OnTfliteClassification += OnDeviceTfliteClassification;
     }
-
     private void OnDeviceConnectionStatus(BS_Device device, BS_ConnectionStatus connectionStatus)
     {
         UpdateToggleConnectionButton(device);
@@ -238,7 +237,6 @@ public class BS_DevicesScrollView : MonoBehaviour
         GameObject item = instantiatedItems[device.Id];
         return item;
     }
-
 
     public void Clear()
     {

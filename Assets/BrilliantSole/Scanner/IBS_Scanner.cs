@@ -29,7 +29,7 @@ public interface IBS_Scanner
         }
     }
 
-
+    void Update();
 
     IReadOnlyDictionary<string, BS_DiscoveredDevice> DiscoveredDevices { get; }
     IReadOnlyDictionary<string, BS_Device> Devices { get; }

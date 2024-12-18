@@ -12,9 +12,9 @@ public abstract partial class BS_BaseClient : IBS_Scanner
         _discoveredDevices.Clear();
         //_devices.Clear();
 
-        foreach (var pair in _devices)
+        foreach (var device in _devices.Values)
         {
-            if (pair.Value.ConnectionManager is BS_ClientConnectionManager connectionManager)
+            if (device.ConnectionManager is BS_ClientConnectionManager connectionManager)
             {
                 connectionManager.SetIsConnected(false);
             }

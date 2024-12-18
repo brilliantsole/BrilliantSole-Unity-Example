@@ -8,19 +8,23 @@ public abstract partial class BS_BaseClientManager<TClientManager, TClient> : BS
     protected virtual TClient Client => null;
     public void Update() { Client.Update(); }
 
+    public IBS_Scanner Scanner => Client;
+
     protected virtual void OnEnable()
     {
         Client.OnConnectionStatus += onConnectionStatus;
         Client.OnIsConnected += onIsConnected;
 
-        Client.OnIsScanningAvailable += onIsScanningAvailable;
         Client.OnIsScanning += onIsScanning;
+        Client.OnScanStart += onScanStart;
+        Client.OnScanStop += onScanStop;
+
+        Client.OnIsScanningAvailable += onIsScanningAvailable;
+        Client.OnScanningIsAvailable += onScanningIsAvailable;
+        Client.OnScanningIsUnavailable += onScanningIsUnavailable;
 
         Client.OnDiscoveredDevice += onDiscoveredDevice;
         Client.OnExpiredDevice += onExpiredDevice;
-
-        Client.OnScanStart += onScanStart;
-        Client.OnScanStop += onScanStop;
     }
 
     protected virtual void OnDisable()
@@ -28,20 +32,27 @@ public abstract partial class BS_BaseClientManager<TClientManager, TClient> : BS
         Client.OnConnectionStatus -= onConnectionStatus;
         Client.OnIsConnected -= onIsConnected;
 
-        Client.OnIsScanningAvailable -= onIsScanningAvailable;
         Client.OnIsScanning -= onIsScanning;
+        Client.OnScanStart -= onScanStart;
+        Client.OnScanStop -= onScanStop;
+        if (IsScanning)
+        {
+            OnScanStop?.Invoke(Scanner);
+            OnIsScanning?.Invoke(Scanner, false);
+            Client.StopScan();
+        }
+
+        Client.OnIsScanningAvailable -= onIsScanningAvailable;
+        Client.OnScanningIsAvailable -= onScanningIsAvailable;
+        Client.OnScanningIsUnavailable -= onScanningIsUnavailable;
+
+        if (IsScanningAvailable)
+        {
+            OnScanningIsUnavailable?.Invoke(Scanner);
+            OnIsScanningAvailable?.Invoke(Scanner, false);
+        }
 
         Client.OnDiscoveredDevice -= onDiscoveredDevice;
         Client.OnExpiredDevice -= onExpiredDevice;
-
-        Client.OnScanStart -= onScanStart;
-        Client.OnScanStop -= onScanStop;
-
-        if (IsScanning)
-        {
-            OnScanStop?.Invoke(Client);
-            OnIsScanning?.Invoke(Client, false);
-            Client.StopScan();
-        }
     }
 }

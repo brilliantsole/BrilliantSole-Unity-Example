@@ -2729,11 +2729,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 79e7bfd0031e04150a17f4b1c0317b74, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  OnDiscoveredDevice:
+  <OnDiscoveredDevice>k__BackingField:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1346735079}
-        m_TargetAssemblyTypeName: BS_ScannerScrollView, Assembly-CSharp
+        m_TargetAssemblyTypeName: BS_BleScannerScrollView, Assembly-CSharp
         m_MethodName: OnDiscoveredDevice
         m_Mode: 0
         m_Arguments:
@@ -2744,11 +2744,11 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  OnExpiredDevice:
+  <OnExpiredDevice>k__BackingField:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1346735079}
-        m_TargetAssemblyTypeName: BS_ScannerScrollView, Assembly-CSharp
+        m_TargetAssemblyTypeName: BS_BleScannerScrollView, Assembly-CSharp
         m_MethodName: OnExpiredDevice
         m_Mode: 0
         m_Arguments:
@@ -2759,10 +2759,10 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  OnIsScanning:
+  <OnIsScanning>k__BackingField:
     m_PersistentCalls:
       m_Calls: []
-  OnScanStart:
+  <OnScanStart>k__BackingField:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 567643137}
@@ -2778,7 +2778,7 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
       - m_Target: {fileID: 1346735079}
-        m_TargetAssemblyTypeName: BS_ScannerScrollView, Assembly-CSharp
+        m_TargetAssemblyTypeName: BS_BleScannerScrollView, Assembly-CSharp
         m_MethodName: Clear
         m_Mode: 1
         m_Arguments:
@@ -2789,7 +2789,7 @@ MonoBehaviour:
           m_StringArgument: Stop Scan
           m_BoolArgument: 0
         m_CallState: 2
-  OnScanStop:
+  <OnScanStop>k__BackingField:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 567643137}
@@ -2802,6 +2802,39 @@ MonoBehaviour:
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: Start Scan
+          m_BoolArgument: 0
+        m_CallState: 2
+  <OnIsScanningAvailable>k__BackingField:
+    m_PersistentCalls:
+      m_Calls: []
+  <OnScanningIsAvailable>k__BackingField:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1162491571}
+        m_TargetAssemblyTypeName: UnityEngine.UI.Selectable, UnityEngine.UI
+        m_MethodName: set_interactable
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+  <OnScanningIsUnavailable>k__BackingField:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1162491571}
+        m_TargetAssemblyTypeName: UnityEngine.UI.Selectable, UnityEngine.UI
+        m_MethodName: set_interactable
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &413817236
@@ -2841,6 +2874,18 @@ MonoBehaviour:
         m_TargetAssemblyTypeName: UnityEngine.UI.Selectable, UnityEngine.UI
         m_MethodName: set_interactable
         m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: Connect
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1932965731}
+        m_TargetAssemblyTypeName: BS_UdpClientScrollView, Assembly-CSharp
+        m_MethodName: Clear
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -2894,7 +2939,7 @@ MonoBehaviour:
           m_StringArgument: Disconnecting
           m_BoolArgument: 0
         m_CallState: 2
-  OnDiscoveredDevice:
+  <OnDiscoveredDevice>k__BackingField:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1932965731}
@@ -2909,7 +2954,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  OnExpiredDevice:
+  <OnExpiredDevice>k__BackingField:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1932965731}
@@ -2924,25 +2969,10 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  OnIsScanning:
+  <OnIsScanning>k__BackingField:
     m_PersistentCalls:
       m_Calls: []
-  OnIsScanningAvailable:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 443572938}
-        m_TargetAssemblyTypeName: UnityEngine.UI.Selectable, UnityEngine.UI
-        m_MethodName: set_interactable
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  OnScanStart:
+  <OnScanStart>k__BackingField:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1420202867}
@@ -2957,19 +2987,7 @@ MonoBehaviour:
           m_StringArgument: Stop Scan
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 1932965731}
-        m_TargetAssemblyTypeName: BS_UdpClientScrollView, Assembly-CSharp
-        m_MethodName: Clear
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: Stop Scan
-          m_BoolArgument: 0
-        m_CallState: 2
-  OnScanStop:
+  <OnScanStop>k__BackingField:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1420202867}
@@ -2982,6 +3000,39 @@ MonoBehaviour:
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: Start Scan
+          m_BoolArgument: 0
+        m_CallState: 2
+  <OnIsScanningAvailable>k__BackingField:
+    m_PersistentCalls:
+      m_Calls: []
+  <OnScanningIsAvailable>k__BackingField:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 443572938}
+        m_TargetAssemblyTypeName: UnityEngine.UI.Selectable, UnityEngine.UI
+        m_MethodName: set_interactable
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+  <OnScanningIsUnavailable>k__BackingField:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 443572938}
+        m_TargetAssemblyTypeName: UnityEngine.UI.Selectable, UnityEngine.UI
+        m_MethodName: set_interactable
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!1 &425435506
