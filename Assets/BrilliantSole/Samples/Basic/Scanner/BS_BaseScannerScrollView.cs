@@ -4,21 +4,52 @@ using UnityEngine;
 using UnityEngine.UI;
 using static BS_ConnectionStatus;
 
-public class BS_BleScannerScrollView : MonoBehaviour
+public abstract class BS_BaseScannerScrollView : MonoBehaviour
 {
     public GameObject ItemPrefab;
     public Transform Content;
     private readonly Dictionary<string, GameObject> instantiatedItems = new();
-    private BS_ScannerManager ScannerManager => BS_ScannerManager.Instance;
+    public Button ToggleScanButton;
+    protected abstract IBS_ScannerManager ScannerManager { get; }
 
     private void OnEnable()
     {
+        ToggleScanButton.onClick.AddListener(ScannerManager.ToggleScan);
+        ScannerManager.OnIsScanning.AddListener(OnIsScanning);
+        ScannerManager.OnIsScanningAvailable.AddListener(OnIsScanningAvailable);
+
+        ScannerManager.OnDiscoveredDevice.AddListener(OnDiscoveredDevice);
+        ScannerManager.OnExpiredDevice.AddListener(OnExpiredDevice);
+
         foreach (var DiscoveredDevice in ScannerManager.DiscoveredDevices.Values) { OnDiscoveredDevice(DiscoveredDevice); }
     }
     private void OnDisable()
     {
+        ToggleScanButton.onClick.RemoveListener(ScannerManager.ToggleScan);
+        ScannerManager.OnIsScanning.RemoveListener(OnIsScanning);
+        ScannerManager.OnIsScanningAvailable.RemoveListener(OnIsScanningAvailable);
+
+        ScannerManager.OnDiscoveredDevice.RemoveListener(OnDiscoveredDevice);
+        ScannerManager.OnExpiredDevice.RemoveListener(OnExpiredDevice);
+
         if (!gameObject.scene.isLoaded) return;
         //foreach (var DiscoveredDevice in ScannerManager.DiscoveredDevices.Values) { OnExpiredDevice(DiscoveredDevice); }
+    }
+
+    private void OnIsScanningAvailable(IBS_Scanner scanner, bool IsScanningAvailable)
+    {
+        ToggleScanButton.interactable = IsScanningAvailable;
+    }
+    private void OnIsScanning(IBS_Scanner scanner, bool isScanning)
+    {
+        var toggleScanButtonText = ToggleScanButton.transform.GetComponentInChildren<TextMeshProUGUI>();
+        toggleScanButtonText.text = isScanning ? "Stop Scan" : "Start Scan";
+        Debug.Log($"fuck {isScanning}");
+
+        if (isScanning)
+        {
+            Clear();
+        }
     }
 
     public void OnDiscoveredDevice(BS_DiscoveredDevice DiscoveredDevice)

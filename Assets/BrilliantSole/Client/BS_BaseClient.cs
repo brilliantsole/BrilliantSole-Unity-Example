@@ -1,3 +1,5 @@
+using System.Linq;
+
 public abstract partial class BS_BaseClient : IBS_Scanner
 {
     private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_BaseClient");
@@ -12,7 +14,7 @@ public abstract partial class BS_BaseClient : IBS_Scanner
         _discoveredDevices.Clear();
         //_devices.Clear();
 
-        foreach (var device in _devices.Values)
+        foreach (var device in _devices.Values.ToList())
         {
             if (device.ConnectionManager is BS_ClientConnectionManager connectionManager)
             {
