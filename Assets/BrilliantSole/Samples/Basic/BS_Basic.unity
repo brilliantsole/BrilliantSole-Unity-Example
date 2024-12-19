@@ -124,17 +124,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4401107653745760218, guid: 306b86271aad0494fb6e0b38e0950c96, type: 3}
   m_PrefabInstance: {fileID: 7447467503863645562}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &205573979 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6458495519374772111, guid: 732689fee254d4f0daba89be36be1fb1, type: 3}
-  m_PrefabInstance: {fileID: 7744646946049720512}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &330585543
 GameObject:
   m_ObjectHideFlags: 0
@@ -482,76 +471,16 @@ MonoBehaviour:
       m_Calls: []
   OnNotConnected:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 205573979}
-        m_TargetAssemblyTypeName: TMPro.TMP_Text, Unity.TextMeshPro
-        m_MethodName: set_text
-        m_Mode: 5
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: Connect
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 539414431}
-        m_TargetAssemblyTypeName: BS_BaseScannerScrollView, Assembly-CSharp
-        m_MethodName: Clear
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: Connect
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   OnConnecting:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 205573979}
-        m_TargetAssemblyTypeName: TMPro.TMP_Text, Unity.TextMeshPro
-        m_MethodName: set_text
-        m_Mode: 5
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: Connecting
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   OnConnected:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 205573979}
-        m_TargetAssemblyTypeName: TMPro.TMP_Text, Unity.TextMeshPro
-        m_MethodName: set_text
-        m_Mode: 5
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: Disconnect
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   OnDisconnecting:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 205573979}
-        m_TargetAssemblyTypeName: TMPro.TMP_Text, Unity.TextMeshPro
-        m_MethodName: set_text
-        m_Mode: 5
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: Disconnecting
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   <OnDiscoveredDevice>k__BackingField:
     m_PersistentCalls:
       m_Calls: []
@@ -640,15 +569,15 @@ Transform:
   - {fileID: 2085067836}
   m_Father: {fileID: 1395240225}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &539414431 stripped
+--- !u!114 &608224755 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7095293340342709715, guid: 732689fee254d4f0daba89be36be1fb1, type: 3}
+  m_CorrespondingSourceObject: {fileID: 8753109174791286541, guid: 732689fee254d4f0daba89be36be1fb1, type: 3}
   m_PrefabInstance: {fileID: 7744646946049720512}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5de9d04f3b8a146bd8ec92dae4452306, type: 3}
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1001 &648179342
@@ -1352,6 +1281,22 @@ PrefabInstance:
       propertyPath: RightInsole
       value: 
       objectReference: {fileID: 2004023842}
+    - target: {fileID: 2163873276996337717, guid: 732689fee254d4f0daba89be36be1fb1, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2163873276996337717, guid: 732689fee254d4f0daba89be36be1fb1, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2163873276996337717, guid: 732689fee254d4f0daba89be36be1fb1, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2163873276996337717, guid: 732689fee254d4f0daba89be36be1fb1, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2330225171379963407, guid: 732689fee254d4f0daba89be36be1fb1, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: -0.0004272461
@@ -1372,6 +1317,14 @@ PrefabInstance:
       propertyPath: RightInsole
       value: 
       objectReference: {fileID: 458288763}
+    - target: {fileID: 3442038330002069939, guid: 732689fee254d4f0daba89be36be1fb1, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3442038330002069939, guid: 732689fee254d4f0daba89be36be1fb1, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4433743804076673167, guid: 732689fee254d4f0daba89be36be1fb1, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -1456,12 +1409,28 @@ PrefabInstance:
       propertyPath: m_OnEndEdit.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 413817236}
+    - target: {fileID: 7095293340342709715, guid: 732689fee254d4f0daba89be36be1fb1, type: 3}
+      propertyPath: ToggleConnectionButton
+      value: 
+      objectReference: {fileID: 608224755}
     - target: {fileID: 7937235541677987714, guid: 732689fee254d4f0daba89be36be1fb1, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7937235541677987714, guid: 732689fee254d4f0daba89be36be1fb1, type: 3}
       propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8092554090128337478, guid: 732689fee254d4f0daba89be36be1fb1, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8092554090128337478, guid: 732689fee254d4f0daba89be36be1fb1, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8753109174791286541, guid: 732689fee254d4f0daba89be36be1fb1, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8753109174791286541, guid: 732689fee254d4f0daba89be36be1fb1, type: 3}

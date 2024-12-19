@@ -11,6 +11,9 @@ public abstract partial class BS_BaseClientManager<TClientManager, TClient> : BS
     public void Connect() { Client.Connect(); }
     public void Disconnect() { Client.Disconnect(); }
 
+    public BS_ConnectionStatus ConnectionStatus => Client.ConnectionStatus;
+    public bool IsConnected => Client.IsConnected;
+
     [Serializable]
     public class BoolUnityEvent : UnityEvent<bool> { }
     public BoolUnityEvent OnIsConnected;

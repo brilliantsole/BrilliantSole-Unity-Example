@@ -12,7 +12,7 @@ public abstract class BS_BaseScannerScrollView : MonoBehaviour
     public Button ToggleScanButton;
     protected abstract IBS_ScannerManager ScannerManager { get; }
 
-    private void OnEnable()
+    protected virtual void OnEnable()
     {
         ToggleScanButton.onClick.AddListener(ScannerManager.ToggleScan);
         ScannerManager.OnIsScanning.AddListener(OnIsScanning);
@@ -23,7 +23,7 @@ public abstract class BS_BaseScannerScrollView : MonoBehaviour
 
         foreach (var DiscoveredDevice in ScannerManager.DiscoveredDevices.Values) { OnDiscoveredDevice(DiscoveredDevice); }
     }
-    private void OnDisable()
+    protected virtual void OnDisable()
     {
         ToggleScanButton.onClick.RemoveListener(ScannerManager.ToggleScan);
         ScannerManager.OnIsScanning.RemoveListener(OnIsScanning);
