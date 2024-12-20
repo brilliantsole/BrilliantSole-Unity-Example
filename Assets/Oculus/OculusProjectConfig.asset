@@ -36,7 +36,7 @@ MonoBehaviour:
   removeGradleManifest: 1
   focusAware: 1
   requiresSystemKeyboard: 1
-  experimentalFeaturesEnabled: 1
+  experimentalFeaturesEnabled: 0
   insightPassthroughEnabled: 0
   _insightPassthroughSupport: 1
   _processorFavor: 0
