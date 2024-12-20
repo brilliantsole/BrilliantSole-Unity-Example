@@ -38,4 +38,8 @@ public class BS_UdpClientScrollView : BS_BaseScannerScrollView
             _ => throw new System.NotImplementedException()
         };
     }
+
+    public void SetServerIp(string newServerIp) { ClientManager.SetServerIp(newServerIp); }
+    public void SetReceivePort(string newReceivePortString) { ClientManager.SetReceivePort(newReceivePortString); }
+    public void SetSendPort(string newSendPortString) { ClientManager.SetSendPort(newSendPortString); }
 }

@@ -2163,6 +2163,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: BS_Menu
       objectReference: {fileID: 0}
+    - target: {fileID: 2867525615389000363, guid: 732689fee254d4f0daba89be36be1fb1, type: 3}
+      propertyPath: m_Text
+      value: 192.168.1.91
+      objectReference: {fileID: 0}
     - target: {fileID: 3426012950397913150, guid: 732689fee254d4f0daba89be36be1fb1, type: 3}
       propertyPath: LeftInsole
       value: 
@@ -10249,7 +10253,7 @@ Transform:
   m_GameObject: {fileID: 1310929627}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.9, z: 0.4}
+  m_LocalPosition: {x: 0, y: 0.9, z: 0.6}
   m_LocalScale: {x: 0.001, y: 0.001, z: 0.001}
   m_ConstrainProportionsScale: 1
   m_Children:
@@ -15558,7 +15562,7 @@ MonoBehaviour:
   shouldBoundaryVisibilityBeSuppressed: 0
   requestBodyTrackingPermissionOnStartup: 0
   requestFaceTrackingPermissionOnStartup: 0
-  requestEyeTrackingPermissionOnStartup: 0
+  requestEyeTrackingPermissionOnStartup: 1
   requestScenePermissionOnStartup: 0
   requestRecordAudioPermissionOnStartup: 0
   _localDimming: 1

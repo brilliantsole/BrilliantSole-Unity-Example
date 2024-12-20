@@ -2695,8 +2695,8 @@ MonoBehaviour:
   m_OnEndEdit:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: BS_UdpClientManager, Assembly-CSharp
+      - m_Target: {fileID: 7095293340342709715}
+        m_TargetAssemblyTypeName: BS_UdpClientScrollView, Assembly-CSharp
         m_MethodName: SetSendPort
         m_Mode: 0
         m_Arguments:
@@ -5985,19 +5985,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 5424339454290327655}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: BS_BaseClientManager`2[[BS_UdpClientManager, Assembly-CSharp
-        m_MethodName: ToggleConnection
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!1 &4373652391184214552
 GameObject:
   m_ObjectHideFlags: 0
@@ -8648,6 +8636,7 @@ MonoBehaviour:
   ItemPrefab: {fileID: 7521304212649258391, guid: 5f6ca97e7b64940fda20ffc0599f46ba, type: 3}
   Content: {fileID: 1645132233191900479}
   ToggleScanButton: {fileID: 7577874587759259461}
+  ToggleConnectionButton: {fileID: 8753109174791286541}
 --- !u!1 &6426206718585005150
 GameObject:
   m_ObjectHideFlags: 0
@@ -9993,8 +9982,8 @@ MonoBehaviour:
   m_OnEndEdit:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: BS_UdpClientManager, Assembly-CSharp
+      - m_Target: {fileID: 7095293340342709715}
+        m_TargetAssemblyTypeName: BS_UdpClientScrollView, Assembly-CSharp
         m_MethodName: SetReceivePort
         m_Mode: 0
         m_Arguments:
@@ -11517,8 +11506,8 @@ MonoBehaviour:
   m_OnEndEdit:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: BS_UdpClientManager, Assembly-CSharp
+      - m_Target: {fileID: 7095293340342709715}
+        m_TargetAssemblyTypeName: BS_UdpClientScrollView, Assembly-CSharp
         m_MethodName: SetServerIp
         m_Mode: 0
         m_Arguments:
