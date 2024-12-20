@@ -109,7 +109,14 @@ public abstract class BS_BaseScannerScrollView : MonoBehaviour
 
         var rssiText = item.transform.Find("Rssi").GetComponent<TextMeshProUGUI>();
         Debug.Log($"updating rssi text to {DiscoveredDevice.Rssi}");
-        rssiText.text = $"Rssi: {DiscoveredDevice.Rssi}";
+        if (DiscoveredDevice.DeviceType != null)
+        {
+            rssiText.text = $"Rssi: {DiscoveredDevice.Rssi}";
+        }
+        else
+        {
+            rssiText.text = "";
+        }
 
         var deviceTypeText = item.transform.Find("DeviceType").GetComponent<TextMeshProUGUI>();
         Debug.Log($"updating deviceType {DiscoveredDevice.DeviceType}");

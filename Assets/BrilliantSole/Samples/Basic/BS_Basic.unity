@@ -382,129 +382,17 @@ MonoBehaviour:
   m_LightCookieSize: {x: 1, y: 1}
   m_LightCookieOffset: {x: 0, y: 0}
   m_SoftShadowQuality: 1
---- !u!1 &413817232
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 413817234}
-  - component: {fileID: 413817235}
-  - component: {fileID: 413817236}
-  m_Layer: 0
-  m_Name: BS_Manager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &413817234
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 413817232}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &413817235
+--- !u!114 &413817236 stripped
 MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 1078390480258470424, guid: 4e16b6f0e22304293b3ff17bab910850, type: 3}
+  m_PrefabInstance: {fileID: 5904732520654534100}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 413817232}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 79e7bfd0031e04150a17f4b1c0317b74, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  <OnDiscoveredDevice>k__BackingField:
-    m_PersistentCalls:
-      m_Calls: []
-  <OnExpiredDevice>k__BackingField:
-    m_PersistentCalls:
-      m_Calls: []
-  <OnIsScanning>k__BackingField:
-    m_PersistentCalls:
-      m_Calls: []
-  <OnScanStart>k__BackingField:
-    m_PersistentCalls:
-      m_Calls: []
-  <OnScanStop>k__BackingField:
-    m_PersistentCalls:
-      m_Calls: []
-  <OnIsScanningAvailable>k__BackingField:
-    m_PersistentCalls:
-      m_Calls: []
-  <OnScanningIsAvailable>k__BackingField:
-    m_PersistentCalls:
-      m_Calls: []
-  <OnScanningIsUnavailable>k__BackingField:
-    m_PersistentCalls:
-      m_Calls: []
---- !u!114 &413817236
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 413817232}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0a2b72aa61a324c26b617af42aceda01, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  OnIsConnected:
-    m_PersistentCalls:
-      m_Calls: []
-  OnConnectionStatus:
-    m_PersistentCalls:
-      m_Calls: []
-  OnNotConnected:
-    m_PersistentCalls:
-      m_Calls: []
-  OnConnecting:
-    m_PersistentCalls:
-      m_Calls: []
-  OnConnected:
-    m_PersistentCalls:
-      m_Calls: []
-  OnDisconnecting:
-    m_PersistentCalls:
-      m_Calls: []
-  <OnDiscoveredDevice>k__BackingField:
-    m_PersistentCalls:
-      m_Calls: []
-  <OnExpiredDevice>k__BackingField:
-    m_PersistentCalls:
-      m_Calls: []
-  <OnIsScanning>k__BackingField:
-    m_PersistentCalls:
-      m_Calls: []
-  <OnScanStart>k__BackingField:
-    m_PersistentCalls:
-      m_Calls: []
-  <OnScanStop>k__BackingField:
-    m_PersistentCalls:
-      m_Calls: []
-  <OnIsScanningAvailable>k__BackingField:
-    m_PersistentCalls:
-      m_Calls: []
-  <OnScanningIsAvailable>k__BackingField:
-    m_PersistentCalls:
-      m_Calls: []
-  <OnScanningIsUnavailable>k__BackingField:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!1 &458288763
 GameObject:
   m_ObjectHideFlags: 0
@@ -1192,6 +1080,63 @@ Transform:
   - {fileID: 1643891525}
   m_Father: {fileID: 484705646}
   m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
+--- !u!1001 &5904732520654534100
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1278418151343975615, guid: 4e16b6f0e22304293b3ff17bab910850, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1278418151343975615, guid: 4e16b6f0e22304293b3ff17bab910850, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1278418151343975615, guid: 4e16b6f0e22304293b3ff17bab910850, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1278418151343975615, guid: 4e16b6f0e22304293b3ff17bab910850, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1278418151343975615, guid: 4e16b6f0e22304293b3ff17bab910850, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1278418151343975615, guid: 4e16b6f0e22304293b3ff17bab910850, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1278418151343975615, guid: 4e16b6f0e22304293b3ff17bab910850, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1278418151343975615, guid: 4e16b6f0e22304293b3ff17bab910850, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1278418151343975615, guid: 4e16b6f0e22304293b3ff17bab910850, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1278418151343975615, guid: 4e16b6f0e22304293b3ff17bab910850, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8474797382083866610, guid: 4e16b6f0e22304293b3ff17bab910850, type: 3}
+      propertyPath: m_Name
+      value: BS_Manager
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 4e16b6f0e22304293b3ff17bab910850, type: 3}
 --- !u!1001 &7447467503863645562
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1449,7 +1394,7 @@ SceneRoots:
   - {fileID: 330585546}
   - {fileID: 410087041}
   - {fileID: 832575519}
-  - {fileID: 413817234}
+  - {fileID: 5904732520654534100}
   - {fileID: 7744646946049720512}
   - {fileID: 1438648592}
   - {fileID: 1395240225}
