@@ -5,7 +5,7 @@ using static BS_DeviceInformationType;
 
 public class BS_ClientConnectionManager : BS_BaseConnectionManager
 {
-    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_ClientConnectionManager", BS_Logger.LogLevel.Log);
+    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_ClientConnectionManager");
 
     public override BS_ConnectionType Type => BS_ConnectionType.Udp;
 

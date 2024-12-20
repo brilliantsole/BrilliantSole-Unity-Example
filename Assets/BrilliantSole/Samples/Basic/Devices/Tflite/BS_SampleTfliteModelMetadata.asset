@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3ecc16fdbf0641bc832bc54906410cf, type: 3}
   m_Name: BS_SampleTfliteModelMetadata
   m_EditorClassIdentifier: 
-  FilePath: BrilliantSole/Samples/Basic/Devices/Tflite/SampleTfliteModel.tflite
+  FilePath: SampleTfliteModel.tflite
   Name: Sample Model
   SensorTypes: 6
   Task: 0
