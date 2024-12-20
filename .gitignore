@@ -83,3 +83,5 @@ mono_crash.*
 .utmp/
 
 omnisharp.json
+
+/Assets/Samples/Meta*
