@@ -1,6 +1,7 @@
 using System.IO;
 using UnityEngine;
 using UnityEngine.Networking;
+using System.Threading.Tasks;
 
 public abstract class BS_FileMetadata : ScriptableObject
 {
@@ -15,7 +16,7 @@ public abstract class BS_FileMetadata : ScriptableObject
         fileData = null;
     }
 
-    public byte[] GetFileData()
+    public async Task<byte[]> GetFileData()
     {
         if (fileData != null)
         {
@@ -35,12 +36,7 @@ public abstract class BS_FileMetadata : ScriptableObject
         try
         {
             using UnityWebRequest request = UnityWebRequest.Get(fullPath);
-            request.SendWebRequest();
-
-            while (!request.isDone)
-            {
-                // Wait for the request to complete
-            }
+            await request.SendWebRequest();
 
             if (request.result == UnityWebRequest.Result.Success)
             {
