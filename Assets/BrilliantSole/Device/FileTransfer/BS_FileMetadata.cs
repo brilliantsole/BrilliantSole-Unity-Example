@@ -56,7 +56,6 @@ public abstract class BS_FileMetadata : ScriptableObject
             return null;
         }
 #else
-        // Non-Android platforms can access files directly
         if (!File.Exists(fullPath))
         {
             Logger.LogError($"Model file not found at {fullPath}");

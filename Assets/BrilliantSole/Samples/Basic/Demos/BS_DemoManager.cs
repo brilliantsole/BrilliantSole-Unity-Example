@@ -11,6 +11,10 @@ public class BS_DemoManager : MonoBehaviour
             demo.SetActive(false);
         }
 
-        demoToShow.SetActive(true);
+        if (!demoToShow.activeSelf)
+        {
+            demoToShow.SetActive(true);
+        }
+
     }
 }
