@@ -23,7 +23,6 @@ public class BS_UdpClientScrollView : BS_BaseScannerScrollView
         ToggleConnectionButton.onClick.RemoveListener(ClientManager.ToggleConnection);
         ClientManager.OnConnectionStatus.RemoveListener(UpdateToggleConnectionButton);
         ClientManager.OnNotConnected.RemoveListener(Clear);
-
     }
 
     private void UpdateToggleConnectionButton(BS_ConnectionStatus connectionStatus)
