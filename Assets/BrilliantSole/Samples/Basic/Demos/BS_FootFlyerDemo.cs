@@ -67,12 +67,12 @@ public class BS_FootFlyerDemo : BS_BaseDemo
         //Debug.Log($"collided with {obstacle.name}");
         if (obstacle.name.Contains(CollectablePrefab.name))
         {
-            Debug.Log("collided with collectable");
+            //Debug.Log("collided with collectable");
             OnCollectableCollision(obstacle);
         }
         else if (obstacle.name.Contains(EnemyPrefab.name))
         {
-            Debug.Log("collided with enemy");
+            //Debug.Log("collided with enemy");
             OnEnemyCollision(obstacle);
         }
         else
@@ -127,7 +127,7 @@ public class BS_FootFlyerDemo : BS_BaseDemo
         var isObstacleEnemy = UnityEngine.Random.value < EnemyObstacleProbability;
         var obstaclePrefab = isObstacleEnemy ? EnemyPrefab : CollectablePrefab;
 
-        Debug.Log($"spawning {(isObstacleEnemy ? "enemy" : "collectable")}");
+        //Debug.Log($"spawning {(isObstacleEnemy ? "enemy" : "collectable")}");
 
         var obstacle = Instantiate(obstaclePrefab, Scene.transform.position, Quaternion.identity, Scene.transform);
 
@@ -150,7 +150,7 @@ public class BS_FootFlyerDemo : BS_BaseDemo
     {
         var position = Player.transform.localPosition;
         position.y = Math.Clamp(newHeight, -Size.y / 2, Size.y / 2);
-        Debug.Log($"updating Player height to {position.y}");
+        //Debug.Log($"updating Player height to {position.y}");
         Player.transform.localPosition = position;
     }
     private void SetPlayerHeightOffset(float heightOffset)
@@ -171,13 +171,13 @@ public class BS_FootFlyerDemo : BS_BaseDemo
         if (insoleSide != InsoleSide) { return; }
         var pitch = quaternion.GetPitch();
         pitch += 2.0f * Mathf.PI;
-        Debug.Log($"pitch: {pitch}");
+        //Debug.Log($"pitch: {pitch}");
         var normalizedHeight = PitchRange.UpdateAndGetNormalization(pitch, false);
         if (InvertPitch)
         {
             normalizedHeight = 1 - normalizedHeight;
         }
-        Debug.Log($"normalizedHeight: {normalizedHeight}");
+        //Debug.Log($"normalizedHeight: {normalizedHeight}");
         SetPlayerHeightNormalized(normalizedHeight);
     }
     public override void Calibrate()
