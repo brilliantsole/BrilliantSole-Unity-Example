@@ -144,7 +144,7 @@ Transform:
   m_GameObject: {fileID: 50690733}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -168,7 +168,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &233257743
 Transform:
   m_ObjectHideFlags: 0
@@ -2013,6 +2013,18 @@ PrefabInstance:
       propertyPath: Scene
       value: 
       objectReference: {fileID: 417854996}
+    - target: {fileID: 9074353218437721358, guid: 732689fee254d4f0daba89be36be1fb1, type: 3}
+      propertyPath: EnemyPrefab
+      value: 
+      objectReference: {fileID: 158558286838363881, guid: 8a2f4118bf637412cb90f79cf88c27f1, type: 3}
+    - target: {fileID: 9074353218437721358, guid: 732689fee254d4f0daba89be36be1fb1, type: 3}
+      propertyPath: PlayerPrefab
+      value: 
+      objectReference: {fileID: 158558286838363881, guid: c518b169e92cc4a7d9bccac2c83694ce, type: 3}
+    - target: {fileID: 9074353218437721358, guid: 732689fee254d4f0daba89be36be1fb1, type: 3}
+      propertyPath: CollectablePrefab
+      value: 
+      objectReference: {fileID: 158558286838363881, guid: 4d2fa0b2a8aba4cbdb607e2acdea9c99, type: 3}
     - target: {fileID: 9129270336946077217, guid: 732689fee254d4f0daba89be36be1fb1, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0

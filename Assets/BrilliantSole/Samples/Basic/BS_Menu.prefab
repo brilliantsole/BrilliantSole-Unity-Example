@@ -13539,13 +13539,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6de7013baad8a412196edb84026c5cbf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Player: {fileID: 158558286838363881, guid: c518b169e92cc4a7d9bccac2c83694ce, type: 3}
-  Enemy: {fileID: 158558286838363881, guid: 8a2f4118bf637412cb90f79cf88c27f1, type: 3}
-  Collectable: {fileID: 158558286838363881, guid: 4d2fa0b2a8aba4cbdb607e2acdea9c99, type: 3}
+  PlayerPrefab: {fileID: 0}
+  EnemyPrefab: {fileID: 0}
+  CollectablePrefab: {fileID: 0}
   Scene: {fileID: 0}
   _isRunning: 0
   _score: 0
   _health: 100
+  Size: {x: 2, y: 1, z: 0}
+  Speed: 1
+  CollisionLayer:
+    serializedVersion: 2
+    m_Bits: 64
+  CollectableScore: 100
+  EnemyDamage: 10
+  TimeBetweenObstacleSpawn: 1
+  EnemyObstacleProbability: 0.5
 --- !u!1001 &8151873982435254099
 PrefabInstance:
   m_ObjectHideFlags: 0

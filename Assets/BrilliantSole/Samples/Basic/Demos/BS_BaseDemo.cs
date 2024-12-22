@@ -5,9 +5,9 @@ using System;
 
 public class BS_BaseDemo : MonoBehaviour
 {
-    public GameObject Player;
-    public GameObject Enemy;
-    public GameObject Collectable;
+    public GameObject PlayerPrefab;
+    public GameObject EnemyPrefab;
+    public GameObject CollectablePrefab;
 
     public GameObject Scene;
 
@@ -17,13 +17,13 @@ public class BS_BaseDemo : MonoBehaviour
     private TextMeshProUGUI HealthText;
     private Button CalibrateButton;
 
-    private void Start()
+    protected virtual void Start()
     {
         Controls = transform.Find("Controls").gameObject;
         ToggleButton = Controls.transform.Find("Toggle").GetComponent<Button>();
-        ScoreText = Controls.transform.Find("Score").GetComponent<TextMeshProUGUI>();
+        ScoreText = Controls.transform.Find("Score").GetComponentInChildren<TextMeshProUGUI>();
         CalibrateButton = Controls.transform.Find("Calibrate").GetComponent<Button>();
-        HealthText = Controls.transform.Find("Health").GetComponent<TextMeshProUGUI>();
+        HealthText = Controls.transform.Find("Health").GetComponentInChildren<TextMeshProUGUI>();
 
         ToggleButton.onClick.AddListener(ToggleIsRunning);
         CalibrateButton.onClick.AddListener(Calibrate);
