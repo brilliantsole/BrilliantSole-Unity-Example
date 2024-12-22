@@ -51,7 +51,7 @@ public class BS_FootFlyerDemo : BS_BaseDemo
     private readonly Collider[] colliders = new Collider[10];
     private void CheckObstacleCollisions()
     {
-        var colliderCount = Physics.OverlapSphereNonAlloc(Player.transform.position, 0.2f, colliders, CollisionLayer);
+        var colliderCount = Physics.OverlapSphereNonAlloc(Player.transform.position, 0.1f, colliders, CollisionLayer);
         if (colliderCount > 0)
         {
             //Debug.Log($"collided with {colliderCount} obstacles");
@@ -205,6 +205,5 @@ public class BS_FootFlyerDemo : BS_BaseDemo
     {
         base.Reset();
         ClearObstacles();
-        PitchRange.Reset();
     }
 }
