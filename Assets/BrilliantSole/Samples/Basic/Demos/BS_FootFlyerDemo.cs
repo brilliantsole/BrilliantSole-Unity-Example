@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 public class BS_FootFlyerDemo : BS_BaseDemo
@@ -8,13 +6,12 @@ public class BS_FootFlyerDemo : BS_BaseDemo
     public BS_InsoleSide InsoleSide = BS_InsoleSide.Right;
     public BS_SensorRate SensorRate = BS_SensorRate._20ms;
 
-    private GameObject Player;
+
     public Vector3 Size = new(2f, 1f, 0f);
 
     protected override void Start()
     {
         base.Start();
-        Player = Instantiate(PlayerPrefab, Scene.transform.position, Quaternion.identity, Scene.transform);
         Player.transform.localPosition -= Size / 2;
     }
 
@@ -29,71 +26,17 @@ public class BS_FootFlyerDemo : BS_BaseDemo
         if (!gameObject.scene.isLoaded) return;
         DevicePair.Devices[InsoleSide]?.ClearSensorRate(BS_SensorType.GameRotation);
     }
-
-    private readonly List<GameObject> Obstacles = new();
-    private void ClearObstacles()
-    {
-        foreach (var obstacle in Obstacles.ToList())
-        {
-            RemoveObstacle(obstacle);
-        }
-    }
-    [Range(0.1f, 10.0f)]
-    public float Speed = 1.0f;
-    private void MoveObstacles()
+    protected override void MoveObstacles()
     {
         foreach (var obstacle in Obstacles)
         {
             obstacle.transform.Translate(Speed * Time.deltaTime * Vector3.left);
+        }
+    }
 
-        }
-    }
-    public LayerMask CollisionLayer;
-    private readonly Collider[] colliders = new Collider[10];
-    private void CheckObstacleCollisions()
+    protected override void CheckObstaclePositions()
     {
-        var colliderCount = Physics.OverlapSphereNonAlloc(Player.transform.position, 0.15f, colliders, CollisionLayer);
-        if (colliderCount > 0)
-        {
-            //Debug.Log($"collided with {colliderCount} obstacles");
-            for (int i = 0; i < colliderCount; i++)
-            {
-                var obstacle = colliders[i].gameObject.transform.parent.gameObject;
-                OnObstacleCollision(obstacle);
-            }
-        }
-    }
-    private void OnObstacleCollision(GameObject obstacle)
-    {
-        //Debug.Log($"collided with {obstacle.name}");
-        if (obstacle.name.Contains(CollectablePrefab.name))
-        {
-            //Debug.Log("collided with collectable");
-            OnCollectableCollision(obstacle);
-        }
-        else if (obstacle.name.Contains(EnemyPrefab.name))
-        {
-            //Debug.Log("collided with enemy");
-            OnEnemyCollision(obstacle);
-        }
-        else
-        {
-            Debug.LogError($"uncaught collided obstacle {obstacle.name}");
-        }
-        RemoveObstacle(obstacle);
-    }
-    public int CollectableScore = 100;
-    private void OnCollectableCollision(GameObject obstacle)
-    {
-        Score += CollectableScore;
-    }
-    public float EnemyDamage = 20.0f;
-    private void OnEnemyCollision(GameObject obstacle)
-    {
-        Health -= EnemyDamage;
-    }
-    private void CheckObstaclePositions()
-    {
+        base.CheckObstaclePositions();
         foreach (var obstacle in Obstacles.ToArray())
         {
             if (obstacle.transform.localPosition.x < -((Size.x / 2) + 0.1))
@@ -102,18 +45,12 @@ public class BS_FootFlyerDemo : BS_BaseDemo
             }
         }
     }
-    private void RemoveObstacle(GameObject obstacle)
-    {
-        //Debug.Log("removing obstacle");
-        Obstacles.Remove(obstacle);
-        Destroy(obstacle);
-    }
     private float lastTimeObstacleSpawned = 0;
-    private float runtime = 0;
     [Range(0.5f, 2.0f)]
     public float TimeBetweenObstacleSpawn = 1.0f;
-    private void CheckObstacleSpawn()
+    protected override void CheckObstacleSpawn()
     {
+        base.CheckObstacleSpawn();
         if (runtime - lastTimeObstacleSpawned >= TimeBetweenObstacleSpawn)
         {
             SpawnObstacle();
@@ -187,24 +124,9 @@ public class BS_FootFlyerDemo : BS_BaseDemo
         PitchRange.Reset();
     }
     private bool IsInsoleConnected => DevicePair.Devices[InsoleSide]?.IsConnected == true;
-    void Update()
+    protected override void Update()
     {
         if (!IsInsoleConnected) { CheckMouse(); }
-        if (!IsRunning) { return; }
-        MoveObstacles();
-    }
-    void FixedUpdate()
-    {
-        if (!IsRunning) { return; }
-        runtime += Time.deltaTime;
-        CheckObstacleSpawn();
-        CheckObstacleCollisions();
-        CheckObstaclePositions();
-    }
-
-    public override void Reset()
-    {
-        base.Reset();
-        ClearObstacles();
+        base.Update();
     }
 }

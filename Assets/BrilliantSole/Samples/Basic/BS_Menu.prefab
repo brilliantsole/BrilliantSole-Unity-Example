@@ -13546,15 +13546,15 @@ MonoBehaviour:
   _isRunning: 0
   _score: 0
   _health: 100
-  InsoleSide: 1
-  SensorRate: 20
-  Size: {x: 2, y: 1, z: 0}
   Speed: 1
   CollisionLayer:
     serializedVersion: 2
     m_Bits: 64
   CollectableScore: 100
-  EnemyDamage: 10
+  EnemyDamage: 20
+  InsoleSide: 1
+  SensorRate: 20
+  Size: {x: 2, y: 1, z: 0}
   TimeBetweenObstacleSpawn: 1
   EnemyObstacleProbability: 0.5
   InvertPitch: 0

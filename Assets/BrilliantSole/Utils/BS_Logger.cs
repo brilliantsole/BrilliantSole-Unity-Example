@@ -22,7 +22,7 @@ public class BS_Logger
         currentLogLevel = logLevel;
     }
 
-    public static BS_Logger GetLogger(string category, LogLevel logLevel = LogLevel.Error)
+    public static BS_Logger GetLogger(string category, LogLevel logLevel = LogLevel.Log)
     {
         if (!instances.TryGetValue(category, out var logger))
         {
