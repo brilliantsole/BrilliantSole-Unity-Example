@@ -17,6 +17,8 @@ public class BS_BaseDemo : MonoBehaviour
     private TextMeshProUGUI HealthText;
     private Button CalibrateButton;
 
+    private TextMeshProUGUI GameOverText;
+
     protected virtual void Start()
     {
         Controls = transform.Find("Controls").gameObject;
@@ -24,6 +26,7 @@ public class BS_BaseDemo : MonoBehaviour
         ScoreText = Controls.transform.Find("Score").GetComponentInChildren<TextMeshProUGUI>();
         CalibrateButton = Controls.transform.Find("Calibrate").GetComponent<Button>();
         HealthText = Controls.transform.Find("Health").GetComponentInChildren<TextMeshProUGUI>();
+        GameOverText = transform.Find("Game Over").GetComponent<TextMeshProUGUI>();
 
         ToggleButton.onClick.AddListener(ToggleIsRunning);
         CalibrateButton.onClick.AddListener(Calibrate);
@@ -59,10 +62,21 @@ public class BS_BaseDemo : MonoBehaviour
         Debug.Log($"IsRunning: {IsRunning}");
 
         var toggleButtonText = ToggleButton.transform.Find("Text").GetComponentInChildren<TextMeshProUGUI>();
-        toggleButtonText.text = IsRunning ? "Stop" : "Play";
+        if (IsGameOver)
+        {
+            toggleButtonText.text = "Restart";
+        }
+        else
+        {
+            toggleButtonText.text = IsRunning ? "Stop" : "Play";
+        }
     }
     private void ToggleIsRunning()
     {
+        if (IsGameOver)
+        {
+            Reset();
+        }
         IsRunning = !IsRunning;
     }
 
@@ -101,12 +115,13 @@ public class BS_BaseDemo : MonoBehaviour
             }
         }
     }
+    public bool IsGameOver => Health <= 0;
 
     protected virtual void OnHealthUpdate()
     {
         Debug.Log($"Health: {Health}%");
         HealthText.text = $"Health: {Math.Floor(Health)}%";
-        if (Health <= 0)
+        if (IsGameOver)
         {
             OnGameOver();
         }
@@ -115,6 +130,7 @@ public class BS_BaseDemo : MonoBehaviour
     {
         Debug.Log("Game Over");
         IsRunning = false;
+        GameOverText.gameObject.SetActive(true);
     }
 
     public virtual void Calibrate()
@@ -127,5 +143,6 @@ public class BS_BaseDemo : MonoBehaviour
         Debug.Log("Reset");
         Health = 100;
         Score = 0;
+        GameOverText.gameObject.SetActive(false);
     }
 }

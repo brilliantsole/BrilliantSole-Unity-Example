@@ -81,7 +81,7 @@ public class BS_FootFlyerDemo : BS_BaseDemo
     {
         Score += CollectableScore;
     }
-    public float EnemyDamage = 10.0f;
+    public float EnemyDamage = 20.0f;
     private void OnEnemyCollision(GameObject obstacle)
     {
         Health -= EnemyDamage;
