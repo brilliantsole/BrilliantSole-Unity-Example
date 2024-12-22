@@ -19,6 +19,8 @@ public class BS_BaseDemo : MonoBehaviour
 
     private TextMeshProUGUI GameOverText;
 
+    protected BS_DevicePair DevicePair => BS_DevicePair.Instance;
+
     protected virtual void Start()
     {
         Controls = transform.Find("Controls").gameObject;
@@ -35,12 +37,24 @@ public class BS_BaseDemo : MonoBehaviour
     protected virtual void OnEnable()
     {
         Scene.SetActive(true);
+
+        DevicePair.OnDeviceGameRotation += OnDeviceQuaternion;
+        DevicePair.OnDeviceRotation += OnDeviceQuaternion;
     }
     protected virtual void OnDisable()
     {
+        if (!gameObject.scene.isLoaded) return;
         Scene.SetActive(false);
         Reset();
         IsRunning = false;
+
+        DevicePair.OnDeviceGameRotation -= OnDeviceQuaternion;
+        DevicePair.OnDeviceRotation -= OnDeviceQuaternion;
+    }
+
+    protected virtual void OnDeviceQuaternion(BS_DevicePair devicePair, BS_InsoleSide insoleSide, BS_Device device, Quaternion quaternion, ulong timestamp)
+    {
+
     }
 
     [SerializeField]
@@ -132,10 +146,9 @@ public class BS_BaseDemo : MonoBehaviour
         IsRunning = false;
         GameOverText.gameObject.SetActive(true);
     }
-
     public virtual void Calibrate()
     {
-        Debug.Log("Calibrating");
+        Debug.Log("Calibrating...");
     }
 
     public virtual void Reset()

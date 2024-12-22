@@ -1,10 +1,13 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class BS_FootFlyerDemo : BS_BaseDemo
 {
+    public BS_InsoleSide InsoleSide = BS_InsoleSide.Right;
+    public BS_SensorRate SensorRate = BS_SensorRate._20ms;
+
     private GameObject Player;
     public Vector3 Size = new(2f, 1f, 0f);
 
@@ -18,10 +21,12 @@ public class BS_FootFlyerDemo : BS_BaseDemo
     protected override void OnEnable()
     {
         base.OnEnable();
+        DevicePair.Devices[InsoleSide]?.SetSensorRate(BS_SensorType.GameRotation, SensorRate);
     }
     protected override void OnDisable()
     {
         base.OnDisable();
+        DevicePair.Devices[InsoleSide]?.ClearSensorRate(BS_SensorType.GameRotation);
     }
 
     private readonly List<GameObject> Obstacles = new();
@@ -46,7 +51,7 @@ public class BS_FootFlyerDemo : BS_BaseDemo
     private readonly Collider[] colliders = new Collider[10];
     private void CheckObstacleCollisions()
     {
-        var colliderCount = Physics.OverlapSphereNonAlloc(Player.transform.position, 0.1f, colliders, CollisionLayer);
+        var colliderCount = Physics.OverlapSphereNonAlloc(Player.transform.position, 0.2f, colliders, CollisionLayer);
         if (colliderCount > 0)
         {
             //Debug.Log($"collided with {colliderCount} obstacles");
@@ -119,14 +124,14 @@ public class BS_FootFlyerDemo : BS_BaseDemo
     {
         //Debug.Log("Spawning obstacle...");
 
-        var isObstacleEnemy = Random.value > EnemyObstacleProbability;
+        var isObstacleEnemy = UnityEngine.Random.value < EnemyObstacleProbability;
         var obstaclePrefab = isObstacleEnemy ? EnemyPrefab : CollectablePrefab;
 
         Debug.Log($"spawning {(isObstacleEnemy ? "enemy" : "collectable")}");
 
         var obstacle = Instantiate(obstaclePrefab, Scene.transform.position, Quaternion.identity, Scene.transform);
 
-        Vector3 position = new(Size.x / 2, Size.y * Random.value, 0);
+        Vector3 position = new(Size.x / 2, Size.y * (UnityEngine.Random.value - 0.5f), 0);
         obstacle.transform.localPosition += position;
 
         Obstacles.Add(obstacle);
@@ -134,20 +139,58 @@ public class BS_FootFlyerDemo : BS_BaseDemo
         lastTimeObstacleSpawned = runtime;
     }
 
-    private void MoveMouse()
+    private void CheckMouse()
     {
         if (!Input.mousePresent) { return; }
         var scroll = Input.mouseScrollDelta;
-        var position = Player.transform.localPosition;
-        position.y += scroll.y;
-        Player.transform.localPosition = position;
+        SetPlayerHeightOffset(scroll.y);
     }
 
+    private void SetPlayerHeight(float newHeight)
+    {
+        var position = Player.transform.localPosition;
+        position.y = Math.Clamp(newHeight, -Size.y / 2, Size.y / 2);
+        Debug.Log($"updating Player height to {position.y}");
+        Player.transform.localPosition = position;
+    }
+    private void SetPlayerHeightOffset(float heightOffset)
+    {
+        var position = Player.transform.localPosition;
+        SetPlayerHeight(position.y + heightOffset);
+    }
+    private void SetPlayerHeightNormalized(float normalizedHeight)
+    {
+        SetPlayerHeight(Size.y * (normalizedHeight - 0.5f));
+    }
+
+    private readonly BS_Range PitchRange = new();
+    public bool InvertPitch = false;
+    protected override void OnDeviceQuaternion(BS_DevicePair devicePair, BS_InsoleSide insoleSide, BS_Device device, Quaternion quaternion, ulong timestamp)
+    {
+        base.OnDeviceQuaternion(devicePair, insoleSide, device, quaternion, timestamp);
+        if (insoleSide != InsoleSide) { return; }
+        var pitch = quaternion.GetPitch();
+        pitch += 2.0f * Mathf.PI;
+        Debug.Log($"pitch: {pitch}");
+        var normalizedHeight = PitchRange.UpdateAndGetNormalization(pitch, false);
+        if (InvertPitch)
+        {
+            normalizedHeight = 1 - normalizedHeight;
+        }
+        Debug.Log($"normalizedHeight: {normalizedHeight}");
+        SetPlayerHeightNormalized(normalizedHeight);
+    }
+    public override void Calibrate()
+    {
+        base.Calibrate();
+        PitchRange.Reset();
+    }
+    private bool IsInsoleConnected => DevicePair.Devices[InsoleSide]?.IsConnected == true;
     void Update()
     {
+        if (!IsInsoleConnected) { CheckMouse(); }
         if (!IsRunning) { return; }
         MoveObstacles();
-        MoveMouse();
     }
     void FixedUpdate()
     {
@@ -162,5 +205,6 @@ public class BS_FootFlyerDemo : BS_BaseDemo
     {
         base.Reset();
         ClearObstacles();
+        PitchRange.Reset();
     }
 }

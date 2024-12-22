@@ -64,9 +64,6 @@ public abstract class BS_BaseScannerScrollView : MonoBehaviour
             item = Instantiate(ItemPrefab, Content);
             instantiatedItems[DiscoveredDevice.Id] = item;
 
-            var nameText = item.transform.Find("Name").GetComponent<TextMeshProUGUI>();
-            nameText.text = DiscoveredDevice.Name;
-
             var toggleConnectionButton = item.transform.Find("ToggleConnection/Button").GetComponent<Button>();
             var toggleConnectionButtonText = toggleConnectionButton.transform.GetComponentInChildren<TextMeshProUGUI>();
             BS_Device device = DiscoveredDevice.Device;
@@ -106,6 +103,9 @@ public abstract class BS_BaseScannerScrollView : MonoBehaviour
                 }
             });
         }
+
+        var nameText = item.transform.Find("Name").GetComponent<TextMeshProUGUI>();
+        nameText.text = DiscoveredDevice.Name;
 
         var rssiText = item.transform.Find("Rssi").GetComponent<TextMeshProUGUI>();
         Debug.Log($"updating rssi text to {DiscoveredDevice.Rssi}");
