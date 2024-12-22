@@ -26,6 +26,7 @@ public class BS_FootFlyerDemo : BS_BaseDemo
     protected override void OnDisable()
     {
         base.OnDisable();
+        if (!gameObject.scene.isLoaded) return;
         DevicePair.Devices[InsoleSide]?.ClearSensorRate(BS_SensorType.GameRotation);
     }
 
@@ -51,7 +52,7 @@ public class BS_FootFlyerDemo : BS_BaseDemo
     private readonly Collider[] colliders = new Collider[10];
     private void CheckObstacleCollisions()
     {
-        var colliderCount = Physics.OverlapSphereNonAlloc(Player.transform.position, 0.1f, colliders, CollisionLayer);
+        var colliderCount = Physics.OverlapSphereNonAlloc(Player.transform.position, 0.15f, colliders, CollisionLayer);
         if (colliderCount > 0)
         {
             //Debug.Log($"collided with {colliderCount} obstacles");
