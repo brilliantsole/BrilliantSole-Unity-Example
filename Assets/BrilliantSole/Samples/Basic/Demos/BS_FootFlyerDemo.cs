@@ -4,10 +4,8 @@ using UnityEngine;
 public class BS_FootFlyerDemo : BS_BaseDemo
 {
     public BS_InsoleSide InsoleSide = BS_InsoleSide.Right;
-    public BS_SensorRate SensorRate = BS_SensorRate._20ms;
-
-
-    public Vector3 Size = new(2f, 1f, 0f);
+    private BS_Device Device => DevicePair.Devices.ContainsKey(InsoleSide) ? DevicePair.Devices[InsoleSide] : null;
+    private bool IsInsoleConnected => Device?.IsConnected == true;
 
     protected override void Start()
     {
@@ -37,7 +35,6 @@ public class BS_FootFlyerDemo : BS_BaseDemo
             obstacle.transform.Translate(Speed * Time.deltaTime * Vector3.left);
         }
     }
-
     protected override void CheckObstaclePositions()
     {
         base.CheckObstaclePositions();
@@ -127,8 +124,6 @@ public class BS_FootFlyerDemo : BS_BaseDemo
         base.Calibrate();
         PitchRange.Reset();
     }
-    private BS_Device Device => DevicePair.Devices.ContainsKey(InsoleSide) ? DevicePair.Devices[InsoleSide] : null;
-    private bool IsInsoleConnected => Device?.IsConnected == true;
     protected override void Update()
     {
         if (!IsInsoleConnected) { CheckMouse(); }

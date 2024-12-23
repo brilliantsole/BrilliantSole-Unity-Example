@@ -27,10 +27,16 @@ public class BS_BaseDemo : MonoBehaviour
     protected BS_DevicePair DevicePair => BS_DevicePair.Instance;
 
     protected GameObject Player;
+    protected Rigidbody PlayerRigidBody;
+
+    public BS_SensorRate SensorRate = BS_SensorRate._20ms;
+
+    public Vector3 Size = new(2f, 1f, 0f);
 
     protected virtual void Start()
     {
         Player = Instantiate(PlayerPrefab, Scene.transform.position, Quaternion.identity, Scene.transform);
+        PlayerRigidBody = Player.GetComponent<Rigidbody>();
 
         Controls = transform.Find("Controls").gameObject;
         ToggleButton = Controls.transform.Find("Toggle").GetComponent<Button>();
@@ -81,7 +87,7 @@ public class BS_BaseDemo : MonoBehaviour
     {
         Debug.Log($"IsRunning: {IsRunning}");
 
-        var toggleButtonText = ToggleButton.transform.Find("Text").GetComponentInChildren<TextMeshProUGUI>();
+        var toggleButtonText = ToggleButton.transform.GetChild(0).GetComponentInChildren<TextMeshProUGUI>();
         if (IsGameOver)
         {
             toggleButtonText.text = "Restart";
@@ -91,7 +97,7 @@ public class BS_BaseDemo : MonoBehaviour
             toggleButtonText.text = IsRunning ? "Stop" : "Play";
         }
     }
-    private void ToggleIsRunning()
+    protected void ToggleIsRunning()
     {
         if (IsGameOver)
         {

@@ -734,6 +734,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 670267584}
     - target: {fileID: 30836025688245374, guid: 732689fee254d4f0daba89be36be1fb1, type: 3}
+      propertyPath: defaultMenu
+      value: 
+      objectReference: {fileID: 719379317}
+    - target: {fileID: 30836025688245374, guid: 732689fee254d4f0daba89be36be1fb1, type: 3}
       propertyPath: backToMainMenuButton
       value: 
       objectReference: {fileID: 300878224}
@@ -1737,6 +1741,50 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6185784791652157697, guid: 732689fee254d4f0daba89be36be1fb1, type: 3}
+      propertyPath: Scene
+      value: 
+      objectReference: {fileID: 994307643}
+    - target: {fileID: 6185784791652157697, guid: 732689fee254d4f0daba89be36be1fb1, type: 3}
+      propertyPath: Size.x
+      value: 3.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6185784791652157697, guid: 732689fee254d4f0daba89be36be1fb1, type: 3}
+      propertyPath: Size.y
+      value: 1.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 6185784791652157697, guid: 732689fee254d4f0daba89be36be1fb1, type: 3}
+      propertyPath: EnemyPrefab
+      value: 
+      objectReference: {fileID: 158558286838363881, guid: 8a2f4118bf637412cb90f79cf88c27f1, type: 3}
+    - target: {fileID: 6185784791652157697, guid: 732689fee254d4f0daba89be36be1fb1, type: 3}
+      propertyPath: PlayerPrefab
+      value: 
+      objectReference: {fileID: 158558286838363881, guid: c518b169e92cc4a7d9bccac2c83694ce, type: 3}
+    - target: {fileID: 6185784791652157697, guid: 732689fee254d4f0daba89be36be1fb1, type: 3}
+      propertyPath: CollectablePrefab
+      value: 
+      objectReference: {fileID: 158558286838363881, guid: 4d2fa0b2a8aba4cbdb607e2acdea9c99, type: 3}
+    - target: {fileID: 6185784791652157697, guid: 732689fee254d4f0daba89be36be1fb1, type: 3}
+      propertyPath: CollisionLayer.m_Bits
+      value: 64
+      objectReference: {fileID: 0}
+    - target: {fileID: 6185784791652157697, guid: 732689fee254d4f0daba89be36be1fb1, type: 3}
+      propertyPath: EnemyVibrationConfigurations.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6185784791652157697, guid: 732689fee254d4f0daba89be36be1fb1, type: 3}
+      propertyPath: EnemyVibrationConfigurations.Array.data[0].Locations
+      value: 255
+      objectReference: {fileID: 0}
+    - target: {fileID: 6185784791652157697, guid: 732689fee254d4f0daba89be36be1fb1, type: 3}
+      propertyPath: EnemyVibrationConfigurations.Array.data[0].WaveformEffectSequence.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6185784791652157697, guid: 732689fee254d4f0daba89be36be1fb1, type: 3}
+      propertyPath: EnemyVibrationConfigurations.Array.data[0].WaveformEffectSequence.Array.data[0].Effect
+      value: 14
+      objectReference: {fileID: 0}
     - target: {fileID: 6212235499950470984, guid: 732689fee254d4f0daba89be36be1fb1, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -2077,6 +2125,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5de9d04f3b8a146bd8ec92dae4452306, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &719379317 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4865107907648782127, guid: 732689fee254d4f0daba89be36be1fb1, type: 3}
+  m_PrefabInstance: {fileID: 719379315}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &826892434
 PrefabInstance:
   m_ObjectHideFlags: 0
