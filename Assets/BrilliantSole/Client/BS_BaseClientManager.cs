@@ -4,7 +4,7 @@ public abstract partial class BS_BaseClientManager<TClientManager, TClient> : BS
     where TClientManager : MonoBehaviour
     where TClient : BS_BaseClient
 {
-    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_BaseClientManager", BS_Logger.LogLevel.Log);
+    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_BaseClientManager");
     protected virtual TClient Client => null;
     public void Update() { Client.Update(); }
 

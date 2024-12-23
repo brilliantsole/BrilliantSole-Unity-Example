@@ -23,16 +23,16 @@ public partial class BS_Device
             Logger.Log("Not sending data immediately");
             return;
         }
-        if (IsSendingTxData)
-        {
-            Logger.Log("Already sending TxData - will wait until new data is sent");
-            return;
-        }
         SendPendingTxMessages();
     }
 
     private void SendPendingTxMessages()
     {
+        if (IsSendingTxData)
+        {
+            Logger.Log("Already sending TxData - will wait until new data is sent");
+            return;
+        }
         if (PendingTxMessages.Count == 0) { return; }
         IsSendingTxData = true;
         TxData.Clear();
@@ -58,6 +58,7 @@ public partial class BS_Device
                 pendingTxMessageIndex++;
             }
         }
+        Logger.Log($"there are {PendingTxMessages.Count} messages remaining");
 
         if (TxData.Count == 0)
         {
@@ -65,7 +66,7 @@ public partial class BS_Device
             IsSendingTxData = false;
             return;
         }
-        Logger.Log($"Sending {TxData.Count} Tx bytes...");
+        Logger.Log($"Sending {TxData.Count} Tx bytes");
         SendTxData(TxData);
     }
 

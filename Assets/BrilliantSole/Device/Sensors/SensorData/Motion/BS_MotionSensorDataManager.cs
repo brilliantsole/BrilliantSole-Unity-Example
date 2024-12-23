@@ -137,7 +137,7 @@ public class BS_MotionSensorDataManager : BS_BaseSensorDataManager
     var roll = BS_ByteUtils.ParseNumber<short>(data, 4, true);
     Logger.Log($"orientation: yaw: {yaw}, pitch: {pitch}, roll: {roll}");
 
-    Vector3 vector3 = new(pitch, yaw, roll); // FIX
+    Vector3 vector3 = new(pitch, yaw, roll);
     vector3 *= scalar;
 
     OnOrientation?.Invoke(vector3, timestamp);

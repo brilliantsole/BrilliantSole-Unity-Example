@@ -275,7 +275,7 @@ public class BS_FileTransferManager : BS_BaseManager<BS_FileTransferMessageType>
     // FILE TRANSFER STATUS END
 
     // FILE BLOCK START
-    public void SendFile(BS_FileMetadata fileMetadata)
+    public async void SendFile(BS_FileMetadata fileMetadata)
     {
         if (FileTransferStatus != Idle)
         {
@@ -283,7 +283,12 @@ public class BS_FileTransferManager : BS_BaseManager<BS_FileTransferMessageType>
             return;
         }
 
-        var fileData = fileMetadata.GetFileData();
+        var fileData = await fileMetadata.GetFileData();
+        if (fileData == null)
+        {
+            Logger.LogError("failed to get filedata");
+            return;
+        }
         Logger.Log($"sending {fileMetadata.FileType} file with {fileData.Length} bytes");
 
         FileToSend = fileData;

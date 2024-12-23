@@ -12,7 +12,7 @@ public abstract class BS_BaseScannerScrollView : MonoBehaviour
     public Button ToggleScanButton;
     protected abstract IBS_ScannerManager ScannerManager { get; }
 
-    private void OnEnable()
+    protected virtual void OnEnable()
     {
         ToggleScanButton.onClick.AddListener(ScannerManager.ToggleScan);
         ScannerManager.OnIsScanning.AddListener(OnIsScanning);
@@ -23,7 +23,7 @@ public abstract class BS_BaseScannerScrollView : MonoBehaviour
 
         foreach (var DiscoveredDevice in ScannerManager.DiscoveredDevices.Values) { OnDiscoveredDevice(DiscoveredDevice); }
     }
-    private void OnDisable()
+    protected virtual void OnDisable()
     {
         ToggleScanButton.onClick.RemoveListener(ScannerManager.ToggleScan);
         ScannerManager.OnIsScanning.RemoveListener(OnIsScanning);
@@ -63,9 +63,6 @@ public abstract class BS_BaseScannerScrollView : MonoBehaviour
         {
             item = Instantiate(ItemPrefab, Content);
             instantiatedItems[DiscoveredDevice.Id] = item;
-
-            var nameText = item.transform.Find("Name").GetComponent<TextMeshProUGUI>();
-            nameText.text = DiscoveredDevice.Name;
 
             var toggleConnectionButton = item.transform.Find("ToggleConnection/Button").GetComponent<Button>();
             var toggleConnectionButtonText = toggleConnectionButton.transform.GetComponentInChildren<TextMeshProUGUI>();
@@ -107,9 +104,19 @@ public abstract class BS_BaseScannerScrollView : MonoBehaviour
             });
         }
 
+        var nameText = item.transform.Find("Name").GetComponent<TextMeshProUGUI>();
+        nameText.text = DiscoveredDevice.Name;
+
         var rssiText = item.transform.Find("Rssi").GetComponent<TextMeshProUGUI>();
         Debug.Log($"updating rssi text to {DiscoveredDevice.Rssi}");
-        rssiText.text = $"Rssi: {DiscoveredDevice.Rssi}";
+        if (DiscoveredDevice.DeviceType != null)
+        {
+            rssiText.text = $"Rssi: {DiscoveredDevice.Rssi}";
+        }
+        else
+        {
+            rssiText.text = "";
+        }
 
         var deviceTypeText = item.transform.Find("DeviceType").GetComponent<TextMeshProUGUI>();
         Debug.Log($"updating deviceType {DiscoveredDevice.DeviceType}");

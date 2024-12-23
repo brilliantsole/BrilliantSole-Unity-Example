@@ -1,0 +1,125 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &8474797382083866610
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1278418151343975615}
+  - component: {fileID: 1797856308232307546}
+  - component: {fileID: 1078390480258470424}
+  m_Layer: 0
+  m_Name: BS_Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1278418151343975615
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8474797382083866610}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1797856308232307546
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8474797382083866610}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79e7bfd0031e04150a17f4b1c0317b74, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <OnDiscoveredDevice>k__BackingField:
+    m_PersistentCalls:
+      m_Calls: []
+  <OnExpiredDevice>k__BackingField:
+    m_PersistentCalls:
+      m_Calls: []
+  <OnIsScanning>k__BackingField:
+    m_PersistentCalls:
+      m_Calls: []
+  <OnScanStart>k__BackingField:
+    m_PersistentCalls:
+      m_Calls: []
+  <OnScanStop>k__BackingField:
+    m_PersistentCalls:
+      m_Calls: []
+  <OnIsScanningAvailable>k__BackingField:
+    m_PersistentCalls:
+      m_Calls: []
+  <OnScanningIsAvailable>k__BackingField:
+    m_PersistentCalls:
+      m_Calls: []
+  <OnScanningIsUnavailable>k__BackingField:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &1078390480258470424
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8474797382083866610}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a2b72aa61a324c26b617af42aceda01, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  OnIsConnected:
+    m_PersistentCalls:
+      m_Calls: []
+  OnConnectionStatus:
+    m_PersistentCalls:
+      m_Calls: []
+  OnNotConnected:
+    m_PersistentCalls:
+      m_Calls: []
+  OnConnecting:
+    m_PersistentCalls:
+      m_Calls: []
+  OnConnected:
+    m_PersistentCalls:
+      m_Calls: []
+  OnDisconnecting:
+    m_PersistentCalls:
+      m_Calls: []
+  <OnDiscoveredDevice>k__BackingField:
+    m_PersistentCalls:
+      m_Calls: []
+  <OnExpiredDevice>k__BackingField:
+    m_PersistentCalls:
+      m_Calls: []
+  <OnIsScanning>k__BackingField:
+    m_PersistentCalls:
+      m_Calls: []
+  <OnScanStart>k__BackingField:
+    m_PersistentCalls:
+      m_Calls: []
+  <OnScanStop>k__BackingField:
+    m_PersistentCalls:
+      m_Calls: []
+  <OnIsScanningAvailable>k__BackingField:
+    m_PersistentCalls:
+      m_Calls: []
+  <OnScanningIsAvailable>k__BackingField:
+    m_PersistentCalls:
+      m_Calls: []
+  <OnScanningIsUnavailable>k__BackingField:
+    m_PersistentCalls:
+      m_Calls: []

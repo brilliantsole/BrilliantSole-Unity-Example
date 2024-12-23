@@ -1,6 +1,6 @@
 public partial class BS_UdpClientManager : BS_BaseClientManager<BS_UdpClientManager, BS_UdpClient>
 {
-    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_UdpClientManager", BS_Logger.LogLevel.Log);
+    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_UdpClientManager");
     protected override BS_UdpClient Client => BS_UdpClient.Instance;
 
     protected override void OnEnable()
