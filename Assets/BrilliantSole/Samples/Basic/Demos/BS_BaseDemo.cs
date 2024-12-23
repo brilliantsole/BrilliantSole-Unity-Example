@@ -21,6 +21,9 @@ public class BS_BaseDemo : MonoBehaviour
 
     private TextMeshProUGUI GameOverText;
 
+    public List<BS_VibrationConfiguration> EnemyVibrationConfigurations = new();
+    public List<BS_VibrationConfiguration> CollectableVibrationConfigurations = new();
+
     protected BS_DevicePair DevicePair => BS_DevicePair.Instance;
 
     protected GameObject Player;

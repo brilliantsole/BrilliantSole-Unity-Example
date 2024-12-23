@@ -13543,6 +13543,26 @@ MonoBehaviour:
   EnemyPrefab: {fileID: 158558286838363881, guid: 8a2f4118bf637412cb90f79cf88c27f1, type: 3}
   CollectablePrefab: {fileID: 158558286838363881, guid: 4d2fa0b2a8aba4cbdb607e2acdea9c99, type: 3}
   Scene: {fileID: 0}
+  EnemyVibrationConfigurations:
+  - Type: 0
+    Locations: 255
+    WaveformEffectSequence:
+    - Type: 0
+      Effect: 14
+      Delay: 0
+      LoopCount: 0
+    WaveformEffectSequenceLoopCount: 0
+    WaveformSequence: []
+  CollectableVibrationConfigurations:
+  - Type: 0
+    Locations: 255
+    WaveformEffectSequence:
+    - Type: 0
+      Effect: 10
+      Delay: 0
+      LoopCount: 0
+    WaveformEffectSequenceLoopCount: 0
+    WaveformSequence: []
   _isRunning: 0
   _score: 0
   _health: 100

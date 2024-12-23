@@ -123,7 +123,7 @@ public class BS_SensorConfigurationManager : BS_BaseManager<BS_SensorConfigurati
             return;
         }
 
-        TempSensorConfiguration = sensorConfiguration;
+        TempSensorConfiguration = new(sensorConfiguration);
         if (clearRest)
         {
             foreach (var sensorType in SensorTypes)

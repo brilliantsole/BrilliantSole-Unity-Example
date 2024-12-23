@@ -185,7 +185,7 @@ public class BS_BasicMotionDemo : MonoBehaviour
 
         if (sensorType != null)
         {
-            Debug.Log($"sensorType: {sensorType}");
+            Debug.Log($"setting sensorType: {sensorType} to {SensorRate}");
             positionSensorConfiguration[(BS_SensorType)sensorType] = SensorRate;
         }
         else

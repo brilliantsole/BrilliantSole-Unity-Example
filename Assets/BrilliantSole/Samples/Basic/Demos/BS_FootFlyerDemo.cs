@@ -18,13 +18,13 @@ public class BS_FootFlyerDemo : BS_BaseDemo
     protected override void OnEnable()
     {
         base.OnEnable();
-        DevicePair.Devices[InsoleSide]?.SetSensorRate(BS_SensorType.GameRotation, SensorRate);
+        Device?.SetSensorRate(BS_SensorType.GameRotation, SensorRate);
     }
     protected override void OnDisable()
     {
         base.OnDisable();
         if (!gameObject.scene.isLoaded) return;
-        DevicePair.Devices[InsoleSide]?.ClearSensorRate(BS_SensorType.GameRotation);
+        Device?.ClearSensorRate(BS_SensorType.GameRotation);
     }
     protected override void MoveObstacles()
     {
@@ -123,10 +123,22 @@ public class BS_FootFlyerDemo : BS_BaseDemo
         base.Calibrate();
         PitchRange.Reset();
     }
-    private bool IsInsoleConnected => DevicePair.Devices[InsoleSide]?.IsConnected == true;
+    private BS_Device Device => DevicePair.Devices[InsoleSide];
+    private bool IsInsoleConnected => Device?.IsConnected == true;
     protected override void Update()
     {
         if (!IsInsoleConnected) { CheckMouse(); }
         base.Update();
+    }
+
+    protected override void OnEnemyCollision(GameObject obstacle)
+    {
+        base.OnEnemyCollision(obstacle);
+        Device?.TriggerVibration(EnemyVibrationConfigurations);
+    }
+    protected override void OnCollectableCollision(GameObject obstacle)
+    {
+        base.OnCollectableCollision(obstacle);
+        Device?.TriggerVibration(CollectableVibrationConfigurations);
     }
 }
