@@ -12,7 +12,11 @@ public class BS_FootFlyerDemo : BS_BaseDemo
     protected override void Start()
     {
         base.Start();
-        Player.transform.localPosition -= Size / 2;
+        var playerPosition = Player.transform.localPosition;
+        //playerPosition -= Size / 2;
+        playerPosition.x -= Size.x / 2;
+        playerPosition.z -= Size.z / 2;
+        Player.transform.localPosition = playerPosition;
     }
 
     protected override void OnEnable()
@@ -69,7 +73,7 @@ public class BS_FootFlyerDemo : BS_BaseDemo
 
         var obstacle = Instantiate(obstaclePrefab, Scene.transform.position, Quaternion.identity, Scene.transform);
 
-        Vector3 position = new(Size.x / 2, Size.y * (UnityEngine.Random.value - 0.5f), 0);
+        Vector3 position = new(Size.x / 2, Size.y * UnityEngine.Random.value, 0);
         obstacle.transform.localPosition += position;
 
         Obstacles.Add(obstacle);
@@ -87,7 +91,7 @@ public class BS_FootFlyerDemo : BS_BaseDemo
     private void SetPlayerHeight(float newHeight)
     {
         var position = Player.transform.localPosition;
-        position.y = Math.Clamp(newHeight, -Size.y / 2, Size.y / 2);
+        position.y = Math.Clamp(newHeight, 0, Size.y);
         //Debug.Log($"updating Player height to {position.y}");
         Player.transform.localPosition = position;
     }
@@ -98,7 +102,7 @@ public class BS_FootFlyerDemo : BS_BaseDemo
     }
     private void SetPlayerHeightNormalized(float normalizedHeight)
     {
-        SetPlayerHeight(Size.y * (normalizedHeight - 0.5f));
+        SetPlayerHeight(Size.y * normalizedHeight);
     }
 
     private readonly BS_Range PitchRange = new();
@@ -123,7 +127,7 @@ public class BS_FootFlyerDemo : BS_BaseDemo
         base.Calibrate();
         PitchRange.Reset();
     }
-    private BS_Device Device => DevicePair.Devices[InsoleSide];
+    private BS_Device Device => DevicePair.Devices.ContainsKey(InsoleSide) ? DevicePair.Devices[InsoleSide] : null;
     private bool IsInsoleConnected => Device?.IsConnected == true;
     protected override void Update()
     {
