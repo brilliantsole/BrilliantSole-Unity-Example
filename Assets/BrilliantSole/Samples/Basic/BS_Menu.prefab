@@ -13569,7 +13569,7 @@ MonoBehaviour:
   _isRunning: 0
   _score: 0
   _health: 100
-  Speed: 2
+  Speed: 1.2
   CollisionLayer:
     serializedVersion: 2
     m_Bits: 64
