@@ -13575,7 +13575,7 @@ MonoBehaviour:
     m_Bits: 64
   CollectableScore: 100
   EnemyDamage: 20
-  InsoleSide: 1
+  InsoleSide: 0
   TimeBetweenObstacleSpawn: 1
   EnemyObstacleProbability: 0.5
   InvertPitch: 0
@@ -13783,8 +13783,10 @@ MonoBehaviour:
     m_Bits: 64
   CollectableScore: 100
   EnemyDamage: 20
-  InsoleSide: 1
-  PipePrefab: {fileID: 0}
+  InsoleSide: 0
+  PipePrefab: {fileID: 158558286838363881, guid: 7cefd0a9ebd6348b5a20229b9dc9f257, type: 3}
   ScoreTimeMultiplier: 10
   JumpVelocity: 3.5
-  TimeBetweenObstacleSpawn: 1
+  PitchThreshold: 0
+  InvertPitch: 0
+  TimeBetweenObstacleSpawn: 2

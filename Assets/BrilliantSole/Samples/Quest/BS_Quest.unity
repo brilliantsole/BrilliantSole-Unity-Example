@@ -2008,6 +2008,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6185784791652157697, guid: 732689fee254d4f0daba89be36be1fb1, type: 3}
+      propertyPath: Scene
+      value: 
+      objectReference: {fileID: 1365136405}
     - target: {fileID: 6687418876089538351, guid: 732689fee254d4f0daba89be36be1fb1, type: 3}
       propertyPath: m_PresetInfoIsWorld
       value: 1

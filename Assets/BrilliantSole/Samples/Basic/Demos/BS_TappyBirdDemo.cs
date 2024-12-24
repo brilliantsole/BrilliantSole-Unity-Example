@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class BS_TappyBirdDemo : BS_BaseDemo
@@ -74,6 +75,7 @@ public class BS_TappyBirdDemo : BS_BaseDemo
         base.Reset();
         ResetPlayerPosition();
         HasJumpedAtLeastOnce = false;
+        Pitch = 0.0f;
     }
 
     protected override void FixedUpdate()
@@ -114,6 +116,8 @@ public class BS_TappyBirdDemo : BS_BaseDemo
 
     private void Jump()
     {
+        if (!IsRunning) { return; }
+
         if (!HasJumpedAtLeastOnce)
         {
             HasJumpedAtLeastOnce = true;
@@ -137,6 +141,33 @@ public class BS_TappyBirdDemo : BS_BaseDemo
                 ToggleIsRunning();
             }
         }
+    }
+
+    public float PitchThreshold = 0.0f;
+    public bool InvertPitch = false;
+    private float Pitch = 0.0f;
+    protected override void OnDeviceQuaternion(BS_DevicePair devicePair, BS_InsoleSide insoleSide, BS_Device device, Quaternion quaternion, ulong timestamp)
+    {
+        base.OnDeviceQuaternion(devicePair, insoleSide, device, quaternion, timestamp);
+        if (insoleSide != InsoleSide) { return; }
+
+        var latestPitch = quaternion.GetPitch();
+
+        var didLatestPitchExceedThreshold = DoesPitchExceedThreshold(latestPitch);
+        var shouldJump = didLatestPitchExceedThreshold && !DidPitchExceedThreshold;
+        if (shouldJump)
+        {
+            Jump();
+        }
+        DidPitchExceedThreshold = didLatestPitchExceedThreshold;
+        Pitch = latestPitch;
+    }
+    private bool DoesPitchExceedThreshold(float pitch) => InvertPitch ? pitch > PitchThreshold : pitch < PitchThreshold;
+    private bool DidPitchExceedThreshold = false;
+    public override void Calibrate()
+    {
+        base.Calibrate();
+        PitchThreshold = Pitch;
     }
 
     private void UpdatePlayerRigidBody()
@@ -174,7 +205,7 @@ public class BS_TappyBirdDemo : BS_BaseDemo
             colliderBroadcaster.OnCollider += OnObstacleCollider;
         }
 
-        Vector3 position = new(Size.x / 2, Size.y * Random.value, 0);
+        Vector3 position = new(Size.x / 2, Size.y * UnityEngine.Random.value, 0);
         obstacle.transform.localPosition += position;
 
         Obstacles.Add(obstacle);

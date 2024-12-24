@@ -109,7 +109,6 @@ public class BS_FootFlyerDemo : BS_BaseDemo
         base.OnDeviceQuaternion(devicePair, insoleSide, device, quaternion, timestamp);
         if (insoleSide != InsoleSide) { return; }
         var pitch = quaternion.GetPitch();
-        pitch += 2.0f * Mathf.PI;
         //Debug.Log($"pitch: {pitch}");
         var normalizedHeight = PitchRange.UpdateAndGetNormalization(pitch, false);
         if (InvertPitch)
