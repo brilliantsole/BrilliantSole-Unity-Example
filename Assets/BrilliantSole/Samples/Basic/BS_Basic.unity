@@ -1778,6 +1778,10 @@ PrefabInstance:
       propertyPath: CollectablePrefab
       value: 
       objectReference: {fileID: 158558286838363881, guid: 4d2fa0b2a8aba4cbdb607e2acdea9c99, type: 3}
+    - target: {fileID: 6185784791652157697, guid: 732689fee254d4f0daba89be36be1fb1, type: 3}
+      propertyPath: PlayerLinearDamping
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6212235499950470984, guid: 732689fee254d4f0daba89be36be1fb1, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -2060,7 +2064,7 @@ PrefabInstance:
       objectReference: {fileID: 417854996}
     - target: {fileID: 9074353218437721358, guid: 732689fee254d4f0daba89be36be1fb1, type: 3}
       propertyPath: Speed
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 9074353218437721358, guid: 732689fee254d4f0daba89be36be1fb1, type: 3}
       propertyPath: Size.x
@@ -2068,7 +2072,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9074353218437721358, guid: 732689fee254d4f0daba89be36be1fb1, type: 3}
       propertyPath: Size.y
-      value: 1.4
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9074353218437721358, guid: 732689fee254d4f0daba89be36be1fb1, type: 3}
       propertyPath: EnemyPrefab
@@ -2082,6 +2086,10 @@ PrefabInstance:
       propertyPath: CollectablePrefab
       value: 
       objectReference: {fileID: 158558286838363881, guid: 4d2fa0b2a8aba4cbdb607e2acdea9c99, type: 3}
+    - target: {fileID: 9074353218437721358, guid: 732689fee254d4f0daba89be36be1fb1, type: 3}
+      propertyPath: TimeBetweenObstacleSpawn
+      value: 0.8
+      objectReference: {fileID: 0}
     - target: {fileID: 9094460613277991209, guid: 732689fee254d4f0daba89be36be1fb1, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0

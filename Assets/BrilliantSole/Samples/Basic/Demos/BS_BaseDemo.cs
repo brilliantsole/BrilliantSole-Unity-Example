@@ -29,6 +29,7 @@ public class BS_BaseDemo : MonoBehaviour
 
     protected GameObject Player;
     protected Rigidbody PlayerRigidBody;
+    public float PlayerLinearDamping = 0.0f;
 
     public BS_SensorRate SensorRate = BS_SensorRate._20ms;
 
@@ -38,6 +39,7 @@ public class BS_BaseDemo : MonoBehaviour
     {
         Player = Instantiate(PlayerPrefab, Scene.transform.position, Quaternion.identity, Scene.transform);
         PlayerRigidBody = Player.GetComponent<Rigidbody>();
+        UpdateLinearDamping();
 
         Controls = transform.Find("Controls").gameObject;
         ToggleButton = Controls.transform.Find("Toggle").GetComponent<Button>();
@@ -49,9 +51,22 @@ public class BS_BaseDemo : MonoBehaviour
         ToggleButton.onClick.AddListener(ToggleIsRunning);
         CalibrateButton.onClick.AddListener(Calibrate);
     }
+    private void UpdateLinearDamping()
+    {
+        if (PlayerRigidBody != null)
+        {
+            PlayerRigidBody.linearDamping = PlayerLinearDamping;
+            Debug.Log($"updated linearDamping to {PlayerRigidBody.linearDamping}");
+        }
+        else
+        {
+            Debug.Log("mo PlayerRigidBody found");
+        }
+    }
 
     protected virtual void OnEnable()
     {
+        UpdateLinearDamping();
         Scene.SetActive(true);
 
         DevicePair.OnDeviceGameRotation += OnDeviceQuaternion;

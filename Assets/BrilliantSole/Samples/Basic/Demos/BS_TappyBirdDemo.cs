@@ -104,7 +104,7 @@ public class BS_TappyBirdDemo : BS_BaseDemo
     }
 
     private bool HasJumpedAtLeastOnce = false;
-    [Range(1.0f, 5.0f)]
+    [Range(1.0f, 10.0f)]
     public float JumpVelocity = 3.5f;
 
     private void Jump()
