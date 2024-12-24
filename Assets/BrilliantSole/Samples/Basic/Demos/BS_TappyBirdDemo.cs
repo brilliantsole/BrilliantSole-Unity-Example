@@ -7,9 +7,6 @@ public class BS_TappyBirdDemo : BS_BaseDemo
     private BS_Device Device => DevicePair.Devices.ContainsKey(InsoleSide) ? DevicePair.Devices[InsoleSide] : null;
     private bool IsInsoleConnected => Device?.IsConnected == true;
 
-    public GameObject PipePrefab;
-
-
     protected override void Start()
     {
         base.Start();
@@ -50,10 +47,6 @@ public class BS_TappyBirdDemo : BS_BaseDemo
         {
             if (obstacle.transform.localPosition.x < -((Size.x / 2) + 0.1))
             {
-                if (obstacle.TryGetComponent<BS_ColliderBroadcaster>(out var colliderBroadcaster))
-                {
-                    colliderBroadcaster.OnCollider -= OnObstacleCollider;
-                }
                 RemoveObstacle(obstacle);
             }
         }
@@ -200,23 +193,12 @@ public class BS_TappyBirdDemo : BS_BaseDemo
     {
         var obstacle = Instantiate(PipePrefab, Scene.transform.position, Quaternion.identity, Scene.transform);
 
-        if (obstacle.TryGetComponent<BS_ColliderBroadcaster>(out var colliderBroadcaster))
-        {
-            colliderBroadcaster.OnCollider += OnObstacleCollider;
-        }
-
         Vector3 position = new(Size.x / 2, Size.y * UnityEngine.Random.value, 0);
         obstacle.transform.localPosition += position;
 
-        Obstacles.Add(obstacle);
-
         lastTimeObstacleSpawned = runtime;
-    }
 
-    private void OnObstacleCollider(GameObject obstacle, Collider collider)
-    {
-        OnEnemyCollision(obstacle);
-        RemoveObstacle(obstacle);
+        AddObstacle(obstacle);
     }
 }
 

@@ -543,6 +543,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 50690734}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &466446046 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7125782032598107150, guid: 732689fee254d4f0daba89be36be1fb1, type: 3}
+  m_PrefabInstance: {fileID: 719379315}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &476463781
 GameObject:
   m_ObjectHideFlags: 0
@@ -736,7 +741,7 @@ PrefabInstance:
     - target: {fileID: 30836025688245374, guid: 732689fee254d4f0daba89be36be1fb1, type: 3}
       propertyPath: defaultMenu
       value: 
-      objectReference: {fileID: 719379317}
+      objectReference: {fileID: 466446046}
     - target: {fileID: 30836025688245374, guid: 732689fee254d4f0daba89be36be1fb1, type: 3}
       propertyPath: backToMainMenuButton
       value: 
@@ -2054,6 +2059,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 417854996}
     - target: {fileID: 9074353218437721358, guid: 732689fee254d4f0daba89be36be1fb1, type: 3}
+      propertyPath: Speed
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 9074353218437721358, guid: 732689fee254d4f0daba89be36be1fb1, type: 3}
       propertyPath: Size.x
       value: 3.5
       objectReference: {fileID: 0}
@@ -2129,11 +2138,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5de9d04f3b8a146bd8ec92dae4452306, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1 &719379317 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4865107907648782127, guid: 732689fee254d4f0daba89be36be1fb1, type: 3}
-  m_PrefabInstance: {fileID: 719379315}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &826892434
 PrefabInstance:
   m_ObjectHideFlags: 0

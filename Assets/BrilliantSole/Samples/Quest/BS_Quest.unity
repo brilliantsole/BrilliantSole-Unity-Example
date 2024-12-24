@@ -2076,10 +2076,6 @@ PrefabInstance:
       propertyPath: Size.x
       value: 1.5
       objectReference: {fileID: 0}
-    - target: {fileID: 9074353218437721358, guid: 732689fee254d4f0daba89be36be1fb1, type: 3}
-      propertyPath: InsoleSide
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:

@@ -10,6 +10,7 @@ public class BS_BaseDemo : MonoBehaviour
     public GameObject PlayerPrefab;
     public GameObject EnemyPrefab;
     public GameObject CollectablePrefab;
+    public GameObject PipePrefab;
 
     public GameObject Scene;
 
@@ -184,21 +185,6 @@ public class BS_BaseDemo : MonoBehaviour
     public float Speed = 1.0f;
     protected virtual void MoveObstacles() { }
 
-    public LayerMask CollisionLayer;
-    private readonly Collider[] colliders = new Collider[10];
-    protected virtual void CheckObstacleCollisions()
-    {
-        var colliderCount = Physics.OverlapSphereNonAlloc(Player.transform.position, 0.1f, colliders, CollisionLayer);
-        if (colliderCount > 0)
-        {
-            //Debug.Log($"collided with {colliderCount} obstacles");
-            for (int i = 0; i < colliderCount; i++)
-            {
-                var obstacle = colliders[i].gameObject.transform.parent.gameObject;
-                OnObstacleCollision(obstacle);
-            }
-        }
-    }
     protected void OnObstacleCollision(GameObject obstacle)
     {
         //Debug.Log($"collided with {obstacle.name}");
@@ -212,6 +198,16 @@ public class BS_BaseDemo : MonoBehaviour
             //Debug.Log("collided with enemy");
             OnEnemyCollision(obstacle);
         }
+        else if (obstacle.name.Contains(EnemyPrefab.name))
+        {
+            //Debug.Log("collided with enemy");
+            OnEnemyCollision(obstacle);
+        }
+        else if (obstacle.name.Contains(PipePrefab.name))
+        {
+            //Debug.Log("collided with pipe");
+            OnEnemyCollision(obstacle);
+        }
         else
         {
             Debug.LogError($"uncaught collided obstacle {obstacle.name}");
@@ -221,9 +217,26 @@ public class BS_BaseDemo : MonoBehaviour
     protected virtual void CheckObstaclePositions() { }
     protected void RemoveObstacle(GameObject obstacle)
     {
+        if (obstacle.TryGetComponent<BS_ColliderBroadcaster>(out var colliderBroadcaster))
+        {
+            colliderBroadcaster.OnCollider -= OnObstacleCollider;
+        }
         //Debug.Log("removing obstacle");
         Obstacles.Remove(obstacle);
         Destroy(obstacle);
+    }
+    protected void AddObstacle(GameObject obstacle)
+    {
+        if (obstacle.TryGetComponent<BS_ColliderBroadcaster>(out var colliderBroadcaster))
+        {
+            colliderBroadcaster.OnCollider += OnObstacleCollider;
+        }
+        Obstacles.Add(obstacle);
+    }
+
+    protected void OnObstacleCollider(GameObject obstacle, Collider collider)
+    {
+        OnObstacleCollision(obstacle);
     }
 
     public int CollectableScore = 100;
@@ -248,7 +261,6 @@ public class BS_BaseDemo : MonoBehaviour
         if (!IsRunning) { return; }
         runtime += Time.deltaTime;
         CheckObstacleSpawn();
-        CheckObstacleCollisions();
         CheckObstaclePositions();
     }
 

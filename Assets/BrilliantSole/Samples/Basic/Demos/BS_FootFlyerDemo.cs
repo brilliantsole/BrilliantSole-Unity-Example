@@ -73,7 +73,7 @@ public class BS_FootFlyerDemo : BS_BaseDemo
         Vector3 position = new(Size.x / 2, Size.y * UnityEngine.Random.value, 0);
         obstacle.transform.localPosition += position;
 
-        Obstacles.Add(obstacle);
+        AddObstacle(obstacle);
 
         lastTimeObstacleSpawned = runtime;
     }
