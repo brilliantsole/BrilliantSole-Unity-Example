@@ -123,7 +123,7 @@ public class BS_BaseDemo : MonoBehaviour
 
     protected virtual void OnScoreUpdate()
     {
-        Debug.Log($"Score: {Score}");
+        //Debug.Log($"Score: {Score}");
         ScoreText.text = $"Score: {Math.Floor(Score)}";
     }
 
@@ -199,7 +199,7 @@ public class BS_BaseDemo : MonoBehaviour
             }
         }
     }
-    private void OnObstacleCollision(GameObject obstacle)
+    protected void OnObstacleCollision(GameObject obstacle)
     {
         //Debug.Log($"collided with {obstacle.name}");
         if (obstacle.name.Contains(CollectablePrefab.name))

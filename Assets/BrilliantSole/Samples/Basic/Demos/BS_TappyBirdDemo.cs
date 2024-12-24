@@ -6,6 +6,9 @@ public class BS_TappyBirdDemo : BS_BaseDemo
     private BS_Device Device => DevicePair.Devices.ContainsKey(InsoleSide) ? DevicePair.Devices[InsoleSide] : null;
     private bool IsInsoleConnected => Device?.IsConnected == true;
 
+    public GameObject PipePrefab;
+
+
     protected override void Start()
     {
         base.Start();
@@ -16,6 +19,8 @@ public class BS_TappyBirdDemo : BS_BaseDemo
     {
         var playerPosition = Player.transform.localPosition;
         playerPosition.y = Size.y / 2;
+        playerPosition.x = -Size.x / 3;
+        playerPosition.z = -Size.z / 3;
         Player.transform.localPosition = playerPosition;
     }
 
@@ -35,6 +40,21 @@ public class BS_TappyBirdDemo : BS_BaseDemo
         foreach (var obstacle in Obstacles)
         {
             obstacle.transform.Translate(Speed * Time.deltaTime * Vector3.left);
+        }
+    }
+    protected override void CheckObstaclePositions()
+    {
+        base.CheckObstaclePositions();
+        foreach (var obstacle in Obstacles.ToArray())
+        {
+            if (obstacle.transform.localPosition.x < -((Size.x / 2) + 0.1))
+            {
+                if (obstacle.TryGetComponent<BS_ColliderBroadcaster>(out var colliderBroadcaster))
+                {
+                    colliderBroadcaster.OnCollider -= OnObstacleCollider;
+                }
+                RemoveObstacle(obstacle);
+            }
         }
     }
 
@@ -67,6 +87,16 @@ public class BS_TappyBirdDemo : BS_BaseDemo
     {
         base.Update();
         CheckJumpInput();
+        if (IsRunning && HasJumpedAtLeastOnce)
+        {
+            UpdateScore();
+        }
+    }
+
+    public float ScoreTimeMultiplier = 10.0f;
+    private void UpdateScore()
+    {
+        Score += Time.deltaTime * ScoreTimeMultiplier;
     }
 
     private void CheckPlayerPosition()
@@ -79,6 +109,9 @@ public class BS_TappyBirdDemo : BS_BaseDemo
     }
 
     private bool HasJumpedAtLeastOnce = false;
+    [Range(1.0f, 5.0f)]
+    public float JumpVelocity = 3.5f;
+
     private void Jump()
     {
         if (!HasJumpedAtLeastOnce)
@@ -86,6 +119,10 @@ public class BS_TappyBirdDemo : BS_BaseDemo
             HasJumpedAtLeastOnce = true;
             UpdatePlayerRigidBody();
         }
+
+        var linearVelocity = PlayerRigidBody.linearVelocity;
+        linearVelocity.y = JumpVelocity;
+        PlayerRigidBody.linearVelocity = linearVelocity;
     }
     private void CheckJumpInput()
     {
@@ -95,7 +132,7 @@ public class BS_TappyBirdDemo : BS_BaseDemo
             {
                 Jump();
             }
-            else
+            else if (IsGameOver)
             {
                 ToggleIsRunning();
             }
@@ -114,6 +151,41 @@ public class BS_TappyBirdDemo : BS_BaseDemo
             PlayerRigidBody.useGravity = false;
             PlayerRigidBody.isKinematic = true;
         }
+    }
+
+    private float lastTimeObstacleSpawned = 0;
+    [Range(0.5f, 5.0f)]
+    public float TimeBetweenObstacleSpawn = 1.0f;
+    protected override void CheckObstacleSpawn()
+    {
+        if (!HasJumpedAtLeastOnce) { return; }
+        base.CheckObstacleSpawn();
+        if (runtime - lastTimeObstacleSpawned >= TimeBetweenObstacleSpawn)
+        {
+            SpawnObstacle();
+        }
+    }
+    private void SpawnObstacle()
+    {
+        var obstacle = Instantiate(PipePrefab, Scene.transform.position, Quaternion.identity, Scene.transform);
+
+        if (obstacle.TryGetComponent<BS_ColliderBroadcaster>(out var colliderBroadcaster))
+        {
+            colliderBroadcaster.OnCollider += OnObstacleCollider;
+        }
+
+        Vector3 position = new(Size.x / 2, Size.y * Random.value, 0);
+        obstacle.transform.localPosition += position;
+
+        Obstacles.Add(obstacle);
+
+        lastTimeObstacleSpawned = runtime;
+    }
+
+    private void OnObstacleCollider(GameObject obstacle, Collider collider)
+    {
+        OnEnemyCollision(obstacle);
+        RemoveObstacle(obstacle);
     }
 }
 
