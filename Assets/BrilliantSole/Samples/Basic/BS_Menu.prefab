@@ -13356,13 +13356,16 @@ MonoBehaviour:
     WaveformSequence: []
   PlayerLinearDamping: 0
   SensorRate: 20
-  Size: {x: 2, y: 1, z: 0}
+  Size: {x: 2, y: 1.5, z: 0}
   _isRunning: 0
   _score: 0
   _health: 100
   Speed: 1
   CollectableScore: 100
-  EnemyDamage: 20
+  EnemyDamage: 10
+  TapTargetPrefab: {fileID: 0}
+  MisTapDamage: 10
+  TapScore: 100
   TimeBetweenObstacleSpawn: 1
 --- !u!224 &6533663590242290289 stripped
 RectTransform:

@@ -200,25 +200,25 @@ public class BS_BaseDemo : MonoBehaviour
     public float Speed = 1.0f;
     protected virtual void MoveObstacles() { }
 
-    protected void OnObstacleCollision(GameObject obstacle)
+    protected bool IsObstacleAPrefabOf(GameObject obstacle, GameObject prefab) => obstacle.name.Contains(prefab.name);
+    protected bool IsObstacleCollectable(GameObject obstacle) => IsObstacleAPrefabOf(obstacle, CollectablePrefab);
+    protected bool IsObstacleEnemy(GameObject obstacle) => IsObstacleAPrefabOf(obstacle, EnemyPrefab);
+    protected bool IsObstaclePipe(GameObject obstacle) => IsObstacleAPrefabOf(obstacle, PipePrefab);
+
+    protected virtual void OnObstacleCollision(GameObject obstacle)
     {
-        //Debug.Log($"collided with {obstacle.name}");
-        if (obstacle.name.Contains(CollectablePrefab.name))
+        Debug.Log($"collided with {obstacle.name}");
+        if (IsObstacleCollectable(obstacle))
         {
             //Debug.Log("collided with collectable");
             OnCollectableCollision(obstacle);
         }
-        else if (obstacle.name.Contains(EnemyPrefab.name))
+        else if (IsObstacleCollectable(obstacle))
         {
             //Debug.Log("collided with enemy");
             OnEnemyCollision(obstacle);
         }
-        else if (obstacle.name.Contains(EnemyPrefab.name))
-        {
-            //Debug.Log("collided with enemy");
-            OnEnemyCollision(obstacle);
-        }
-        else if (obstacle.name.Contains(PipePrefab.name))
+        else if (IsObstaclePipe(obstacle))
         {
             //Debug.Log("collided with pipe");
             OnEnemyCollision(obstacle);
@@ -230,7 +230,7 @@ public class BS_BaseDemo : MonoBehaviour
         RemoveObstacle(obstacle);
     }
     protected virtual void CheckObstaclePositions() { }
-    protected void RemoveObstacle(GameObject obstacle)
+    protected virtual void RemoveObstacle(GameObject obstacle)
     {
         if (obstacle.TryGetComponent<BS_ColliderBroadcaster>(out var colliderBroadcaster))
         {

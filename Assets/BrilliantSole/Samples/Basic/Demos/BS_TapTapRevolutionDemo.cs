@@ -1,9 +1,32 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using static BS_InsoleSide;
 
 public class BS_TapTapRevolutionDemo : BS_BaseDemo
 {
+    public GameObject TapTargetPrefab;
+    private readonly Dictionary<BS_InsoleSide, GameObject> TapTargets = new();
+
+    private readonly float xSpacing = 3.0f;
+
+    protected override void Start()
+    {
+        base.Start();
+        Player.SetActive(false);
+
+        foreach (BS_InsoleSide insoleSide in Enum.GetValues(typeof(BS_InsoleSide)))
+        {
+            var TapTarget = Instantiate(TapTargetPrefab, Scene.transform.position, Quaternion.identity, Scene.transform);
+            var localPosition = TapTarget.transform.localPosition;
+            var xOffset = Size.x / xSpacing;
+            if (insoleSide == Left) { xOffset *= -1.0f; }
+            localPosition.x = xOffset;
+            TapTarget.transform.localPosition = localPosition;
+            TapTargets[insoleSide] = TapTarget;
+        }
+    }
     protected override void OnEnable()
     {
         base.OnEnable();
@@ -30,8 +53,18 @@ public class BS_TapTapRevolutionDemo : BS_BaseDemo
     private void OnTap(BS_InsoleSide insoleSide)
     {
         Debug.Log($"{insoleSide} tap");
-        // FILL - clear obstacles
+        if (PendingObstacles.ContainsKey(insoleSide))
+        {
+            RemoveObstacle(PendingObstacles[insoleSide]);
+            Score += TapScore;
+        }
+        else
+        {
+            Health -= MisTapDamage;
+        }
     }
+    public float MisTapDamage = 10.0f;
+    public float TapScore = 100.0f;
 
     protected override void MoveObstacles()
     {
@@ -48,6 +81,7 @@ public class BS_TapTapRevolutionDemo : BS_BaseDemo
             if (obstacle.transform.localPosition.y < -0.1)
             {
                 RemoveObstacle(obstacle);
+                Health -= EnemyDamage;
             }
         }
     }
@@ -72,11 +106,11 @@ public class BS_TapTapRevolutionDemo : BS_BaseDemo
         List<BS_InsoleSide> sides = new();
         if (DevicePair.IsHalfConnected)
         {
-            sides.Add(Random.value < 0.5f ? Left : Right);
+            sides.Add(UnityEngine.Random.value < 0.5f ? Left : Right);
         }
         else
         {
-            var useBoth = Random.value < 0.33f;
+            var useBoth = UnityEngine.Random.value < 0.33f;
             if (useBoth)
             {
                 sides.Add(Left);
@@ -84,7 +118,7 @@ public class BS_TapTapRevolutionDemo : BS_BaseDemo
             }
             else
             {
-                sides.Add(Random.value < 0.5f ? Left : Right);
+                sides.Add(UnityEngine.Random.value < 0.5f ? Left : Right);
             }
         }
 
@@ -95,7 +129,7 @@ public class BS_TapTapRevolutionDemo : BS_BaseDemo
             var obstacle = Instantiate(obstaclePrefab, Scene.transform.position, Quaternion.identity, Scene.transform);
 
             Vector3 position = new(0, Size.y, 0);
-            var xOffset = Size.x / 3;
+            var xOffset = Size.x / xSpacing;
             if (side == Left) { xOffset *= -1; }
             position.x += xOffset;
             obstacle.transform.localPosition += position;
@@ -124,5 +158,30 @@ public class BS_TapTapRevolutionDemo : BS_BaseDemo
         }
     }
 
-
+    private readonly Dictionary<BS_InsoleSide, GameObject> PendingObstacles = new();
+    protected override void OnObstacleCollision(GameObject obstacle)
+    {
+        if (IsObstacleEnemy(obstacle))
+        {
+            var side = GetObstacleSide(obstacle);
+            PendingObstacles[side] = obstacle;
+            // FILL - change color
+        }
+        else
+        {
+            base.OnObstacleCollision(obstacle);
+        }
+    }
+    private BS_InsoleSide GetObstacleSide(GameObject obstacle) => obstacle.transform.localPosition.x < 0 ? Left : Right;
+    protected override void RemoveObstacle(GameObject obstacle)
+    {
+        if (IsObstacleEnemy(obstacle))
+        {
+            if (PendingObstacles.ContainsValue(obstacle))
+            {
+                PendingObstacles.Remove(GetObstacleSide(obstacle));
+            }
+        }
+        base.RemoveObstacle(obstacle);
+    }
 }

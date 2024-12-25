@@ -1765,6 +1765,10 @@ PrefabInstance:
       propertyPath: Scene
       value: 
       objectReference: {fileID: 641668468}
+    - target: {fileID: 5254998383097603176, guid: 732689fee254d4f0daba89be36be1fb1, type: 3}
+      propertyPath: TapTargetPrefab
+      value: 
+      objectReference: {fileID: 6865563771350048401, guid: 3334439e39def4b838d642cbc7fe3568, type: 3}
     - target: {fileID: 5308268217974579803, guid: 732689fee254d4f0daba89be36be1fb1, type: 3}
       propertyPath: m_IsActive
       value: 0
