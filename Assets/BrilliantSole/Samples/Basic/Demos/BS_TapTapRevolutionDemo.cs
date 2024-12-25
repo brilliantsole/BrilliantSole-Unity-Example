@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -8,6 +9,8 @@ public class BS_TapTapRevolutionDemo : BS_BaseDemo
 {
     public GameObject TapTargetPrefab;
     private readonly Dictionary<BS_InsoleSide, GameObject> TapTargets = new();
+    private readonly Dictionary<BS_InsoleSide, Renderer> TapTargetRenderers = new();
+    private readonly Dictionary<BS_InsoleSide, Color> TapTargetOriginalColors = new();
 
     private readonly float xSpacing = 3.0f;
 
@@ -25,7 +28,21 @@ public class BS_TapTapRevolutionDemo : BS_BaseDemo
             localPosition.x = xOffset;
             TapTarget.transform.localPosition = localPosition;
             TapTargets[insoleSide] = TapTarget;
+            var TapTargetRenderer = TapTarget.transform.GetChild(0).GetComponent<Renderer>();
+            TapTargetRenderers[insoleSide] = TapTargetRenderer;
+            TapTargetOriginalColors[insoleSide] = TapTargetRenderer.material.color;
         }
+    }
+    public float ColorFlashDuration = 0.2f;
+    private IEnumerator FlashColor(Renderer renderer, Color color, Color originalColor)
+    {
+        renderer.material.color = color;
+        yield return new WaitForSeconds(ColorFlashDuration);
+        renderer.material.color = originalColor;
+    }
+    private void FlashInsoleColor(BS_InsoleSide insoleSide, Color color)
+    {
+        StartCoroutine(FlashColor(TapTargetRenderers[insoleSide], color, TapTargetOriginalColors[insoleSide]));
     }
     protected override void OnEnable()
     {
@@ -50,20 +67,30 @@ public class BS_TapTapRevolutionDemo : BS_BaseDemo
         }
     }
 
+    public Color TapHitColor = Color.green;
+    public Color TapMissColor = Color.red;
     private void OnTap(BS_InsoleSide insoleSide)
     {
+        if (!IsRunning) { return; }
+
         Debug.Log($"{insoleSide} tap");
-        if (PendingObstacles.ContainsKey(insoleSide))
+
+        var CorrectHit = PendingObstacles.ContainsKey(insoleSide);
+        var color = CorrectHit ? TapHitColor : TapMissColor;
+
+        if (CorrectHit)
         {
             RemoveObstacle(PendingObstacles[insoleSide]);
             Score += TapScore;
         }
         else
         {
-            Health -= MisTapDamage;
+            Health -= MissTapDamage;
         }
+        FlashInsoleColor(insoleSide, color);
+        // FILL - vibrate
     }
-    public float MisTapDamage = 10.0f;
+    public float MissTapDamage = 10.0f;
     public float TapScore = 100.0f;
 
     protected override void MoveObstacles()
@@ -82,6 +109,11 @@ public class BS_TapTapRevolutionDemo : BS_BaseDemo
             {
                 RemoveObstacle(obstacle);
                 Health -= EnemyDamage;
+                if (PendingObstacles.ContainsValue(obstacle))
+                {
+                    var side = GetObstacleSide(obstacle);
+                    FlashInsoleColor(side, TapMissColor);
+                }
             }
         }
     }
@@ -158,6 +190,7 @@ public class BS_TapTapRevolutionDemo : BS_BaseDemo
         }
     }
 
+    public Color TappableEnemyColor = Color.magenta;
     private readonly Dictionary<BS_InsoleSide, GameObject> PendingObstacles = new();
     protected override void OnObstacleCollision(GameObject obstacle)
     {
@@ -165,7 +198,9 @@ public class BS_TapTapRevolutionDemo : BS_BaseDemo
         {
             var side = GetObstacleSide(obstacle);
             PendingObstacles[side] = obstacle;
-            // FILL - change color
+            var renderer = obstacle.transform.GetChild(0).GetComponent<Renderer>();
+            renderer.material.color = TappableEnemyColor;
+            // FILL - vibrate
         }
         else
         {
