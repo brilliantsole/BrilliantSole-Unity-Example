@@ -155,7 +155,11 @@ public class BS_TappyBirdDemo : BS_BaseDemo
         DidPitchExceedThreshold = didLatestPitchExceedThreshold;
         Pitch = latestPitch;
     }
-    private bool DoesPitchExceedThreshold(float pitch) => InvertPitch ? pitch > PitchThreshold : pitch < PitchThreshold;
+    private bool DoesPitchExceedThreshold(float pitch)
+    {
+        var offset = DidPitchExceedThreshold ? -20.0f : 0.0f;
+        return InvertPitch ? pitch > (PitchThreshold + offset) : pitch < (PitchThreshold + offset);
+    }
     private bool DidPitchExceedThreshold = false;
     public override void Calibrate()
     {

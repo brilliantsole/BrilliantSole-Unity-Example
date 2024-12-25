@@ -13300,6 +13300,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -29.608719
       objectReference: {fileID: 0}
+    - target: {fileID: 8709554584225099353, guid: 207da8b1ab915491b8ef017073ab892f, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 400
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -13325,6 +13329,41 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6dbb6f316d8541519ba50a306df4b59, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  PlayerPrefab: {fileID: 158558286838363881, guid: c518b169e92cc4a7d9bccac2c83694ce, type: 3}
+  EnemyPrefab: {fileID: 158558286838363881, guid: 8a2f4118bf637412cb90f79cf88c27f1, type: 3}
+  CollectablePrefab: {fileID: 158558286838363881, guid: 4d2fa0b2a8aba4cbdb607e2acdea9c99, type: 3}
+  PipePrefab: {fileID: 0}
+  Scene: {fileID: 0}
+  EnemyVibrationConfigurations:
+  - Type: 0
+    Locations: 255
+    WaveformEffectSequence:
+    - Type: 0
+      Effect: 14
+      Delay: 0
+      LoopCount: 0
+    WaveformEffectSequenceLoopCount: 0
+    WaveformSequence: []
+  CollectableVibrationConfigurations:
+  - Type: 0
+    Locations: 255
+    WaveformEffectSequence:
+    - Type: 0
+      Effect: 10
+      Delay: 0
+      LoopCount: 0
+    WaveformEffectSequenceLoopCount: 0
+    WaveformSequence: []
+  PlayerLinearDamping: 0
+  SensorRate: 20
+  Size: {x: 2, y: 1, z: 0}
+  _isRunning: 0
+  _score: 0
+  _health: 100
+  Speed: 1
+  CollectableScore: 100
+  EnemyDamage: 20
+  TimeBetweenObstacleSpawn: 1
 --- !u!224 &6533663590242290289 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 5083973908934596382, guid: 207da8b1ab915491b8ef017073ab892f, type: 3}
@@ -13565,6 +13604,7 @@ MonoBehaviour:
       LoopCount: 0
     WaveformEffectSequenceLoopCount: 0
     WaveformSequence: []
+  PlayerLinearDamping: 0
   SensorRate: 20
   Size: {x: 3.5, y: 1.4, z: 0}
   _isRunning: 0
@@ -13771,6 +13811,7 @@ MonoBehaviour:
     WaveformEffectSequenceLoopCount: 0
     WaveformSequence: []
   CollectableVibrationConfigurations: []
+  PlayerLinearDamping: 0
   SensorRate: 20
   Size: {x: 3.5, y: 1.4, z: 0}
   _isRunning: 0

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 
 public partial class BS_DevicePair
 {
@@ -9,6 +10,7 @@ public partial class BS_DevicePair
     public BS_Device Right => Devices.GetValueOrDefault(BS_InsoleSide.Right, null);
 
     public bool HasAllDevices => Devices.Count == 2;
+    private int ConnectedDevicesCount => Devices.Values.Select(device => device.IsConnected).Count();
 
     public void AddDevice(BS_Device device)
     {
