@@ -60,7 +60,7 @@ public class BS_BaseDemo : MonoBehaviour
         }
         else
         {
-            Debug.Log("mo PlayerRigidBody found");
+            Debug.Log("no PlayerRigidBody found");
         }
     }
 

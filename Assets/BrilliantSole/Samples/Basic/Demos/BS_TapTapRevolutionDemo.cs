@@ -106,7 +106,7 @@ public class BS_TapTapRevolutionDemo : BS_BaseDemo
         base.CheckObstaclePositions();
         foreach (var obstacle in Obstacles.ToArray())
         {
-            if (obstacle.transform.localPosition.y < -0.1)
+            if (obstacle.transform.localPosition.y < -0.4)
             {
                 RemoveObstacle(obstacle);
                 Health -= EnemyDamage;

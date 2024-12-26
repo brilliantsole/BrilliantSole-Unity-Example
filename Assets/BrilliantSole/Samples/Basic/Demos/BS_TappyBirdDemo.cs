@@ -160,7 +160,7 @@ public class BS_TappyBirdDemo : BS_BaseDemo
     }
     private bool DoesPitchExceedThreshold(float pitch)
     {
-        var offset = DidPitchExceedThreshold ? -20.0f : 0.0f;
+        var offset = DidPitchExceedThreshold ? 5.0f : 0.0f;
         return InvertPitch ? pitch > (PitchThreshold + offset) : pitch < (PitchThreshold + offset);
     }
     private bool DidPitchExceedThreshold = false;
