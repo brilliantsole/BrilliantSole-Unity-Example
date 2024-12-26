@@ -280,4 +280,9 @@ public class BS_BaseDemo : MonoBehaviour
     }
 
     protected virtual void CheckObstacleSpawn() { }
+
+    protected void TriggerVibration(BS_InsoleSide insoleSide, List<BS_VibrationConfiguration> vibrationConfigurations)
+    {
+        DevicePair.GetDevice(insoleSide)?.TriggerVibration(vibrationConfigurations);
+    }
 }

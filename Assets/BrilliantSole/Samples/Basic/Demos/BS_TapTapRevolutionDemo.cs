@@ -53,9 +53,9 @@ public class BS_TapTapRevolutionDemo : BS_BaseDemo
     protected override void OnDisable()
     {
         base.OnDisable();
+        DevicePair.OnDeviceTfliteClassification -= OnDeviceTfliteClassification;
         if (!gameObject.scene.isLoaded) return;
         DevicePair.SetTfliteInferencingEnabled(false);
-        DevicePair.OnDeviceTfliteClassification -= OnDeviceTfliteClassification;
     }
 
     private void OnDeviceTfliteClassification(BS_DevicePair devicePair, BS_InsoleSide insoleSide, BS_Device device, string classification, float value, ulong timestamp)
@@ -77,6 +77,7 @@ public class BS_TapTapRevolutionDemo : BS_BaseDemo
 
         var CorrectHit = PendingObstacles.ContainsKey(insoleSide);
         var color = CorrectHit ? TapHitColor : TapMissColor;
+        var vibrationConfigurations = CorrectHit ? CollectableVibrationConfigurations : EnemyVibrationConfigurations;
 
         if (CorrectHit)
         {
@@ -88,7 +89,7 @@ public class BS_TapTapRevolutionDemo : BS_BaseDemo
             Health -= MissTapDamage;
         }
         FlashInsoleColor(insoleSide, color);
-        // FILL - vibrate
+        TriggerVibration(insoleSide, vibrationConfigurations);
     }
     public float MissTapDamage = 10.0f;
     public float TapScore = 100.0f;
@@ -109,11 +110,9 @@ public class BS_TapTapRevolutionDemo : BS_BaseDemo
             {
                 RemoveObstacle(obstacle);
                 Health -= EnemyDamage;
-                if (PendingObstacles.ContainsValue(obstacle))
-                {
-                    var side = GetObstacleSide(obstacle);
-                    FlashInsoleColor(side, TapMissColor);
-                }
+                var side = GetObstacleSide(obstacle);
+                FlashInsoleColor(side, TapMissColor);
+                TriggerVibration(side, EnemyVibrationConfigurations);
             }
         }
     }
@@ -138,7 +137,10 @@ public class BS_TapTapRevolutionDemo : BS_BaseDemo
         List<BS_InsoleSide> sides = new();
         if (DevicePair.IsHalfConnected)
         {
-            sides.Add(UnityEngine.Random.value < 0.5f ? Left : Right);
+            if (UnityEngine.Random.value < 0.5f)
+            {
+                sides.Add((DevicePair.GetDevice(Left)?.IsConnected == true) ? Left : Right);
+            }
         }
         else
         {
@@ -200,7 +202,6 @@ public class BS_TapTapRevolutionDemo : BS_BaseDemo
             PendingObstacles[side] = obstacle;
             var renderer = obstacle.transform.GetChild(0).GetComponent<Renderer>();
             renderer.material.color = TappableEnemyColor;
-            // FILL - vibrate
         }
         else
         {

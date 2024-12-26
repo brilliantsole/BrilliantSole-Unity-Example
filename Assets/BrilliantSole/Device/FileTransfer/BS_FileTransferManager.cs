@@ -291,11 +291,31 @@ public class BS_FileTransferManager : BS_BaseManager<BS_FileTransferMessageType>
         }
         Logger.Log($"sending {fileMetadata.FileType} file with {fileData.Length} bytes");
 
+        var fileChecksum = GetCrc32(fileData);
+
+        if (fileMetadata.FileType != FileType)
+        {
+            // different file types - sending
+        }
+        else if (fileData.Length != FileLength)
+        {
+            // different file lengths - sending
+        }
+        else if (FileChecksum != fileChecksum)
+        {
+            // different file checksums - sending
+        }
+        else
+        {
+            Logger.Log($"already sent file");
+            return;
+        }
+
         FileToSend = fileData;
 
         SetFileTransferType(fileMetadata.FileType, false);
         SetFileLength((uint)FileToSend.Length, false);
-        SetFileChecksum(GetCrc32(FileToSend), false);
+        SetFileChecksum(fileChecksum, false);
         SetFileTransferCommand(Send);
     }
     public void ReceiveFile(BS_FileType fileType)

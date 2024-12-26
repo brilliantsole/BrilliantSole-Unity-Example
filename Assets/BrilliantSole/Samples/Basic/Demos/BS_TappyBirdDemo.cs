@@ -100,6 +100,7 @@ public class BS_TappyBirdDemo : BS_BaseDemo
         {
             Debug.Log("Reached bottom");
             Health = 0;
+            Device?.TriggerVibration(EnemyVibrationConfigurations);
         }
     }
 
@@ -120,6 +121,8 @@ public class BS_TappyBirdDemo : BS_BaseDemo
         var linearVelocity = PlayerRigidBody.linearVelocity;
         linearVelocity.y = JumpVelocity;
         PlayerRigidBody.linearVelocity = linearVelocity;
+
+        Device?.TriggerVibration(CollectableVibrationConfigurations);
     }
     private void CheckJumpInput()
     {
@@ -203,6 +206,12 @@ public class BS_TappyBirdDemo : BS_BaseDemo
         lastTimeObstacleSpawned = runtime;
 
         AddObstacle(obstacle);
+    }
+
+    protected override void OnEnemyCollision(GameObject obstacle)
+    {
+        base.OnEnemyCollision(obstacle);
+        Device?.TriggerVibration(EnemyVibrationConfigurations);
     }
 }
 

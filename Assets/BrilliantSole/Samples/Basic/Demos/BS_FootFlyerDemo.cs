@@ -1,10 +1,11 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class BS_FootFlyerDemo : BS_BaseDemo
 {
     public BS_InsoleSide InsoleSide = BS_InsoleSide.Right;
-    private BS_Device Device => DevicePair.Devices.ContainsKey(InsoleSide) ? DevicePair.Devices[InsoleSide] : null;
+    private BS_Device Device => DevicePair.Devices.GetValueOrDefault(InsoleSide, null);
     private bool IsInsoleConnected => Device?.IsConnected == true;
 
     protected override void Start()

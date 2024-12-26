@@ -1771,15 +1771,15 @@ PrefabInstance:
       objectReference: {fileID: 6865563771350048401, guid: 3334439e39def4b838d642cbc7fe3568, type: 3}
     - target: {fileID: 5254998383097603176, guid: 732689fee254d4f0daba89be36be1fb1, type: 3}
       propertyPath: TappableEnemyColor.b
-      value: 0
+      value: 0.0639931
       objectReference: {fileID: 0}
     - target: {fileID: 5254998383097603176, guid: 732689fee254d4f0daba89be36be1fb1, type: 3}
       propertyPath: TappableEnemyColor.g
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5254998383097603176, guid: 732689fee254d4f0daba89be36be1fb1, type: 3}
       propertyPath: TappableEnemyColor.r
-      value: 0.997499
+      value: 0.764151
       objectReference: {fileID: 0}
     - target: {fileID: 5308268217974579803, guid: 732689fee254d4f0daba89be36be1fb1, type: 3}
       propertyPath: m_IsActive

@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using UnityEngine;
 using static BS_TfliteMessageType;
 using static BS_TfliteTask;
@@ -92,7 +91,7 @@ public class BS_TfliteManager : BS_BaseManager<BS_TfliteMessageType>
         SetTask(tfliteModelMetadata.Task, false);
         SetCaptureDelay(tfliteModelMetadata.CaptureDelay, false);
         SetSensorRate(tfliteModelMetadata.SensorRate, false);
-        SetThreshold(tfliteModelMetadata.Threshold, sendImmediately);
+        SetThreshold(tfliteModelMetadata.Threshold, false);
         SetSensorTypes(tfliteModelMetadata.GetSensorTypes(), sendImmediately);
     }
 
@@ -200,7 +199,8 @@ public class BS_TfliteManager : BS_BaseManager<BS_TfliteMessageType>
         }
         Logger.Log($"setting sensorRate to {newSensorRate}...");
 
-        List<byte> data = new() { (byte)newSensorRate };
+        List<byte> data = new();
+        data.AddRange(BS_ByteUtils.ToByteArray((ushort)newSensorRate, true));
         BS_TxMessage[] Messages = { CreateMessage(SetTfliteSensorRate, data) };
         SendTxMessages(Messages, sendImmediately);
     }

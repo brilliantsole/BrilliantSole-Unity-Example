@@ -16,8 +16,8 @@ MonoBehaviour:
   Name: Sample Model
   SensorTypes: 6
   Task: 0
-  SensorRate: 20
-  CaptureDelay: 1000
+  SensorRate: 10
+  CaptureDelay: 500
   Threshold: 0
   Classes:
   - idle
