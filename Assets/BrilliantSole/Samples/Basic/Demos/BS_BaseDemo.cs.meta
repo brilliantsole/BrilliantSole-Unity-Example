@@ -1,2 +1,16 @@
 fileFormatVersion: 2
 guid: e88404dc0e6d24370b255837ef2f7046
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - PlayerPrefab: {fileID: 158558286838363881, guid: c518b169e92cc4a7d9bccac2c83694ce, type: 3}
+  - EnemyPrefab: {fileID: 158558286838363881, guid: 8a2f4118bf637412cb90f79cf88c27f1, type: 3}
+  - CollectablePrefab: {fileID: 158558286838363881, guid: 4d2fa0b2a8aba4cbdb607e2acdea9c99, type: 3}
+  - PipePrefab: {fileID: 158558286838363881, guid: 7cefd0a9ebd6348b5a20229b9dc9f257, type: 3}
+  - Scene: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
