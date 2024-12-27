@@ -7,6 +7,8 @@ using UnityEngine.Events;
 [RequireComponent(typeof(Rigidbody))]
 public class BS_EyeInteractable : MonoBehaviour
 {
+    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_EyeInteractable", BS_Logger.LogLevel.Log);
+
     [SerializeField]
     private UnityEvent<GameObject> OnObjectHover;
 
@@ -44,6 +46,7 @@ public class BS_EyeInteractable : MonoBehaviour
             if (_IsHovered != value)
             {
                 _IsHovered = value;
+                Logger.Log($"IsHovered updated to {IsHovered}");
                 if (_IsHovered)
                 {
                     if (meshRenderer && OnHoverActiveMaterial)

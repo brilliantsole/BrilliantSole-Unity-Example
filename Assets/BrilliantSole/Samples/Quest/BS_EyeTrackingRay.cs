@@ -5,8 +5,10 @@ using System.Collections.Generic;
 using UnityEngine.Events;
 
 [RequireComponent(typeof(LineRenderer))]
-public class EyeTrackingRay : MonoBehaviour
+public class BS_EyeTrackingRay : MonoBehaviour
 {
+    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_EyeTrackingRay", BS_Logger.LogLevel.Log);
+
     [SerializeField]
     private float rayDistance = 1.0f;
 
@@ -49,11 +51,9 @@ public class EyeTrackingRay : MonoBehaviour
 
     private void FixedUpdate()
     {
-        RaycastHit hit;
-
         Vector3 raycastDirection = transform.TransformDirection(Vector3.forward) * rayDistance;
 
-        if (Physics.Raycast(transform.position, raycastDirection, out hit, 50.0f, layersToInclude))
+        if (Physics.Raycast(transform.position, raycastDirection, out RaycastHit hit, 50.0f, layersToInclude))
         {
             UnSelect();
 
