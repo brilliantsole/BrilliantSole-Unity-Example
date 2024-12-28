@@ -39,7 +39,7 @@ public class BS_EyeInteractable : MonoBehaviour
             if (_IsHovered != value)
             {
                 _IsHovered = value;
-                Logger.Log($"IsHovered updated to {IsHovered}");
+                Logger.Log($"\"{name}\" IsHovered updated to {IsHovered}");
                 if (_IsHovered)
                 {
                     OnHover?.Invoke(this);

@@ -5,7 +5,7 @@ public abstract class BS_BaseEyeTrackingUIComponent : MonoBehaviour
 {
     private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_BaseEyeTrackingUIComponent", BS_Logger.LogLevel.Log);
 
-    private BS_EyeInteractable eyeInteractable;
+    protected BS_EyeInteractable eyeInteractable;
     protected virtual void Start()
     {
         eyeInteractable = GetComponent<BS_EyeInteractable>();

@@ -25,10 +25,7 @@ public class BS_EyeTrackingRay : MonoBehaviour
 
     private LineRenderer lineRenderer;
 
-    private List<BS_EyeInteractable> eyeInteractables = new();
-
-    [SerializeField]
-    public UnityEvent<BS_EyeInteractable> OnObjectHoverUpdate;
+    private readonly List<BS_EyeInteractable> eyeInteractables = new();
 
     void Start()
     {
@@ -48,24 +45,29 @@ public class BS_EyeTrackingRay : MonoBehaviour
         lineRenderer.SetPosition(1, new Vector3(transform.position.x, transform.position.y, transform.position.z + rayDistance));
     }
 
+    readonly RaycastHit[] hits = new RaycastHit[10];
     private void FixedUpdate()
     {
         Vector3 raycastDirection = transform.TransformDirection(Vector3.forward) * rayDistance;
 
-        if (Physics.Raycast(transform.position, raycastDirection, out RaycastHit hit, 50.0f, layersToInclude))
+        var hitCount = Physics.RaycastNonAlloc(transform.position, raycastDirection, hits, 5.0f, layersToInclude);
+        if (hitCount > 0)
         {
             UnSelect();
-
-            lineRenderer.startColor = rayColorHoverState;
-            lineRenderer.endColor = rayColorHoverState;
-
-            var eyeInteractable = hit.transform.GetComponent<BS_EyeInteractable>();
-            if (eyeInteractable != null && !eyeInteractable.ShouldIgnore)
+            for (int i = 0; i < hitCount; i++)
             {
-                eyeInteractables.Add(eyeInteractable);
-                eyeInteractable.IsHovered = true;
-                eyeInteractable.hitPoint.Set(hit.point.x, hit.point.y, hit.point.z);
-                OnObjectHoverUpdate.Invoke(eyeInteractable);
+                RaycastHit hit = hits[i];
+
+                lineRenderer.startColor = rayColorHoverState;
+                lineRenderer.endColor = rayColorHoverState;
+
+                var eyeInteractable = hit.transform.GetComponent<BS_EyeInteractable>();
+                if (eyeInteractable && !eyeInteractable.ShouldIgnore)
+                {
+                    eyeInteractables.Add(eyeInteractable);
+                    eyeInteractable.IsHovered = true;
+                    eyeInteractable.hitPoint.Set(hit.point.x, hit.point.y, hit.point.z);
+                }
             }
         }
         else
@@ -81,7 +83,6 @@ public class BS_EyeTrackingRay : MonoBehaviour
         foreach (var eyeInteractable in eyeInteractables)
         {
             eyeInteractable.IsHovered = false;
-            OnObjectHoverUpdate.Invoke(eyeInteractable);
         }
         if (clear)
         {
