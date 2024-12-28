@@ -1,4 +1,4 @@
-// from https://www.youtube.com/watch?v=ZoySn7QlMfQ
+// based on https://www.youtube.com/watch?v=ZoySn7QlMfQ
 
 using UnityEngine;
 using System.Collections.Generic;
@@ -30,7 +30,6 @@ public class BS_EyeTrackingRay : MonoBehaviour
     [SerializeField]
     public UnityEvent<BS_EyeInteractable> OnObjectHoverUpdate;
 
-    // Start is called before the first frame update
     void Start()
     {
         lineRenderer = GetComponent<LineRenderer>();
@@ -88,11 +87,5 @@ public class BS_EyeTrackingRay : MonoBehaviour
         {
             eyeInteractables.Clear();
         }
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
     }
 }

@@ -1,7 +1,8 @@
-// from https://www.youtube.com/watch?v=ZoySn7QlMfQ
+// based on https://www.youtube.com/watch?v=ZoySn7QlMfQ
 
+using System;
+using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Events;
 
 [RequireComponent(typeof(Collider))]
 [RequireComponent(typeof(Rigidbody))]
@@ -9,26 +10,18 @@ public class BS_EyeInteractable : MonoBehaviour
 {
     private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_EyeInteractable", BS_Logger.LogLevel.Log);
 
-    [SerializeField]
-    private UnityEvent<GameObject> OnObjectHover;
+    public Action<BS_EyeInteractable> OnHover;
+    public Action<BS_EyeInteractable> OnUnhover;
+    public Action<BS_EyeInteractable, bool> OnIsHovered;
 
-    [SerializeField]
-    private UnityEvent<GameObject> OnObjectUnHover;
-
-    [SerializeField]
-    private Material OnHoverActiveMaterial;
-
-    [SerializeField]
-    private Material OnHoverInactiveMaterial;
-
-    private MeshRenderer meshRenderer;
+    [HideInInspector]
     public BoxCollider _collider;
 
+    [HideInInspector]
     public Vector3 hitPoint;
 
     void Start()
     {
-        meshRenderer = GetComponent<MeshRenderer>();
         _collider = GetComponent<BoxCollider>();
     }
 
@@ -49,20 +42,13 @@ public class BS_EyeInteractable : MonoBehaviour
                 Logger.Log($"IsHovered updated to {IsHovered}");
                 if (_IsHovered)
                 {
-                    if (meshRenderer && OnHoverActiveMaterial)
-                    {
-                        meshRenderer.material = OnHoverActiveMaterial;
-                    }
-                    OnObjectHover.Invoke(gameObject);
+                    OnHover?.Invoke(this);
                 }
                 else
                 {
-                    if (meshRenderer && OnHoverInactiveMaterial)
-                    {
-                        meshRenderer.material = OnHoverInactiveMaterial;
-                    }
-                    OnObjectUnHover.Invoke(gameObject);
+                    OnUnhover?.Invoke(this);
                 }
+                OnIsHovered?.Invoke(this, IsHovered);
             }
         }
     }
