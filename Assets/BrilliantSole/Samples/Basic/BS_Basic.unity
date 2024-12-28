@@ -794,8 +794,9 @@ MonoBehaviour:
   devicePath: 1
   on: 1
   color: {r: 1, g: 1, b: 1, a: 1}
-  shouldUpdateHSV: 0
-  hsv: {x: 0, y: 0, z: 0}
+  hue: 0
+  saturation: 0
+  brightness: 1
   bridge: {fileID: 385947974}
 --- !u!1001 &719379315
 PrefabInstance:
@@ -1461,6 +1462,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3275714873998162163, guid: 732689fee254d4f0daba89be36be1fb1, type: 3}
+      propertyPath: HueBridge
+      value: 
+      objectReference: {fileID: 385947973}
     - target: {fileID: 3290962668689106054, guid: 732689fee254d4f0daba89be36be1fb1, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -1635,10 +1640,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3947135002401762516, guid: 732689fee254d4f0daba89be36be1fb1, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3961902078501486615, guid: 732689fee254d4f0daba89be36be1fb1, type: 3}
-      propertyPath: m_Value
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4081967488432909660, guid: 732689fee254d4f0daba89be36be1fb1, type: 3}
@@ -1987,7 +1988,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5207929791772442596, guid: 732689fee254d4f0daba89be36be1fb1, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.000030517578
+      value: -0.00091552734
       objectReference: {fileID: 0}
     - target: {fileID: 5254998383097603176, guid: 732689fee254d4f0daba89be36be1fb1, type: 3}
       propertyPath: Scene
@@ -2447,10 +2448,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8703052225035676111, guid: 732689fee254d4f0daba89be36be1fb1, type: 3}
       propertyPath: m_Size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8703052225035676111, guid: 732689fee254d4f0daba89be36be1fb1, type: 3}
-      propertyPath: m_Value
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8784926799123005759, guid: 732689fee254d4f0daba89be36be1fb1, type: 3}

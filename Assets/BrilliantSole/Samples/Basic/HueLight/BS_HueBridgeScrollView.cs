@@ -14,11 +14,28 @@ public class BS_HueBridgeScrollView : MonoBehaviour
 
     private IReadOnlyList<HueLamp> currentHueLamps;
 
+
     void Start()
     {
         hueBridge = HueBridge.GetComponent<HueBridge>();
         OnDiscoveredHueLamps(hueBridge, hueBridge.HueLamps);
         hueBridge.OnDiscoveredHueLamps += OnDiscoveredHueLamps;
+    }
+
+    public void DiscoverLights()
+    {
+        hueBridge.DiscoverLights();
+    }
+
+    public void SetHueBridgeHostname(string hostName)
+    {
+        Debug.Log($"setting hostName to {hostName}");
+        hueBridge.hostName = hostName;
+    }
+    public void SetHueBridgeUsername(string username)
+    {
+        Debug.Log($"setting username to {username}");
+        hueBridge.username = username;
     }
 
     private void OnDiscoveredHueLamps(HueBridge hueBridge, IReadOnlyList<HueLamp> hueLamps)
@@ -54,10 +71,12 @@ public class BS_HueBridgeScrollView : MonoBehaviour
     }
     private void OnDiscoveredHueLamp(HueBridge hueBridge, HueLamp hueLamp)
     {
-        Debug.Log($"adding light {hueLamp.devicePath}");
+        Debug.Log($"adding light \"{hueLamp.name}\"");
 
         if (!instantiatedItems.TryGetValue(hueLamp.devicePath, out var item))
         {
+            Debug.Log($"creating light item \"{hueLamp.name}\"");
+
             item = Instantiate(ItemPrefab, Content);
             instantiatedItems[hueLamp.devicePath] = item;
 
@@ -90,6 +109,10 @@ public class BS_HueBridgeScrollView : MonoBehaviour
             {
                 hueLamp.Saturation = value;
             });
+        }
+        else
+        {
+            Debug.Log($"light item \"{hueLamp.name}\" already exists");
         }
 
         var nameText = item.transform.Find("Name").GetComponentInChildren<TextMeshProUGUI>();
