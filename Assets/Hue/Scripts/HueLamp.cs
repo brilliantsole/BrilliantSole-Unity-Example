@@ -14,12 +14,56 @@ public class HueLamp : MonoBehaviour
 	private bool oldOn;
 	private Color oldColor;
 
-	public bool shouldUpdateHSV = false;
-	public Vector3 hsv;
+	private bool shouldUpdateHSV = false;
+
+	[Range(0.0f, 1.0f)]
+	[SerializeField]
+	private float hue = 0.0f;
+	private float oldHue = 0.0f;
+	public float Hue
+	{
+		get => hue;
+		set
+		{
+			hue = value;
+			oldHue = value;
+			shouldUpdateHSV = true;
+		}
+	}
+
+	[Range(0.0f, 1.0f)]
+	[SerializeField]
+	private float saturation = 0.0f;
+	private float oldSaturation = 0.0f;
+	public float Saturation
+	{
+		get => saturation;
+		set
+		{
+			saturation = value;
+			oldSaturation = value;
+			shouldUpdateHSV = true;
+		}
+	}
+
+	[Range(0.0f, 1.0f)]
+	[SerializeField]
+	private float brightness = 0.0f;
+	private float oldBrightness = 0.0f;
+	public float Brightness
+	{
+		get => brightness;
+		set
+		{
+			brightness = value;
+			oldBrightness = value;
+			shouldUpdateHSV = true;
+		}
+	}
 
 	public Dictionary<string, object> state = new();
 
-	private IEnumerator SendMessage()
+	private IEnumerator SendMessage(bool includeOn = false)
 	{
 		if (bridge == null)
 		{
@@ -28,31 +72,34 @@ public class HueLamp : MonoBehaviour
 		}
 
 		string url = $"http://{bridge.hostName}/api/{bridge.username}/lights/{devicePath}/state";
-
-		state["on"] = on;
-		state["hue"] = (int)(hsv.x / 360.0f * 65535.0f);
-		state["sat"] = (int)(hsv.y * 255.0f);
-		state["bri"] = (int)(hsv.z * 255.0f);
+		if (includeOn)
+		{
+			state["on"] = on;
+		}
+		else
+		{
+			state["hue"] = (int)(Hue * 65535.0f);
+			state["sat"] = (int)(Saturation * 255.0f);
+			state["bri"] = (int)(Brightness * 255.0f);
+		}
 
 		string jsonData = Json.Serialize(state);
 		byte[] jsonBytes = System.Text.Encoding.UTF8.GetBytes(jsonData);
 
-		using (UnityEngine.Networking.UnityWebRequest request = UnityEngine.Networking.UnityWebRequest.Put(url, jsonBytes))
+		using UnityEngine.Networking.UnityWebRequest request = UnityEngine.Networking.UnityWebRequest.Put(url, jsonBytes);
+		request.SetRequestHeader("Content-Type", "application/json");
+
+		//Debug.Log($"Sending request to: {url} with data: {jsonData}");
+
+		yield return request.SendWebRequest();
+
+		if (request.result != UnityEngine.Networking.UnityWebRequest.Result.Success)
 		{
-			request.SetRequestHeader("Content-Type", "application/json");
-
-			Debug.Log($"Sending request to: {url} with data: {jsonData}");
-
-			yield return request.SendWebRequest();
-
-			if (request.result != UnityEngine.Networking.UnityWebRequest.Result.Success)
-			{
-				Debug.LogError($"Error sending message: {request.error}");
-			}
-			else
-			{
-				Debug.Log("Message sent successfully.");
-			}
+			Debug.LogError($"Error sending message: {request.error}");
+		}
+		else
+		{
+			//Debug.Log("Message sent successfully.");
 		}
 	}
 
@@ -74,16 +121,27 @@ public class HueLamp : MonoBehaviour
 
 	private void UpdateLight()
 	{
-		if (shouldUpdateHSV)
+		if (shouldUpdateHSV || oldHue != hue || oldSaturation != saturation || oldBrightness != brightness)
 		{
+			oldHue = hue;
+			oldSaturation = saturation;
+			oldBrightness = brightness;
+
 			StartCoroutine(SendMessage());
 			shouldUpdateHSV = false;
 		}
-		else if (oldOn != on || oldColor != color)
+		else if (oldOn != on)
 		{
-			StartCoroutine(SendMessage());
-
+			StartCoroutine(SendMessage(true));
 			oldOn = on;
+		}
+		else if (oldColor != color)
+		{
+			var hsv = HSVFromRGB(color);
+			hue = hsv.x;
+			saturation = hsv.y;
+			brightness = hsv.z;
+			StartCoroutine(SendMessage());
 			oldColor = color;
 		}
 	}
@@ -122,6 +180,7 @@ public class HueLamp : MonoBehaviour
 			{
 				hue += 360f;
 			}
+			hue /= 360.0f;
 
 			saturation = c / max;
 		}

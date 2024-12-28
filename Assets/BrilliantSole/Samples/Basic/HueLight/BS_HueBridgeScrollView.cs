@@ -39,6 +39,12 @@ public class BS_HueBridgeScrollView : MonoBehaviour
                 var brightnessSlider = GetBrightnessSlider(item);
                 brightnessSlider.onValueChanged.RemoveAllListeners();
 
+                var hueSlider = GetHueSlider(item);
+                hueSlider.onValueChanged.RemoveAllListeners();
+
+                var saturationSlider = GetSaturationSlider(item);
+                saturationSlider.onValueChanged.RemoveAllListeners();
+
                 Destroy(item);
                 instantiatedItems.Remove(hueLamp.devicePath);
             }
@@ -62,13 +68,23 @@ public class BS_HueBridgeScrollView : MonoBehaviour
                 hueLamp.on = !hueLamp.on;
                 toggleButtonText.text = hueLamp.on ? "On" : "Off";
             });
-            toggleButton.onClick.RemoveAllListeners();
 
             var brightnessSlider = GetBrightnessSlider(item);
             brightnessSlider.onValueChanged.AddListener((value) =>
             {
-                hueLamp.hsv.z = value;
-                hueLamp.shouldUpdateHSV = true;
+                hueLamp.Brightness = value;
+            });
+
+            var hueSlider = GetHueSlider(item);
+            hueSlider.onValueChanged.AddListener((value) =>
+            {
+                hueLamp.Hue = value;
+            });
+
+            var saturationSlider = GetSaturationSlider(item);
+            saturationSlider.onValueChanged.AddListener((value) =>
+            {
+                hueLamp.Saturation = value;
             });
         }
 
@@ -80,4 +96,6 @@ public class BS_HueBridgeScrollView : MonoBehaviour
     private TextMeshProUGUI GetToggleButtonText(GameObject item) => item.transform.Find("Toggle/Button").GetComponentInChildren<TextMeshProUGUI>();
 
     private Slider GetBrightnessSlider(GameObject item) => item.transform.Find("Brightness/Slider").GetComponent<Slider>();
+    private Slider GetHueSlider(GameObject item) => item.transform.Find("Hue/Slider").GetComponent<Slider>();
+    private Slider GetSaturationSlider(GameObject item) => item.transform.Find("Saturation/Slider").GetComponent<Slider>();
 }
