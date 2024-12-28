@@ -1,9 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
-using System.Net;
 
 using MiniJSON;
-using System;
 using System.Collections;
 
 [ExecuteInEditMode]
@@ -21,42 +19,46 @@ public class HueLamp : MonoBehaviour
 
 	public Dictionary<string, object> state = new();
 
-	private HueBridge bridge;
-
-	private readonly BS_Throttler throttler = new();
-
-	void OnEnable()
-	{
-		bridge = GameObject.Find("Hue Bridge").GetComponent<HueBridge>();
-	}
-
-	public void SetHSVColor()
+	private IEnumerator SendMessage()
 	{
 		if (bridge == null)
 		{
-			Debug.LogError("no hue bridge found");
-			return;
+			Debug.LogError("HueBridge is not assigned.");
+			yield break;
 		}
-		HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://" + bridge.hostName + "/api/" + bridge.username + "/lights/" + devicePath + "/state");
-		Debug.Log("http" + bridge.hostName + bridge.portNumber + "/api/" + bridge.username + "/lights/" + devicePath + "/state");
-		request.Method = "PUT";
 
-		//state["on"] = on;
-		state["hue"] = (int)(hsv.x * 65535.0f);
+		string url = $"http://{bridge.hostName}/api/{bridge.username}/lights/{devicePath}/state";
+
+		state["on"] = on;
+		state["hue"] = (int)(hsv.x / 360.0f * 65535.0f);
 		state["sat"] = (int)(hsv.y * 255.0f);
 		state["bri"] = (int)(hsv.z * 255.0f);
 
-		byte[] bytes = System.Text.Encoding.ASCII.GetBytes(Json.Serialize(state));
-		request.ContentLength = bytes.Length;
+		string jsonData = Json.Serialize(state);
+		byte[] jsonBytes = System.Text.Encoding.UTF8.GetBytes(jsonData);
 
-		System.IO.Stream s = request.GetRequestStream();
-		s.Write(bytes, 0, bytes.Length);
-		s.Close();
+		using (UnityEngine.Networking.UnityWebRequest request = UnityEngine.Networking.UnityWebRequest.Put(url, jsonBytes))
+		{
+			request.SetRequestHeader("Content-Type", "application/json");
 
-		HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+			Debug.Log($"Sending request to: {url} with data: {jsonData}");
 
-		response.Close();
+			yield return request.SendWebRequest();
+
+			if (request.result != UnityEngine.Networking.UnityWebRequest.Result.Success)
+			{
+				Debug.LogError($"Error sending message: {request.error}");
+			}
+			else
+			{
+				Debug.Log("Message sent successfully.");
+			}
+		}
 	}
+
+	public HueBridge bridge;
+
+	private readonly BS_Throttler throttler = new();
 
 	void Update()
 	{
@@ -74,39 +76,12 @@ public class HueLamp : MonoBehaviour
 	{
 		if (shouldUpdateHSV)
 		{
-			SetHSVColor();
+			StartCoroutine(SendMessage());
 			shouldUpdateHSV = false;
 		}
-
-		if (oldOn != on || oldColor != color)
+		else if (oldOn != on || oldColor != color)
 		{
-			HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://" + bridge.hostName + "/api/" + bridge.username + "/lights/" + devicePath + "/state");
-			Debug.Log("http" + bridge.hostName + bridge.portNumber + "/api/" + bridge.username + "/lights/" + devicePath + "/state");
-			request.Method = "PUT";
-
-			Vector3 hsv = HSVFromRGB(color);
-
-			//Debug.Log(hsv);
-
-			var state = new Dictionary<string, object>
-			{
-				["on"] = on,
-				["hue"] = (int)(hsv.x / 360.0f * 65535.0f),
-				["sat"] = (int)(hsv.y * 255.0f),
-				["bri"] = (int)(hsv.z * 255.0f)
-			};
-			if ((int)(hsv.z * 255.0f) == 0) state["on"] = false;
-
-			byte[] bytes = System.Text.Encoding.ASCII.GetBytes(Json.Serialize(state));
-			request.ContentLength = bytes.Length;
-
-			System.IO.Stream s = request.GetRequestStream();
-			s.Write(bytes, 0, bytes.Length);
-			s.Close();
-
-			HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-
-			response.Close();
+			StartCoroutine(SendMessage());
 
 			oldOn = on;
 			oldColor = color;

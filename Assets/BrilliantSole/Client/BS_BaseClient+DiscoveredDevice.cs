@@ -41,7 +41,7 @@ public partial class BS_BaseClient
         }
         var discoveredDeviceJson = (BS_DiscoveredDeviceJson)nullableDiscoveredDeviceJson;
 
-        if (_allDiscoveredDevices.TryGetValue(discoveredDeviceJson.bluetoothId, out BS_DiscoveredDevice discoveredDevice))
+        if (_allDiscoveredDevices.TryGetValue(discoveredDeviceJson.bluetoothId, out var discoveredDevice))
         {
             discoveredDevice.Update(discoveredDeviceJson);
             AddDiscoveredDevice(discoveredDevice);
@@ -59,7 +59,7 @@ public partial class BS_BaseClient
         var bluetoothId = BS_StringUtils.GetString(data, true);
         Logger.Log($"expired bluetoothId {bluetoothId}");
 
-        if (_discoveredDevices.TryGetValue(bluetoothId, out BS_DiscoveredDevice discoveredDevice))
+        if (_discoveredDevices.TryGetValue(bluetoothId, out var discoveredDevice))
         {
             RemoveDiscoveredDevice(discoveredDevice);
         }

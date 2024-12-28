@@ -36,7 +36,7 @@ public partial class BS_BaseClient
         offset += 1 + bluetoothId.Length;
 
         Logger.Log($"received device message from {bluetoothId}");
-        if (_allDevices.TryGetValue(bluetoothId, out BS_Device device))
+        if (_allDevices.TryGetValue(bluetoothId, out var device))
         {
             var messageDataLength = data.Length - offset;
             var messageData = BS_ParseUtils.GetSubarray(data, (ushort)offset, (ushort)messageDataLength);
