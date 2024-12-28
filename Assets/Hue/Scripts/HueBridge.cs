@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using MiniJSON;
-using System.Linq;
 using System;
 
 public class HueBridge : MonoBehaviour
@@ -72,7 +71,7 @@ public class HueBridge : MonoBehaviour
 				hueLamps.Add(hueLamp);
 			}
 		}
-		catch (System.Exception ex)
+		catch (Exception ex)
 		{
 			Debug.LogError($"Error parsing lights: {ex.Message}");
 		}

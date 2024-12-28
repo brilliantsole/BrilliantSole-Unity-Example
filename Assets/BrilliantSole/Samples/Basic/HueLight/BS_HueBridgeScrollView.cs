@@ -68,20 +68,24 @@ public class BS_HueBridgeScrollView : MonoBehaviour
                 hueLamp.on = !hueLamp.on;
                 toggleButtonText.text = hueLamp.on ? "On" : "Off";
             });
+            toggleButtonText.text = hueLamp.on ? "On" : "Off";
 
             var brightnessSlider = GetBrightnessSlider(item);
+            brightnessSlider.value = hueLamp.Brightness;
             brightnessSlider.onValueChanged.AddListener((value) =>
             {
                 hueLamp.Brightness = value;
             });
 
             var hueSlider = GetHueSlider(item);
+            hueSlider.value = hueLamp.Hue;
             hueSlider.onValueChanged.AddListener((value) =>
             {
                 hueLamp.Hue = value;
             });
 
             var saturationSlider = GetSaturationSlider(item);
+            saturationSlider.value = hueLamp.Saturation;
             saturationSlider.onValueChanged.AddListener((value) =>
             {
                 hueLamp.Saturation = value;
