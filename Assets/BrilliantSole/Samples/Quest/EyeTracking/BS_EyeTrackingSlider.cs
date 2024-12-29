@@ -1,6 +1,8 @@
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
+using static BS_VibrationWaveformEffect;
 
 [RequireComponent(typeof(Slider))]
 public class BS_EyeTrackingSlider : BS_BaseEyeTrackingUIImageComponent
@@ -53,6 +55,23 @@ public class BS_EyeTrackingSlider : BS_BaseEyeTrackingUIImageComponent
         slider.onValueChanged.Invoke(value);
     }
 
+    public List<BS_VibrationConfiguration> StartSlidingVibrationConfigurations = new()
+    {
+        new () {
+            Locations = BS_VibrationLocationFlag.Front | BS_VibrationLocationFlag.Rear,
+            Type = BS_VibrationType.WaveformEffect,
+            WaveformEffectSequence = new() {new(StrongClick_100)}
+        }
+    };
+    public List<BS_VibrationConfiguration> StopSlidingVibrationConfigurations = new()
+    {
+        new () {
+            Locations = BS_VibrationLocationFlag.Front | BS_VibrationLocationFlag.Rear,
+            Type = BS_VibrationType.WaveformEffect,
+            WaveformEffectSequence = new() {new(DoubleClick_100)}
+        }
+    };
+
     private bool isSliding = false;
     public bool IsSliding
     {
@@ -66,11 +85,13 @@ public class BS_EyeTrackingSlider : BS_BaseEyeTrackingUIImageComponent
             if (Device == null) { return; }
             if (IsSliding)
             {
-                Device.SetSensorRate(SensorType, SensorRate);
+                Device.SetSensorRate(SensorType, SensorRate, false);
+                Device.TriggerVibration(StartSlidingVibrationConfigurations);
             }
             else
             {
-                Device.ClearSensorRate(SensorType);
+                Device.ClearSensorRate(SensorType, false);
+                Device.TriggerVibration(StopSlidingVibrationConfigurations);
             }
         }
     }

@@ -1677,7 +1677,7 @@ GameObject:
   - component: {fileID: 5242747291764595270}
   - component: {fileID: 7849767530240130741}
   - component: {fileID: 675982588197740019}
-  - component: {fileID: 635877657572650725}
+  - component: {fileID: 2376307079238394779}
   m_Layer: 8
   m_Name: Slider
   m_TagString: Untagged
@@ -1821,7 +1821,7 @@ MonoBehaviour:
   _collider: {fileID: 0}
   hitPoint: {x: 0, y: 0, z: 0}
   ShouldIgnore: 0
---- !u!114 &635877657572650725
+--- !u!114 &2376307079238394779
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1837,6 +1837,26 @@ MonoBehaviour:
   HoverColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   SensorRate: 20
   InvertPitch: 0
+  StartSlidingVibrationConfigurations:
+  - Type: 0
+    Locations: 3
+    WaveformEffectSequence:
+    - Type: 0
+      Effect: 1
+      Delay: 0
+      LoopCount: 0
+    WaveformEffectSequenceLoopCount: 0
+    WaveformSequence: []
+  StopSlidingVibrationConfigurations:
+  - Type: 0
+    Locations: 3
+    WaveformEffectSequence:
+    - Type: 0
+      Effect: 10
+      Delay: 0
+      LoopCount: 0
+    WaveformEffectSequenceLoopCount: 0
+    WaveformSequence: []
 --- !u!1 &7521304212649258391
 GameObject:
   m_ObjectHideFlags: 0
@@ -2028,7 +2048,7 @@ GameObject:
   - component: {fileID: 6797907066526845316}
   - component: {fileID: 4471223867537128927}
   - component: {fileID: 8533530156447010431}
-  - component: {fileID: 3359093081229187029}
+  - component: {fileID: 2564749671030384093}
   m_Layer: 8
   m_Name: Button
   m_TagString: Untagged
@@ -2201,7 +2221,7 @@ MonoBehaviour:
   _collider: {fileID: 0}
   hitPoint: {x: 0, y: 0, z: 0}
   ShouldIgnore: 0
---- !u!114 &3359093081229187029
+--- !u!114 &2564749671030384093
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2215,6 +2235,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   InsoleSide: 1
   HoverColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  ClickVibrationConfigurations:
+  - Type: 0
+    Locations: 3
+    WaveformEffectSequence:
+    - Type: 0
+      Effect: 1
+      Delay: 0
+      LoopCount: 0
+    WaveformEffectSequenceLoopCount: 0
+    WaveformSequence: []
 --- !u!1 &9077045845503065502
 GameObject:
   m_ObjectHideFlags: 0

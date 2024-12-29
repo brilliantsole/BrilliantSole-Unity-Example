@@ -83,7 +83,7 @@ public class BS_SensorConfigurationManager : BS_BaseManager<BS_SensorConfigurati
     public bool IsSensorRateNonZero(BS_SensorType sensorType) { return SensorConfiguration.GetValueOrDefault(sensorType, _0ms) != _0ms; }
     public BS_SensorRate? GetSensorRate(BS_SensorType sensorType) { return ContainsSensorType(sensorType) ? SensorConfiguration[sensorType] : null; }
 
-    public void SetSensorRate(BS_SensorType sensorType, BS_SensorRate sensorRate)
+    public void SetSensorRate(BS_SensorType sensorType, BS_SensorRate sensorRate, bool sendImmediately = true)
     {
         if (!ContainsSensorType(sensorType))
         {
@@ -98,10 +98,10 @@ public class BS_SensorConfigurationManager : BS_BaseManager<BS_SensorConfigurati
 
         TempSensorConfiguration.Clear();
         TempSensorConfiguration.Add(sensorType, sensorRate);
-        SetSensorConfiguration(TempSensorConfiguration);
+        SetSensorConfiguration(TempSensorConfiguration, sendImmediately: sendImmediately);
     }
-    public void ToggleSensorRate(BS_SensorType sensorType, BS_SensorRate sensorRate) { SetSensorRate(sensorType, IsSensorRateNonZero(sensorType) ? _0ms : sensorRate); }
-    public void ClearSensorRate(BS_SensorType sensorType) { SetSensorRate(sensorType, _0ms); }
+    public void ToggleSensorRate(BS_SensorType sensorType, BS_SensorRate sensorRate, bool sendImmediately = true) { SetSensorRate(sensorType, IsSensorRateNonZero(sensorType) ? _0ms : sensorRate, sendImmediately); }
+    public void ClearSensorRate(BS_SensorType sensorType, bool sendImmediately = true) { SetSensorRate(sensorType, _0ms, sendImmediately); }
 
     private readonly List<byte> Array = new();
     private List<byte> GetSensorConfigurationArray(in BS_SensorConfiguration sensorConfiguration)
@@ -168,11 +168,11 @@ public class BS_SensorConfigurationManager : BS_BaseManager<BS_SensorConfigurati
         TempSensorConfiguration.Clear();
     }
 
-    public void ClearSensorConfiguration()
+    public void ClearSensorConfiguration(bool sendImmediately = true)
     {
         TempSensorConfiguration.Clear();
         foreach (var sensorType in SensorTypes) { TempSensorConfiguration.Add(sensorType, _0ms); }
-        SetSensorConfiguration(TempSensorConfiguration);
+        SetSensorConfiguration(TempSensorConfiguration, sendImmediately: sendImmediately);
     }
 
     public string PrintSensorConfiguration(in BS_SensorConfiguration sensorConfiguration)
