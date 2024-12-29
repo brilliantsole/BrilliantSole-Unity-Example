@@ -6,7 +6,7 @@ using static BS_VibrationWaveformEffect;
 [RequireComponent(typeof(Button))]
 public class BS_EyeTrackingButton : BS_BaseEyeTrackingUIImageComponent
 {
-    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_EyeTrackingButton", BS_Logger.LogLevel.Log);
+    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_EyeTrackingButton");
 
     private Button button;
 

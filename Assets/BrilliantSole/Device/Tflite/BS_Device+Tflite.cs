@@ -5,7 +5,7 @@ public partial class BS_Device
 {
     private readonly BS_TfliteManager TfliteManager = new();
 
-    public bool IsTfliteReady => TfliteManager.IsReady;
+    public bool IsTfliteReady => TfliteManager.IsReady && TfliteManager.TfliteModelMetadata != null;
     public bool TfliteInferencingEnabled => TfliteManager.InferencingEnabled;
 
     public event Action<BS_Device, bool> OnIsTfliteReady;
@@ -23,10 +23,14 @@ public partial class BS_Device
         TfliteManager.OnClassification += onTfliteClassification;
     }
 
-    public void SendTfliteModel(BS_TfliteModelMetadata tfliteModelMetadata)
+    public async void SendTfliteModel(BS_TfliteModelMetadata tfliteModelMetadata)
     {
-        TfliteManager.SendTfliteModel(tfliteModelMetadata, false);
-        SendFile(tfliteModelMetadata);
+        TfliteManager.SendTfliteModel(tfliteModelMetadata);
+        var isSendingFile = await SendFile(tfliteModelMetadata);
+        if (!isSendingFile)
+        {
+            onIsTfliteReady(IsTfliteReady);
+        }
     }
     public void SetTfliteInferencingEnabled(bool inferencingEnabled, bool sendImmediately = true) { TfliteManager.SetInferencingEnabled(inferencingEnabled, sendImmediately); }
     public void ToggleTfliteInferencingEnabled() { TfliteManager.ToggleInferencingEnabled(); }

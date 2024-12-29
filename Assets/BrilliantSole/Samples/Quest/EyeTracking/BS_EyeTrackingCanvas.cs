@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class BS_EyeTrackingCanvas : BS_BaseEyeTrackingUIComponent
 {
-    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_BaseEyeTrackingUIComponent", BS_Logger.LogLevel.Log);
+    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_BaseEyeTrackingUIComponent");
 
     public GameObject Cursor;
     protected override void OnIsHovered(BS_EyeInteractable eyeInteractable, bool IsHovered)

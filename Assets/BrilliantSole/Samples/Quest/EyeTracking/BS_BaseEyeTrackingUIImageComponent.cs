@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 public class BS_BaseEyeTrackingUIImageComponent : BS_BaseEyeTrackingUIComponent, IPointerEnterHandler, IPointerExitHandler
 {
-    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_BaseEyeTrackingUIImageComponent", BS_Logger.LogLevel.Log);
+    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_BaseEyeTrackingUIImageComponent");
 
     protected Image image;
     public Color HoverColor = Color.yellow;

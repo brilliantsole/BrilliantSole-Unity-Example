@@ -8,7 +8,7 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody))]
 public class BS_EyeInteractable : MonoBehaviour
 {
-    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_EyeInteractable", BS_Logger.LogLevel.Log);
+    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_EyeInteractable");
 
     public Action<BS_EyeInteractable> OnHover;
     public Action<BS_EyeInteractable> OnUnhover;

@@ -7,7 +7,7 @@ using static BS_VibrationWaveformEffect;
 [RequireComponent(typeof(Slider))]
 public class BS_EyeTrackingSlider : BS_BaseEyeTrackingUIImageComponent
 {
-    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_EyeTrackingSlider", BS_Logger.LogLevel.Log);
+    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_EyeTrackingSlider");
 
     private Slider slider;
 

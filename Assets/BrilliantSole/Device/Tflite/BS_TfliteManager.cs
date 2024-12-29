@@ -99,7 +99,6 @@ public class BS_TfliteManager : BS_BaseManager<BS_TfliteMessageType>
 
     public void SendTfliteModel(BS_TfliteModelMetadata tfliteModelMetadata, bool sendImmediately = true)
     {
-        // FILL
         TfliteModelMetadata = tfliteModelMetadata;
         SetName(tfliteModelMetadata.Name, false);
         SetTask(tfliteModelMetadata.Task, false);
@@ -107,6 +106,8 @@ public class BS_TfliteManager : BS_BaseManager<BS_TfliteMessageType>
         SetSensorRate(tfliteModelMetadata.SensorRate, false);
         SetThreshold(tfliteModelMetadata.Threshold, false);
         SetSensorTypes(tfliteModelMetadata.GetSensorTypes(), sendImmediately);
+
+
     }
 
     // NAME START

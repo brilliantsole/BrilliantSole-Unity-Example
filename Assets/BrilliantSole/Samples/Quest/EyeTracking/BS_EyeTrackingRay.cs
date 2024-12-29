@@ -8,7 +8,7 @@ using System.Linq;
 [RequireComponent(typeof(LineRenderer))]
 public class BS_EyeTrackingRay : MonoBehaviour
 {
-    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_EyeTrackingRay", BS_Logger.LogLevel.Log);
+    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_EyeTrackingRay");
 
     [SerializeField]
     private float rayDistance = 1.0f;
