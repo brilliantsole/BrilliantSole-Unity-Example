@@ -2,7 +2,6 @@
 
 using UnityEngine;
 using System.Collections.Generic;
-using UnityEngine.Events;
 using System.Linq;
 
 [RequireComponent(typeof(LineRenderer))]
@@ -46,7 +45,7 @@ public class BS_EyeTrackingRay : MonoBehaviour
         lineRenderer.SetPosition(1, new Vector3(transform.position.x, transform.position.y, transform.position.z + rayDistance));
     }
 
-    readonly RaycastHit[] hits = new RaycastHit[10];
+    readonly RaycastHit[] hits = new RaycastHit[2];
     private void FixedUpdate()
     {
         Vector3 raycastDirection = transform.TransformDirection(Vector3.forward) * rayDistance;

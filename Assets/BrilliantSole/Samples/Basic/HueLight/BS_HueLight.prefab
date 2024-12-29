@@ -149,7 +149,11 @@ GameObject:
   m_Component:
   - component: {fileID: 834565200381919651}
   - component: {fileID: 6617828290173439926}
-  m_Layer: 5
+  - component: {fileID: 6607242796324424033}
+  - component: {fileID: 1731135799251980941}
+  - component: {fileID: 6186895327786837614}
+  - component: {fileID: 5385021312041859002}
+  m_Layer: 8
   m_Name: Slider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -229,6 +233,105 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
+--- !u!65 &6607242796324424033
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1463993362228789914}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 180, y: 110, z: 5}
+  m_Center: {x: 0, y: 25, z: 0}
+--- !u!54 &1731135799251980941
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1463993362228789914}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!114 &6186895327786837614
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1463993362228789914}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e42cc61e810444c32bf87da073fa4731, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _collider: {fileID: 0}
+  hitPoint: {x: 0, y: 0, z: 0}
+  ShouldIgnore: 0
+--- !u!114 &5385021312041859002
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1463993362228789914}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2cfb78edbceb4472db4781aff73bc262, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  InsoleSide: 1
+  HoverColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  SensorRate: 20
+  InvertPitch: 0
+  StartSlidingVibrationConfigurations:
+  - Type: 0
+    Locations: 3
+    WaveformEffectSequence:
+    - Type: 0
+      Effect: 1
+      Delay: 0
+      LoopCount: 0
+    WaveformEffectSequenceLoopCount: 0
+    WaveformSequence: []
+  StopSlidingVibrationConfigurations:
+  - Type: 0
+    Locations: 3
+    WaveformEffectSequence:
+    - Type: 0
+      Effect: 10
+      Delay: 0
+      LoopCount: 0
+    WaveformEffectSequenceLoopCount: 0
+    WaveformSequence: []
 --- !u!1 &1804467960308932753
 GameObject:
   m_ObjectHideFlags: 0
@@ -1777,7 +1880,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 210, y: 110, z: 5}
+  m_Size: {x: 180, y: 110, z: 5}
   m_Center: {x: 0, y: 25, z: 0}
 --- !u!54 &7849767530240130741
 Rigidbody:
@@ -2255,7 +2358,11 @@ GameObject:
   m_Component:
   - component: {fileID: 3641807845918843954}
   - component: {fileID: 7517945230320603651}
-  m_Layer: 5
+  - component: {fileID: 4876681778667324926}
+  - component: {fileID: 5371625607781809671}
+  - component: {fileID: 8235836955085199239}
+  - component: {fileID: 6031724652345751594}
+  m_Layer: 8
   m_Name: Slider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2335,6 +2442,105 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
+--- !u!65 &4876681778667324926
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9077045845503065502}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 180, y: 110, z: 5}
+  m_Center: {x: 0, y: 25, z: 0}
+--- !u!54 &5371625607781809671
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9077045845503065502}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!114 &8235836955085199239
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9077045845503065502}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e42cc61e810444c32bf87da073fa4731, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _collider: {fileID: 0}
+  hitPoint: {x: 0, y: 0, z: 0}
+  ShouldIgnore: 0
+--- !u!114 &6031724652345751594
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9077045845503065502}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2cfb78edbceb4472db4781aff73bc262, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  InsoleSide: 1
+  HoverColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  SensorRate: 20
+  InvertPitch: 0
+  StartSlidingVibrationConfigurations:
+  - Type: 0
+    Locations: 3
+    WaveformEffectSequence:
+    - Type: 0
+      Effect: 1
+      Delay: 0
+      LoopCount: 0
+    WaveformEffectSequenceLoopCount: 0
+    WaveformSequence: []
+  StopSlidingVibrationConfigurations:
+  - Type: 0
+    Locations: 3
+    WaveformEffectSequence:
+    - Type: 0
+      Effect: 10
+      Delay: 0
+      LoopCount: 0
+    WaveformEffectSequenceLoopCount: 0
+    WaveformSequence: []
 --- !u!1 &9084263367495791740
 GameObject:
   m_ObjectHideFlags: 0

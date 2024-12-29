@@ -26,24 +26,19 @@ public class BS_EyeTrackingSlider : BS_BaseEyeTrackingUIImageComponent
         base.OnEnable();
 
         PitchRange.Reset();
-
-        if (Device == null) { return; }
-        Device.OnGameRotation += OnGameRotation;
     }
     protected override void OnDisable()
     {
         base.OnDisable();
 
-        if (Device == null) { return; }
-        Device.OnGameRotation -= OnGameRotation;
-        if (!gameObject.scene.isLoaded) return;
-        Device.ClearSensorRate(SensorType);
+        IsSliding = false;
     }
 
     private readonly BS_Range PitchRange = new();
     public bool InvertPitch = false;
     private void OnGameRotation(BS_Device device, Quaternion gameRotation, ulong timestamp)
     {
+        if (!IsSliding) { return; }
         var pitch = gameRotation.GetPitch();
         var value = PitchRange.UpdateAndGetNormalization(pitch, false);
         if (InvertPitch)
@@ -87,11 +82,13 @@ public class BS_EyeTrackingSlider : BS_BaseEyeTrackingUIImageComponent
             {
                 Device.SetSensorRate(SensorType, SensorRate, false);
                 Device.TriggerVibration(StartSlidingVibrationConfigurations);
+                Device.OnGameRotation += OnGameRotation;
             }
             else
             {
                 Device.ClearSensorRate(SensorType, false);
                 Device.TriggerVibration(StopSlidingVibrationConfigurations);
+                Device.OnGameRotation -= OnGameRotation;
             }
         }
     }

@@ -8,6 +8,7 @@ public partial class BS_BaseClient
     public event Action<BS_BaseClient, bool> OnIsConnected;
 
     public bool ReconnectOnDisconnection = false;
+    protected bool DisconnectedUnintentionally = false;
 
     [SerializeField]
     private BS_ConnectionStatus _connectionStatus;
@@ -34,10 +35,11 @@ public partial class BS_BaseClient
                     else
                     {
                         Reset();
-                        if (ReconnectOnDisconnection)
+                        if (DisconnectedUnintentionally && ReconnectOnDisconnection)
                         {
                             Logger.Log($"attempting reconnection");
                             Connect();
+                            DisconnectedUnintentionally = false;
                         }
                     }
                     break;
