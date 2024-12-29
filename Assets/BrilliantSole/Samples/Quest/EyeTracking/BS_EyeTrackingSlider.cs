@@ -11,6 +11,8 @@ public class BS_EyeTrackingSlider : BS_BaseEyeTrackingUIImageComponent
 
     private Slider slider;
 
+    public Color SlidingColor = Color.blue;
+
     protected override void Start()
     {
         base.Start();
@@ -89,6 +91,11 @@ public class BS_EyeTrackingSlider : BS_BaseEyeTrackingUIImageComponent
                 Device.ClearSensorRate(SensorType, false);
                 Device.TriggerVibration(StopSlidingVibrationConfigurations);
                 Device.OnGameRotation -= OnGameRotation;
+            }
+
+            if (IsHovered)
+            {
+                image.color = IsSliding ? SlidingColor : Color.white;
             }
         }
     }
