@@ -2,23 +2,21 @@ using UnityEngine;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(Button))]
-[RequireComponent(typeof(BS_EyeInteractable))]
-public class BS_EyeTrackingButton : BS_BaseEyeTrackingUIComponent
+public class BS_EyeTrackingButton : BS_BaseEyeTrackingUIImageComponent
 {
     private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_EyeTrackingButton", BS_Logger.LogLevel.Log);
 
-    private Image image;
-    public Color HoverColor = Color.yellow;
+    private Button button;
 
     protected override void Start()
     {
         base.Start();
-        image = GetComponent<Image>();
+        button = GetComponent<Button>();
     }
 
-    protected override void OnIsHovered(BS_EyeInteractable eyeInteractable, bool IsHovered)
+    protected override void OnTap(BS_InsoleSide insoleSide)
     {
-        base.OnIsHovered(eyeInteractable, IsHovered);
-        image.color = IsHovered ? HoverColor : Color.white;
+        base.OnTap(insoleSide);
+        button.onClick.Invoke();
     }
 }

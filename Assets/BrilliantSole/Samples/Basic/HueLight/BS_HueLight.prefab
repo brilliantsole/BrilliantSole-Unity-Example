@@ -1674,7 +1674,11 @@ GameObject:
   m_Component:
   - component: {fileID: 2674243691003005978}
   - component: {fileID: 2004219661181917040}
-  m_Layer: 5
+  - component: {fileID: 5242747291764595270}
+  - component: {fileID: 7849767530240130741}
+  - component: {fileID: 675982588197740019}
+  - component: {fileID: 635877657572650725}
+  m_Layer: 8
   m_Name: Slider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1754,6 +1758,85 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
+--- !u!65 &5242747291764595270
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6706812758395460273}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 210, y: 110, z: 5}
+  m_Center: {x: 0, y: 25, z: 0}
+--- !u!54 &7849767530240130741
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6706812758395460273}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!114 &675982588197740019
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6706812758395460273}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e42cc61e810444c32bf87da073fa4731, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _collider: {fileID: 0}
+  hitPoint: {x: 0, y: 0, z: 0}
+  ShouldIgnore: 0
+--- !u!114 &635877657572650725
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6706812758395460273}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2cfb78edbceb4472db4781aff73bc262, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  InsoleSide: 1
+  HoverColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  SensorRate: 20
+  InvertPitch: 0
 --- !u!1 &7521304212649258391
 GameObject:
   m_ObjectHideFlags: 0
@@ -2130,6 +2213,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0049a9aeddd6c4855bae96768fe030fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  InsoleSide: 1
   HoverColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
 --- !u!1 &9077045845503065502
 GameObject:

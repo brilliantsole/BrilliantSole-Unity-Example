@@ -23,9 +23,9 @@ public partial class BS_DevicePair
         device.OnTfliteClassification -= onDeviceTfliteClassification;
     }
 
-    public void SetTfliteInferencingEnabled(bool inferencingEnabled)
+    public void SetTfliteInferencingEnabled(bool inferencingEnabled, bool sendImmediately = true)
     {
-        foreach (var device in devices.Values) { device.SetTfliteInferencingEnabled(inferencingEnabled); }
+        foreach (var device in devices.Values) { device.SetTfliteInferencingEnabled(inferencingEnabled, sendImmediately); }
     }
 
     private void onDeviceIsTfliteReady(BS_Device device, bool isTfliteReady)

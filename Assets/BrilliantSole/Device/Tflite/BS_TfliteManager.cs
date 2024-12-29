@@ -395,14 +395,22 @@ public class BS_TfliteManager : BS_BaseManager<BS_TfliteMessageType>
         var numberOfInferences = inferenceMessageLength / inferenceSize;
 
         Dictionary<string, float> inferenceMap = null;
-        if (TfliteModelMetadata.Classes?.Count == numberOfInferences)
+        if (TfliteModelMetadata != null)
         {
-            inferenceMap = new();
+            if (TfliteModelMetadata.Classes?.Count == numberOfInferences)
+            {
+                inferenceMap = new();
+            }
+            else
+            {
+                Logger.LogError($"TfliteModelMetadata classes doesn't match (expected {numberOfInferences}, got {TfliteModelMetadata.Classes.Count})");
+            }
         }
         else
         {
-            Logger.LogError($"TfliteModelMetadata classes doesn't match (expected {numberOfInferences}, got {TfliteModelMetadata.Classes.Count})");
+            Logger.LogWarning("null TfliteModelMetadata");
         }
+
 
         List<float> inference = new();
         var maxValue = float.MinValue;

@@ -3,6 +3,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.Events;
+using System.Linq;
 
 [RequireComponent(typeof(LineRenderer))]
 public class BS_EyeTrackingRay : MonoBehaviour
@@ -49,11 +50,12 @@ public class BS_EyeTrackingRay : MonoBehaviour
     private void FixedUpdate()
     {
         Vector3 raycastDirection = transform.TransformDirection(Vector3.forward) * rayDistance;
+        List<BS_EyeInteractable> eyeInteractablesToUnhover = new(eyeInteractables.Select(eyeInteractable => eyeInteractable.IsHovered ? eyeInteractable : null));
 
         var hitCount = Physics.RaycastNonAlloc(transform.position, raycastDirection, hits, 5.0f, layersToInclude);
         if (hitCount > 0)
         {
-            UnSelect();
+            eyeInteractables.Clear();
             for (int i = 0; i < hitCount; i++)
             {
                 RaycastHit hit = hits[i];
@@ -65,7 +67,8 @@ public class BS_EyeTrackingRay : MonoBehaviour
                 if (eyeInteractable && !eyeInteractable.ShouldIgnore)
                 {
                     eyeInteractables.Add(eyeInteractable);
-                    eyeInteractable.IsHovered = true;
+                    eyeInteractablesToUnhover.Remove(eyeInteractable);
+                    eyeInteractable.SetIsHovered(true);
                     eyeInteractable.hitPoint.Set(hit.point.x, hit.point.y, hit.point.z);
                 }
             }
@@ -74,19 +77,12 @@ public class BS_EyeTrackingRay : MonoBehaviour
         {
             lineRenderer.startColor = rayColorDefaultState;
             lineRenderer.endColor = rayColorDefaultState;
-            UnSelect(true);
-        }
-    }
-
-    void UnSelect(bool clear = false)
-    {
-        foreach (var eyeInteractable in eyeInteractables)
-        {
-            eyeInteractable.IsHovered = false;
-        }
-        if (clear)
-        {
             eyeInteractables.Clear();
+        }
+
+        foreach (var eyeInteractable in eyeInteractablesToUnhover)
+        {
+            eyeInteractable.SetIsHovered(false);
         }
     }
 }

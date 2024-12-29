@@ -14,12 +14,23 @@ public class BS_HueBridgeScrollView : MonoBehaviour
 
     private IReadOnlyList<HueLamp> currentHueLamps;
 
+    private readonly BS_DevicePair DevicePair = BS_DevicePair.Instance;
 
     void Start()
     {
         hueBridge = HueBridge.GetComponent<HueBridge>();
         OnDiscoveredHueLamps(hueBridge, hueBridge.HueLamps);
         hueBridge.OnDiscoveredHueLamps += OnDiscoveredHueLamps;
+    }
+
+    private void OnEnable()
+    {
+        DevicePair.SetTfliteInferencingEnabled(true);
+    }
+    private void OnDisable()
+    {
+        if (!gameObject.scene.isLoaded) return;
+        DevicePair.SetTfliteInferencingEnabled(false);
     }
 
     public void DiscoverLights()

@@ -27,6 +27,18 @@ public class BS_EyeInteractable : MonoBehaviour
 
     public bool ShouldIgnore = false;
 
+    public void SetIsHovered(bool newIsHovered, bool invoke = true)
+    {
+        if (invoke)
+        {
+            IsHovered = newIsHovered;
+        }
+        else
+        {
+            _IsHovered = newIsHovered;
+        }
+    }
+
     private bool _IsHovered = false;
     public bool IsHovered
     {
@@ -34,12 +46,12 @@ public class BS_EyeInteractable : MonoBehaviour
         {
             return _IsHovered;
         }
-        set
+        private set
         {
             if (_IsHovered != value)
             {
                 _IsHovered = value;
-                Logger.Log($"\"{name}\" IsHovered updated to {IsHovered}");
+                //Logger.Log($"\"{name}\" IsHovered updated to {IsHovered}");
                 if (_IsHovered)
                 {
                     OnHover?.Invoke(this);
