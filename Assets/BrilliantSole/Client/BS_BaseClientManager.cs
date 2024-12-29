@@ -10,6 +10,11 @@ public abstract partial class BS_BaseClientManager<TClientManager, TClient> : BS
 
     public IBS_Scanner Scanner => Client;
 
+    protected void Start()
+    {
+        Client.ReconnectOnDisconnection = ReconnectOnDisconnection;
+    }
+
     protected virtual void OnEnable()
     {
         Client.OnConnectionStatus += onConnectionStatus;

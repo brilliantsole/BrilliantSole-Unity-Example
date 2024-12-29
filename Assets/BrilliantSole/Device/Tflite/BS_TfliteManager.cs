@@ -82,11 +82,25 @@ public class BS_TfliteManager : BS_BaseManager<BS_TfliteMessageType>
     }
 
     private BS_TfliteModelMetadata _tfliteModelMetadata;
-    public BS_TfliteModelMetadata TfliteModelMetadata => _tfliteModelMetadata;
+    public BS_TfliteModelMetadata TfliteModelMetadata
+    {
+        get => _tfliteModelMetadata;
+        private set
+        {
+            if (_tfliteModelMetadata == value)
+            {
+                Logger.Log($"redundant TfliteModelMetadata assignment");
+                return;
+            }
+            Logger.Log($"updated TfliteModelMetadata");
+            _tfliteModelMetadata = value;
+        }
+    }
 
     public void SendTfliteModel(BS_TfliteModelMetadata tfliteModelMetadata, bool sendImmediately = true)
     {
-        _tfliteModelMetadata = tfliteModelMetadata;
+        // FILL
+        TfliteModelMetadata = tfliteModelMetadata;
         SetName(tfliteModelMetadata.Name, false);
         SetTask(tfliteModelMetadata.Task, false);
         SetCaptureDelay(tfliteModelMetadata.CaptureDelay, false);
@@ -235,6 +249,11 @@ public class BS_TfliteManager : BS_BaseManager<BS_TfliteMessageType>
     }
     private void SetSensorTypes(HashSet<BS_SensorType> newSensorTypes, bool sendImmediately = true)
     {
+        if (SensorTypes.SetEquals(newSensorTypes))
+        {
+            Logger.Log($"redundant SensorTypes assignment");
+            return;
+        }
         Logger.Log($"setting sensorTypes to {string.Join(", ", newSensorTypes)}...");
         List<byte> data = newSensorTypes.Select(e => (byte)e).ToList();
         BS_TxMessage[] Messages = { CreateMessage(SetTfliteSensorTypes, data) };
@@ -437,12 +456,11 @@ public class BS_TfliteManager : BS_BaseManager<BS_TfliteMessageType>
                     }
                 }
             }
-
         }
         Logger.Log($"parsed inference with {inference.Count} classes as {timestamp}ms");
 
         OnInference?.Invoke(inference, inferenceMap, timestamp);
-        if (Task == Classification)
+        if (Task == Classification && maxClassName != null)
         {
             Logger.Log($"max class: {maxClassName} (#{maxIndex}) with {maxValue}");
             OnClassification?.Invoke(maxClassName, maxValue, timestamp);

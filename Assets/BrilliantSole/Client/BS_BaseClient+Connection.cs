@@ -7,6 +7,8 @@ public partial class BS_BaseClient
     public event Action<BS_BaseClient, BS_ConnectionStatus> OnConnectionStatus;
     public event Action<BS_BaseClient, bool> OnIsConnected;
 
+    public bool ReconnectOnDisconnection = false;
+
     [SerializeField]
     private BS_ConnectionStatus _connectionStatus;
     public BS_ConnectionStatus ConnectionStatus
@@ -29,7 +31,15 @@ public partial class BS_BaseClient
                 case NotConnected:
                     OnIsConnected?.Invoke(this, IsConnected);
                     if (ConnectionStatus == Connected) { SendRequiredMessages(); }
-                    else { Reset(); }
+                    else
+                    {
+                        Reset();
+                        if (ReconnectOnDisconnection)
+                        {
+                            Logger.Log($"attempting reconnection");
+                            Connect();
+                        }
+                    }
                     break;
             }
         }

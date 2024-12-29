@@ -81,6 +81,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a2b72aa61a324c26b617af42aceda01, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  reconnectOnDisconnection: 1
   OnIsConnected:
     m_PersistentCalls:
       m_Calls: []
