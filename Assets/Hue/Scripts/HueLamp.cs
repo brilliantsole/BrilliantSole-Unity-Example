@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 using MiniJSON;
 using System.Collections;
+using System;
 
 [ExecuteInEditMode]
 public class HueLamp : MonoBehaviour
@@ -13,6 +14,8 @@ public class HueLamp : MonoBehaviour
 
 	private bool oldOn;
 	private Color oldColor;
+
+	public Action<Color> OnColorUpdate;
 
 	private bool shouldUpdateHSV = false;
 
@@ -129,11 +132,13 @@ public class HueLamp : MonoBehaviour
 
 			StartCoroutine(SendMessage());
 			shouldUpdateHSV = false;
+			UpdateComputedColor();
 		}
 		else if (oldOn != on)
 		{
 			StartCoroutine(SendMessage(true));
 			oldOn = on;
+			UpdateComputedColor();
 		}
 		else if (oldColor != color)
 		{
@@ -143,6 +148,7 @@ public class HueLamp : MonoBehaviour
 			brightness = hsv.z;
 			StartCoroutine(SendMessage());
 			oldColor = color;
+			UpdateComputedColor();
 		}
 	}
 
@@ -186,5 +192,15 @@ public class HueLamp : MonoBehaviour
 		}
 
 		return new Vector3(hue, saturation, brightness);
+	}
+
+
+	[SerializeField]
+	private Color computedColor = new();
+	public Color ComputedColor => on ? computedColor : Color.black;
+	private void UpdateComputedColor()
+	{
+		computedColor = Color.HSVToRGB(Hue, Saturation, Brightness);
+		OnColorUpdate?.Invoke(ComputedColor);
 	}
 }

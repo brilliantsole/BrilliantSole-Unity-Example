@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
@@ -73,6 +74,8 @@ public class BS_HueBridgeScrollView : MonoBehaviour
                 var saturationSlider = GetSaturationSlider(item);
                 saturationSlider.onValueChanged.RemoveAllListeners();
 
+                hueLamp.OnColorUpdate = null;
+
                 Destroy(item);
                 instantiatedItems.Remove(hueLamp.devicePath);
             }
@@ -90,6 +93,12 @@ public class BS_HueBridgeScrollView : MonoBehaviour
 
             item = Instantiate(ItemPrefab, Content);
             instantiatedItems[hueLamp.devicePath] = item;
+
+            hueLamp.OnColorUpdate += color =>
+            {
+                var image = GetColorImage(item);
+                image.color = hueLamp.ComputedColor;
+            };
 
             var toggleButton = GetToggleButton(item);
             var toggleButtonText = GetToggleButtonText(item);
@@ -136,4 +145,6 @@ public class BS_HueBridgeScrollView : MonoBehaviour
     private Slider GetBrightnessSlider(GameObject item) => item.transform.Find("Brightness/Slider").GetComponent<Slider>();
     private Slider GetHueSlider(GameObject item) => item.transform.Find("Hue/Slider").GetComponent<Slider>();
     private Slider GetSaturationSlider(GameObject item) => item.transform.Find("Saturation/Slider").GetComponent<Slider>();
+
+    private Image GetColorImage(GameObject item) => item.transform.Find("Color").GetComponentInChildren<Image>();
 }

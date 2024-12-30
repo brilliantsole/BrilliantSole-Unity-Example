@@ -1,5 +1,80 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &699627142086836733
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7605402017152451259}
+  - component: {fileID: 4891060519808067848}
+  - component: {fileID: 5558176402700919928}
+  m_Layer: 5
+  m_Name: Panel
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &7605402017152451259
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 699627142086836733}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1967053102455099370}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 200, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &4891060519808067848
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 699627142086836733}
+  m_CullTransparentMesh: 1
+--- !u!114 &5558176402700919928
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 699627142086836733}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.392}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
+  m_Type: 1
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
 --- !u!1 &1015331901181952952
 GameObject:
   m_ObjectHideFlags: 0
@@ -152,7 +227,7 @@ GameObject:
   - component: {fileID: 6607242796324424033}
   - component: {fileID: 1731135799251980941}
   - component: {fileID: 6186895327786837614}
-  - component: {fileID: 5385021312041859002}
+  - component: {fileID: 7657757606370219703}
   m_Layer: 8
   m_Name: Slider
   m_TagString: Untagged
@@ -296,7 +371,7 @@ MonoBehaviour:
   _collider: {fileID: 0}
   hitPoint: {x: 0, y: 0, z: 0}
   ShouldIgnore: 0
---- !u!114 &5385021312041859002
+--- !u!114 &7657757606370219703
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -310,6 +385,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   InsoleSide: 1
   HoverColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  SlidingColor: {r: 0, g: 1, b: 1, a: 1}
   SensorRate: 20
   InvertPitch: 0
   StartSlidingVibrationConfigurations:
@@ -1780,7 +1856,7 @@ GameObject:
   - component: {fileID: 5242747291764595270}
   - component: {fileID: 7849767530240130741}
   - component: {fileID: 675982588197740019}
-  - component: {fileID: 2376307079238394779}
+  - component: {fileID: 5503077566664611891}
   m_Layer: 8
   m_Name: Slider
   m_TagString: Untagged
@@ -1924,7 +2000,7 @@ MonoBehaviour:
   _collider: {fileID: 0}
   hitPoint: {x: 0, y: 0, z: 0}
   ShouldIgnore: 0
---- !u!114 &2376307079238394779
+--- !u!114 &5503077566664611891
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1938,6 +2014,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   InsoleSide: 1
   HoverColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  SlidingColor: {r: 0, g: 1, b: 1, a: 1}
   SensorRate: 20
   InvertPitch: 0
   StartSlidingVibrationConfigurations:
@@ -1960,6 +2037,69 @@ MonoBehaviour:
       LoopCount: 0
     WaveformEffectSequenceLoopCount: 0
     WaveformSequence: []
+--- !u!1 &7483696151254655497
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1967053102455099370}
+  - component: {fileID: 5630256846191099554}
+  m_Layer: 5
+  m_Name: Color
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1967053102455099370
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7483696151254655497}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 7605402017152451259}
+  m_Father: {fileID: 1637605388383264739}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &5630256846191099554
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7483696151254655497}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59f8146938fff824cb5fd77236b75775, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Padding:
+    m_Left: 0
+    m_Right: 0
+    m_Top: 0
+    m_Bottom: 0
+  m_ChildAlignment: 0
+  m_Spacing: 0
+  m_ChildForceExpandWidth: 0
+  m_ChildForceExpandHeight: 0
+  m_ChildControlWidth: 0
+  m_ChildControlHeight: 0
+  m_ChildScaleWidth: 0
+  m_ChildScaleHeight: 0
+  m_ReverseArrangement: 0
 --- !u!1 &7521304212649258391
 GameObject:
   m_ObjectHideFlags: 0
@@ -1994,6 +2134,7 @@ RectTransform:
   - {fileID: 2722006153000413659}
   - {fileID: 6674893069316977626}
   - {fileID: 8976388030171359106}
+  - {fileID: 1967053102455099370}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
@@ -2361,7 +2502,7 @@ GameObject:
   - component: {fileID: 4876681778667324926}
   - component: {fileID: 5371625607781809671}
   - component: {fileID: 8235836955085199239}
-  - component: {fileID: 6031724652345751594}
+  - component: {fileID: 1101713320319264340}
   m_Layer: 8
   m_Name: Slider
   m_TagString: Untagged
@@ -2505,7 +2646,7 @@ MonoBehaviour:
   _collider: {fileID: 0}
   hitPoint: {x: 0, y: 0, z: 0}
   ShouldIgnore: 0
---- !u!114 &6031724652345751594
+--- !u!114 &1101713320319264340
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2519,6 +2660,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   InsoleSide: 1
   HoverColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  SlidingColor: {r: 0, g: 1, b: 1, a: 1}
   SensorRate: 20
   InvertPitch: 0
   StartSlidingVibrationConfigurations:

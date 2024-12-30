@@ -11,7 +11,7 @@ public class BS_EyeTrackingSlider : BS_BaseEyeTrackingUIImageComponent
 
     private Slider slider;
 
-    public Color SlidingColor = Color.blue;
+    public Color SlidingColor = Color.cyan;
 
     protected override void Start()
     {
