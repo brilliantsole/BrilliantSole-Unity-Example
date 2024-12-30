@@ -39,7 +39,6 @@ public class BS_HueBridgeScrollView : MonoBehaviour
         {
             var toggleButtonText = GetToggleButtonText(item);
             toggleButtonText.text = AreLightsOn ? "On" : "Off";
-
         }
         UpdateToggleLightsButton();
     }
