@@ -15,13 +15,38 @@ public class BS_HueBridgeScrollView : MonoBehaviour
 
     private IReadOnlyList<HueLamp> currentHueLamps;
 
+    public Button ToggleLightsButton;
+
     private readonly BS_DevicePair DevicePair = BS_DevicePair.Instance;
 
     void Start()
     {
+        ToggleLightsButton.onClick.AddListener(ToggleLights);
         hueBridge = HueBridge.GetComponent<HueBridge>();
         OnDiscoveredHueLamps(hueBridge, hueBridge.HueLamps);
         hueBridge.OnDiscoveredHueLamps += OnDiscoveredHueLamps;
+    }
+
+    private bool AreLightsOn = false;
+    private void ToggleLights()
+    {
+        AreLightsOn = !AreLightsOn;
+        foreach (var hueLamp in currentHueLamps)
+        {
+            hueLamp.on = AreLightsOn;
+        }
+        foreach (var item in instantiatedItems.Values)
+        {
+            var toggleButtonText = GetToggleButtonText(item);
+            toggleButtonText.text = AreLightsOn ? "On" : "Off";
+
+        }
+        UpdateToggleLightsButton();
+    }
+    private void UpdateToggleLightsButton()
+    {
+        var toggleLightsButtonText = ToggleLightsButton.GetComponentInChildren<TextMeshProUGUI>();
+        toggleLightsButtonText.text = AreLightsOn ? "Turn Lights Off" : "Turn Lights On";
     }
 
     private void OnEnable()
@@ -146,5 +171,5 @@ public class BS_HueBridgeScrollView : MonoBehaviour
     private Slider GetHueSlider(GameObject item) => item.transform.Find("Hue/Slider").GetComponent<Slider>();
     private Slider GetSaturationSlider(GameObject item) => item.transform.Find("Saturation/Slider").GetComponent<Slider>();
 
-    private Image GetColorImage(GameObject item) => item.transform.Find("Color").GetComponentInChildren<Image>();
+    private Image GetColorImage(GameObject item) => item.transform.Find("Name").GetComponentInChildren<Image>();
 }
