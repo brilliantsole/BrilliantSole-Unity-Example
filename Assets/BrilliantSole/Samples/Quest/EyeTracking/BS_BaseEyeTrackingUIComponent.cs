@@ -1,7 +1,7 @@
 using UnityEngine;
 
 [RequireComponent(typeof(BS_EyeInteractable))]
-public abstract class BS_BaseEyeTrackingUIComponent : MonoBehaviour
+public class BS_BaseEyeTrackingUIComponent : MonoBehaviour
 {
     private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_BaseEyeTrackingUIComponent");
 
@@ -21,14 +21,14 @@ public abstract class BS_BaseEyeTrackingUIComponent : MonoBehaviour
 
     protected virtual void OnHover(BS_EyeInteractable eyeInteractable)
     {
-        //Logger.Log("OnHover");
+        Logger.Log("OnHover");
     }
     protected virtual void OnUnHover(BS_EyeInteractable eyeInteractable)
     {
-        //Logger.Log("OnUnHover");
+        Logger.Log("OnUnHover");
     }
     protected virtual void OnIsHovered(BS_EyeInteractable eyeInteractable, bool IsHovered)
     {
-        //Logger.Log($"IsHovered? {IsHovered}");
+        Logger.Log($"IsHovered? {IsHovered}");
     }
 }

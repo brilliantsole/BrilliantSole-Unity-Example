@@ -1,37 +1,218 @@
+using System;
+using System.Collections.Generic;
 using jp.kshoji.unity.midi;
+using MidiPlayerTK;
+using TMPro;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class BS_Piano : MonoBehaviour, IMidiDeviceEventHandler, IMidiAllEventsHandler
 {
+    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_Piano", BS_Logger.LogLevel.Log);
+
+    public BS_InsoleSide InsoleSide = BS_InsoleSide.Right;
+    public BS_SensorRate SensorRate = BS_SensorRate._40ms;
+    private BS_DevicePair DevicePair => BS_DevicePair.Instance;
+    private BS_Device Device => DevicePair.Devices.ContainsKey(InsoleSide) ? DevicePair.Devices[InsoleSide] : null;
+    private bool IsInsoleConnected => Device?.IsConnected == true;
+
+    public enum BS_PedalMode
+    {
+        None,
+        Sustain,
+        Reverb,
+        Chorus,
+        Drum
+    }
+
+    [SerializeField]
+    private BS_PedalMode pedalMode = BS_PedalMode.None;
+    public BS_PedalMode PedalMode
+    {
+        get => pedalMode;
+        private set
+        {
+            if (value == pedalMode) { return; }
+            pedalMode = value;
+            OnPedalMode();
+        }
+    }
+    private void OnPedalMode()
+    {
+        Logger.Log($"updated pedal mode to \"{PedalMode}\"");
+
+        SustainText.transform.parent.gameObject.SetActive(PedalMode == BS_PedalMode.Sustain);
+
+        switch (PedalMode)
+        {
+            case BS_PedalMode.None:
+                Device?.ClearSensorRate(BS_SensorType.GameRotation);
+                break;
+            default:
+                Device?.SetSensorRate(BS_SensorType.GameRotation, SensorRate);
+                break;
+        }
+
+        Reset();
+    }
+
+    public TMP_Dropdown PedalModeDropdown;
+    public Button CalibrateButton;
+    public TextMeshProUGUI SustainText;
+
+    private MidiStreamPlayer midiStreamPlayer;
+
     private void Log(string message)
     {
-        Debug.Log(message);
+        Logger.Log(message);
     }
     private void LogWarning(string message)
     {
-        Debug.LogWarning(message);
+        Logger.LogWarning(message);
     }
     private void LogError(string message)
     {
-        Debug.LogError(message);
+        Logger.LogError(message);
     }
+
+    public TMP_Dropdown InstrumentDropdown;
 
     private void Awake()
     {
         MidiManager.Instance.RegisterEventHandleObject(gameObject);
         MidiManager.Instance.InitializeMidi(() =>
         {
-            Debug.Log("initialized midi");
+            Logger.Log("initialized midi");
         });
+
 #if UNITY_EDITOR
         EditorApplication.playModeStateChanged += OnPlayModeStateChanged;
 #endif
+
+        midiStreamPlayer = FindAnyObjectByType<MidiStreamPlayer>();
+        if (midiStreamPlayer != null)
+        {
+            midiStreamPlayer.OnEventSynthAwake.AddListener(OnEventSynthAwake);
+            midiStreamPlayer.OnEventSynthStarted.AddListener(OnEventSynthStarted);
+        }
+        else
+        {
+            LogError("unable to find MidiStreamPlayer");
+        }
     }
+
+    private void Start()
+    {
+        MidiPlayerGlobal.OnEventPresetLoaded.AddListener(OnEventPresetLoaded);
+
+        PopulateInstrumentDropdown();
+        InstrumentDropdown.onValueChanged.AddListener(OnInstrumentDropdownValueChanged);
+        PedalModeDropdown.onValueChanged.AddListener(OnPedalModeDropdownValueChanged);
+
+        PedalModeDropdown.ClearOptions();
+        List<string> PedalModeStrings = new(Enum.GetNames(typeof(BS_PedalMode)));
+        PedalModeDropdown.AddOptions(PedalModeStrings);
+
+        CalibrateButton.onClick.AddListener(Calibrate);
+    }
+    private void OnEnable()
+    {
+        DevicePair.OnDeviceGameRotation += OnDeviceQuaternion;
+        DevicePair.OnDeviceRotation += OnDeviceQuaternion;
+        OnPedalMode();
+        Reset();
+    }
+    private void OnDisable()
+    {
+        DevicePair.OnDeviceGameRotation -= OnDeviceQuaternion;
+        DevicePair.OnDeviceRotation -= OnDeviceQuaternion;
+        if (!gameObject.scene.isLoaded) return;
+        Device?.ClearSensorRate(BS_SensorType.GameRotation);
+    }
+
+    private void PopulateInstrumentDropdown()
+    {
+        InstrumentDropdown.ClearOptions();
+
+        var instrumentList = MidiPlayerGlobal.MPTK_ListPreset;
+        if (instrumentList != null)
+        {
+            List<string> instrumentNames = new();
+            foreach (var preset in instrumentList)
+            {
+                instrumentNames.Add(RemoveInstrumentNumber(preset.Label));
+            }
+            InstrumentDropdown.AddOptions(instrumentNames);
+        }
+        else
+        {
+            LogError("No SoundFont is loaded or accessible.");
+        }
+    }
+
+    private string RemoveInstrumentNumber(string label)
+    {
+        int dashIndex = label.IndexOf(" - ");
+        return dashIndex >= 0 ? label.Substring(dashIndex + 3) : label;
+    }
+
+    private int StreamChannel = 0;
+    private readonly int DrumChannel = 9;
+    private void OnInstrumentDropdownValueChanged(int selectedIndex)
+    {
+        Log($"Instrument changed to {InstrumentDropdown.options[selectedIndex].text}");
+
+        var instrumentList = MidiPlayerGlobal.MPTK_ListPreset;
+        if (instrumentList != null && selectedIndex >= 0 && selectedIndex < instrumentList.Count)
+        {
+            var preset = instrumentList[selectedIndex];
+            midiStreamPlayer.MPTK_PlayEvent(new MPTKEvent() { Command = MPTKCommand.PatchChange, Value = preset.Index, Channel = StreamChannel, });
+
+            Logger.Log($"Instrument Preset change - channel:{StreamChannel} bank:{midiStreamPlayer.MPTK_Channels[StreamChannel].BankNum} preset:{midiStreamPlayer.MPTK_Channels[StreamChannel].PresetNum}");
+        }
+        else
+        {
+            Logger.LogError("Invalid selection index or instrument list.");
+        }
+    }
+
+    private void OnPedalModeDropdownValueChanged(int selectedIndex)
+    {
+        var selectedPedalModeString = PedalModeDropdown.options[selectedIndex].text;
+        //Logger.Log($"selectedPedalModeString: {selectedPedalModeString}");
+
+        if (Enum.TryParse(selectedPedalModeString, out BS_PedalMode selectedPedalMode))
+        {
+            //Logger.Log($"parsed selectedPedalMode {selectedPedalMode}");
+            PedalMode = selectedPedalMode;
+        }
+        else
+        {
+            Logger.LogError($"uncaught selectedPedalModeString \"{selectedPedalModeString}\"");
+        }
+    }
+
+    // MIDI PLAYER START
+    private void OnEventPresetLoaded()
+    {
+        Log("OnEventPresetLoaded");
+
+    }
+
+    private void OnEventSynthAwake(string name)
+    {
+        Log($"OnEventSynthAwake {name}");
+    }
+    private void OnEventSynthStarted(string name)
+    {
+        Log($"OnEventSynthStarted {name}");
+    }
+    // MIDI PLAYER END
 
     private void OnDestroy()
     {
-        MidiManager.Instance.TerminateMidi();
+        Deinitialize();
     }
 
 #if UNITY_EDITOR
@@ -39,11 +220,20 @@ public class BS_Piano : MonoBehaviour, IMidiDeviceEventHandler, IMidiAllEventsHa
     {
         if (state == PlayModeStateChange.ExitingPlayMode || state == PlayModeStateChange.EnteredEditMode)
         {
-            MidiManager.Instance.TerminateMidi();
+            Log("OnPlayModeStateChanged");
+            Deinitialize();
         }
     }
 #endif
 
+    private void Deinitialize()
+    {
+        Log("Deinitialize");
+        MidiManager.Instance.TerminateMidi();
+        DestroyImmediate(MidiManager.Instance);
+    }
+
+    // MIDI KEYBOARD START
     public void OnMidiInputDeviceAttached(string deviceId)
     {
         Log($"OnMidiInputDeviceAttached {deviceId} name: {MidiManager.Instance.GetDeviceName(deviceId)}");
@@ -67,11 +257,25 @@ public class BS_Piano : MonoBehaviour, IMidiDeviceEventHandler, IMidiAllEventsHa
     public void OnMidiNoteOn(string deviceId, int group, int channel, int note, int velocity)
     {
         Log($"OnMidiNoteOn note: {note}, velocity: {velocity}");
+        midiStreamPlayer.MPTK_PlayEvent(new MPTKEvent()
+        {
+            Command = MPTKCommand.NoteOn,
+            Value = note,
+            Channel = StreamChannel,
+            Velocity = velocity
+        });
     }
 
     public void OnMidiNoteOff(string deviceId, int group, int channel, int note, int velocity)
     {
         Log($"OnMidiNoteOff note: {note}, velocity: {velocity}");
+        midiStreamPlayer.MPTK_PlayEvent(new MPTKEvent()
+        {
+            Command = MPTKCommand.NoteOff,
+            Value = note,
+            Channel = StreamChannel,
+            //Velocity = velocity
+        });
     }
 
     public void OnMidiChannelAftertouch(string deviceId, int group, int channel, int pressure)
@@ -173,4 +377,105 @@ public class BS_Piano : MonoBehaviour, IMidiDeviceEventHandler, IMidiAllEventsHa
     {
         Log($"OnMidiMiscellaneousFunctionCodes");
     }
+    // MIDI KEYBOARD END
+
+    [SerializeField]
+    private bool sustain = false;
+    public bool Sustain
+    {
+        get => sustain;
+        private set
+        {
+            if (value == sustain) { return; }
+            sustain = value;
+            Logger.Log($"updated sustain to {Sustain}");
+            SustainText.gameObject.SetActive(Sustain);
+
+            midiStreamPlayer.MPTK_PlayEvent(new MPTKEvent()
+            {
+                Command = MPTKCommand.ControlChange,
+                Controller = MPTKController.Sustain,
+                Value = !Sustain ? 0 : 64,
+                Channel = StreamChannel
+            });
+        }
+    }
+
+    public int DrumNote = 35;
+    private void PlayDrum()
+    {
+        Logger.Log("playing drum");
+        midiStreamPlayer.MPTK_PlayEvent(new MPTKEvent()
+        {
+            Command = MPTKCommand.NoteOn,
+            Value = DrumNote,
+            Channel = DrumChannel,
+        });
+    }
+
+    // BS START
+    private float PitchThreshold = 0.0f;
+    private readonly BS_Range PitchRange = new();
+    public bool InvertPitch = false;
+    private float Pitch = 0.0f;
+    private void OnDeviceQuaternion(BS_DevicePair devicePair, BS_InsoleSide insoleSide, BS_Device device, Quaternion quaternion, ulong timestamp)
+    {
+        if (insoleSide != InsoleSide) { return; }
+
+        var latestPitch = quaternion.GetPitch();
+
+        switch (PedalMode)
+        {
+            case BS_PedalMode.Sustain:
+            case BS_PedalMode.Drum:
+                var didLatestPitchExceedThreshold = DoesPitchExceedThreshold(latestPitch);
+                if (didLatestPitchExceedThreshold != DidPitchExceedThreshold)
+                {
+                    if (didLatestPitchExceedThreshold && PedalMode == BS_PedalMode.Drum)
+                    {
+                        PlayDrum();
+                    }
+                    DidPitchExceedThreshold = didLatestPitchExceedThreshold;
+                }
+                if (PedalMode == BS_PedalMode.Sustain)
+                {
+                    Sustain = didLatestPitchExceedThreshold;
+                }
+                break;
+            case BS_PedalMode.Reverb:
+            case BS_PedalMode.Chorus:
+                var value = PitchRange.UpdateAndGetNormalization(latestPitch, false);
+                // FILL - use value to apply effects (effects in Pro version only)
+                break;
+        }
+
+        Pitch = latestPitch;
+    }
+    private bool DoesPitchExceedThreshold(float pitch)
+    {
+        var offset = DidPitchExceedThreshold ? 1.0f : 0.0f;
+        return InvertPitch ? pitch < (PitchThreshold + offset) : pitch > (PitchThreshold + offset);
+    }
+    private bool DidPitchExceedThreshold = false;
+    public void Calibrate()
+    {
+        switch (PedalMode)
+        {
+            case BS_PedalMode.Sustain:
+            case BS_PedalMode.Drum:
+                PitchThreshold = Pitch;
+                break;
+            case BS_PedalMode.Reverb:
+            case BS_PedalMode.Chorus:
+                PitchRange.Reset();
+                break;
+        }
+    }
+
+    private void Reset()
+    {
+        PitchRange.Reset();
+        Sustain = false;
+    }
+    // BS END
 }
