@@ -17,6 +17,10 @@ public class BS_Piano : MonoBehaviour, IMidiDeviceEventHandler, IMidiAllEventsHa
     private BS_Device Device => DevicePair.Devices.ContainsKey(InsoleSide) ? DevicePair.Devices[InsoleSide] : null;
     private bool IsInsoleConnected => Device?.IsConnected == true;
 
+    public GameObject InstrumentsGrid;
+    public List<string> InstrumentsGridNames = new();
+    public GameObject InstrumentGridButton;
+
     public BS_PianoUI PianoUI;
 
     public enum BS_PedalMode
@@ -62,6 +66,8 @@ public class BS_Piano : MonoBehaviour, IMidiDeviceEventHandler, IMidiAllEventsHa
     public TMP_Dropdown PedalModeDropdown;
     public Button CalibrateButton;
     public TextMeshProUGUI SustainText;
+
+    public TMP_Dropdown ModeDropdown;
 
     private MidiStreamPlayer midiStreamPlayer;
 
@@ -116,7 +122,11 @@ public class BS_Piano : MonoBehaviour, IMidiDeviceEventHandler, IMidiAllEventsHa
         List<string> PedalModeStrings = new(Enum.GetNames(typeof(BS_PedalMode)));
         PedalModeDropdown.AddOptions(PedalModeStrings);
 
+        ModeDropdown.onValueChanged.AddListener(OnModeDropdownValueChanged);
+
         CalibrateButton.onClick.AddListener(Calibrate);
+
+        PopulateInstrumentsGrid();
 
         PianoUI.OnKeyDown += OnKeyDown;
         PianoUI.OnKeyUp += OnKeyUp;
@@ -134,6 +144,55 @@ public class BS_Piano : MonoBehaviour, IMidiDeviceEventHandler, IMidiAllEventsHa
         DevicePair.OnDeviceRotation -= OnDeviceQuaternion;
         if (!gameObject.scene.isLoaded) return;
         Device?.ClearSensorRate(BS_SensorType.GameRotation);
+    }
+
+    public enum BS_Mode
+    {
+        Play,
+        Track
+    }
+    [SerializeField]
+    private BS_Mode mode = BS_Mode.Play;
+    public BS_Mode Mode
+    {
+        get => mode;
+        private set
+        {
+            if (value == mode) { return; }
+            mode = value;
+            OnMode();
+        }
+    }
+    private void OnMode()
+    {
+        Logger.Log($"updated mode to \"{Mode}\"");
+
+        switch (Mode)
+        {
+            case BS_Mode.Play:
+                // FILL
+                break;
+            case BS_Mode.Track:
+                // FILL
+                break;
+        }
+
+    }
+
+    private void OnModeDropdownValueChanged(int selectedIndex)
+    {
+        var selectedModeString = ModeDropdown.options[selectedIndex].text;
+        //Logger.Log($"selectedModeString: {selectedModeString}");
+
+        if (Enum.TryParse(selectedModeString, out BS_Mode selectedMode))
+        {
+            //Logger.Log($"parsed selectedMode {selectedMode}");
+            Mode = selectedMode;
+        }
+        else
+        {
+            Logger.LogError($"uncaught selectedModeString \"{selectedModeString}\"");
+        }
     }
 
     private void OnKeyDown(BS_PianoKeyData KeyData)
@@ -172,6 +231,44 @@ public class BS_Piano : MonoBehaviour, IMidiDeviceEventHandler, IMidiAllEventsHa
                 instrumentNames.Add(RemoveInstrumentNumber(preset.Label));
             }
             InstrumentDropdown.AddOptions(instrumentNames);
+        }
+        else
+        {
+            LogError("No SoundFont is loaded or accessible.");
+        }
+    }
+    private void PopulateInstrumentsGrid()
+    {
+        while (InstrumentsGrid.transform.childCount > 0)
+        {
+            var child = InstrumentsGrid.transform.GetChild(0);
+            if (Application.isEditor)
+            {
+                DestroyImmediate(child.gameObject);
+            }
+            else
+            {
+                Destroy(child.gameObject);
+            }
+        }
+
+        var instrumentList = MidiPlayerGlobal.MPTK_ListPreset;
+        if (instrumentList != null)
+        {
+            foreach (var preset in instrumentList)
+            {
+                var instrumentName = RemoveInstrumentNumber(preset.Label);
+                if (InstrumentsGridNames.Contains(instrumentName))
+                {
+                    var instrumentGridButton = Instantiate(InstrumentGridButton, InstrumentsGrid.transform);
+                    instrumentGridButton.GetComponentInChildren<TextMeshProUGUI>().text = instrumentName;
+                    instrumentGridButton.GetComponentInChildren<BS_EyeInteractable>().OnHover += (eyeInteractable) =>
+                    {
+                        InstrumentDropdown.value = preset.Index;
+                        OnInstrumentDropdownValueChanged(preset.Index);
+                    };
+                }
+            }
         }
         else
         {
