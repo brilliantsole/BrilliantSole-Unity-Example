@@ -258,6 +258,7 @@ public class BS_Piano : MonoBehaviour, IMidiDeviceEventHandler, IMidiAllEventsHa
             foreach (var preset in instrumentList)
             {
                 var instrumentName = RemoveInstrumentNumber(preset.Label);
+                Logger.Log($"instrumentName: {instrumentName}");
                 if (InstrumentsGridNames.Contains(instrumentName))
                 {
                     var instrumentGridButton = Instantiate(InstrumentGridButton, InstrumentsGrid.transform);

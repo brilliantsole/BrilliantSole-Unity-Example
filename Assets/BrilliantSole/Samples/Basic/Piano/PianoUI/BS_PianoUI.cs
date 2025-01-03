@@ -15,7 +15,7 @@ public class BS_PianoUI : MonoBehaviour
     private int truncateMidiNote(int note)
     {
         int noteInOctave = note % 12;
-        return noteInOctave + note / 12 % Octaves * 12;
+        return noteInOctave + note / 12 % (Octaves + 1) * 12;
     }
     public void OnMidiNote(int note, bool isOn)
     {
@@ -122,8 +122,8 @@ public class BS_PianoUI : MonoBehaviour
         var blackKeyWidth = blackKeyRectTramsform.rect.width;
         var blackKeyY = -blackKeyRectTramsform.rect.y;
 
-        var fullWidth = Octaves * whiteKeyWidth * 7;
-        var xOffset = (-fullWidth / 2) + (whiteKeyWidth / 2);
+        var fullWidth = (Octaves * whiteKeyWidth * 7) + 1;
+        var xOffset = -fullWidth / 2;
 
         Debug.Log($"whiteKeyHeight: {whiteKeyHeight}, whiteKeyWidth: {whiteKeyWidth}");
         Debug.Log($"blackKeyHeight: {blackKeyHeight}, blackKeyWidth: {blackKeyWidth}, blackKeyY: {blackKeyY}");
@@ -131,9 +131,12 @@ public class BS_PianoUI : MonoBehaviour
         int whiteKeyIndex = 0;
         int blackKeyIndex = 0;
         List<GameObject> blackKeys = new();
-        for (int octave = StartOctave; octave < StartOctave + Octaves; octave++)
+        bool didAddLastWhiteKey = false;
+        for (int octave = StartOctave; (octave < StartOctave + Octaves) || !didAddLastWhiteKey; octave++)
         {
-            for (int i = 0; i < whiteKeyNames.Length; i++)
+            bool isAddingLastWhiteKey = octave >= StartOctave + Octaves;
+
+            for (int i = 0; (i < whiteKeyNames.Length) && !didAddLastWhiteKey; i++)
             {
                 int midiNote = whiteKeyMidiOffsets[i] + octave * 12;
 
@@ -149,6 +152,12 @@ public class BS_PianoUI : MonoBehaviour
                 whiteKeyData.Color = BS_PianoKeyData.BS_PianoKeyColor.White;
 
                 whiteKeyIndex++;
+
+                if (isAddingLastWhiteKey)
+                {
+                    didAddLastWhiteKey = true;
+                    break;
+                }
 
                 if (i < blackKeyNames.Length && !string.IsNullOrEmpty(blackKeyNames[i]))
                 {
