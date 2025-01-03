@@ -17,6 +17,8 @@ public class BS_Piano : MonoBehaviour, IMidiDeviceEventHandler, IMidiAllEventsHa
     private BS_Device Device => DevicePair.Devices.ContainsKey(InsoleSide) ? DevicePair.Devices[InsoleSide] : null;
     private bool IsInsoleConnected => Device?.IsConnected == true;
 
+    public BS_PianoUI PianoUI;
+
     public enum BS_PedalMode
     {
         None,
@@ -115,6 +117,9 @@ public class BS_Piano : MonoBehaviour, IMidiDeviceEventHandler, IMidiAllEventsHa
         PedalModeDropdown.AddOptions(PedalModeStrings);
 
         CalibrateButton.onClick.AddListener(Calibrate);
+
+        PianoUI.OnKeyDown += OnKeyDown;
+        PianoUI.OnKeyUp += OnKeyUp;
     }
     private void OnEnable()
     {
@@ -129,6 +134,29 @@ public class BS_Piano : MonoBehaviour, IMidiDeviceEventHandler, IMidiAllEventsHa
         DevicePair.OnDeviceRotation -= OnDeviceQuaternion;
         if (!gameObject.scene.isLoaded) return;
         Device?.ClearSensorRate(BS_SensorType.GameRotation);
+    }
+
+    private void OnKeyDown(BS_PianoKeyData KeyData)
+    {
+        Log($"OnKeyDown {KeyData.MidiNote}");
+        midiStreamPlayer.MPTK_PlayEvent(new MPTKEvent()
+        {
+            Command = MPTKCommand.NoteOn,
+            Value = KeyData.MidiNote,
+            Channel = StreamChannel,
+            Duration = -1,
+            Velocity = 80
+        });
+    }
+    private void OnKeyUp(BS_PianoKeyData KeyData)
+    {
+        Log($"OnKeyUp {KeyData.MidiNote}");
+        midiStreamPlayer.MPTK_PlayEvent(new MPTKEvent()
+        {
+            Command = MPTKCommand.NoteOff,
+            Value = KeyData.MidiNote,
+            Channel = StreamChannel,
+        });
     }
 
     private void PopulateInstrumentDropdown()
@@ -264,6 +292,7 @@ public class BS_Piano : MonoBehaviour, IMidiDeviceEventHandler, IMidiAllEventsHa
             Channel = StreamChannel,
             Velocity = velocity
         });
+        PianoUI.OnMidiNote(note, true);
     }
 
     public void OnMidiNoteOff(string deviceId, int group, int channel, int note, int velocity)
@@ -276,6 +305,7 @@ public class BS_Piano : MonoBehaviour, IMidiDeviceEventHandler, IMidiAllEventsHa
             Channel = StreamChannel,
             //Velocity = velocity
         });
+        PianoUI.OnMidiNote(note, false);
     }
 
     public void OnMidiChannelAftertouch(string deviceId, int group, int channel, int pressure)
