@@ -19,12 +19,17 @@ public class BS_PianoUI : MonoBehaviour
     }
     public void OnMidiNote(int note, bool isOn)
     {
-        int truncatedNote = truncateMidiNote(note);
-        if (truncatedMidiMapping.TryGetValue(truncatedNote, out var key))
+        Logger.Log($"OnMidiNote {note} isOn? {isOn}");
+        note = truncateMidiNote(note);
+        if (truncatedMidiMapping.TryGetValue(note, out var key))
         {
             var pianoKeyData = key.GetComponent<BS_PianoKeyData>();
             pianoKeyData.IsDown = isOn;
             SimulateKeyEvent(key, isOn);
+        }
+        else
+        {
+            Logger.LogError($"couldn't find key for midi note {note}");
         }
     }
 
@@ -117,6 +122,9 @@ public class BS_PianoUI : MonoBehaviour
         var blackKeyWidth = blackKeyRectTramsform.rect.width;
         var blackKeyY = -blackKeyRectTramsform.rect.y;
 
+        var fullWidth = Octaves * whiteKeyWidth * 7;
+        var xOffset = (-fullWidth / 2) + (whiteKeyWidth / 2);
+
         Debug.Log($"whiteKeyHeight: {whiteKeyHeight}, whiteKeyWidth: {whiteKeyWidth}");
         Debug.Log($"blackKeyHeight: {blackKeyHeight}, blackKeyWidth: {blackKeyWidth}, blackKeyY: {blackKeyY}");
 
@@ -133,7 +141,7 @@ public class BS_PianoUI : MonoBehaviour
                 var whiteKeyName = whiteKeyNames[i];
                 whiteKey.name = $"{whiteKeyName}{octave}";
                 whiteKey.GetComponentInChildren<TextMeshProUGUI>().text = whiteKeyIndex < whiteKeyBindings.Length ? whiteKeyBindings[whiteKeyIndex] : "";
-                whiteKey.transform.localPosition = new Vector3(whiteKeyIndex * whiteKeyWidth, 0, 0);
+                whiteKey.transform.localPosition = new Vector3(whiteKeyIndex * whiteKeyWidth + xOffset, 0, 0);
 
                 var whiteKeyData = whiteKey.AddComponent<BS_PianoKeyData>();
                 whiteKeyData.MidiNote = midiNote;
@@ -150,7 +158,7 @@ public class BS_PianoUI : MonoBehaviour
                     var blackKeyName = blackKeyNames[i];
                     blackKey.name = $"{blackKeyName}{octave}";
                     blackKey.GetComponentInChildren<TextMeshProUGUI>().text = blackKeyIndex < blackKeyBindings.Length ? blackKeyBindings[blackKeyIndex] : "";
-                    blackKey.transform.localPosition = new Vector3((whiteKeyIndex * whiteKeyWidth) - (whiteKeyWidth / 2), blackKeyY, 0);
+                    blackKey.transform.localPosition = new Vector3((whiteKeyIndex * whiteKeyWidth) - (whiteKeyWidth / 2) + xOffset, blackKeyY, 0);
                     blackKeys.Add(blackKey);
 
                     var blackKeyData = blackKey.AddComponent<BS_PianoKeyData>();
@@ -168,12 +176,6 @@ public class BS_PianoUI : MonoBehaviour
         {
             blackKey.transform.SetAsLastSibling();
         }
-
-        var fullWidth = Octaves * whiteKeyWidth * 7;
-        var localPosition = transform.localPosition;
-        localPosition.x = -fullWidth / 2;
-        localPosition.x += whiteKeyWidth / 2;
-        transform.localPosition = localPosition;
     }
 
     private void Update()
