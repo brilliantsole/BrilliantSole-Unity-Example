@@ -198,6 +198,7 @@ public class BS_Piano : MonoBehaviour, IMidiDeviceEventHandler, IMidiAllEventsHa
     private void OnKeyDown(BS_PianoKeyData KeyData)
     {
         Log($"OnKeyDown {KeyData.MidiNote}");
+        selectHoveredInstrument();
         midiStreamPlayer.MPTK_PlayEvent(new MPTKEvent()
         {
             Command = MPTKCommand.NoteOn,
@@ -237,19 +238,19 @@ public class BS_Piano : MonoBehaviour, IMidiDeviceEventHandler, IMidiAllEventsHa
             LogError("No SoundFont is loaded or accessible.");
         }
     }
+    private int? hoveredInstrumentIndex = null;
+    private void selectHoveredInstrument()
+    {
+        if (hoveredInstrumentIndex == null) { return; }
+        InstrumentDropdown.value = (int)hoveredInstrumentIndex;
+        OnInstrumentDropdownValueChanged((int)hoveredInstrumentIndex);
+        hoveredInstrumentIndex = null;
+    }
     private void PopulateInstrumentsGrid()
     {
-        while (InstrumentsGrid.transform.childCount > 0)
+        foreach (Transform child in InstrumentsGrid.transform)
         {
-            var child = InstrumentsGrid.transform.GetChild(0);
-            if (Application.isEditor)
-            {
-                DestroyImmediate(child.gameObject);
-            }
-            else
-            {
-                Destroy(child.gameObject);
-            }
+            Destroy(child.gameObject);
         }
 
         var instrumentList = MidiPlayerGlobal.MPTK_ListPreset;
@@ -258,15 +259,20 @@ public class BS_Piano : MonoBehaviour, IMidiDeviceEventHandler, IMidiAllEventsHa
             foreach (var preset in instrumentList)
             {
                 var instrumentName = RemoveInstrumentNumber(preset.Label);
-                Logger.Log($"instrumentName: {instrumentName}");
                 if (InstrumentsGridNames.Contains(instrumentName))
                 {
                     var instrumentGridButton = Instantiate(InstrumentGridButton, InstrumentsGrid.transform);
                     instrumentGridButton.GetComponentInChildren<TextMeshProUGUI>().text = instrumentName;
-                    instrumentGridButton.GetComponentInChildren<BS_EyeInteractable>().OnHover += (eyeInteractable) =>
+                    instrumentGridButton.GetComponentInChildren<BS_EyeInteractable>().OnIsHovered += (eyeInteractable, isHovered) =>
                     {
-                        InstrumentDropdown.value = preset.Index;
-                        OnInstrumentDropdownValueChanged(preset.Index);
+                        if (isHovered)
+                        {
+                            hoveredInstrumentIndex = preset.Index;
+                        }
+                        else if (hoveredInstrumentIndex == preset.Index)
+                        {
+                            hoveredInstrumentIndex = null;
+                        }
                     };
                 }
             }
@@ -383,6 +389,7 @@ public class BS_Piano : MonoBehaviour, IMidiDeviceEventHandler, IMidiAllEventsHa
     public void OnMidiNoteOn(string deviceId, int group, int channel, int note, int velocity)
     {
         Log($"OnMidiNoteOn note: {note}, velocity: {velocity}");
+        selectHoveredInstrument();
         midiStreamPlayer.MPTK_PlayEvent(new MPTKEvent()
         {
             Command = MPTKCommand.NoteOn,
