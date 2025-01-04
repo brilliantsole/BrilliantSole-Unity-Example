@@ -2446,6 +2446,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4973133548002271150, guid: 732689fee254d4f0daba89be36be1fb1, type: 3}
+      propertyPath: 'InstrumentsGridNames.Array.data[6]'
+      value: Nylon Guitar
+      objectReference: {fileID: 0}
+    - target: {fileID: 4973133548002271150, guid: 732689fee254d4f0daba89be36be1fb1, type: 3}
       propertyPath: 'InstrumentsGridNames.Array.data[15]'
       value: Synth Voice
       objectReference: {fileID: 0}
