@@ -197,3 +197,4 @@ MonoBehaviour:
     m_Bits: 256
   rayColorDefaultState: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   rayColorHoverState: {r: 1, g: 0, b: 0, a: 1}
+  HitPointPrefab: {fileID: 3430296023010421285, guid: b18703d900dbc4c59b3d03a27ba2bd34, type: 3}

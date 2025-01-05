@@ -13,9 +13,12 @@ public class BS_PianoTrackColumn : BS_BaseEyeTrackingUIComponent, IPointerEnterH
         UpdateColor();
     }
 
+    public Color Color = Color.white;
+    public Color HoverColor = Color.yellow;
+
     private void UpdateColor()
     {
-        image.enabled = IsHovered;
+        image.color = IsHovered ? HoverColor : Color;
     }
 
     private readonly List<BS_PianoTrackNote> notes = new();
@@ -75,14 +78,26 @@ public class BS_PianoTrackColumn : BS_BaseEyeTrackingUIComponent, IPointerEnterH
     {
 #if UNITY_EDITOR
         eyeInteractable.SetIsHovered(true);
+#else
+        if (eventData.pointerId == BS_EyeTrackingCanvas.PointerId)
+        {
+            eyeInteractable.SetIsHovered(true);
+        }
 #endif
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
+
 #if UNITY_EDITOR
         eyeInteractable.SetIsHovered(false);
+#else
+        if (eventData.pointerId == BS_EyeTrackingCanvas.PointerId)
+        {
+            eyeInteractable.SetIsHovered(false);
+        }
 #endif
+
     }
 
     public void AddNote(int midiNote, bool clearRest)

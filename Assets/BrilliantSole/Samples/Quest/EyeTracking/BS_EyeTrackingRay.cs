@@ -27,6 +27,13 @@ public class BS_EyeTrackingRay : MonoBehaviour
 
     private readonly List<BS_EyeInteractable> eyeInteractables = new();
 
+    public enum Side
+    {
+        Left,
+        Right
+    };
+    public Side side;
+
     void Start()
     {
         lineRenderer = GetComponent<LineRenderer>();
@@ -44,6 +51,10 @@ public class BS_EyeTrackingRay : MonoBehaviour
         lineRenderer.SetPosition(0, transform.position);
         lineRenderer.SetPosition(1, new Vector3(transform.position.x, transform.position.y, transform.position.z + rayDistance));
     }
+
+    public GameObject HitPointPrefab;
+    public Color HitPointColor;
+    private readonly Dictionary<BS_EyeInteractable, GameObject> HitPointGameObjects = new();
 
     readonly RaycastHit[] hits = new RaycastHit[10];
     private void FixedUpdate()
@@ -70,7 +81,30 @@ public class BS_EyeTrackingRay : MonoBehaviour
                     eyeInteractablesToUnhover.Remove(eyeInteractable);
                     Logger.Log($"hovered on {eyeInteractable.gameObject.name}");
                     eyeInteractable.SetIsHovered(true);
-                    eyeInteractable.hitPoint.Set(hit.point.x, hit.point.y, hit.point.z);
+                    eyeInteractable.hitPoint = hit.point;
+                    if (side == Side.Left)
+                    {
+                        eyeInteractable.leftHitPoint = hit.point;
+                    }
+                    else
+                    {
+                        eyeInteractable.rightHitPoint = hit.point;
+                    }
+
+                    if (showMarkers)
+                    {
+                        if (HitPointGameObjects.TryGetValue(eyeInteractable, out var hitPointGameObject))
+                        {
+                            hitPointGameObject.transform.position = hit.point;
+                            hitPointGameObject.SetActive(true);
+                        }
+                        else
+                        {
+                            hitPointGameObject = Instantiate(HitPointPrefab, hit.point, Quaternion.identity);
+                            hitPointGameObject.GetComponent<Renderer>().material.color = HitPointColor;
+                            HitPointGameObjects.Add(eyeInteractable, hitPointGameObject);
+                        }
+                    }
                 }
             }
         }
@@ -85,6 +119,16 @@ public class BS_EyeTrackingRay : MonoBehaviour
         {
             Logger.Log($"unhovering {eyeInteractable.gameObject.name}");
             eyeInteractable.SetIsHovered(false);
+
+            if (showMarkers)
+            {
+                if (HitPointGameObjects.TryGetValue(eyeInteractable, out var hitPointGameObject))
+                {
+                    hitPointGameObject.SetActive(false);
+                }
+            }
         }
     }
+
+    private bool showMarkers = false;
 }
