@@ -295,6 +295,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _collider: {fileID: 0}
   hitPoint: {x: 0, y: 0, z: 0}
+  leftHitPoint: {x: 0, y: 0, z: 0}
+  rightHitPoint: {x: 0, y: 0, z: 0}
   ShouldIgnore: 0
 --- !u!114 &7657757606370219703
 MonoBehaviour:
@@ -2027,6 +2029,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _collider: {fileID: 0}
   hitPoint: {x: 0, y: 0, z: 0}
+  leftHitPoint: {x: 0, y: 0, z: 0}
+  rightHitPoint: {x: 0, y: 0, z: 0}
   ShouldIgnore: 0
 --- !u!114 &5503077566664611891
 MonoBehaviour:
@@ -2428,6 +2432,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _collider: {fileID: 0}
   hitPoint: {x: 0, y: 0, z: 0}
+  leftHitPoint: {x: 0, y: 0, z: 0}
+  rightHitPoint: {x: 0, y: 0, z: 0}
   ShouldIgnore: 0
 --- !u!114 &2564749671030384093
 MonoBehaviour:
@@ -2609,6 +2615,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _collider: {fileID: 0}
   hitPoint: {x: 0, y: 0, z: 0}
+  leftHitPoint: {x: 0, y: 0, z: 0}
+  rightHitPoint: {x: 0, y: 0, z: 0}
   ShouldIgnore: 0
 --- !u!114 &1101713320319264340
 MonoBehaviour:
