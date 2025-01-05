@@ -1340,7 +1340,7 @@ MonoBehaviour:
   ModeDropdown: {fileID: 7235329058728720172}
   InstrumentDropdown: {fileID: 2302785089466075513}
   playOnHover: 0
-  mode: 1
+  mode: 0
   sustain: 0
   DrumNote: 35
   InvertPitch: 0

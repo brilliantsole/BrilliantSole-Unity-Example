@@ -150,6 +150,7 @@ public class BS_Piano : MonoBehaviour, IMidiDeviceEventHandler, IMidiAllEventsHa
 
         PianoUI.OnKeyDown += OnKeyDown;
         PianoUI.OnKeyUp += OnKeyUp;
+        PianoUI.OnHoveredKeyData += OnHoveredKeyData;
 
         PianoTracks = Tracks.GetComponent<BS_PianoTracks>();
         PianoTracks.OnColumnIsHovered += OnColumnIsHovered;
@@ -173,6 +174,14 @@ public class BS_Piano : MonoBehaviour, IMidiDeviceEventHandler, IMidiAllEventsHa
         Device?.ClearSensorRate(BS_SensorType.GameRotation);
     }
 
+    private void OnHoveredKeyData(BS_PianoKeyData pianoKeyData, bool isHovered)
+    {
+        if (PlayOnHover)
+        {
+            // FILL - play/stop hovered note
+        }
+    }
+
     [SerializeField]
     private bool playOnHover = false;
     public bool PlayOnHover
@@ -191,11 +200,11 @@ public class BS_Piano : MonoBehaviour, IMidiDeviceEventHandler, IMidiAllEventsHa
                 case BS_Mode.Play:
                     if (PlayOnHover)
                     {
-                        // FILL
+                        // FILL - play hovered note
                     }
                     else
                     {
-                        // FILL
+                        // FILL - stop hovered note
                     }
                     break;
                 case BS_Mode.Track:
@@ -217,24 +226,13 @@ public class BS_Piano : MonoBehaviour, IMidiDeviceEventHandler, IMidiAllEventsHa
     }
     private void OnColumnIsHovered(BS_PianoTrack track, BS_PianoTrackColumn column, bool isHovered)
     {
-        switch (Mode)
+        if (PlayOnHover)
         {
-            case BS_Mode.Play:
-                // FILL
-                break;
-            case BS_Mode.Track:
-                if (PlayOnHover)
-                {
-                    playColumn(column, isHovered);
-                }
-                break;
+            playColumn(column, isHovered);
         }
 
     }
-    private void OnTrackIsHovered(BS_PianoTrack track, bool isHovered)
-    {
-        // FILL
-    }
+    private void OnTrackIsHovered(BS_PianoTrack track, bool isHovered) { }
 
     private readonly List<BS_PianoTrackNote> currentlyPlayingNotes = new();
     private void clearColumn()

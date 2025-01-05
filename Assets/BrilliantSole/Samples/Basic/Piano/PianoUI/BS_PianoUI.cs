@@ -81,8 +81,31 @@ public class BS_PianoUI : MonoBehaviour
             }
 
             var keyData = child.GetComponentInChildren<BS_PianoKeyData>();
-            midiMapping[keyData.MidiNote] = child.gameObject; ;
-            truncatedMidiMapping[keyData.TruncatedMidiNote] = child.gameObject; ;
+            midiMapping[keyData.MidiNote] = child.gameObject;
+            truncatedMidiMapping[keyData.TruncatedMidiNote] = child.gameObject;
+
+            if (child.gameObject.TryGetComponent<BS_EyeInteractable>(out var eyeInteractable))
+            {
+                eyeInteractable.OnIsHovered += OnIsHovered;
+            }
+        }
+    }
+
+    private BS_PianoKeyData hoveredKeyData = null;
+    public BS_PianoKeyData HoveredKeyData => hoveredKeyData;
+    public Action<BS_PianoKeyData, bool> OnHoveredKeyData;
+    private void OnIsHovered(BS_EyeInteractable eyeInteractable, bool isHovered)
+    {
+        var keyData = eyeInteractable.transform.GetComponentInChildren<BS_PianoKeyData>();
+        if (isHovered)
+        {
+            hoveredKeyData = keyData;
+            OnHoveredKeyData?.Invoke(keyData, isHovered);
+        }
+        else if (hoveredKeyData == keyData)
+        {
+            hoveredKeyData = null;
+            OnHoveredKeyData?.Invoke(keyData, isHovered);
         }
     }
 
