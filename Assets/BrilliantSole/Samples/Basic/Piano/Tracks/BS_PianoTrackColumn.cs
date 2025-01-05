@@ -97,7 +97,6 @@ public class BS_PianoTrackColumn : BS_BaseEyeTrackingUIComponent, IPointerEnterH
             eyeInteractable.SetIsHovered(false);
         }
 #endif
-
     }
 
     public void AddNote(int midiNote, bool clearRest)

@@ -33,7 +33,8 @@ public class BS_Piano : MonoBehaviour, IMidiDeviceEventHandler, IMidiAllEventsHa
         Sustain,
         Reverb,
         Chorus,
-        Drum
+        Drum,
+        Track
     }
 
     [SerializeField]
@@ -53,6 +54,7 @@ public class BS_Piano : MonoBehaviour, IMidiDeviceEventHandler, IMidiAllEventsHa
         Logger.Log($"updated pedal mode to \"{PedalMode}\"");
 
         SustainText.transform.parent.gameObject.SetActive(PedalMode == BS_PedalMode.Sustain);
+        PlayColumnOnHoverText.transform.parent.gameObject.SetActive(PedalMode == BS_PedalMode.Track);
 
         switch (PedalMode)
         {
@@ -67,9 +69,21 @@ public class BS_Piano : MonoBehaviour, IMidiDeviceEventHandler, IMidiAllEventsHa
         Reset();
     }
 
+    private void SetPedalMode(BS_PedalMode pedalMode)
+    {
+        PedalModeDropdown.value = Array.IndexOf(Enum.GetValues(typeof(BS_PedalMode)), pedalMode);
+        PedalMode = pedalMode;
+    }
+    private void SetMode(BS_Mode mode)
+    {
+        ModeDropdown.value = Array.IndexOf(Enum.GetValues(typeof(BS_Mode)), mode);
+        Mode = mode;
+    }
+
     public TMP_Dropdown PedalModeDropdown;
     public Button CalibrateButton;
     public TextMeshProUGUI SustainText;
+    public TextMeshProUGUI PlayColumnOnHoverText;
 
     public TMP_Dropdown ModeDropdown;
 
@@ -125,8 +139,9 @@ public class BS_Piano : MonoBehaviour, IMidiDeviceEventHandler, IMidiAllEventsHa
         PedalModeDropdown.ClearOptions();
         List<string> PedalModeStrings = new(Enum.GetNames(typeof(BS_PedalMode)));
         PedalModeDropdown.AddOptions(PedalModeStrings);
+        SetPedalMode(PedalMode);
+        OnPedalMode();
 
-        //ModeDropdown.value = Array.IndexOf(Enum.GetValues(typeof(BS_PedalMode)), PedalMode);
         ModeDropdown.onValueChanged.AddListener(OnModeDropdownValueChanged);
 
         CalibrateButton.onClick.AddListener(Calibrate);
@@ -140,7 +155,7 @@ public class BS_Piano : MonoBehaviour, IMidiDeviceEventHandler, IMidiAllEventsHa
         PianoTracks.OnColumnIsHovered += OnColumnIsHovered;
         PianoTracks.OnTrackIsHovered += OnTrackIsHovered;
 
-        ModeDropdown.value = Array.IndexOf(Enum.GetValues(typeof(BS_Mode)), Mode);
+        SetMode(Mode);
         OnMode();
     }
     private void OnEnable()
@@ -158,7 +173,32 @@ public class BS_Piano : MonoBehaviour, IMidiDeviceEventHandler, IMidiAllEventsHa
         Device?.ClearSensorRate(BS_SensorType.GameRotation);
     }
 
-    public bool PlayColumnOnHover = true;
+    [SerializeField]
+    private bool playColumnOnHover = false;
+    public bool PlayColumnOnHover
+    {
+        get => playColumnOnHover;
+        private set
+        {
+            if (value == playColumnOnHover) { return; }
+            playColumnOnHover = value;
+
+            Logger.Log($"updated PlayColumnOnHover to {PlayColumnOnHover}");
+            PlayColumnOnHoverText.gameObject.SetActive(PlayColumnOnHover);
+
+            if (PlayColumnOnHover)
+            {
+                if (PianoTracks.HoveredColumn != null)
+                {
+                    playColumn(PianoTracks.HoveredColumn, true);
+                }
+            }
+            else
+            {
+                clearColumn();
+            }
+        }
+    }
     private void OnColumnIsHovered(BS_PianoTrack track, BS_PianoTrackColumn column, bool isHovered)
     {
         if (PlayColumnOnHover)
@@ -172,7 +212,7 @@ public class BS_Piano : MonoBehaviour, IMidiDeviceEventHandler, IMidiAllEventsHa
     }
 
     private readonly List<BS_PianoTrackNote> currentlyPlayingNotes = new();
-    private void playColumn(BS_PianoTrackColumn column, bool isHovered)
+    private void clearColumn()
     {
         foreach (var note in currentlyPlayingNotes)
         {
@@ -184,6 +224,10 @@ public class BS_Piano : MonoBehaviour, IMidiDeviceEventHandler, IMidiAllEventsHa
             });
         }
         currentlyPlayingNotes.Clear();
+    }
+    private void playColumn(BS_PianoTrackColumn column, bool isHovered)
+    {
+        clearColumn();
 
         if (isHovered)
         {
@@ -622,6 +666,7 @@ public class BS_Piano : MonoBehaviour, IMidiDeviceEventHandler, IMidiAllEventsHa
         {
             case BS_PedalMode.Sustain:
             case BS_PedalMode.Drum:
+            case BS_PedalMode.Track:
                 var didLatestPitchExceedThreshold = DoesPitchExceedThreshold(latestPitch);
                 if (didLatestPitchExceedThreshold != DidPitchExceedThreshold)
                 {
@@ -634,6 +679,10 @@ public class BS_Piano : MonoBehaviour, IMidiDeviceEventHandler, IMidiAllEventsHa
                 if (PedalMode == BS_PedalMode.Sustain)
                 {
                     Sustain = didLatestPitchExceedThreshold;
+                }
+                if (PedalMode == BS_PedalMode.Track)
+                {
+                    PlayColumnOnHover = didLatestPitchExceedThreshold;
                 }
                 break;
             case BS_PedalMode.Reverb:
@@ -657,6 +706,7 @@ public class BS_Piano : MonoBehaviour, IMidiDeviceEventHandler, IMidiAllEventsHa
         {
             case BS_PedalMode.Sustain:
             case BS_PedalMode.Drum:
+            case BS_PedalMode.Track:
                 PitchThreshold = Pitch;
                 break;
             case BS_PedalMode.Reverb:
