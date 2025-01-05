@@ -45,15 +45,16 @@ public class BS_EyeTrackingRay : MonoBehaviour
         lineRenderer.SetPosition(1, new Vector3(transform.position.x, transform.position.y, transform.position.z + rayDistance));
     }
 
-    readonly RaycastHit[] hits = new RaycastHit[2];
+    readonly RaycastHit[] hits = new RaycastHit[10];
     private void FixedUpdate()
     {
         Vector3 raycastDirection = transform.TransformDirection(Vector3.forward) * rayDistance;
-        List<BS_EyeInteractable> eyeInteractablesToUnhover = new(eyeInteractables.Select(eyeInteractable => eyeInteractable.IsHovered ? eyeInteractable : null));
+        List<BS_EyeInteractable> eyeInteractablesToUnhover = eyeInteractables.Where(eyeInteractable => eyeInteractable.IsHovered).ToList();
 
         var hitCount = Physics.RaycastNonAlloc(transform.position, raycastDirection, hits, 5.0f, layersToInclude);
         if (hitCount > 0)
         {
+            Logger.Log($"hit {hitCount} interactables");
             eyeInteractables.Clear();
             for (int i = 0; i < hitCount; i++)
             {
@@ -67,6 +68,7 @@ public class BS_EyeTrackingRay : MonoBehaviour
                 {
                     eyeInteractables.Add(eyeInteractable);
                     eyeInteractablesToUnhover.Remove(eyeInteractable);
+                    Logger.Log($"hovered on {eyeInteractable.gameObject.name}");
                     eyeInteractable.SetIsHovered(true);
                     eyeInteractable.hitPoint.Set(hit.point.x, hit.point.y, hit.point.z);
                 }
@@ -81,6 +83,7 @@ public class BS_EyeTrackingRay : MonoBehaviour
 
         foreach (var eyeInteractable in eyeInteractablesToUnhover)
         {
+            Logger.Log($"unhovering {eyeInteractable.gameObject.name}");
             eyeInteractable.SetIsHovered(false);
         }
     }

@@ -8,7 +8,7 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody))]
 public class BS_EyeInteractable : MonoBehaviour
 {
-    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_EyeInteractable");
+    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_EyeInteractable", BS_Logger.LogLevel.Log);
 
     public Action<BS_EyeInteractable> OnHover;
     public Action<BS_EyeInteractable> OnUnhover;
@@ -51,7 +51,7 @@ public class BS_EyeInteractable : MonoBehaviour
             if (_IsHovered != value)
             {
                 _IsHovered = value;
-                //Logger.Log($"\"{name}\" IsHovered updated to {IsHovered}");
+                Logger.Log($"\"{name}\" IsHovered updated to {IsHovered}");
                 if (_IsHovered)
                 {
                     OnHover?.Invoke(this);

@@ -46,11 +46,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4527350101466193250, guid: 35d1c8c8179054295bb5fd0c4343874e, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 50
+      value: 80
       objectReference: {fileID: 0}
     - target: {fileID: 4527350101466193250, guid: 35d1c8c8179054295bb5fd0c4343874e, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 10
+      value: 18
       objectReference: {fileID: 0}
     - target: {fileID: 4527350101466193250, guid: 35d1c8c8179054295bb5fd0c4343874e, type: 3}
       propertyPath: m_LocalPosition.x
@@ -102,7 +102,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4854328981110178690, guid: 35d1c8c8179054295bb5fd0c4343874e, type: 3}
       propertyPath: m_Name
-      value: Note (2) Variant
+      value: BlackNote
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

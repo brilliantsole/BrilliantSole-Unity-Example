@@ -191,12 +191,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rayDistance: 2
-  rayWidth: 0.01
+  rayWidth: 0.001
   layersToInclude:
     serializedVersion: 2
     m_Bits: 256
   rayColorDefaultState: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   rayColorHoverState: {r: 1, g: 0, b: 0, a: 1}
-  OnObjectHoverUpdate:
-    m_PersistentCalls:
-      m_Calls: []
