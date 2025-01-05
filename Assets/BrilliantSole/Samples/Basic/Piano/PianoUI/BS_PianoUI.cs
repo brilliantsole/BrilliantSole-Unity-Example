@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
+using Mono.Cecil.Cil;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 [ExecuteInEditMode]
 public class BS_PianoUI : MonoBehaviour
@@ -11,6 +13,18 @@ public class BS_PianoUI : MonoBehaviour
 
     public GameObject WhiteKeyPrefab;
     public GameObject BlackKeyPrefab;
+
+    public void SetVisibility(bool isVisible)
+    {
+        foreach (var image in GetComponentsInChildren<Image>())
+        {
+            image.enabled = isVisible;
+        }
+        foreach (var text in GetComponentsInChildren<TextMeshProUGUI>())
+        {
+            text.enabled = isVisible;
+        }
+    }
 
     private int truncateMidiNote(int note)
     {

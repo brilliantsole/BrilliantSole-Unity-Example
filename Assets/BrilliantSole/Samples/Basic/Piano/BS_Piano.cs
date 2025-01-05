@@ -23,6 +23,10 @@ public class BS_Piano : MonoBehaviour, IMidiDeviceEventHandler, IMidiAllEventsHa
 
     public BS_PianoUI PianoUI;
 
+    public GameObject Tracks;
+    private BS_PianoTracks PianoTracks;
+    public GameObject TrackPrefab;
+
     public enum BS_PedalMode
     {
         None,
@@ -130,6 +134,10 @@ public class BS_Piano : MonoBehaviour, IMidiDeviceEventHandler, IMidiAllEventsHa
 
         PianoUI.OnKeyDown += OnKeyDown;
         PianoUI.OnKeyUp += OnKeyUp;
+
+        PianoTracks = Tracks.GetComponent<BS_PianoTracks>();
+
+        OnMode();
     }
     private void OnEnable()
     {
@@ -167,16 +175,10 @@ public class BS_Piano : MonoBehaviour, IMidiDeviceEventHandler, IMidiAllEventsHa
     {
         Logger.Log($"updated mode to \"{Mode}\"");
 
-        switch (Mode)
-        {
-            case BS_Mode.Play:
-                // FILL
-                break;
-            case BS_Mode.Track:
-                // FILL
-                break;
-        }
+        PianoUI.SetVisibility(Mode == BS_Mode.Play);
+        InstrumentsGrid.SetActive(Mode == BS_Mode.Play);
 
+        Tracks.SetActive(Mode == BS_Mode.Track);
     }
 
     private void OnModeDropdownValueChanged(int selectedIndex)
@@ -207,6 +209,7 @@ public class BS_Piano : MonoBehaviour, IMidiDeviceEventHandler, IMidiAllEventsHa
             Duration = -1,
             Velocity = 80
         });
+        // FILL - Tracks
     }
     private void OnKeyUp(BS_PianoKeyData KeyData)
     {
@@ -217,6 +220,7 @@ public class BS_Piano : MonoBehaviour, IMidiDeviceEventHandler, IMidiAllEventsHa
             Value = KeyData.MidiNote,
             Channel = StreamChannel,
         });
+        // FILL - Tracks
     }
 
     private void PopulateInstrumentDropdown()
@@ -398,6 +402,7 @@ public class BS_Piano : MonoBehaviour, IMidiDeviceEventHandler, IMidiAllEventsHa
             Velocity = velocity
         });
         PianoUI.OnMidiNote(note, true);
+        // FILL - Tracks
     }
 
     public void OnMidiNoteOff(string deviceId, int group, int channel, int note, int velocity)
@@ -411,6 +416,7 @@ public class BS_Piano : MonoBehaviour, IMidiDeviceEventHandler, IMidiAllEventsHa
             //Velocity = velocity
         });
         PianoUI.OnMidiNote(note, false);
+        // FILL - Tracks
     }
 
     public void OnMidiChannelAftertouch(string deviceId, int group, int channel, int pressure)
@@ -580,7 +586,7 @@ public class BS_Piano : MonoBehaviour, IMidiDeviceEventHandler, IMidiAllEventsHa
             case BS_PedalMode.Reverb:
             case BS_PedalMode.Chorus:
                 var value = PitchRange.UpdateAndGetNormalization(latestPitch, false);
-                // FILL - use value to apply effects (effects in Pro version only)
+                // TODO - use value to apply effects (effects in Pro version only)
                 break;
         }
 
