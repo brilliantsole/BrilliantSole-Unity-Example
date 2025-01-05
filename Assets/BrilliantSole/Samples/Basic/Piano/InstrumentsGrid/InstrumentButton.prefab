@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 2769773070651533628}
   - component: {fileID: 1900359194144565422}
   - component: {fileID: 8700836080283272324}
-  m_Layer: 8
+  m_Layer: 5
   m_Name: Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -187,6 +187,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _collider: {fileID: 0}
   hitPoint: {x: 0, y: 0, z: 0}
+  leftHitPoint: {x: 0, y: 0, z: 0}
+  rightHitPoint: {x: 0, y: 0, z: 0}
   ShouldIgnore: 0
 --- !u!114 &8700836080283272324
 MonoBehaviour:

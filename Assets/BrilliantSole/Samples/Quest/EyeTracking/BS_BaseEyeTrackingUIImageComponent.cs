@@ -49,14 +49,27 @@ public class BS_BaseEyeTrackingUIImageComponent : BS_BaseEyeTrackingUIComponent,
 #if UNITY_EDITOR
         eyeInteractable.SetIsHovered(true);
         image.color = HoverColor;
+#else
+        if (eventData.pointerId == BS_EyeTrackingCanvas.PointerId)
+        {
+            eyeInteractable.SetIsHovered(true);
+            image.color = HoverColor;
+        }
 #endif
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
+
 #if UNITY_EDITOR
         eyeInteractable.SetIsHovered(false);
         image.color = Color.white;
+#else
+        if (eventData.pointerId == BS_EyeTrackingCanvas.PointerId)
+        {
+            eyeInteractable.SetIsHovered(false);
+            image.color = Color.white;
+        }
 #endif
     }
 }

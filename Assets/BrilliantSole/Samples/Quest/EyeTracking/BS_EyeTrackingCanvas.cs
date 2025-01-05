@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -60,19 +61,19 @@ public class BS_EyeTrackingCanvas : BS_BaseEyeTrackingUIComponent
         EventSystem.current.RaycastAll(pointerData, raycastResults);
 
         HashSet<GameObject> hoveredGameObjectsToRemove = new(hoveredGameObjects);
+        HashSet<GameObject> enteredGameObjects = new();
 
         if (raycastResults.Count > 0)
         {
-            Debug.Log($"raycast {raycastResults.Count} objects");
+            //Debug.Log($"raycast {raycastResults.Count} objects");
             foreach (var result in raycastResults)
             {
-                Debug.Log($"Pointer moved over: {result.gameObject.name}");
-                ExecuteEvents.Execute(result.gameObject, pointerData, ExecuteEvents.pointerMoveHandler);
-
+                //Debug.Log($"Pointer moved over: {result.gameObject.name}");
+                //ExecuteEvents.Execute(result.gameObject, pointerData, ExecuteEvents.pointerMoveHandler);
                 var isNew = hoveredGameObjects.Add(result.gameObject);
                 if (isNew)
                 {
-                    ExecuteEvents.Execute(result.gameObject, pointerData, ExecuteEvents.pointerEnterHandler);
+                    enteredGameObjects.Add(result.gameObject);
                 }
                 hoveredGameObjectsToRemove.Remove(result.gameObject);
             }
@@ -86,6 +87,10 @@ public class BS_EyeTrackingCanvas : BS_BaseEyeTrackingUIComponent
         {
             hoveredGameObjects.Remove(_gameObject);
             ExecuteEvents.Execute(_gameObject, pointerData, ExecuteEvents.pointerExitHandler);
+        }
+        foreach (var _gameObject in enteredGameObjects)
+        {
+            ExecuteEvents.Execute(_gameObject, pointerData, ExecuteEvents.pointerEnterHandler);
         }
     }
 }

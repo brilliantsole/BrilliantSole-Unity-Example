@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 951550096700060331}
   - component: {fileID: 2992564584280070204}
   - component: {fileID: 7787831191546479337}
-  m_Layer: 8
+  m_Layer: 5
   m_Name: Column
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -157,7 +157,7 @@ MonoBehaviour:
   hitPoint: {x: 0, y: 0, z: 0}
   leftHitPoint: {x: 0, y: 0, z: 0}
   rightHitPoint: {x: 0, y: 0, z: 0}
-  ShouldIgnore: 1
+  ShouldIgnore: 0
 --- !u!114 &951550096700060331
 MonoBehaviour:
   m_ObjectHideFlags: 0

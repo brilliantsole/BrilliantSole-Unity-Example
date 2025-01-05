@@ -126,6 +126,7 @@ public class BS_Piano : MonoBehaviour, IMidiDeviceEventHandler, IMidiAllEventsHa
         List<string> PedalModeStrings = new(Enum.GetNames(typeof(BS_PedalMode)));
         PedalModeDropdown.AddOptions(PedalModeStrings);
 
+        //ModeDropdown.value = Array.IndexOf(Enum.GetValues(typeof(BS_PedalMode)), PedalMode);
         ModeDropdown.onValueChanged.AddListener(OnModeDropdownValueChanged);
 
         CalibrateButton.onClick.AddListener(Calibrate);
@@ -139,6 +140,7 @@ public class BS_Piano : MonoBehaviour, IMidiDeviceEventHandler, IMidiAllEventsHa
         PianoTracks.OnColumnIsHovered += OnColumnIsHovered;
         PianoTracks.OnTrackIsHovered += OnTrackIsHovered;
 
+        ModeDropdown.value = Array.IndexOf(Enum.GetValues(typeof(BS_Mode)), Mode);
         OnMode();
     }
     private void OnEnable()
@@ -441,6 +443,7 @@ public class BS_Piano : MonoBehaviour, IMidiDeviceEventHandler, IMidiAllEventsHa
 
     public void OnMidiNoteOn(string deviceId, int group, int channel, int note, int velocity)
     {
+        velocity = Math.Max(velocity, 40); // soft velocity
         Log($"OnMidiNoteOn note: {note}, velocity: {velocity}");
         selectHoveredInstrument();
         midiStreamPlayer.MPTK_PlayEvent(new MPTKEvent()
