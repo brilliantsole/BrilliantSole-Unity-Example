@@ -9,7 +9,7 @@ using UnityEngine.UI;
 
 public class BS_Piano : MonoBehaviour, IMidiDeviceEventHandler, IMidiAllEventsHandler
 {
-    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_Piano", BS_Logger.LogLevel.Log);
+    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_Piano");
 
     public BS_InsoleSide InsoleSide = BS_InsoleSide.Right;
     public BS_SensorRate SensorRate = BS_SensorRate._40ms;
@@ -136,6 +136,8 @@ public class BS_Piano : MonoBehaviour, IMidiDeviceEventHandler, IMidiAllEventsHa
         PianoUI.OnKeyUp += OnKeyUp;
 
         PianoTracks = Tracks.GetComponent<BS_PianoTracks>();
+        PianoTracks.OnColumnIsHovered += OnColumnIsHovered;
+        PianoTracks.OnTrackIsHovered += OnTrackIsHovered;
 
         OnMode();
     }
@@ -152,6 +154,51 @@ public class BS_Piano : MonoBehaviour, IMidiDeviceEventHandler, IMidiAllEventsHa
         DevicePair.OnDeviceRotation -= OnDeviceQuaternion;
         if (!gameObject.scene.isLoaded) return;
         Device?.ClearSensorRate(BS_SensorType.GameRotation);
+    }
+
+    public bool PlayColumnOnHover = true;
+    private void OnColumnIsHovered(BS_PianoTrack track, BS_PianoTrackColumn column, bool isHovered)
+    {
+        if (PlayColumnOnHover)
+        {
+            playColumn(column, isHovered);
+        }
+    }
+    private void OnTrackIsHovered(BS_PianoTrack track, bool isHovered)
+    {
+        // FILL
+    }
+
+    private readonly List<BS_PianoTrackNote> currentlyPlayingNotes = new();
+    private void playColumn(BS_PianoTrackColumn column, bool isHovered)
+    {
+        foreach (var note in currentlyPlayingNotes)
+        {
+            midiStreamPlayer.MPTK_PlayEvent(new MPTKEvent()
+            {
+                Command = MPTKCommand.NoteOff,
+                Value = note.MidiNote,
+                Channel = StreamChannel,
+            });
+        }
+        currentlyPlayingNotes.Clear();
+
+        if (isHovered)
+        {
+            foreach (var note in column.Notes)
+            {
+                if (!note.IsOn) { continue; }
+                midiStreamPlayer.MPTK_PlayEvent(new MPTKEvent()
+                {
+                    Command = MPTKCommand.NoteOn,
+                    Value = note.MidiNote,
+                    Channel = StreamChannel,
+                    Duration = -1,
+                    Velocity = 80
+                });
+                currentlyPlayingNotes.Add(note);
+            }
+        }
     }
 
     public enum BS_Mode
@@ -197,6 +244,7 @@ public class BS_Piano : MonoBehaviour, IMidiDeviceEventHandler, IMidiAllEventsHa
         }
     }
 
+    private HashSet<int> downMidiNotes = new();
     private void OnKeyDown(BS_PianoKeyData KeyData)
     {
         Log($"OnKeyDown {KeyData.MidiNote}");
@@ -209,7 +257,8 @@ public class BS_Piano : MonoBehaviour, IMidiDeviceEventHandler, IMidiAllEventsHa
             Duration = -1,
             Velocity = 80
         });
-        // FILL - Tracks
+        PianoTracks.AddNote(KeyData.MidiNote, downMidiNotes.Count == 0);
+        downMidiNotes.Add(KeyData.MidiNote);
     }
     private void OnKeyUp(BS_PianoKeyData KeyData)
     {
@@ -220,7 +269,7 @@ public class BS_Piano : MonoBehaviour, IMidiDeviceEventHandler, IMidiAllEventsHa
             Value = KeyData.MidiNote,
             Channel = StreamChannel,
         });
-        // FILL - Tracks
+        downMidiNotes.Remove(KeyData.MidiNote);
     }
 
     private void PopulateInstrumentDropdown()
@@ -402,7 +451,8 @@ public class BS_Piano : MonoBehaviour, IMidiDeviceEventHandler, IMidiAllEventsHa
             Velocity = velocity
         });
         PianoUI.OnMidiNote(note, true);
-        // FILL - Tracks
+        PianoTracks.AddNote(note, downMidiNotes.Count == 0);
+        downMidiNotes.Add(note);
     }
 
     public void OnMidiNoteOff(string deviceId, int group, int channel, int note, int velocity)
@@ -416,7 +466,7 @@ public class BS_Piano : MonoBehaviour, IMidiDeviceEventHandler, IMidiAllEventsHa
             //Velocity = velocity
         });
         PianoUI.OnMidiNote(note, false);
-        // FILL - Tracks
+        downMidiNotes.Remove(note);
     }
 
     public void OnMidiChannelAftertouch(string deviceId, int group, int channel, int pressure)

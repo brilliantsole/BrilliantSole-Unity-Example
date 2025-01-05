@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -19,9 +20,29 @@ public class BS_PianoTrack : MonoBehaviour
         }
     }
 
+    public Action<BS_PianoTrackColumn, bool> OnColumnIsHovered;
+
+    private BS_PianoTrackColumn hoveredColumn;
+    public BS_PianoTrackColumn HoveredColumn => hoveredColumn;
+
     private void Start()
     {
         columns.AddRange(transform.GetComponentsInChildren<BS_PianoTrackColumn>());
+        foreach (var column in columns)
+        {
+            column.transform.GetComponent<BS_EyeInteractable>().OnIsHovered += (eyeInteractable, isHovered) =>
+            {
+                if (isHovered)
+                {
+                    hoveredColumn = column;
+                }
+                else if (column == hoveredColumn)
+                {
+                    hoveredColumn = null;
+                }
+                OnColumnIsHovered?.Invoke(column, isHovered);
+            };
+        }
         UpdateColumnOctaves();
     }
 
@@ -29,7 +50,6 @@ public class BS_PianoTrack : MonoBehaviour
     {
         foreach (var column in columns)
         {
-            Debug.Log($"updating column octave {Octave}");
             column.Octave = Octave;
         }
     }

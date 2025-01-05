@@ -9,7 +9,7 @@ using UnityEngine.UI;
 [ExecuteInEditMode]
 public class BS_PianoUI : MonoBehaviour
 {
-    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_PianoUI", BS_Logger.LogLevel.Log);
+    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_PianoUI");
 
     public GameObject WhiteKeyPrefab;
     public GameObject BlackKeyPrefab;

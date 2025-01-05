@@ -21,6 +21,8 @@ public class BS_PianoTrackColumn : BS_BaseEyeTrackingUIComponent, IPointerEnterH
     private readonly List<BS_PianoTrackNote> notes = new();
     public IReadOnlyList<BS_PianoTrackNote> Notes => notes;
 
+    private readonly Dictionary<int, BS_PianoTrackNote> midiMapping = new();
+
     [SerializeField]
     private int octave = 4;
     public int Octave
@@ -41,11 +43,13 @@ public class BS_PianoTrackColumn : BS_BaseEyeTrackingUIComponent, IPointerEnterH
 
     private void UpdateMidiNotes()
     {
+        midiMapping.Clear();
         var midiNote = (octave * 12) + notes.Count;
         foreach (var note in notes)
         {
             midiNote--;
             note.MidiNote = midiNote;
+            midiMapping[midiNote] = note;
         }
     }
 
@@ -79,5 +83,25 @@ public class BS_PianoTrackColumn : BS_BaseEyeTrackingUIComponent, IPointerEnterH
 #if UNITY_EDITOR
         eyeInteractable.SetIsHovered(false);
 #endif
+    }
+
+    public void AddNote(int midiNote, bool clearRest)
+    {
+        if (clearRest)
+        {
+            foreach (var _note in notes)
+            {
+                _note.IsOn = false;
+            }
+        }
+
+        if (midiMapping.TryGetValue(midiNote, out var note))
+        {
+            note.IsOn = true;
+        }
+        else
+        {
+            Debug.Log($"no note found for {midiNote}");
+        }
     }
 }
