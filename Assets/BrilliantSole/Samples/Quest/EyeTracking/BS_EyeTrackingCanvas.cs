@@ -5,7 +5,7 @@ using UnityEngine.EventSystems;
 
 public class BS_EyeTrackingCanvas : BS_BaseEyeTrackingUIComponent
 {
-    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_BaseEyeTrackingUIComponent");
+    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_BaseEyeTrackingUIComponent", BS_Logger.LogLevel.Log);
 
     public GameObject Cursor;
     public Canvas targetCanvas;
@@ -35,13 +35,13 @@ public class BS_EyeTrackingCanvas : BS_BaseEyeTrackingUIComponent
     {
         if (targetCanvas == null || vrCamera == null)
         {
-            Debug.LogError("Target Canvas or VR Camera is not set.");
+            Logger.Log("Target Canvas or VR Camera is not set.");
             return;
         }
 
         if (targetCanvas.renderMode != RenderMode.WorldSpace)
         {
-            Debug.LogError("Canvas must be in World Space mode.");
+            Logger.Log("Canvas must be in World Space mode.");
             return;
         }
 
@@ -65,10 +65,10 @@ public class BS_EyeTrackingCanvas : BS_BaseEyeTrackingUIComponent
 
         if (raycastResults.Count > 0)
         {
-            //Debug.Log($"raycast {raycastResults.Count} objects");
+            Logger.Log($"raycast {raycastResults.Count} objects");
             foreach (var result in raycastResults)
             {
-                //Debug.Log($"Pointer moved over: {result.gameObject.name}");
+                Logger.Log($"Pointer moved over: {result.gameObject.name}");
                 //ExecuteEvents.Execute(result.gameObject, pointerData, ExecuteEvents.pointerMoveHandler);
                 var isNew = hoveredGameObjects.Add(result.gameObject);
                 if (isNew)
@@ -76,11 +76,19 @@ public class BS_EyeTrackingCanvas : BS_BaseEyeTrackingUIComponent
                     enteredGameObjects.Add(result.gameObject);
                 }
                 hoveredGameObjectsToRemove.Remove(result.gameObject);
+
+                if (result.gameObject.TryGetComponent<BS_EyeInteractable>(out var eyeInteractable))
+                {
+                    if (eyeInteractable.BlockUIRaycast)
+                    {
+                        break;
+                    }
+                }
             }
         }
         else
         {
-            //Debug.Log("No UI element was hit by the pointer move.");
+            //Logger.Log("No UI element was hit by the pointer move.");
         }
 
         foreach (var _gameObject in hoveredGameObjectsToRemove)

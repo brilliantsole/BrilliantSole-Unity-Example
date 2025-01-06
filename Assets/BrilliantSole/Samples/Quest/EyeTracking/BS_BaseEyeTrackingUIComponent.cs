@@ -3,7 +3,7 @@ using UnityEngine;
 [RequireComponent(typeof(BS_EyeInteractable))]
 public class BS_BaseEyeTrackingUIComponent : MonoBehaviour
 {
-    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_BaseEyeTrackingUIComponent", BS_Logger.LogLevel.Log);
+    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_BaseEyeTrackingUIComponent");
 
     protected readonly BS_DevicePair DevicePair = BS_DevicePair.Instance;
     public BS_InsoleSide InsoleSide = BS_InsoleSide.Right;

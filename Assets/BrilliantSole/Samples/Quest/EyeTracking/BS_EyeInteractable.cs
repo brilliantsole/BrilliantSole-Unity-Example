@@ -1,7 +1,6 @@
 // based on https://www.youtube.com/watch?v=ZoySn7QlMfQ
 
 using System;
-using Unity.VisualScripting;
 using UnityEngine;
 
 [RequireComponent(typeof(Collider))]
@@ -9,6 +8,8 @@ using UnityEngine;
 public class BS_EyeInteractable : MonoBehaviour
 {
     private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_EyeInteractable");
+
+    public bool BlockUIRaycast = true;
 
     public Action<BS_EyeInteractable> OnHover;
     public Action<BS_EyeInteractable> OnUnhover;

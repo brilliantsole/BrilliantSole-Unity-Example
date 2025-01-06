@@ -123,7 +123,7 @@ public class BS_PianoUI : MonoBehaviour
         if (keyData.IsDown) { return; }
         keyData.IsDown = true;
         Logger.Log($"onKeyDown {key.name}");
-        OnKeyDown?.Invoke(key.GetComponent<BS_PianoKeyData>());
+        OnKeyDown?.Invoke(keyData);
     }
     private void onKeyUp(GameObject key)
     {
@@ -131,7 +131,7 @@ public class BS_PianoUI : MonoBehaviour
         if (!keyData.IsDown) { return; }
         keyData.IsDown = false;
         Logger.Log($"onKeyUp {key.name}");
-        OnKeyUp?.Invoke(key.GetComponent<BS_PianoKeyData>());
+        OnKeyUp?.Invoke(keyData);
     }
 
     public void GenerateKeys()
@@ -238,7 +238,12 @@ public class BS_PianoUI : MonoBehaviour
         }
     }
 
-    private void SimulateKeyEvent(GameObject key, bool isDown)
+    public void SimulateKeyEvent(BS_PianoKeyData keyData, bool isHovered)
+    {
+        SimulateKeyEvent(keyData.gameObject, isHovered);
+    }
+
+    public void SimulateKeyEvent(GameObject key, bool isDown)
     {
         var pointer = new PointerEventData(EventSystem.current);
         if (isDown)

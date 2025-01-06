@@ -178,7 +178,7 @@ public class BS_Piano : MonoBehaviour, IMidiDeviceEventHandler, IMidiAllEventsHa
     {
         if (PlayOnHover)
         {
-            // FILL - play/stop hovered note
+            playHoveredNote(pianoKeyData, isHovered);
         }
     }
 
@@ -200,11 +200,15 @@ public class BS_Piano : MonoBehaviour, IMidiDeviceEventHandler, IMidiAllEventsHa
                 case BS_Mode.Play:
                     if (PlayOnHover)
                     {
-                        // FILL - play hovered note
+                        selectHoveredInstrument();
+                        if (PianoUI.HoveredKeyData != null)
+                        {
+                            playHoveredNote(PianoUI.HoveredKeyData, true);
+                        }
                     }
                     else
                     {
-                        // FILL - stop hovered note
+                        clearHoveredNote();
                     }
                     break;
                 case BS_Mode.Track:
@@ -268,6 +272,39 @@ public class BS_Piano : MonoBehaviour, IMidiDeviceEventHandler, IMidiAllEventsHa
                 currentlyPlayingNotes.Add(note);
             }
         }
+    }
+
+
+    private BS_PianoKeyData currentlyPlayingNote = null;
+    private void playHoveredNote(BS_PianoKeyData keyData, bool isHovered)
+    {
+        clearHoveredNote();
+        if (isHovered)
+        {
+            PianoUI.SimulateKeyEvent(keyData, true);
+            midiStreamPlayer.MPTK_PlayEvent(new MPTKEvent()
+            {
+                Command = MPTKCommand.NoteOn,
+                Value = keyData.MidiNote,
+                Channel = StreamChannel,
+                Duration = -1,
+                Velocity = 80
+            });
+            currentlyPlayingNote = keyData;
+        }
+
+    }
+    private void clearHoveredNote()
+    {
+        if (currentlyPlayingNote == null) { return; }
+        PianoUI.SimulateKeyEvent(currentlyPlayingNote, false);
+        midiStreamPlayer.MPTK_PlayEvent(new MPTKEvent()
+        {
+            Command = MPTKCommand.NoteOff,
+            Value = currentlyPlayingNote.MidiNote,
+            Channel = StreamChannel,
+        });
+        currentlyPlayingNote = null;
     }
 
     public enum BS_Mode
