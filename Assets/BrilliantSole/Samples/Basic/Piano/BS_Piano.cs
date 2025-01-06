@@ -5,6 +5,7 @@ using MidiPlayerTK;
 using TMPro;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class BS_Piano : MonoBehaviour, IMidiDeviceEventHandler, IMidiAllEventsHandler
@@ -410,8 +411,22 @@ public class BS_Piano : MonoBehaviour, IMidiDeviceEventHandler, IMidiAllEventsHa
         if (hoveredInstrumentIndex == null) { return; }
         InstrumentDropdown.value = (int)hoveredInstrumentIndex;
         OnInstrumentDropdownValueChanged((int)hoveredInstrumentIndex);
+        if (instrumentGridButtons.TryGetValue((int)hoveredInstrumentIndex, out var instrumentGridButton))
+        {
+            if (false && instrumentGridButton.TryGetComponent<BS_EyeTrackingButton>(out var eyeTrackingButton))
+            {
+                eyeTrackingButton.OnPointerDown();
+            }
+            if (instrumentGridButton.TryGetComponent<Button>(out var button))
+            {
+                var pointer = new PointerEventData(EventSystem.current);
+                ExecuteEvents.Execute(button.gameObject, pointer, ExecuteEvents.pointerDownHandler);
+            }
+
+        }
         hoveredInstrumentIndex = null;
     }
+    private readonly Dictionary<int, GameObject> instrumentGridButtons = new();
     private void PopulateInstrumentsGrid()
     {
         foreach (Transform child in InstrumentsGrid.transform)
@@ -428,6 +443,7 @@ public class BS_Piano : MonoBehaviour, IMidiDeviceEventHandler, IMidiAllEventsHa
                 if (InstrumentsGridNames.Contains(instrumentName))
                 {
                     var instrumentGridButton = Instantiate(InstrumentGridButton, InstrumentsGrid.transform);
+                    instrumentGridButtons.Add(preset.Index, instrumentGridButton);
                     instrumentGridButton.GetComponentInChildren<TextMeshProUGUI>().text = instrumentName;
                     instrumentGridButton.GetComponentInChildren<BS_EyeInteractable>().OnIsHovered += (eyeInteractable, isHovered) =>
                     {

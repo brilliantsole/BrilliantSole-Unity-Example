@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 1363437919339797103}
   - component: {fileID: 2769773070651533628}
   - component: {fileID: 1900359194144565422}
-  - component: {fileID: 8700836080283272324}
+  - component: {fileID: 8100740276882180624}
   m_Layer: 5
   m_Name: Button
   m_TagString: Untagged
@@ -185,12 +185,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e42cc61e810444c32bf87da073fa4731, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  BlockUIRaycast: 1
   _collider: {fileID: 0}
   hitPoint: {x: 0, y: 0, z: 0}
   leftHitPoint: {x: 0, y: 0, z: 0}
   rightHitPoint: {x: 0, y: 0, z: 0}
   ShouldIgnore: 0
---- !u!114 &8700836080283272324
+--- !u!114 &8100740276882180624
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -199,11 +200,23 @@ MonoBehaviour:
   m_GameObject: {fileID: 1794576878848615589}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9e2fcb62c677c47f4acfd742b5c92758, type: 3}
+  m_Script: {fileID: 11500000, guid: 0049a9aeddd6c4855bae96768fe030fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   InsoleSide: 1
   HoverColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  DefaultColor: {r: 1, g: 1, b: 1, a: 1}
+  PressedColor: {r: 0.8773585, g: 0.8086497, b: 0, a: 1}
+  ClickVibrationConfigurations:
+  - Type: 0
+    Locations: 3
+    WaveformEffectSequence:
+    - Type: 0
+      Effect: 1
+      Delay: 0
+      LoopCount: 0
+    WaveformEffectSequenceLoopCount: 0
+    WaveformSequence: []
 --- !u!1 &3947075223936653639
 GameObject:
   m_ObjectHideFlags: 0
