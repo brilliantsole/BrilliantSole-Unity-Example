@@ -274,7 +274,6 @@ public class BS_Piano : MonoBehaviour, IMidiDeviceEventHandler, IMidiAllEventsHa
         }
     }
 
-
     private BS_PianoKeyData currentlyPlayingNote = null;
     private void playHoveredNote(BS_PianoKeyData keyData, bool isHovered)
     {
@@ -290,6 +289,10 @@ public class BS_Piano : MonoBehaviour, IMidiDeviceEventHandler, IMidiAllEventsHa
                 Duration = -1,
                 Velocity = 80
             });
+            if (keyData.gameObject.TryGetComponent<BS_EyeTrackingButton>(out var eyeTrackingButton))
+            {
+                eyeTrackingButton.OnPointerDown();
+            }
             currentlyPlayingNote = keyData;
         }
 
@@ -304,6 +307,10 @@ public class BS_Piano : MonoBehaviour, IMidiDeviceEventHandler, IMidiAllEventsHa
             Value = currentlyPlayingNote.MidiNote,
             Channel = StreamChannel,
         });
+        if (currentlyPlayingNote.gameObject.TryGetComponent<BS_EyeTrackingButton>(out var eyeTrackingButton))
+        {
+            eyeTrackingButton.OnPointerUp();
+        }
         currentlyPlayingNote = null;
     }
 

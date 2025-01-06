@@ -8,6 +8,7 @@ public class BS_BaseEyeTrackingUIImageComponent : BS_BaseEyeTrackingUIComponent,
 
     protected Image image;
     public Color HoverColor = Color.yellow;
+    public Color DefaultColor = Color.white;
 
     protected override void Start()
     {
@@ -41,19 +42,19 @@ public class BS_BaseEyeTrackingUIImageComponent : BS_BaseEyeTrackingUIComponent,
     protected override void OnIsHovered(BS_EyeInteractable eyeInteractable, bool IsHovered)
     {
         base.OnIsHovered(eyeInteractable, IsHovered);
-        image.color = IsHovered ? HoverColor : Color.white;
+        image.color = IsHovered ? HoverColor : DefaultColor;
     }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
 #if UNITY_EDITOR
         eyeInteractable.SetIsHovered(true);
-        image.color = HoverColor;
+        SetColor(HoverColor);
 #else
         if (eventData.pointerId == BS_EyeTrackingCanvas.PointerId)
         {
             eyeInteractable.SetIsHovered(true);
-            image.color = HoverColor;
+            SetColor(HoverColor);
         }
 #endif
     }
@@ -63,13 +64,18 @@ public class BS_BaseEyeTrackingUIImageComponent : BS_BaseEyeTrackingUIComponent,
 
 #if UNITY_EDITOR
         eyeInteractable.SetIsHovered(false);
-        image.color = Color.white;
+        SetColor(DefaultColor);
 #else
         if (eventData.pointerId == BS_EyeTrackingCanvas.PointerId)
         {
             eyeInteractable.SetIsHovered(false);
-            image.color = Color.white;
+            SetColor(DefaultColor);
         }
 #endif
+    }
+
+    protected virtual void SetColor(Color color)
+    {
+        image.color = color;
     }
 }
