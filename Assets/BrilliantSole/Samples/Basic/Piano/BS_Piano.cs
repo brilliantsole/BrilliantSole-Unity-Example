@@ -413,16 +413,28 @@ public class BS_Piano : MonoBehaviour, IMidiDeviceEventHandler, IMidiAllEventsHa
         OnInstrumentDropdownValueChanged((int)hoveredInstrumentIndex);
         if (instrumentGridButtons.TryGetValue((int)hoveredInstrumentIndex, out var instrumentGridButton))
         {
-            if (false && instrumentGridButton.TryGetComponent<BS_EyeTrackingButton>(out var eyeTrackingButton))
+            if (false)
             {
-                eyeTrackingButton.OnPointerDown();
-            }
-            if (instrumentGridButton.TryGetComponent<Button>(out var button))
-            {
-                var pointer = new PointerEventData(EventSystem.current);
-                ExecuteEvents.Execute(button.gameObject, pointer, ExecuteEvents.pointerDownHandler);
-            }
 
+                var eyeTrackingButton = instrumentGridButton.GetComponentInChildren<BS_EyeTrackingButton>();
+                if (eyeTrackingButton != null)
+                {
+                    eyeTrackingButton.OnPointerDown();
+                }
+            }
+            else
+            {
+                var button = instrumentGridButton.GetComponentInChildren<Button>();
+                if (button != null)
+                {
+                    var pointer = new PointerEventData(EventSystem.current);
+                    ExecuteEvents.Execute(button.gameObject, pointer, ExecuteEvents.pointerDownHandler);
+                }
+            }
+        }
+        else
+        {
+            Logger.LogError($"couldn't find gridButton for {hoveredInstrumentIndex}");
         }
         hoveredInstrumentIndex = null;
     }
