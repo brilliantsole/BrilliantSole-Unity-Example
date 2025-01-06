@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 179b9047773dd4a37a9cf37d3bb5a41e, type: 3}
   m_Name: BS_PianoTrackNoteColors
   m_EditorClassIdentifier: 
-  UnhoveredOffWhiteColor: {r: 1, g: 1, b: 1, a: 0.5254902}
-  HoveredOffWhiteColor: {r: 1, g: 1, b: 1, a: 0.5019608}
+  UnhoveredOffWhiteColor: {r: 1, g: 1, b: 1, a: 0.039215688}
+  HoveredOffWhiteColor: {r: 1, g: 1, b: 1, a: 0.039215688}
   UnhoveredOnWhiteColor: {r: 1, g: 1, b: 1, a: 1}
   HoveredOnWhiteColor: {r: 1, g: 1, b: 1, a: 1}
-  UnhoveredOffBlackColor: {r: 0, g: 0, b: 0, a: 0.5372549}
-  HoveredOffBlackColor: {r: 0, g: 0, b: 0, a: 0.5254902}
+  UnhoveredOffBlackColor: {r: 0, g: 0, b: 0, a: 0.039215688}
+  HoveredOffBlackColor: {r: 0, g: 0, b: 0, a: 0.039215688}
   UnhoveredOnBlackColor: {r: 0, g: 0, b: 0, a: 1}
   HoveredOnBlackColor: {r: 0, g: 0, b: 0, a: 1}
