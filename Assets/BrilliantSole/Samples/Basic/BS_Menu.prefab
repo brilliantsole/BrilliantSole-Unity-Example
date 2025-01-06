@@ -1308,7 +1308,7 @@ MonoBehaviour:
   - Harpsichord
   - Vibraphone
   - Distortion Guitar
-  - Violin
+  - Viola
   - Cello
   - Nylon Guitar
   - Orchestra Hit
@@ -21893,6 +21893,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e42cc61e810444c32bf87da073fa4731, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  BlockUIRaycast: 1
   _collider: {fileID: 0}
   hitPoint: {x: 0, y: 0, z: 0}
   leftHitPoint: {x: 0, y: 0, z: 0}
@@ -21912,6 +21913,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   InsoleSide: 1
   HoverColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  DefaultColor: {r: 1, g: 1, b: 1, a: 1}
+  PressedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   ClickVibrationConfigurations:
   - Type: 0
     Locations: 3
