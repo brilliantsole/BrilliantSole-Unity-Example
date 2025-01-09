@@ -41200,7 +41200,7 @@ MonoBehaviour:
   Speed: 1.2
   CollectableScore: 100
   EnemyDamage: 20
-  InsoleSide: 0
+  InsoleSide: 1
   TimeBetweenObstacleSpawn: 1
   EnemyObstacleProbability: 0.5
   InvertPitch: 0
@@ -44127,7 +44127,7 @@ MonoBehaviour:
   Speed: 1.3
   CollectableScore: 100
   EnemyDamage: 20
-  InsoleSide: 0
+  InsoleSide: 1
   ScoreTimeMultiplier: 10
   JumpVelocity: 3.5
   PitchThreshold: 0
