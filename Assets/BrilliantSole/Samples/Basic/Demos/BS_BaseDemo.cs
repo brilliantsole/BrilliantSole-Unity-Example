@@ -200,20 +200,20 @@ public class BS_BaseDemo : MonoBehaviour
     public float Speed = 1.0f;
     protected virtual void MoveObstacles() { }
 
-    protected bool IsObstacleAPrefabOf(GameObject obstacle, GameObject prefab) => obstacle.name.Contains(prefab.name);
+    protected bool IsObstacleAPrefabOf(GameObject obstacle, GameObject prefab) => prefab != null && obstacle.name.ToLower().Contains(prefab.name.ToLower());
     protected bool IsObstacleCollectable(GameObject obstacle) => IsObstacleAPrefabOf(obstacle, CollectablePrefab);
     protected bool IsObstacleEnemy(GameObject obstacle) => IsObstacleAPrefabOf(obstacle, EnemyPrefab);
     protected bool IsObstaclePipe(GameObject obstacle) => IsObstacleAPrefabOf(obstacle, PipePrefab);
 
     protected virtual void OnObstacleCollision(GameObject obstacle)
     {
-        Debug.Log($"collided with {obstacle.name}");
+        //Debug.Log($"collided with {obstacle.name}");
         if (IsObstacleCollectable(obstacle))
         {
             //Debug.Log("collided with collectable");
             OnCollectableCollision(obstacle);
         }
-        else if (IsObstacleCollectable(obstacle))
+        else if (IsObstacleEnemy(obstacle))
         {
             //Debug.Log("collided with enemy");
             OnEnemyCollision(obstacle);
