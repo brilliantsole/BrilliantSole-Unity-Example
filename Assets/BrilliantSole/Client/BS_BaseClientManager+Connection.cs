@@ -7,6 +7,21 @@ public abstract partial class BS_BaseClientManager<TClientManager, TClient> : BS
     where TClientManager : MonoBehaviour
     where TClient : BS_BaseClient
 {
+    [SerializeField]
+    private bool reconnectOnDisconnection = false;
+    public bool ReconnectOnDisconnection
+    {
+        get => reconnectOnDisconnection;
+        set
+        {
+            if (reconnectOnDisconnection != value)
+            {
+                reconnectOnDisconnection = value;
+                Client.ReconnectOnDisconnection = value;
+            }
+        }
+    }
+
     public void ToggleConnection() { Client.ToggleConnection(); }
     public void Connect() { Client.Connect(); }
     public void Disconnect() { Client.Disconnect(); }

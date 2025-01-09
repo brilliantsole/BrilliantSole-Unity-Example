@@ -1,18 +1,21 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class BS_FootFlyerDemo : BS_BaseDemo
 {
     public BS_InsoleSide InsoleSide = BS_InsoleSide.Right;
-    public BS_SensorRate SensorRate = BS_SensorRate._20ms;
-
-
-    public Vector3 Size = new(2f, 1f, 0f);
+    private BS_Device Device => DevicePair.Devices.GetValueOrDefault(InsoleSide, null);
+    private bool IsInsoleConnected => Device?.IsConnected == true;
 
     protected override void Start()
     {
         base.Start();
-        Player.transform.localPosition -= Size / 2;
+        var playerPosition = Player.transform.localPosition;
+        //playerPosition -= Size / 2;
+        playerPosition.x -= Size.x / 2;
+        playerPosition.z -= Size.z / 2;
+        Player.transform.localPosition = playerPosition;
     }
 
     protected override void OnEnable()
@@ -33,7 +36,6 @@ public class BS_FootFlyerDemo : BS_BaseDemo
             obstacle.transform.Translate(Speed * Time.deltaTime * Vector3.left);
         }
     }
-
     protected override void CheckObstaclePositions()
     {
         base.CheckObstaclePositions();
@@ -69,10 +71,10 @@ public class BS_FootFlyerDemo : BS_BaseDemo
 
         var obstacle = Instantiate(obstaclePrefab, Scene.transform.position, Quaternion.identity, Scene.transform);
 
-        Vector3 position = new(Size.x / 2, Size.y * (UnityEngine.Random.value - 0.5f), 0);
+        Vector3 position = new(Size.x / 2, Size.y * UnityEngine.Random.value, 0);
         obstacle.transform.localPosition += position;
 
-        Obstacles.Add(obstacle);
+        AddObstacle(obstacle);
 
         lastTimeObstacleSpawned = runtime;
     }
@@ -87,7 +89,7 @@ public class BS_FootFlyerDemo : BS_BaseDemo
     private void SetPlayerHeight(float newHeight)
     {
         var position = Player.transform.localPosition;
-        position.y = Math.Clamp(newHeight, -Size.y / 2, Size.y / 2);
+        position.y = Math.Clamp(newHeight, 0, Size.y);
         //Debug.Log($"updating Player height to {position.y}");
         Player.transform.localPosition = position;
     }
@@ -98,7 +100,7 @@ public class BS_FootFlyerDemo : BS_BaseDemo
     }
     private void SetPlayerHeightNormalized(float normalizedHeight)
     {
-        SetPlayerHeight(Size.y * (normalizedHeight - 0.5f));
+        SetPlayerHeight(Size.y * normalizedHeight);
     }
 
     private readonly BS_Range PitchRange = new();
@@ -108,7 +110,6 @@ public class BS_FootFlyerDemo : BS_BaseDemo
         base.OnDeviceQuaternion(devicePair, insoleSide, device, quaternion, timestamp);
         if (insoleSide != InsoleSide) { return; }
         var pitch = quaternion.GetPitch();
-        pitch += 2.0f * Mathf.PI;
         //Debug.Log($"pitch: {pitch}");
         var normalizedHeight = PitchRange.UpdateAndGetNormalization(pitch, false);
         if (InvertPitch)
@@ -123,8 +124,6 @@ public class BS_FootFlyerDemo : BS_BaseDemo
         base.Calibrate();
         PitchRange.Reset();
     }
-    private BS_Device Device => DevicePair.Devices[InsoleSide];
-    private bool IsInsoleConnected => Device?.IsConnected == true;
     protected override void Update()
     {
         if (!IsInsoleConnected) { CheckMouse(); }

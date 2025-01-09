@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 public partial class BS_Device
 {
@@ -36,9 +37,9 @@ public partial class BS_Device
     }
     public BS_FileTransferStatus FileTransferStatus => FileTransferManager.FileTransferStatus;
 
-    private void SendFile(BS_FileMetadata fileMetadata)
+    private async Task<bool> SendFile(BS_FileMetadata fileMetadata)
     {
-        FileTransferManager.SendFile(fileMetadata);
+        return await FileTransferManager.SendFile(fileMetadata);
     }
     public void ReceiveFile(BS_FileType fileType)
     {

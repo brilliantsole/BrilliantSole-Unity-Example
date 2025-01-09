@@ -47,6 +47,7 @@ public partial class BS_UdpClient
     {
         if (DidPongTimeout)
         {
+            DisconnectedUnintentionally = true;
             Disconnect();
             DidPongTimeout = false;
         }

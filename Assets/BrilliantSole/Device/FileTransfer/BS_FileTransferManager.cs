@@ -5,6 +5,7 @@ using static BS_FileTransferMessageType;
 using static BS_FileTransferStatus;
 using static BS_FileTransferCommand;
 using System.Data.Common;
+using System.Threading.Tasks;
 
 public class BS_FileTransferManager : BS_BaseManager<BS_FileTransferMessageType>
 {
@@ -275,28 +276,50 @@ public class BS_FileTransferManager : BS_BaseManager<BS_FileTransferMessageType>
     // FILE TRANSFER STATUS END
 
     // FILE BLOCK START
-    public async void SendFile(BS_FileMetadata fileMetadata)
+    public async Task<bool> SendFile(BS_FileMetadata fileMetadata)
     {
+
         if (FileTransferStatus != Idle)
         {
             Logger.LogWarning($"cannot send file - transferStatus is {FileTransferStatus}");
-            return;
+            return false;
         }
 
         var fileData = await fileMetadata.GetFileData();
         if (fileData == null)
         {
             Logger.LogError("failed to get filedata");
-            return;
+            return false;
         }
         Logger.Log($"sending {fileMetadata.FileType} file with {fileData.Length} bytes");
+
+        var fileChecksum = GetCrc32(fileData);
+
+        if (fileMetadata.FileType != FileType)
+        {
+            // different file types - sending
+        }
+        else if (fileData.Length != FileLength)
+        {
+            // different file lengths - sending
+        }
+        else if (FileChecksum != fileChecksum)
+        {
+            // different file checksums - sending
+        }
+        else
+        {
+            Logger.Log($"already sent file");
+            return false;
+        }
 
         FileToSend = fileData;
 
         SetFileTransferType(fileMetadata.FileType, false);
         SetFileLength((uint)FileToSend.Length, false);
-        SetFileChecksum(GetCrc32(FileToSend), false);
+        SetFileChecksum(fileChecksum, false);
         SetFileTransferCommand(Send);
+        return true;
     }
     public void ReceiveFile(BS_FileType fileType)
     {

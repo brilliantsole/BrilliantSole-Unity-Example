@@ -18,25 +18,36 @@ public partial class BS_DevicePair
             OnIsFullyConnected?.Invoke(this, IsFullyConnected);
         }
     }
+
+    public event Action<BS_DevicePair, bool> OnIsHalfConnected;
+
+    [SerializeField]
+    private bool isHalfConnected = false;
+    public bool IsHalfConnected
+    {
+        get => isHalfConnected;
+        private set
+        {
+            if (value == isHalfConnected) { return; }
+            Logger.Log($"updating IsHalfConnected to {value}");
+            isHalfConnected = value;
+            OnIsHalfConnected?.Invoke(this, IsHalfConnected);
+        }
+    }
+
+    private void CheckIsHalfConnected()
+    {
+        var newIsHalfConnected = ConnectedDevicesCount == 1;
+        Logger.Log($"newIsHalfConnected: {newIsHalfConnected}");
+        IsHalfConnected = newIsHalfConnected;
+    }
     private void CheckIsFullyConnected()
     {
-        bool newIsFullyConnected;
-        if (HasAllDevices)
-        {
-            newIsFullyConnected = true;
-            foreach (var pair in Devices)
-            {
-                newIsFullyConnected = newIsFullyConnected && pair.Value.IsConnected;
-                if (!newIsFullyConnected) { break; }
-            }
-        }
-        else
-        {
-            newIsFullyConnected = false;
-        }
-
+        var newIsFullyConnected = ConnectedDevicesCount == 2;
         Logger.Log($"newIsFullyConnected: {newIsFullyConnected}");
         IsFullyConnected = newIsFullyConnected;
+
+        CheckIsHalfConnected();
     }
 
     public Action<BS_DevicePair, BS_InsoleSide, BS_Device, BS_ConnectionStatus> OnDeviceConnectionStatus;
@@ -49,6 +60,7 @@ public partial class BS_DevicePair
     private void onDeviceIsConnected(BS_Device device, bool isConnected)
     {
         OnDeviceIsConnected?.Invoke(this, (BS_InsoleSide)device.InsoleSide, device, isConnected);
+        CheckIsFullyConnected();
     }
 
     private void AddDeviceConnectionListeners(BS_Device device)

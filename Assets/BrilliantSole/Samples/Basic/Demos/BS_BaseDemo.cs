@@ -10,6 +10,7 @@ public class BS_BaseDemo : MonoBehaviour
     public GameObject PlayerPrefab;
     public GameObject EnemyPrefab;
     public GameObject CollectablePrefab;
+    public GameObject PipePrefab;
 
     public GameObject Scene;
 
@@ -27,10 +28,18 @@ public class BS_BaseDemo : MonoBehaviour
     protected BS_DevicePair DevicePair => BS_DevicePair.Instance;
 
     protected GameObject Player;
+    protected Rigidbody PlayerRigidBody;
+    public float PlayerLinearDamping = 0.0f;
+
+    public BS_SensorRate SensorRate = BS_SensorRate._20ms;
+
+    public Vector3 Size = new(2f, 1f, 0f);
 
     protected virtual void Start()
     {
         Player = Instantiate(PlayerPrefab, Scene.transform.position, Quaternion.identity, Scene.transform);
+        PlayerRigidBody = Player.GetComponent<Rigidbody>();
+        UpdateLinearDamping();
 
         Controls = transform.Find("Controls").gameObject;
         ToggleButton = Controls.transform.Find("Toggle").GetComponent<Button>();
@@ -42,9 +51,22 @@ public class BS_BaseDemo : MonoBehaviour
         ToggleButton.onClick.AddListener(ToggleIsRunning);
         CalibrateButton.onClick.AddListener(Calibrate);
     }
+    private void UpdateLinearDamping()
+    {
+        if (PlayerRigidBody != null)
+        {
+            PlayerRigidBody.linearDamping = PlayerLinearDamping;
+            Debug.Log($"updated linearDamping to {PlayerRigidBody.linearDamping}");
+        }
+        else
+        {
+            Debug.Log("no PlayerRigidBody found");
+        }
+    }
 
     protected virtual void OnEnable()
     {
+        UpdateLinearDamping();
         Scene.SetActive(true);
 
         DevicePair.OnDeviceGameRotation += OnDeviceQuaternion;
@@ -81,7 +103,7 @@ public class BS_BaseDemo : MonoBehaviour
     {
         Debug.Log($"IsRunning: {IsRunning}");
 
-        var toggleButtonText = ToggleButton.transform.Find("Text").GetComponentInChildren<TextMeshProUGUI>();
+        var toggleButtonText = ToggleButton.transform.GetChild(0).GetComponentInChildren<TextMeshProUGUI>();
         if (IsGameOver)
         {
             toggleButtonText.text = "Restart";
@@ -91,7 +113,7 @@ public class BS_BaseDemo : MonoBehaviour
             toggleButtonText.text = IsRunning ? "Stop" : "Play";
         }
     }
-    private void ToggleIsRunning()
+    protected void ToggleIsRunning()
     {
         if (IsGameOver)
         {
@@ -117,7 +139,7 @@ public class BS_BaseDemo : MonoBehaviour
 
     protected virtual void OnScoreUpdate()
     {
-        Debug.Log($"Score: {Score}");
+        //Debug.Log($"Score: {Score}");
         ScoreText.text = $"Score: {Math.Floor(Score)}";
     }
 
@@ -178,32 +200,27 @@ public class BS_BaseDemo : MonoBehaviour
     public float Speed = 1.0f;
     protected virtual void MoveObstacles() { }
 
-    public LayerMask CollisionLayer;
-    private readonly Collider[] colliders = new Collider[10];
-    protected virtual void CheckObstacleCollisions()
+    protected bool IsObstacleAPrefabOf(GameObject obstacle, GameObject prefab) => obstacle.name.Contains(prefab.name);
+    protected bool IsObstacleCollectable(GameObject obstacle) => IsObstacleAPrefabOf(obstacle, CollectablePrefab);
+    protected bool IsObstacleEnemy(GameObject obstacle) => IsObstacleAPrefabOf(obstacle, EnemyPrefab);
+    protected bool IsObstaclePipe(GameObject obstacle) => IsObstacleAPrefabOf(obstacle, PipePrefab);
+
+    protected virtual void OnObstacleCollision(GameObject obstacle)
     {
-        var colliderCount = Physics.OverlapSphereNonAlloc(Player.transform.position, 0.1f, colliders, CollisionLayer);
-        if (colliderCount > 0)
-        {
-            //Debug.Log($"collided with {colliderCount} obstacles");
-            for (int i = 0; i < colliderCount; i++)
-            {
-                var obstacle = colliders[i].gameObject.transform.parent.gameObject;
-                OnObstacleCollision(obstacle);
-            }
-        }
-    }
-    private void OnObstacleCollision(GameObject obstacle)
-    {
-        //Debug.Log($"collided with {obstacle.name}");
-        if (obstacle.name.Contains(CollectablePrefab.name))
+        Debug.Log($"collided with {obstacle.name}");
+        if (IsObstacleCollectable(obstacle))
         {
             //Debug.Log("collided with collectable");
             OnCollectableCollision(obstacle);
         }
-        else if (obstacle.name.Contains(EnemyPrefab.name))
+        else if (IsObstacleCollectable(obstacle))
         {
             //Debug.Log("collided with enemy");
+            OnEnemyCollision(obstacle);
+        }
+        else if (IsObstaclePipe(obstacle))
+        {
+            //Debug.Log("collided with pipe");
             OnEnemyCollision(obstacle);
         }
         else
@@ -213,11 +230,28 @@ public class BS_BaseDemo : MonoBehaviour
         RemoveObstacle(obstacle);
     }
     protected virtual void CheckObstaclePositions() { }
-    protected void RemoveObstacle(GameObject obstacle)
+    protected virtual void RemoveObstacle(GameObject obstacle)
     {
+        if (obstacle.TryGetComponent<BS_ColliderBroadcaster>(out var colliderBroadcaster))
+        {
+            colliderBroadcaster.OnCollider -= OnObstacleCollider;
+        }
         //Debug.Log("removing obstacle");
         Obstacles.Remove(obstacle);
         Destroy(obstacle);
+    }
+    protected void AddObstacle(GameObject obstacle)
+    {
+        if (obstacle.TryGetComponent<BS_ColliderBroadcaster>(out var colliderBroadcaster))
+        {
+            colliderBroadcaster.OnCollider += OnObstacleCollider;
+        }
+        Obstacles.Add(obstacle);
+    }
+
+    protected void OnObstacleCollider(GameObject obstacle, Collider collider)
+    {
+        OnObstacleCollision(obstacle);
     }
 
     public int CollectableScore = 100;
@@ -242,9 +276,13 @@ public class BS_BaseDemo : MonoBehaviour
         if (!IsRunning) { return; }
         runtime += Time.deltaTime;
         CheckObstacleSpawn();
-        CheckObstacleCollisions();
         CheckObstaclePositions();
     }
 
     protected virtual void CheckObstacleSpawn() { }
+
+    protected void TriggerVibration(BS_InsoleSide insoleSide, List<BS_VibrationConfiguration> vibrationConfigurations)
+    {
+        DevicePair.GetDevice(insoleSide)?.TriggerVibration(vibrationConfigurations);
+    }
 }

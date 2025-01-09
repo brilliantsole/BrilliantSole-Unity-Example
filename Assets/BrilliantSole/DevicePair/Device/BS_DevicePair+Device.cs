@@ -1,14 +1,19 @@
 using System.Collections.Generic;
+using System.Linq;
 
 public partial class BS_DevicePair
 {
     private readonly Dictionary<BS_InsoleSide, BS_Device> devices = new();
     public IReadOnlyDictionary<BS_InsoleSide, BS_Device> Devices => devices;
 
-    public BS_Device Left => Devices.GetValueOrDefault(BS_InsoleSide.Left, null);
-    public BS_Device Right => Devices.GetValueOrDefault(BS_InsoleSide.Right, null);
+    public BS_Device GetDevice(BS_InsoleSide insoleSide) => Devices.GetValueOrDefault(insoleSide, null);
+    public BS_Device Left => GetDevice(BS_InsoleSide.Left);
+
+    public BS_Device Right => GetDevice(BS_InsoleSide.Right);
+
 
     public bool HasAllDevices => Devices.Count == 2;
+    private int ConnectedDevicesCount => Devices.Values.Select(device => device.IsConnected).Count();
 
     public void AddDevice(BS_Device device)
     {

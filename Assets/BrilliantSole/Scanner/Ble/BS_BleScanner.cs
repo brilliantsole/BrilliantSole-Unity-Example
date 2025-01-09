@@ -114,7 +114,7 @@ public class BS_BleScanner : BS_BaseScanner<BS_BleScanner>
     private void OnDiscoveredBleDevice(string address, string name)
     {
         Logger.Log($"Discovered device \"{name}\" with address {address}");
-        if (_allDiscoveredDevices.TryGetValue(address, out BS_DiscoveredDevice discoveredDevice))
+        if (_allDiscoveredDevices.TryGetValue(address, out var discoveredDevice))
         {
             discoveredDevice.Update(name, null, null);
             AddDiscoveredDevice(discoveredDevice);
@@ -135,7 +135,7 @@ public class BS_BleScanner : BS_BaseScanner<BS_BleScanner>
             Logger.Log($"Device \"{name}\" is type \"{deviceType}\"");
         }
 
-        if (_allDiscoveredDevices.TryGetValue(address, out BS_DiscoveredDevice discoveredDevice))
+        if (_allDiscoveredDevices.TryGetValue(address, out var discoveredDevice))
         {
             discoveredDevice.Update(name, deviceType, rssi);
             AddDiscoveredDevice(discoveredDevice);

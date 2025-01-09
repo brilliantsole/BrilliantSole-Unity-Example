@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using UnityEngine;
 using static BS_TfliteMessageType;
 using static BS_TfliteTask;
@@ -83,17 +82,32 @@ public class BS_TfliteManager : BS_BaseManager<BS_TfliteMessageType>
     }
 
     private BS_TfliteModelMetadata _tfliteModelMetadata;
-    public BS_TfliteModelMetadata TfliteModelMetadata => _tfliteModelMetadata;
+    public BS_TfliteModelMetadata TfliteModelMetadata
+    {
+        get => _tfliteModelMetadata;
+        private set
+        {
+            if (_tfliteModelMetadata == value)
+            {
+                Logger.Log($"redundant TfliteModelMetadata assignment");
+                return;
+            }
+            Logger.Log($"updated TfliteModelMetadata");
+            _tfliteModelMetadata = value;
+        }
+    }
 
     public void SendTfliteModel(BS_TfliteModelMetadata tfliteModelMetadata, bool sendImmediately = true)
     {
-        _tfliteModelMetadata = tfliteModelMetadata;
+        TfliteModelMetadata = tfliteModelMetadata;
         SetName(tfliteModelMetadata.Name, false);
         SetTask(tfliteModelMetadata.Task, false);
         SetCaptureDelay(tfliteModelMetadata.CaptureDelay, false);
         SetSensorRate(tfliteModelMetadata.SensorRate, false);
-        SetThreshold(tfliteModelMetadata.Threshold, sendImmediately);
+        SetThreshold(tfliteModelMetadata.Threshold, false);
         SetSensorTypes(tfliteModelMetadata.GetSensorTypes(), sendImmediately);
+
+
     }
 
     // NAME START
@@ -200,7 +214,8 @@ public class BS_TfliteManager : BS_BaseManager<BS_TfliteMessageType>
         }
         Logger.Log($"setting sensorRate to {newSensorRate}...");
 
-        List<byte> data = new() { (byte)newSensorRate };
+        List<byte> data = new();
+        data.AddRange(BS_ByteUtils.ToByteArray((ushort)newSensorRate, true));
         BS_TxMessage[] Messages = { CreateMessage(SetTfliteSensorRate, data) };
         SendTxMessages(Messages, sendImmediately);
     }
@@ -235,6 +250,11 @@ public class BS_TfliteManager : BS_BaseManager<BS_TfliteMessageType>
     }
     private void SetSensorTypes(HashSet<BS_SensorType> newSensorTypes, bool sendImmediately = true)
     {
+        if (SensorTypes.SetEquals(newSensorTypes))
+        {
+            Logger.Log($"redundant SensorTypes assignment");
+            return;
+        }
         Logger.Log($"setting sensorTypes to {string.Join(", ", newSensorTypes)}...");
         List<byte> data = newSensorTypes.Select(e => (byte)e).ToList();
         BS_TxMessage[] Messages = { CreateMessage(SetTfliteSensorTypes, data) };
@@ -395,14 +415,22 @@ public class BS_TfliteManager : BS_BaseManager<BS_TfliteMessageType>
         var numberOfInferences = inferenceMessageLength / inferenceSize;
 
         Dictionary<string, float> inferenceMap = null;
-        if (TfliteModelMetadata.Classes?.Count == numberOfInferences)
+        if (TfliteModelMetadata != null)
         {
-            inferenceMap = new();
+            if (TfliteModelMetadata.Classes?.Count == numberOfInferences)
+            {
+                inferenceMap = new();
+            }
+            else
+            {
+                Logger.LogError($"TfliteModelMetadata classes doesn't match (expected {numberOfInferences}, got {TfliteModelMetadata.Classes.Count})");
+            }
         }
         else
         {
-            Logger.LogError($"TfliteModelMetadata classes doesn't match (expected {numberOfInferences}, got {TfliteModelMetadata.Classes.Count})");
+            Logger.LogWarning("null TfliteModelMetadata");
         }
+
 
         List<float> inference = new();
         var maxValue = float.MinValue;
@@ -429,12 +457,11 @@ public class BS_TfliteManager : BS_BaseManager<BS_TfliteMessageType>
                     }
                 }
             }
-
         }
         Logger.Log($"parsed inference with {inference.Count} classes as {timestamp}ms");
 
         OnInference?.Invoke(inference, inferenceMap, timestamp);
-        if (Task == Classification)
+        if (Task == Classification && maxClassName != null)
         {
             Logger.Log($"max class: {maxClassName} (#{maxIndex}) with {maxValue}");
             OnClassification?.Invoke(maxClassName, maxValue, timestamp);
