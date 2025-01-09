@@ -85,5 +85,5 @@ mono_crash.*
 omnisharp.json
 
 /Assets/Samples/Meta*
-/Assets/MIDI
-/Assets/MidiPlayer
+/Assets/MIDI*
+/Assets/MidiPlayer*
