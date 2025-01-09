@@ -607,8 +607,11 @@ public class BS_Piano : MonoBehaviour, IMidiDeviceEventHandler, IMidiAllEventsHa
             Channel = StreamChannel,
             //Velocity = velocity
         });
-        PianoUI.OnMidiNote(note, false);
-        downMidiNotes.Remove(note);
+        if (!Sustain)
+        {
+            PianoUI.OnMidiNote(note, false);
+            downMidiNotes.Remove(note);
+        }
     }
 
     public void OnMidiChannelAftertouch(string deviceId, int group, int channel, int pressure)
@@ -731,6 +734,14 @@ public class BS_Piano : MonoBehaviour, IMidiDeviceEventHandler, IMidiAllEventsHa
                 Value = !Sustain ? 0 : 64,
                 Channel = StreamChannel
             });
+            if (!Sustain)
+            {
+                foreach (var note in downMidiNotes)
+                {
+                    PianoUI.OnMidiNote(note, false);
+                }
+                downMidiNotes.Clear();
+            }
         }
     }
 
