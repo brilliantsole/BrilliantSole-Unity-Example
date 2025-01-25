@@ -406,7 +406,7 @@ public class BS_FileTransferManager : BS_BaseManager<BS_FileTransferMessageType>
 
         FileToReceive.AddRange(data);
         currentFileLength = (ushort)FileToReceive.Count;
-        var progress = FileToReceive.Count / (float)FileLength;
+        var progress = currentFileLength / (float)FileLength;
         Logger.Log($"FileToReceive length: {FileToReceive.Count}/{FileLength} ({progress}%)");
         OnFileTransferProgress?.Invoke(FileType, BS_FileTransferDirection.Receiving, progress);
 
@@ -449,7 +449,7 @@ public class BS_FileTransferManager : BS_BaseManager<BS_FileTransferMessageType>
 
         if (BytesTransferred != currentBytesTransferred)
         {
-            Logger.LogError($"BytesTransferred not equal - got {currentBytesTransferred}, expected {currentBytesTransferred}");
+            Logger.LogError($"BytesTransferred not equal - got {currentBytesTransferred}, expected {BytesTransferred}");
             CancelFileTransfer();
             return;
         }
