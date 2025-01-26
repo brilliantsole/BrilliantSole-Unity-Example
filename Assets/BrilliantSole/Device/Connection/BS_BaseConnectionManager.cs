@@ -86,7 +86,7 @@ public abstract class BS_BaseConnectionManager
         OnRxMessages?.Invoke(this);
     }
 
-    private void OnParsedRxMessage(byte messageType, byte[] messageData) { OnRxMessage(this, messageType, messageData); }
+    private void OnParsedRxMessage(byte messageType, byte[] messageData) { OnRxMessage?.Invoke(this, messageType, messageData); }
 
     public virtual void SendTxData(List<byte> data) { Logger.Log($"Sending {data.Count} bytes..."); }
 }
