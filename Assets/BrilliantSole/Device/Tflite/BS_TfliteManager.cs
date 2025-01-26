@@ -106,8 +106,6 @@ public class BS_TfliteManager : BS_BaseManager<BS_TfliteMessageType>
         SetSensorRate(tfliteModelMetadata.SensorRate, false);
         SetThreshold(tfliteModelMetadata.Threshold, false);
         SetSensorTypes(tfliteModelMetadata.GetSensorTypes(), sendImmediately);
-
-
     }
 
     // NAME START
