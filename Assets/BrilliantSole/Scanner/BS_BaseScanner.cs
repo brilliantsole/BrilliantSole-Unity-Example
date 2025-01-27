@@ -131,13 +131,25 @@ public abstract class BS_BaseScanner : IBS_Scanner
     {
         if (IsScanning)
         {
-            RemoveExpiredDiscoveredDevices();
+            // FILL - limit checking to once per second
+            CheckExpiredDiscoveredDevices();
         }
     }
 
     readonly private int DiscoveredDeviceExpirationTime = 5;
-    private void RemoveExpiredDiscoveredDevices()
+    private DateTime lastTimeCheckedExpiredDiscoveredDevices;
+    private int checkExpiredDiscoveredDevicesTime = 1;
+    private void CheckExpiredDiscoveredDevices()
     {
+        var now = DateTime.Now;
+        if ((now - lastTimeCheckedExpiredDiscoveredDevices).TotalSeconds < checkExpiredDiscoveredDevicesTime)
+        {
+            return;
+        }
+        lastTimeCheckedExpiredDiscoveredDevices = now;
+
+        Logger.Log("CheckExpiredDiscoveredDevices...");
+
         List<string> deviceIdsToRemove = new();
 
         foreach (var discoveredDevicePair in _discoveredDevices)
