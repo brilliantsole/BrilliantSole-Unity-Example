@@ -213,7 +213,7 @@ public abstract class BS_BaseScanner : IBS_Scanner
         return device;
     }
 
-    public BS_Device? ToggleConnectionToDiscoveredDevice(BS_DiscoveredDevice discoveredDevice)
+    public BS_Device ToggleConnectionToDiscoveredDevice(BS_DiscoveredDevice discoveredDevice)
     {
         BS_Device device = GetDeviceByDiscoveredDevice(discoveredDevice, true)!;
         device.ToggleConnection();
