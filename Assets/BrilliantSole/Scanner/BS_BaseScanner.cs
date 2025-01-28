@@ -203,7 +203,9 @@ public abstract class BS_BaseScanner : IBS_Scanner
 
     public virtual BS_Device ConnectToDiscoveredDevice(BS_DiscoveredDevice discoveredDevice)
     {
-        return GetDeviceByDiscoveredDevice(discoveredDevice, true)!;
+        var device = GetDeviceByDiscoveredDevice(discoveredDevice, true)!;
+        device.Connect();
+        return device;
     }
 
     public BS_Device? DisconnectFromDiscoveredDevice(BS_DiscoveredDevice discoveredDevice)
