@@ -349,7 +349,7 @@ public class BS_FileTransferManager : BS_BaseManager<BS_FileTransferMessageType>
         Logger.Log($"remainingBytes: {remainingBytes}");
 
         var progress = BytesTransferred / (float)FileToSend.Length;
-        Logger.Log($"progress: {progress}");
+        Logger.Log($"progress: {progress * 100}%");
         OnFileTransferProgress?.Invoke(FileType, BS_FileTransferDirection.Sending, progress);
 
         if (remainingBytes == 0)
