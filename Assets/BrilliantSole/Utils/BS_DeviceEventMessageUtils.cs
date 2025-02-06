@@ -70,7 +70,4 @@ public static class BS_DeviceEventMessageUtils
 
         return byteArray;
     }
-
-    public static BS_ConnectionMessage CreateMessage(string enumString, in List<byte> data) { return new(stringToByte[enumString], data); }
-    public static BS_ConnectionMessage CreateMessage(string enumString) { return new(stringToByte[enumString]); }
 }
