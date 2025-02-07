@@ -51,8 +51,15 @@ public partial class BS_UdpClient
 
     private void OnUdpData(in byte[] data)
     {
+        StopWaitingForPong();
+
         Logger.Log($"parsing {data.Length} bytes...");
         BS_ParseUtils.ParseMessages(data, OnUdpMessage);
+
+        if (IsConnected)
+        {
+            WaitForPong();
+        }
     }
     private void OnUdpMessage(byte udpMessageTypeByte, byte[] data)
     {
@@ -63,8 +70,6 @@ public partial class BS_UdpClient
         }
         var udpMessageType = (BS_UdpMessageType)udpMessageTypeByte;
         Logger.Log($"udpMessageType: {udpMessageType}");
-
-        StopWaitingForPong();
 
         switch (udpMessageType)
         {
@@ -82,11 +87,6 @@ public partial class BS_UdpClient
             default:
                 Logger.LogError($"Uncaught udpMessageType {udpMessageType}");
                 break;
-        }
-
-        if (IsConnected)
-        {
-            WaitForPong();
         }
     }
 
