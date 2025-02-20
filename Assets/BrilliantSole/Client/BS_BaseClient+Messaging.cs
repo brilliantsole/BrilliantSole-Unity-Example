@@ -9,6 +9,7 @@ public partial class BS_BaseClient
     {
         Logger.Log($"received {data.Length} bytes...");
         ParseServerData(data);
+        CheckIfFullyConnected();
     }
     private void ParseServerData(in byte[] data)
     {
@@ -49,6 +50,7 @@ public partial class BS_BaseClient
                 Logger.LogError($"Uncaught serverMessageType {serverMessageType}");
                 break;
         }
+        receivedMessageTypes.Add(serverMessageType);
     }
 
     private void SendMessages(List<BS_ServerMessage> serverMessages, bool sendImmediately = true)
@@ -66,7 +68,7 @@ public partial class BS_BaseClient
         SendMessageData(MessageData, sendImmediately);
     }
 
-    private void SendRequiredMessages() { SendMessages(RequiredMessages); }
+    protected void SendRequiredMessages(bool sendImmediately = true) { SendMessages(RequiredMessages, sendImmediately); }
     private static readonly List<BS_ServerMessageType> RequiredMessageTypes = new(){
         BS_ServerMessageType.IsScanningAvailable,
         BS_ServerMessageType.DiscoveredDevices,

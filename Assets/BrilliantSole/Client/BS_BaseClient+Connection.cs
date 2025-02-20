@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using static BS_ConnectionStatus;
 
@@ -31,7 +32,10 @@ public partial class BS_BaseClient
                 case Connected:
                 case NotConnected:
                     OnIsConnected?.Invoke(this, IsConnected);
-                    if (ConnectionStatus == Connected) { SendRequiredMessages(); }
+                    if (ConnectionStatus == Connected)
+                    {
+                        // SendRequiredMessages(false);
+                    }
                     else
                     {
                         Reset();
@@ -100,5 +104,33 @@ public partial class BS_BaseClient
                 Connect();
                 break;
         }
+    }
+
+    private readonly HashSet<BS_ServerMessageType> receivedMessageTypes = new();
+    private void CheckIfFullyConnected()
+    {
+        if (ConnectionStatus != Connecting)
+        {
+            return;
+        }
+        Logger.Log("checking if fully connected...");
+
+        if (!receivedMessageTypes.Contains(BS_ServerMessageType.IsScanningAvailable))
+        {
+            Logger.Log("didn't receive isScanningAvailable yet - not fully connected");
+            return;
+        }
+
+        if (IsScanningAvailable)
+        {
+            if (!receivedMessageTypes.Contains(BS_ServerMessageType.IsScanning))
+            {
+                Logger.Log("didn't receive isScanning yet - not fully connected");
+                return;
+            }
+        }
+
+        Logger.Log("fully connected");
+        ConnectionStatus = Connected;
     }
 }

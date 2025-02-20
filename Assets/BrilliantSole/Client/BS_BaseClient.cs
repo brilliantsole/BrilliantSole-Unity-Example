@@ -2,7 +2,7 @@ using System.Linq;
 
 public abstract partial class BS_BaseClient : IBS_Scanner
 {
-    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_BaseClient");
+    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_BaseClient", BS_Logger.LogLevel.Log);
 
     protected virtual void Reset()
     {
@@ -13,6 +13,8 @@ public abstract partial class BS_BaseClient : IBS_Scanner
 
         _discoveredDevices.Clear();
         //_devices.Clear();
+
+        receivedMessageTypes.Clear();
 
         foreach (var device in _devices.Values.ToList())
         {

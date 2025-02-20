@@ -10,7 +10,7 @@ using UnityEngine.UI;
 
 public class BS_Piano : MonoBehaviour, IMidiDeviceEventHandler, IMidiAllEventsHandler
 {
-    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_Piano", BS_Logger.LogLevel.Log);
+    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_Piano");
 
     public BS_InsoleSide InsoleSide = BS_InsoleSide.Right;
     public BS_SensorRate SensorRate = BS_SensorRate._40ms;
