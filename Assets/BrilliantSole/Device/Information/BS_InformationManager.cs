@@ -50,7 +50,7 @@ public class BS_InformationManager : BS_BaseManager<BS_InformationMessageType>
     private ushort? _mtu;
     public ushort Mtu
     {
-        get => _mtu ?? 0;
+        get => _mtu ?? 23;
         private set
         {
             if (_mtu == value) { return; }
