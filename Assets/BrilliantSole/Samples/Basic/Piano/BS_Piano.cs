@@ -560,6 +560,7 @@ public class BS_Piano : MonoBehaviour, IMidiDeviceEventHandler, IMidiAllEventsHa
     }
 
     // MIDI KEYBOARD START
+
     public void OnMidiInputDeviceAttached(string deviceId)
     {
         Log($"OnMidiInputDeviceAttached {deviceId} name: {MidiManager.Instance.GetDeviceName(deviceId)}");
@@ -580,37 +581,98 @@ public class BS_Piano : MonoBehaviour, IMidiDeviceEventHandler, IMidiAllEventsHa
         Log($"OnMidiOutputDeviceDetached {deviceId} name: {MidiManager.Instance.GetDeviceName(deviceId)}");
     }
 
+    private readonly int pianoChannel = 0;
+    private readonly int padChannel = 9;
     public void OnMidiNoteOn(string deviceId, int group, int channel, int note, int velocity)
     {
-        velocity = Math.Max(velocity, 40); // soft velocity
         Log($"OnMidiNoteOn note: {note}, velocity: {velocity}, channel: {channel}, group: {group}");
-        selectHoveredInstrument();
-        midiStreamPlayer.MPTK_PlayEvent(new MPTKEvent()
+        if (channel == pianoChannel)
         {
-            Command = MPTKCommand.NoteOn,
-            Value = note,
-            Channel = StreamChannel,
-            Velocity = velocity
-        });
-        PianoUI.OnMidiNote(note, true);
-        PianoTracks.AddNote(note, downMidiNotes.Count == 0);
-        downMidiNotes.Add(note);
+            velocity = Math.Max(velocity, 40); // soft velocity
+            selectHoveredInstrument();
+            midiStreamPlayer.MPTK_PlayEvent(new MPTKEvent()
+            {
+                Command = MPTKCommand.NoteOn,
+                Value = note,
+                Channel = StreamChannel,
+                Velocity = velocity
+            });
+            PianoUI.OnMidiNote(note, true);
+            PianoTracks.AddNote(note, downMidiNotes.Count == 0);
+            downMidiNotes.Add(note);
+        }
+        if (channel == padChannel)
+        {
+            switch (note)
+            {
+                case 36: // Pad 1
+                    if (mode == BS_Mode.Track)
+                    {
+                        PlayOnHover = !PlayOnHover;
+                    }
+                    break;
+                case 37: // Pad 2
+                    PianoTracks.ClearHoveredColumn();
+                    break;
+                case 38: // Pad 3
+                    PianoTracks.Clear();
+                    break;
+                case 39: // Pad 4
+                    break;
+                case 40: // Pad 5
+                    break;
+                case 41: // Pad 6
+                    break;
+                case 42: // Pad 7
+                    break;
+                case 43: // Pad 8
+                    break;
+            }
+        }
     }
 
     public void OnMidiNoteOff(string deviceId, int group, int channel, int note, int velocity)
     {
         Log($"OnMidiNoteOff note: {note}, velocity: {velocity}, channel: {channel}, group: {group}");
-        midiStreamPlayer.MPTK_PlayEvent(new MPTKEvent()
+        if (channel == pianoChannel)
         {
-            Command = MPTKCommand.NoteOff,
-            Value = note,
-            Channel = StreamChannel,
-            //Velocity = velocity
-        });
-        if (!Sustain)
+            midiStreamPlayer.MPTK_PlayEvent(new MPTKEvent()
+            {
+                Command = MPTKCommand.NoteOff,
+                Value = note,
+                Channel = StreamChannel,
+                //Velocity = velocity
+            });
+            if (!Sustain)
+            {
+                PianoUI.OnMidiNote(note, false);
+                downMidiNotes.Remove(note);
+            }
+        }
+        if (channel == padChannel)
         {
-            PianoUI.OnMidiNote(note, false);
-            downMidiNotes.Remove(note);
+            switch (note)
+            {
+                case 36: // Pad 1
+                    break;
+                case 37: // Pad 2
+                    break;
+                case 38: // Pad 3
+                    break;
+                case 39: // Pad 4
+                    break;
+                case 40: // Pad 5
+                    break;
+                case 41: // Pad 6
+                    break;
+                case 42: // Pad 7
+                    break;
+                case 43: // Pad 8
+                    break;
+                default:
+                    Log($"uncaught pad note {note}");
+                    break;
+            }
         }
     }
 

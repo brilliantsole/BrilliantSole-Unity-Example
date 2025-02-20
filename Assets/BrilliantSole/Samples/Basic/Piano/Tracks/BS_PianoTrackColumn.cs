@@ -103,10 +103,7 @@ public class BS_PianoTrackColumn : BS_BaseEyeTrackingUIComponent, IPointerEnterH
     {
         if (clearRest)
         {
-            foreach (var _note in notes)
-            {
-                _note.IsOn = false;
-            }
+            Clear();
         }
 
         if (midiMapping.TryGetValue(midiNote, out var note))
@@ -116,6 +113,14 @@ public class BS_PianoTrackColumn : BS_BaseEyeTrackingUIComponent, IPointerEnterH
         else
         {
             Debug.Log($"no note found for {midiNote}");
+        }
+    }
+
+    public void Clear()
+    {
+        foreach (var _note in notes)
+        {
+            _note.IsOn = false;
         }
     }
 }

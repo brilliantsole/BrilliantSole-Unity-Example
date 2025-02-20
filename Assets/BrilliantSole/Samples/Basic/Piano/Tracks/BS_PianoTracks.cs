@@ -56,4 +56,18 @@ public class BS_PianoTracks : MonoBehaviour
         if (HoveredColumn == null) { return; }
         HoveredColumn.AddNote(midiNote, clearRest);
     }
+
+    public void ClearHoveredColumn()
+    {
+        if (HoveredColumn == null) { return; }
+        HoveredColumn.Clear();
+    }
+
+    public void Clear()
+    {
+        foreach (var track in pianoTracks)
+        {
+            track.Clear();
+        }
+    }
 }
