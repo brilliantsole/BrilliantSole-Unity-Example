@@ -51,7 +51,7 @@ public class BS_DiscoveredDevice
     public readonly IBS_Scanner Scanner;
     public BS_Device Connect() { return Scanner.ConnectToDiscoveredDevice(this); }
     public BS_Device? Disconnect() { return Scanner.DisconnectFromDiscoveredDevice(this); }
-    public BS_Device ToggleConnection() { return Scanner.ToggleConnectionToDiscoveredDevice(this); }
+    public BS_Device? ToggleConnection() { return Scanner.ToggleConnectionToDiscoveredDevice(this); }
 
     public BS_Device? Device => Scanner.Devices.ContainsKey(Id) ? Scanner.Devices[Id] : null;
 }

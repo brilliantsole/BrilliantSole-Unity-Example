@@ -92,7 +92,7 @@ public class BS_SensorConfigurationManager : BS_BaseManager<BS_SensorConfigurati
         }
         if (GetSensorRate(sensorType) == sensorRate)
         {
-            Logger.LogError($"redundant sensorRate {sensorRate} for sensorType {sensorType}");
+            Logger.Log($"redundant sensorRate {sensorRate} for sensorType {sensorType}");
             return;
         }
 

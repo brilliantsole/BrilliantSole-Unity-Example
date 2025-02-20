@@ -20,7 +20,13 @@ public partial class BS_BaseClient
     }
     private BS_Device CreateDevice(BS_DiscoveredDevice discoveredDevice)
     {
-        BS_Device device = new(discoveredDevice);
+        var device = GetDeviceByDiscoveredDevice(discoveredDevice);
+        if (device != null)
+        {
+            Logger.Log($"already created device for {discoveredDevice.Name}");
+            return device;
+        }
+        device = new(discoveredDevice);
         Logger.Log($"creating device for {discoveredDevice.Name}...");
         SetupDevice(device, discoveredDevice.Id);
         return device;
@@ -88,7 +94,7 @@ public partial class BS_BaseClient
         return device;
     }
 
-    public BS_Device ToggleConnectionToDiscoveredDevice(BS_DiscoveredDevice discoveredDevice)
+    public BS_Device? ToggleConnectionToDiscoveredDevice(BS_DiscoveredDevice discoveredDevice)
     {
         BS_Device device = GetDeviceByDiscoveredDevice(discoveredDevice, true)!;
         device.ToggleConnection();

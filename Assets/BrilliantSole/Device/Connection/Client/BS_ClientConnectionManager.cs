@@ -9,6 +9,8 @@ public class BS_ClientConnectionManager : BS_BaseConnectionManager
 
     public override BS_ConnectionType Type => BS_ConnectionType.Udp;
 
+    public override bool IsAvailable => Client.IsConnected;
+
     protected override void Connect(ref bool Continue)
     {
         base.Connect(ref Continue);

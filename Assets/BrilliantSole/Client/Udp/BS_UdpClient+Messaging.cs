@@ -51,11 +51,10 @@ public partial class BS_UdpClient
 
     private void OnUdpData(in byte[] data)
     {
-        StopWaitingForPong();
-
         Logger.Log($"parsing {data.Length} bytes...");
+        StopWaitingForPong();
         BS_ParseUtils.ParseMessages(data, OnUdpMessage);
-
+        SendPendingUdpMessages();
         if (IsConnected)
         {
             WaitForPong();
@@ -172,6 +171,7 @@ public partial class BS_UdpClient
         Logger.Log("successfully set ReceivePort");
         DidSetRemoteReceivePort = true;
 
-        ConnectionStatus = Connected;
+        //ConnectionStatus = Connected;
+        SendRequiredMessages(false);
     }
 }

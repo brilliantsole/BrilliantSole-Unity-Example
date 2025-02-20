@@ -39,5 +39,5 @@ public interface IBS_Scanner
 
     BS_Device ConnectToDiscoveredDevice(BS_DiscoveredDevice discoveredDevice);
     BS_Device? DisconnectFromDiscoveredDevice(BS_DiscoveredDevice discoveredDevice);
-    BS_Device ToggleConnectionToDiscoveredDevice(BS_DiscoveredDevice discoveredDevice);
+    BS_Device? ToggleConnectionToDiscoveredDevice(BS_DiscoveredDevice discoveredDevice);
 }

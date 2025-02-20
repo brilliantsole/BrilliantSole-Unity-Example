@@ -106,6 +106,8 @@ public class BS_TfliteManager : BS_BaseManager<BS_TfliteMessageType>
         SetSensorRate(tfliteModelMetadata.SensorRate, false);
         SetThreshold(tfliteModelMetadata.Threshold, false);
         SetSensorTypes(tfliteModelMetadata.GetSensorTypes(), sendImmediately);
+
+
     }
 
     // NAME START
@@ -456,7 +458,7 @@ public class BS_TfliteManager : BS_BaseManager<BS_TfliteMessageType>
                 }
             }
         }
-        Logger.Log($"parsed inference with {inference.Count} classes at {timestamp}ms");
+        Logger.Log($"parsed inference with {inference.Count} classes as {timestamp}ms");
 
         OnInference?.Invoke(inference, inferenceMap, timestamp);
         if (Task == Classification && maxClassName != null)

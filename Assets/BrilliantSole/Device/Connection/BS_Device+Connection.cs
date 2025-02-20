@@ -62,6 +62,8 @@ public partial class BS_Device
     public BS_ConnectionType? ConnectionType => ConnectionManager?.Type;
     private BS_ConnectionStatus ConnectionManagerStatus => ConnectionManager?.Status ?? NotConnected;
 
+    public bool IsAvailable => ConnectionManager?.IsAvailable ?? false;
+
     public event Action<BS_Device, BS_ConnectionStatus>? OnConnectionStatus;
     public event Action<BS_Device, bool>? OnIsConnected;
 

@@ -131,25 +131,13 @@ public abstract class BS_BaseScanner : IBS_Scanner
     {
         if (IsScanning)
         {
-            // FILL - limit checking to once per second
-            CheckExpiredDiscoveredDevices();
+            RemoveExpiredDiscoveredDevices();
         }
     }
 
     readonly private int DiscoveredDeviceExpirationTime = 5;
-    private DateTime lastTimeCheckedExpiredDiscoveredDevices;
-    private int checkExpiredDiscoveredDevicesTime = 1;
-    private void CheckExpiredDiscoveredDevices()
+    private void RemoveExpiredDiscoveredDevices()
     {
-        var now = DateTime.Now;
-        if ((now - lastTimeCheckedExpiredDiscoveredDevices).TotalSeconds < checkExpiredDiscoveredDevicesTime)
-        {
-            return;
-        }
-        lastTimeCheckedExpiredDiscoveredDevices = now;
-
-        Logger.Log("CheckExpiredDiscoveredDevices...");
-
         List<string> deviceIdsToRemove = new();
 
         foreach (var discoveredDevicePair in _discoveredDevices)
@@ -203,9 +191,7 @@ public abstract class BS_BaseScanner : IBS_Scanner
 
     public virtual BS_Device ConnectToDiscoveredDevice(BS_DiscoveredDevice discoveredDevice)
     {
-        var device = GetDeviceByDiscoveredDevice(discoveredDevice, true)!;
-        device.Connect();
-        return device;
+        return GetDeviceByDiscoveredDevice(discoveredDevice, true)!;
     }
 
     public BS_Device? DisconnectFromDiscoveredDevice(BS_DiscoveredDevice discoveredDevice)
@@ -215,7 +201,7 @@ public abstract class BS_BaseScanner : IBS_Scanner
         return device;
     }
 
-    public BS_Device ToggleConnectionToDiscoveredDevice(BS_DiscoveredDevice discoveredDevice)
+    public BS_Device? ToggleConnectionToDiscoveredDevice(BS_DiscoveredDevice discoveredDevice)
     {
         BS_Device device = GetDeviceByDiscoveredDevice(discoveredDevice, true)!;
         device.ToggleConnection();

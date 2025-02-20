@@ -9,6 +9,8 @@ public abstract class BS_BaseConnectionManager
 
     public abstract BS_ConnectionType Type { get; }
 
+    public abstract bool IsAvailable { get; }
+
     public Action<BS_BaseConnectionManager, byte> OnBatteryLevel;
     public Action<BS_BaseConnectionManager, byte, byte[]> OnRxMessage;
     public Action<BS_BaseConnectionManager> OnRxMessages;
@@ -86,7 +88,7 @@ public abstract class BS_BaseConnectionManager
         OnRxMessages?.Invoke(this);
     }
 
-    private void OnParsedRxMessage(byte messageType, byte[] messageData) { OnRxMessage?.Invoke(this, messageType, messageData); }
+    private void OnParsedRxMessage(byte messageType, byte[] messageData) { OnRxMessage(this, messageType, messageData); }
 
     public virtual void SendTxData(List<byte> data) { Logger.Log($"Sending {data.Count} bytes..."); }
 }

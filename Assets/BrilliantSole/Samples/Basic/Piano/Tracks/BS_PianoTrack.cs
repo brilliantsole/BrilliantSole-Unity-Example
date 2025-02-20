@@ -53,4 +53,17 @@ public class BS_PianoTrack : MonoBehaviour
             column.Octave = Octave;
         }
     }
+
+    public void ClearHoveredColumn()
+    {
+        if (hoveredColumn == null) { return; }
+        hoveredColumn.Clear();
+    }
+    public void Clear()
+    {
+        foreach (var column in columns)
+        {
+            column.Clear();
+        }
+    }
 }
