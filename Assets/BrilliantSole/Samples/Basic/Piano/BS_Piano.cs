@@ -10,7 +10,7 @@ using UnityEngine.UI;
 
 public class BS_Piano : MonoBehaviour, IMidiDeviceEventHandler, IMidiAllEventsHandler
 {
-    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_Piano");
+    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_Piano", BS_Logger.LogLevel.Log);
 
     public BS_InsoleSide InsoleSide = BS_InsoleSide.Right;
     public BS_SensorRate SensorRate = BS_SensorRate._40ms;
@@ -583,7 +583,7 @@ public class BS_Piano : MonoBehaviour, IMidiDeviceEventHandler, IMidiAllEventsHa
     public void OnMidiNoteOn(string deviceId, int group, int channel, int note, int velocity)
     {
         velocity = Math.Max(velocity, 40); // soft velocity
-        Log($"OnMidiNoteOn note: {note}, velocity: {velocity}");
+        Log($"OnMidiNoteOn note: {note}, velocity: {velocity}, channel: {channel}, group: {group}");
         selectHoveredInstrument();
         midiStreamPlayer.MPTK_PlayEvent(new MPTKEvent()
         {
@@ -599,7 +599,7 @@ public class BS_Piano : MonoBehaviour, IMidiDeviceEventHandler, IMidiAllEventsHa
 
     public void OnMidiNoteOff(string deviceId, int group, int channel, int note, int velocity)
     {
-        Log($"OnMidiNoteOff note: {note}, velocity: {velocity}");
+        Log($"OnMidiNoteOff note: {note}, velocity: {velocity}, channel: {channel}, group: {group}");
         midiStreamPlayer.MPTK_PlayEvent(new MPTKEvent()
         {
             Command = MPTKCommand.NoteOff,
@@ -616,52 +616,52 @@ public class BS_Piano : MonoBehaviour, IMidiDeviceEventHandler, IMidiAllEventsHa
 
     public void OnMidiChannelAftertouch(string deviceId, int group, int channel, int pressure)
     {
-        Log($"OnMidiChannelAftertouch pressure: {pressure}");
+        Log($"OnMidiChannelAftertouch pressure: {pressure}, channel: {channel}, group: {group}");
     }
 
     public void OnMidiPitchWheel(string deviceId, int group, int channel, int amount)
     {
-        Log($"OnMidiPitchWheel channel: {channel}, amount: {amount}");
+        Log($"OnMidiPitchWheel channel: {channel}, amount: {amount}, group: {group}");
     }
 
     public void OnMidiPolyphonicAftertouch(string deviceId, int group, int channel, int note, int pressure)
     {
-        Log($"OnMidiPolyphonicAftertouch note: {note}, pressure: {pressure}");
+        Log($"OnMidiPolyphonicAftertouch note: {note}, pressure: {pressure}, channel: {channel}, group: {group}");
     }
 
     public void OnMidiProgramChange(string deviceId, int group, int channel, int program)
     {
-        Log($"OnMidiProgramChange");
+        Log($"OnMidiProgramChange, channel: {channel}, group: {group}, {program}");
     }
 
     public void OnMidiControlChange(string deviceId, int group, int channel, int function, int value)
     {
-        Log($"OnMidiControlChange function: {function}, value: {value}");
+        Log($"OnMidiControlChange function: {function}, value: {value}, channel: {channel}, group: {group}");
     }
 
     public void OnMidiContinue(string deviceId, int group)
     {
-        Log($"OnMidiContinue");
+        Log($"OnMidiContinue, group: {group}");
     }
 
     public void OnMidiReset(string deviceId, int group)
     {
-        Log($"OnMidiReset");
+        Log($"OnMidiReset, group: {group}");
     }
 
     public void OnMidiStart(string deviceId, int group)
     {
-        Log($"OnMidiStart");
+        Log($"OnMidiStart, group: {group}");
     }
 
     public void OnMidiStop(string deviceId, int group)
     {
-        Log($"OnMidiStop");
+        Log($"OnMidiStop, group: {group}");
     }
 
     public void OnMidiActiveSensing(string deviceId, int group)
     {
-        Log($"OnMidiActiveSensing");
+        Log($"OnMidiActiveSensing,  group: {group}");
     }
 
     public void OnMidiCableEvents(string deviceId, int group, int byte1, int byte2, int byte3)
