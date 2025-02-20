@@ -18,7 +18,9 @@ public abstract partial class BS_BaseClient : IBS_Scanner
         {
             if (device.ConnectionManager is BS_ClientConnectionManager connectionManager)
             {
+                device._SetConnectionStatus(BS_ConnectionStatus.NotConnected);
                 connectionManager.SetIsConnected(false);
+                BS_DeviceManager._OnIsDeviceConnected(device, false);
             }
             else
             {

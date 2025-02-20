@@ -9,6 +9,8 @@ public abstract class BS_BaseConnectionManager
 
     public abstract BS_ConnectionType Type { get; }
 
+    public abstract bool IsAvailable { get; }
+
     public Action<BS_BaseConnectionManager, byte> OnBatteryLevel;
     public Action<BS_BaseConnectionManager, byte, byte[]> OnRxMessage;
     public Action<BS_BaseConnectionManager> OnRxMessages;

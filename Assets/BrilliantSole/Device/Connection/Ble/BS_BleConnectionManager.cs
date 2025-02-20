@@ -10,6 +10,8 @@ public class BS_BleConnectionManager : BS_BaseConnectionManager
 
     public override BS_ConnectionType Type => BS_ConnectionType.Ble;
 
+    public override bool IsAvailable => true;
+
     public BS_DiscoveredDevice? DiscoveredDevice;
     public string Address => DiscoveredDevice?.Id ?? "";
     public override string? Name => DiscoveredDevice?.Name;
