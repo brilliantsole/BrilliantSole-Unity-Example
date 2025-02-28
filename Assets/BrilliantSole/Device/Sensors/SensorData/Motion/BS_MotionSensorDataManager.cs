@@ -170,7 +170,7 @@ public class BS_MotionSensorDataManager : BS_BaseSensorDataManager
   public Action<uint, ulong> OnStepCount;
   private void ParseStepCount(in byte[] data, in ulong timestamp)
   {
-    var stepCount = BS_ByteUtils.ParseNumber<uint>(data);
+    var stepCount = BS_ByteUtils.ParseNumber<uint>(data, isLittleEndian: true);
     Logger.Log($"stepCount: {stepCount}");
     OnStepCount?.Invoke(stepCount, timestamp);
   }
