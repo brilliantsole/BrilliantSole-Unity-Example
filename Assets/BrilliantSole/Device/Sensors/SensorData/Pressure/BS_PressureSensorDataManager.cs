@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using Unity.Mathematics;
 using UnityEngine;
 using static BS_SensorType;
 
@@ -50,13 +49,15 @@ public class BS_PressureSensorDataManager : BS_BaseSensorDataManager
 
     private readonly List<BS_Range> pressureSensorRanges = new();
     private readonly BS_CenterOfPressureRange centerOfPressureRange = new();
+    private readonly BS_Range normalizedSumRange = new();
 
     public Action<BS_PressureData, ulong> OnPressureData;
     private void ParsePressureData(in byte[] data, in ulong timestamp, in float scalar)
     {
-        if (data.Length != NumberOfPressureSensors * 2)
+        var expectedDataLength = NumberOfPressureSensors * 2;
+        if (data.Length != expectedDataLength)
         {
-            throw new ArgumentException($"invalid number of pressure sensors (expected {NumberOfPressureSensors * 2}, got {data.Length})");
+            throw new ArgumentException($"invalid number of pressure sensors (expected {expectedDataLength}, got {data.Length})");
         }
 
         BS_PressureSensorData[] Sensors = new BS_PressureSensorData[NumberOfPressureSensors];
@@ -68,10 +69,10 @@ public class BS_PressureSensorDataManager : BS_BaseSensorDataManager
             var RawValue = BS_ByteUtils.ParseNumber<ushort>(data, i * 2, true);
             Logger.Log($"pressure #{i} RawValue: {RawValue}");
 
-            var ScaledValue = RawValue * scalar;
+            var ScaledValue = RawValue * scalar / NumberOfPressureSensors;
             Logger.Log($"pressure #{i} ScaledValue: {RawValue}");
 
-            var NormalizedValue = pressureSensorRanges[i].UpdateAndGetNormalization(ScaledValue, true);
+            var NormalizedValue = pressureSensorRanges[i].UpdateAndGetNormalization(ScaledValue, false);
             Logger.Log($"pressure #{i} NormalizedValue: {NormalizedValue}");
 
             float WeightedValue = 0.0f;
@@ -80,10 +81,10 @@ public class BS_PressureSensorDataManager : BS_BaseSensorDataManager
             Logger.Log($"PressureSensor #{i}: {Sensors[i]}");
 
             ScaledSum += ScaledValue;
-            NormalizedSum += NormalizedValue;
-            Logger.Log($"partial (#{i}) ScaledSum: {ScaledSum}, NormalizedSum: {NormalizedSum}");
+            //NormalizedSum += NormalizedValue;
+            Logger.Log($"partial (#{i}) ScaledSum: {ScaledSum}");
         }
-
+        NormalizedSum = normalizedSumRange.UpdateAndGetNormalization(ScaledSum, false);
         Logger.Log($"final ScaledSum: {ScaledSum}, NormalizedSum: {NormalizedSum}");
 
         Vector2? CenterOfPressure = null;
@@ -115,6 +116,7 @@ public class BS_PressureSensorDataManager : BS_BaseSensorDataManager
     {
         base.Reset();
         centerOfPressureRange.Reset();
+        normalizedSumRange.Reset();
         foreach (var PressureSensorRange in pressureSensorRanges) { PressureSensorRange.Reset(); }
     }
 }

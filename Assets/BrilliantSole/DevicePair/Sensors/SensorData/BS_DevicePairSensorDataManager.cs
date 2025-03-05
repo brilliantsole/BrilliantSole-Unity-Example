@@ -1,5 +1,3 @@
-using UnityEngine;
-
 public class BS_DevicePairSensorDataManager
 {
     public readonly BS_DevicePairPressureSensorDataManager PressureSensorDataManager = new();

@@ -4,7 +4,7 @@ using UnityEngine;
 [Serializable]
 public struct BS_PressureSensorData
 {
-    public readonly Vector2 Position { get; }
+    public Vector2 Position;
     public readonly int RawValue { get; }
     public readonly float ScaledValue { get; }
     public readonly float NormalizedValue { get; }
@@ -19,6 +19,8 @@ public struct BS_PressureSensorData
         NormalizedValue = normalizedValue;
         WeightedValue = weightedValue;
     }
+
+
 
     public override readonly string ToString()
     {
