@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using NUnit.Framework.Internal;
 
 public abstract class BS_BaseSensorDataManager
 {
