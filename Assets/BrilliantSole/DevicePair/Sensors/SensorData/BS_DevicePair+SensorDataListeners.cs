@@ -53,82 +53,82 @@ public partial class BS_DevicePair
         device.OnBarometerData -= onDeviceBarometerData;
     }
 
-    public event Action<BS_DevicePair, BS_InsoleSide, BS_Device, BS_PressureData, ulong> OnDevicePressureData;
+    public event Action<BS_DevicePair, BS_Side, BS_Device, BS_PressureData, ulong> OnDevicePressureData;
     private void onDevicePressureData(BS_Device device, BS_PressureData pressureData, ulong timestamp)
     {
-        var insoleSide = (BS_InsoleSide)device.InsoleSide;
-        OnDevicePressureData?.Invoke(this, insoleSide, device, pressureData, timestamp);
-        SensorDataManager.PressureSensorDataManager.OnDevicePressureData(insoleSide, pressureData, timestamp);
+        var side = (BS_Side)device.Side;
+        OnDevicePressureData?.Invoke(this, side, device, pressureData, timestamp);
+        SensorDataManager.PressureSensorDataManager.OnDevicePressureData(side, pressureData, timestamp);
     }
 
-    public event Action<BS_DevicePair, BS_InsoleSide, BS_Device, Vector3, ulong> OnDeviceAcceleration;
+    public event Action<BS_DevicePair, BS_Side, BS_Device, Vector3, ulong> OnDeviceAcceleration;
     private void onDeviceAcceleration(BS_Device device, Vector3 acceleration, ulong timestamp)
     {
-        OnDeviceAcceleration?.Invoke(this, (BS_InsoleSide)device.InsoleSide, device, acceleration, timestamp);
+        OnDeviceAcceleration?.Invoke(this, (BS_Side)device.Side, device, acceleration, timestamp);
     }
-    public event Action<BS_DevicePair, BS_InsoleSide, BS_Device, Vector3, ulong> OnDeviceGravity;
+    public event Action<BS_DevicePair, BS_Side, BS_Device, Vector3, ulong> OnDeviceGravity;
     private void onDeviceGravity(BS_Device device, Vector3 gravity, ulong timestamp)
     {
-        OnDeviceGravity?.Invoke(this, (BS_InsoleSide)device.InsoleSide, device, gravity, timestamp);
+        OnDeviceGravity?.Invoke(this, (BS_Side)device.Side, device, gravity, timestamp);
     }
-    public event Action<BS_DevicePair, BS_InsoleSide, BS_Device, Vector3, ulong> OnDeviceLinearAcceleration;
+    public event Action<BS_DevicePair, BS_Side, BS_Device, Vector3, ulong> OnDeviceLinearAcceleration;
     private void onDeviceLinearAcceleration(BS_Device device, Vector3 linearAcceleration, ulong timestamp)
     {
-        OnDeviceLinearAcceleration?.Invoke(this, (BS_InsoleSide)device.InsoleSide, device, linearAcceleration, timestamp);
+        OnDeviceLinearAcceleration?.Invoke(this, (BS_Side)device.Side, device, linearAcceleration, timestamp);
     }
-    public event Action<BS_DevicePair, BS_InsoleSide, BS_Device, Vector3, ulong> OnDeviceGyroscope;
+    public event Action<BS_DevicePair, BS_Side, BS_Device, Vector3, ulong> OnDeviceGyroscope;
     private void onDeviceGyroscope(BS_Device device, Vector3 gyroscope, ulong timestamp)
     {
-        OnDeviceGyroscope?.Invoke(this, (BS_InsoleSide)device.InsoleSide, device, gyroscope, timestamp);
+        OnDeviceGyroscope?.Invoke(this, (BS_Side)device.Side, device, gyroscope, timestamp);
     }
-    public event Action<BS_DevicePair, BS_InsoleSide, BS_Device, Vector3, ulong> OnDeviceMagnetometer;
+    public event Action<BS_DevicePair, BS_Side, BS_Device, Vector3, ulong> OnDeviceMagnetometer;
     private void onDeviceMagnetometer(BS_Device device, Vector3 magnetometer, ulong timestamp)
     {
-        OnDeviceMagnetometer?.Invoke(this, (BS_InsoleSide)device.InsoleSide, device, magnetometer, timestamp);
+        OnDeviceMagnetometer?.Invoke(this, (BS_Side)device.Side, device, magnetometer, timestamp);
     }
 
-    public event Action<BS_DevicePair, BS_InsoleSide, BS_Device, Quaternion, ulong> OnDeviceGameRotation;
+    public event Action<BS_DevicePair, BS_Side, BS_Device, Quaternion, ulong> OnDeviceGameRotation;
     private void onDeviceGameRotation(BS_Device device, Quaternion gameRotation, ulong timestamp)
     {
-        OnDeviceGameRotation?.Invoke(this, (BS_InsoleSide)device.InsoleSide, device, gameRotation, timestamp);
+        OnDeviceGameRotation?.Invoke(this, (BS_Side)device.Side, device, gameRotation, timestamp);
     }
-    public event Action<BS_DevicePair, BS_InsoleSide, BS_Device, Quaternion, ulong> OnDeviceRotation;
+    public event Action<BS_DevicePair, BS_Side, BS_Device, Quaternion, ulong> OnDeviceRotation;
     private void onDeviceRotation(BS_Device device, Quaternion rotation, ulong timestamp)
     {
-        OnDeviceRotation?.Invoke(this, (BS_InsoleSide)device.InsoleSide, device, rotation, timestamp);
+        OnDeviceRotation?.Invoke(this, (BS_Side)device.Side, device, rotation, timestamp);
     }
 
-    public event Action<BS_DevicePair, BS_InsoleSide, BS_Device, Vector3, ulong> OnDeviceOrientation;
+    public event Action<BS_DevicePair, BS_Side, BS_Device, Vector3, ulong> OnDeviceOrientation;
     private void onDeviceOrientation(BS_Device device, Vector3 deviceOrientation, ulong timestamp)
     {
-        OnDeviceOrientation?.Invoke(this, (BS_InsoleSide)device.InsoleSide, device, deviceOrientation, timestamp);
+        OnDeviceOrientation?.Invoke(this, (BS_Side)device.Side, device, deviceOrientation, timestamp);
     }
 
-    public event Action<BS_DevicePair, BS_InsoleSide, BS_Device, ulong> OnDeviceStepDetection;
+    public event Action<BS_DevicePair, BS_Side, BS_Device, ulong> OnDeviceStepDetection;
     private void onDeviceStepDetection(BS_Device device, ulong timestamp)
     {
-        OnDeviceStepDetection?.Invoke(this, (BS_InsoleSide)device.InsoleSide, device, timestamp);
+        OnDeviceStepDetection?.Invoke(this, (BS_Side)device.Side, device, timestamp);
     }
-    public event Action<BS_DevicePair, BS_InsoleSide, BS_Device, uint, ulong> OnDeviceStepCount;
+    public event Action<BS_DevicePair, BS_Side, BS_Device, uint, ulong> OnDeviceStepCount;
     private void onDeviceStepCount(BS_Device device, uint stepCount, ulong timestamp)
     {
-        OnDeviceStepCount?.Invoke(this, (BS_InsoleSide)device.InsoleSide, device, stepCount, timestamp);
+        OnDeviceStepCount?.Invoke(this, (BS_Side)device.Side, device, stepCount, timestamp);
     }
 
-    public event Action<BS_DevicePair, BS_InsoleSide, BS_Device, HashSet<BS_Activity>, ulong> OnDeviceActivity;
+    public event Action<BS_DevicePair, BS_Side, BS_Device, HashSet<BS_Activity>, ulong> OnDeviceActivity;
     private void onDeviceActivity(BS_Device device, HashSet<BS_Activity> activity, ulong timestamp)
     {
-        OnDeviceActivity?.Invoke(this, (BS_InsoleSide)device.InsoleSide, device, activity, timestamp);
+        OnDeviceActivity?.Invoke(this, (BS_Side)device.Side, device, activity, timestamp);
     }
-    public event Action<BS_DevicePair, BS_InsoleSide, BS_Device, BS_DeviceOrientation, ulong> OnDeviceDeviceOrientation;
+    public event Action<BS_DevicePair, BS_Side, BS_Device, BS_DeviceOrientation, ulong> OnDeviceDeviceOrientation;
     private void onDeviceDeviceOrientation(BS_Device device, BS_DeviceOrientation deviceOrientation, ulong timestamp)
     {
-        OnDeviceDeviceOrientation?.Invoke(this, (BS_InsoleSide)device.InsoleSide, device, deviceOrientation, timestamp);
+        OnDeviceDeviceOrientation?.Invoke(this, (BS_Side)device.Side, device, deviceOrientation, timestamp);
     }
 
-    public event Action<BS_DevicePair, BS_InsoleSide, BS_Device, float, ulong> OnDeviceBarometerData;
+    public event Action<BS_DevicePair, BS_Side, BS_Device, float, ulong> OnDeviceBarometerData;
     private void onDeviceBarometerData(BS_Device device, float barometerData, ulong timestamp)
     {
-        OnDeviceBarometerData?.Invoke(this, (BS_InsoleSide)device.InsoleSide, device, barometerData, timestamp);
+        OnDeviceBarometerData?.Invoke(this, (BS_Side)device.Side, device, barometerData, timestamp);
     }
 }

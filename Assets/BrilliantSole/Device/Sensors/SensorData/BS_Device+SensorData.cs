@@ -55,4 +55,6 @@ public partial class BS_Device
 
         SensorDataManager.BarometerSensorDataManager.OnBarometer = (barometer, timestamp) => OnBarometerData?.Invoke(this, barometer, timestamp);
     }
+
+    public int NumberOfPressureSensors => SensorDataManager.PressureSensorDataManager.NumberOfPressureSensors;
 }

@@ -25,7 +25,7 @@ public class BS_BaseDemo : MonoBehaviour
     public List<BS_VibrationConfiguration> EnemyVibrationConfigurations = new();
     public List<BS_VibrationConfiguration> CollectableVibrationConfigurations = new();
 
-    protected BS_DevicePair DevicePair => BS_DevicePair.Instance;
+    protected BS_DevicePair DevicePair => BS_DevicePair.Insoles;
 
     protected GameObject Player;
     protected Rigidbody PlayerRigidBody;
@@ -83,7 +83,7 @@ public class BS_BaseDemo : MonoBehaviour
         DevicePair.OnDeviceRotation -= OnDeviceQuaternion;
     }
 
-    protected virtual void OnDeviceQuaternion(BS_DevicePair devicePair, BS_InsoleSide insoleSide, BS_Device device, Quaternion quaternion, ulong timestamp) { }
+    protected virtual void OnDeviceQuaternion(BS_DevicePair devicePair, BS_Side side, BS_Device device, Quaternion quaternion, ulong timestamp) { }
 
     [SerializeField]
     private bool _isRunning = false;
@@ -281,8 +281,8 @@ public class BS_BaseDemo : MonoBehaviour
 
     protected virtual void CheckObstacleSpawn() { }
 
-    protected void TriggerVibration(BS_InsoleSide insoleSide, List<BS_VibrationConfiguration> vibrationConfigurations)
+    protected void TriggerVibration(BS_Side side, List<BS_VibrationConfiguration> vibrationConfigurations)
     {
-        DevicePair.GetDevice(insoleSide)?.TriggerVibration(vibrationConfigurations);
+        DevicePair.GetDevice(side)?.TriggerVibration(vibrationConfigurations);
     }
 }

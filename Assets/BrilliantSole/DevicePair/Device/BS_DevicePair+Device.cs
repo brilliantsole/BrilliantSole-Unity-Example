@@ -3,13 +3,13 @@ using System.Linq;
 
 public partial class BS_DevicePair
 {
-    private readonly Dictionary<BS_InsoleSide, BS_Device> devices = new();
-    public IReadOnlyDictionary<BS_InsoleSide, BS_Device> Devices => devices;
+    private readonly Dictionary<BS_Side, BS_Device> devices = new();
+    public IReadOnlyDictionary<BS_Side, BS_Device> Devices => devices;
 
-    public BS_Device GetDevice(BS_InsoleSide insoleSide) => Devices.GetValueOrDefault(insoleSide, null);
-    public BS_Device Left => GetDevice(BS_InsoleSide.Left);
+    public BS_Device GetDevice(BS_Side side) => Devices.GetValueOrDefault(side, null);
+    public BS_Device Left => GetDevice(BS_Side.Left);
 
-    public BS_Device Right => GetDevice(BS_InsoleSide.Right);
+    public BS_Device Right => GetDevice(BS_Side.Right);
 
 
     public bool HasAllDevices => Devices.Count == 2;
@@ -17,30 +17,35 @@ public partial class BS_DevicePair
 
     public void AddDevice(BS_Device device)
     {
-        if (!device.IsInsole)
+        if (Type == BS_DevicePairType.Insoles && !device.IsInsole)
         {
             Logger.Log($"device is not insole - skipping");
             return;
         }
-
-        var insoleSide = (BS_InsoleSide)device.InsoleSide;
-
-        if (devices.ContainsKey(insoleSide))
+        if (Type == BS_DevicePairType.Gloves && !device.IsGlove)
         {
-            if (devices[insoleSide] == device)
+            Logger.Log($"device is not glove - skipping");
+            return;
+        }
+
+        var side = (BS_Side)device.Side;
+
+        if (devices.ContainsKey(side))
+        {
+            if (devices[side] == device)
             {
                 Logger.Log($"already has device");
                 return;
             }
             else
             {
-                RemoveDevice(insoleSide);
+                RemoveDevice(side);
             }
         }
 
-        Logger.Log($"adding {insoleSide} device \"{device.Name}\"");
+        Logger.Log($"adding {side} device \"{device.Name}\"");
 
-        devices.Add(insoleSide, device);
+        devices.Add(side, device);
         AddDeviceListeners(device);
         CheckIsFullyConnected();
     }
@@ -52,28 +57,28 @@ public partial class BS_DevicePair
             Logger.Log($"device is not insole");
             return;
         }
-        var insoleSide = (BS_InsoleSide)device.InsoleSide;
-        if (devices.ContainsKey(insoleSide) && devices[insoleSide] == device)
+        var side = (BS_Side)device.Side;
+        if (devices.ContainsKey(side) && devices[side] == device)
         {
-            RemoveDevice(insoleSide);
+            RemoveDevice(side);
         }
         else
         {
             Logger.Log($"device not found");
         }
     }
-    public void RemoveDevice(BS_InsoleSide insoleSide)
+    public void RemoveDevice(BS_Side side)
     {
-        if (devices.ContainsKey(insoleSide))
+        if (devices.ContainsKey(side))
         {
-            var device = devices[insoleSide];
+            var device = devices[side];
             RemoveDeviceListeners(device);
-            devices.Remove(insoleSide);
+            devices.Remove(side);
             CheckIsFullyConnected();
         }
         else
         {
-            Logger.Log($"no device found for {insoleSide} side");
+            Logger.Log($"no device found for {side} side");
         }
     }
 }

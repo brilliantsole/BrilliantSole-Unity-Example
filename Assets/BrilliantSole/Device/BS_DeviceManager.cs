@@ -51,7 +51,8 @@ public static class BS_DeviceManager
             }
 
             OnDeviceConnected?.Invoke(device);
-            BS_DevicePair.Instance.AddDevice(device);
+            BS_DevicePair.Insoles.AddDevice(device);
+            BS_DevicePair.Gloves.AddDevice(device);
         }
         else
         {

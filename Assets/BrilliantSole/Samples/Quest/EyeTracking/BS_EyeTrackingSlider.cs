@@ -109,9 +109,9 @@ public class BS_EyeTrackingSlider : BS_BaseEyeTrackingUIImageComponent
         }
     }
 
-    protected override void OnTap(BS_InsoleSide insoleSide)
+    protected override void OnTap(BS_Side side)
     {
-        base.OnTap(insoleSide);
+        base.OnTap(side);
         IsSliding = true;
     }
 }

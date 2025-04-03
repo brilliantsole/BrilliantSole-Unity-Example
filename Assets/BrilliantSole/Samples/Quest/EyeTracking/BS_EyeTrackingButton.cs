@@ -28,9 +28,9 @@ public class BS_EyeTrackingButton : BS_BaseEyeTrackingUIImageComponent, IPointer
         }
     };
 
-    protected override void OnTap(BS_InsoleSide insoleSide)
+    protected override void OnTap(BS_Side side)
     {
-        base.OnTap(insoleSide);
+        base.OnTap(side);
         Device?.TriggerVibration(ClickVibrationConfigurations);
         button.onClick.Invoke();
     }

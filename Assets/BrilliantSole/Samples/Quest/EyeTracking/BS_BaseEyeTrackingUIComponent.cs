@@ -5,8 +5,8 @@ public class BS_BaseEyeTrackingUIComponent : MonoBehaviour
 {
     private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_BaseEyeTrackingUIComponent");
 
-    protected readonly BS_DevicePair DevicePair = BS_DevicePair.Instance;
-    public BS_InsoleSide InsoleSide = BS_InsoleSide.Right;
+    protected readonly BS_DevicePair DevicePair = BS_DevicePair.Insoles;
+    public BS_Side InsoleSide = BS_Side.Right;
     public BS_Device Device => DevicePair.GetDevice(InsoleSide);
 
     protected BS_EyeInteractable eyeInteractable;

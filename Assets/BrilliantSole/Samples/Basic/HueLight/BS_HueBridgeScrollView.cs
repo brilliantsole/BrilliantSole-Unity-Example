@@ -17,7 +17,7 @@ public class BS_HueBridgeScrollView : MonoBehaviour
 
     public Button ToggleLightsButton;
 
-    private readonly BS_DevicePair DevicePair = BS_DevicePair.Instance;
+    private readonly BS_DevicePair DevicePair = BS_DevicePair.Insoles;
 
     void Start()
     {

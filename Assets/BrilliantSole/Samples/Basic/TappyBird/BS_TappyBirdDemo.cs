@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class BS_TappyBirdDemo : BS_BaseDemo
 {
-    public BS_InsoleSide InsoleSide = BS_InsoleSide.Right;
+    public BS_Side InsoleSide = BS_Side.Right;
     private BS_Device Device => DevicePair.Devices.ContainsKey(InsoleSide) ? DevicePair.Devices[InsoleSide] : null;
     private bool IsInsoleConnected => Device?.IsConnected == true;
 
@@ -142,10 +142,10 @@ public class BS_TappyBirdDemo : BS_BaseDemo
     public float PitchThreshold = 0.0f;
     public bool InvertPitch = false;
     private float Pitch = 0.0f;
-    protected override void OnDeviceQuaternion(BS_DevicePair devicePair, BS_InsoleSide insoleSide, BS_Device device, Quaternion quaternion, ulong timestamp)
+    protected override void OnDeviceQuaternion(BS_DevicePair devicePair, BS_Side side, BS_Device device, Quaternion quaternion, ulong timestamp)
     {
-        base.OnDeviceQuaternion(devicePair, insoleSide, device, quaternion, timestamp);
-        if (insoleSide != InsoleSide) { return; }
+        base.OnDeviceQuaternion(devicePair, side, device, quaternion, timestamp);
+        if (side != InsoleSide) { return; }
 
         var latestPitch = quaternion.GetPitch();
 
