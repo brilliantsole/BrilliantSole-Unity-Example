@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class BS_FootFlyerDemo : BS_BaseDemo
 {
-    public BS_InsoleSide InsoleSide = BS_InsoleSide.Right;
+    public BS_Side InsoleSide = BS_Side.Right;
     private BS_Device Device => DevicePair.Devices.GetValueOrDefault(InsoleSide, null);
     private bool IsInsoleConnected => Device?.IsConnected == true;
 
@@ -105,10 +105,10 @@ public class BS_FootFlyerDemo : BS_BaseDemo
 
     private readonly BS_Range PitchRange = new();
     public bool InvertPitch = false;
-    protected override void OnDeviceQuaternion(BS_DevicePair devicePair, BS_InsoleSide insoleSide, BS_Device device, Quaternion quaternion, ulong timestamp)
+    protected override void OnDeviceQuaternion(BS_DevicePair devicePair, BS_Side side, BS_Device device, Quaternion quaternion, ulong timestamp)
     {
-        base.OnDeviceQuaternion(devicePair, insoleSide, device, quaternion, timestamp);
-        if (insoleSide != InsoleSide) { return; }
+        base.OnDeviceQuaternion(devicePair, side, device, quaternion, timestamp);
+        if (side != InsoleSide) { return; }
         var pitch = quaternion.GetPitch();
         //Debug.Log($"pitch: {pitch}");
         var normalizedHeight = PitchRange.UpdateAndGetNormalization(pitch, false);

@@ -26,15 +26,15 @@ public class BS_BaseEyeTrackingUIImageComponent : BS_BaseEyeTrackingUIComponent,
         if (!gameObject.scene.isLoaded) return;
     }
 
-    private void OnDeviceTfliteClassification(BS_DevicePair devicePair, BS_InsoleSide insoleSide, BS_Device device, string classification, float value, ulong timestamp)
+    private void OnDeviceTfliteClassification(BS_DevicePair devicePair, BS_Side side, BS_Device device, string classification, float value, ulong timestamp)
     {
-        if (classification == "tap" && IsHovered && insoleSide == InsoleSide)
+        if (classification == "tap" && IsHovered && side == InsoleSide)
         {
-            OnTap(insoleSide);
+            OnTap(side);
         }
     }
 
-    protected virtual void OnTap(BS_InsoleSide insoleSide)
+    protected virtual void OnTap(BS_Side side)
     {
         Logger.Log("Tap");
     }

@@ -2,7 +2,7 @@ using TMPro;
 using UnityEngine;
 using static BS_SensorType;
 using static BS_SensorRate;
-using static BS_InsoleSide;
+using static BS_Side;
 
 using BS_SensorConfiguration = System.Collections.Generic.Dictionary<BS_SensorType, BS_SensorRate>;
 using System.Linq;
@@ -13,9 +13,9 @@ public class BS_BasicMotionDemo : MonoBehaviour
 {
     public GameObject LeftInsole;
     public GameObject RightInsole;
-    private GameObject GetInsole(BS_InsoleSide insoleSide)
+    private GameObject GetInsole(BS_Side side)
     {
-        return insoleSide switch
+        return side switch
         {
             Left => LeftInsole,
             Right => RightInsole,
@@ -23,7 +23,7 @@ public class BS_BasicMotionDemo : MonoBehaviour
         };
     }
 
-    private BS_DevicePair DevicePair => BS_DevicePair.Instance;
+    private BS_DevicePair DevicePair => BS_DevicePair.Insoles;
 
     public TMP_Dropdown positionDropdown;
     public TMP_Dropdown rotationDropdown;
@@ -71,64 +71,64 @@ public class BS_BasicMotionDemo : MonoBehaviour
         if (RightInsole != null) { RightInsole.SetActive(active); }
     }
 
-    private Transform GetInsoleTransform(BS_InsoleSide insoleSide, string path)
+    private Transform GetInsoleTransform(BS_Side side, string path)
     {
-        return GetInsole(insoleSide)?.transform?.Find(path);
+        return GetInsole(side)?.transform?.Find(path);
     }
-    private Transform GetInsolePositionTransform(BS_InsoleSide insoleSide)
+    private Transform GetInsolePositionTransform(BS_Side side)
     {
-        return GetInsoleTransform(insoleSide, "Rotation/Position");
+        return GetInsoleTransform(side, "Rotation/Position");
     }
-    private Transform GetInsoleRotationTransform(BS_InsoleSide insoleSide)
+    private Transform GetInsoleRotationTransform(BS_Side side)
     {
-        return GetInsoleTransform(insoleSide, "Rotation");
+        return GetInsoleTransform(side, "Rotation");
     }
 
-    private void OnDeviceQuaternion(BS_DevicePair devicePair, BS_InsoleSide insoleSide, BS_Device device, Quaternion quaternion, ulong timestamp)
+    private void OnDeviceQuaternion(BS_DevicePair devicePair, BS_Side side, BS_Device device, Quaternion quaternion, ulong timestamp)
     {
-        var insoleTransform = GetInsoleRotationTransform(insoleSide);
+        var insoleTransform = GetInsoleRotationTransform(side);
         if (insoleTransform == null) { return; }
 
-        LatestYaw[insoleSide] = quaternion.eulerAngles.y;
+        LatestYaw[side] = quaternion.eulerAngles.y;
 
-        var offsetYaw = OffsetYaw.GetValueOrDefault(insoleSide, 0.0f);
+        var offsetYaw = OffsetYaw.GetValueOrDefault(side, 0.0f);
         var yawAdjustment = Quaternion.Euler(0, -offsetYaw, 0);
 
         insoleTransform.localRotation = yawAdjustment * quaternion;
     }
-    private void OnDeviceEulerAngles(BS_DevicePair devicePair, BS_InsoleSide insoleSide, BS_Device device, Vector3 eulerAngles, ulong timestamp)
+    private void OnDeviceEulerAngles(BS_DevicePair devicePair, BS_Side side, BS_Device device, Vector3 eulerAngles, ulong timestamp)
     {
-        var insoleTransform = GetInsoleRotationTransform(insoleSide);
+        var insoleTransform = GetInsoleRotationTransform(side);
         if (insoleTransform == null) { return; }
 
-        LatestYaw[insoleSide] = eulerAngles.y;
+        LatestYaw[side] = eulerAngles.y;
 
-        var offsetYaw = OffsetYaw.GetValueOrDefault(insoleSide, 0.0f);
+        var offsetYaw = OffsetYaw.GetValueOrDefault(side, 0.0f);
         var yawAdjustment = Quaternion.Euler(0, -offsetYaw, 0);
 
         insoleTransform.localRotation = yawAdjustment * Quaternion.Euler(eulerAngles);
     }
-    private void OnDeviceGyroscope(BS_DevicePair devicePair, BS_InsoleSide insoleSide, BS_Device device, Vector3 eulerAngles, ulong timestamp)
+    private void OnDeviceGyroscope(BS_DevicePair devicePair, BS_Side side, BS_Device device, Vector3 eulerAngles, ulong timestamp)
     {
-        var insoleTransform = GetInsoleRotationTransform(insoleSide);
+        var insoleTransform = GetInsoleRotationTransform(side);
         if (insoleTransform == null) { return; }
         insoleTransform.localRotation = Quaternion.Euler(eulerAngles * 0.2f);
     }
-    private void OnDevicePosition(BS_DevicePair devicePair, BS_InsoleSide insoleSide, BS_Device device, Vector3 position, ulong timestamp)
+    private void OnDevicePosition(BS_DevicePair devicePair, BS_Side side, BS_Device device, Vector3 position, ulong timestamp)
     {
-        var insoleTransform = GetInsolePositionTransform(insoleSide);
+        var insoleTransform = GetInsolePositionTransform(side);
         if (insoleTransform == null) { return; }
         insoleTransform.localPosition = Vector3.Lerp(insoleTransform.localPosition, position * 100.0f, 0.4f);
     }
 
-    private readonly Dictionary<BS_InsoleSide, float> LatestYaw = new();
-    private readonly Dictionary<BS_InsoleSide, float> OffsetYaw = new();
+    private readonly Dictionary<BS_Side, float> LatestYaw = new();
+    private readonly Dictionary<BS_Side, float> OffsetYaw = new();
     public void Calibrate()
     {
         Debug.Log("Calibrating...");
-        foreach (BS_InsoleSide insoleSide in Enum.GetValues(typeof(BS_InsoleSide)))
+        foreach (BS_Side side in Enum.GetValues(typeof(BS_Side)))
         {
-            OffsetYaw[insoleSide] = LatestYaw.GetValueOrDefault(insoleSide, 0.0f);
+            OffsetYaw[side] = LatestYaw.GetValueOrDefault(side, 0.0f);
         }
     }
 

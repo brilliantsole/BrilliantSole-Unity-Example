@@ -14,10 +14,10 @@ public partial class BS_DevicePair
         device.OnSensorConfiguration -= onDeviceSensorConfiguration;
     }
 
-    public event Action<BS_DevicePair, BS_InsoleSide, BS_Device, BS_SensorConfiguration> OnDeviceSensorConfiguration;
+    public event Action<BS_DevicePair, BS_Side, BS_Device, BS_SensorConfiguration> OnDeviceSensorConfiguration;
     private void onDeviceSensorConfiguration(BS_Device device, BS_SensorConfiguration sensorConfiguration)
     {
-        OnDeviceSensorConfiguration?.Invoke(this, (BS_InsoleSide)device.InsoleSide, device, sensorConfiguration);
+        OnDeviceSensorConfiguration?.Invoke(this, (BS_Side)device.Side, device, sensorConfiguration);
     }
 
     public void SetSensorConfiguration(BS_SensorConfiguration sensorConfiguration, bool clearRest = false)

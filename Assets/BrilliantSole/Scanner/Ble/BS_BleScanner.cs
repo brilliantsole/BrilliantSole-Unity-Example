@@ -134,7 +134,10 @@ public class BS_BleScanner : BS_BaseScanner<BS_BleScanner>
             deviceType = (BS_DeviceType)data[2];
             Logger.Log($"Device \"{name}\" is type \"{deviceType}\"");
         }
-        // TODO: - next 4 bytes for wifi ip address (for esp32)
+        if (data.Length >= 7)
+        {
+            // TODO: - next 4 bytes for wifi ip address (for esp32)
+        }
 
         if (_allDiscoveredDevices.TryGetValue(address, out var discoveredDevice))
         {

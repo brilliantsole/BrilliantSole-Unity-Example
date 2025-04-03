@@ -7,17 +7,17 @@ public class BS_DevicePairPressureSensorDataManager
 {
     private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_DevicePairPressureSensorDataManager");
 
-    private readonly Dictionary<BS_InsoleSide, BS_PressureData> devicePressureData = new();
+    private readonly Dictionary<BS_Side, BS_PressureData> devicePressureData = new();
     private bool HasAllData => devicePressureData.Count == 2;
     private readonly BS_CenterOfPressureRange centerOfPressureRange = new();
     private readonly BS_Range normalizedSumRange = new();
 
     public Action<BS_DevicePairPressureData, ulong> OnPressureData;
 
-    public void OnDevicePressureData(BS_InsoleSide insoleSide, BS_PressureData pressureData, ulong timestamp)
+    public void OnDevicePressureData(BS_Side side, BS_PressureData pressureData, ulong timestamp)
     {
-        Logger.Log($"assigning {insoleSide} pressure data");
-        devicePressureData[insoleSide] = pressureData;
+        Logger.Log($"assigning {side} pressure data");
+        devicePressureData[side] = pressureData;
         if (!HasAllData)
         {
             Logger.Log("doesn't have all pressure data");
@@ -27,17 +27,17 @@ public class BS_DevicePairPressureSensorDataManager
 
         float scaledSum = 0.0f;
         float normalizedSum = 0.0f;
-        foreach (var _insoleSide in devicePressureData.Keys)
+        foreach (var _side in devicePressureData.Keys)
         {
-            scaledSum += devicePressureData[_insoleSide].ScaledSum;
+            scaledSum += devicePressureData[_side].ScaledSum;
         }
         normalizedSum = normalizedSumRange.UpdateAndGetNormalization(scaledSum, false);
         Logger.Log($"scaledSum: {scaledSum}, normalizedSum: {normalizedSum}");
 
-        Dictionary<BS_InsoleSide, BS_PressureSensorData[]> sensors = new();
-        foreach (var _insoleSide in devicePressureData.Keys)
+        Dictionary<BS_Side, BS_PressureSensorData[]> sensors = new();
+        foreach (var _side in devicePressureData.Keys)
         {
-            sensors[_insoleSide] = new BS_PressureSensorData[devicePressureData[_insoleSide].Sensors.Count()];
+            sensors[_side] = new BS_PressureSensorData[devicePressureData[_side].Sensors.Count()];
         }
         Vector2? centerOfPressure = null;
         Vector2? normalizedCenterOfPressure = null;
@@ -45,31 +45,31 @@ public class BS_DevicePairPressureSensorDataManager
         {
             float centerOfPressureX = 0.0f;
             float centerOfPressureY = 0.0f;
-            foreach (var _insoleSide in devicePressureData.Keys)
+            foreach (var _side in devicePressureData.Keys)
             {
                 if (true)
                 {
-                    var numberOfPressureSensors = devicePressureData[_insoleSide].Sensors.Count();
+                    var numberOfPressureSensors = devicePressureData[_side].Sensors.Count();
                     for (int i = 0; i < numberOfPressureSensors; i++)
                     {
-                        sensors[_insoleSide][i] = devicePressureData[_insoleSide].Sensors[i];
-                        sensors[_insoleSide][i].WeightedValue = sensors[_insoleSide][i].ScaledValue / scaledSum;
-                        sensors[_insoleSide][i].Position.x /= 2.0f;
-                        if (_insoleSide == BS_InsoleSide.Right)
+                        sensors[_side][i] = devicePressureData[_side].Sensors[i];
+                        sensors[_side][i].WeightedValue = sensors[_side][i].ScaledValue / scaledSum;
+                        sensors[_side][i].Position.x /= 2.0f;
+                        if (_side == BS_Side.Right)
                         {
-                            sensors[_insoleSide][i].Position.x += 0.5f;
+                            sensors[_side][i].Position.x += 0.5f;
                         }
-                        centerOfPressureX += sensors[_insoleSide][i].Position.x * sensors[_insoleSide][i].WeightedValue;
-                        centerOfPressureY += sensors[_insoleSide][i].Position.y * sensors[_insoleSide][i].WeightedValue;
+                        centerOfPressureX += sensors[_side][i].Position.x * sensors[_side][i].WeightedValue;
+                        centerOfPressureY += sensors[_side][i].Position.y * sensors[_side][i].WeightedValue;
                     }
                 }
                 else
                 {
-                    float normalizedSumWeight = devicePressureData[_insoleSide].NormalizedSum / normalizedSum;
-                    if (normalizedSumWeight > 0.0f && devicePressureData[_insoleSide].NormalizedCenterOfPressure != null)
+                    float normalizedSumWeight = devicePressureData[_side].NormalizedSum / normalizedSum;
+                    if (normalizedSumWeight > 0.0f && devicePressureData[_side].NormalizedCenterOfPressure != null)
                     {
-                        centerOfPressureY += (float)(devicePressureData[_insoleSide].NormalizedCenterOfPressure?.y) * normalizedSumWeight;
-                        if (_insoleSide == BS_InsoleSide.Right)
+                        centerOfPressureY += (float)(devicePressureData[_side].NormalizedCenterOfPressure?.y) * normalizedSumWeight;
+                        if (_side == BS_Side.Right)
                         {
                             centerOfPressureX = normalizedSumWeight;
                         }

@@ -12,9 +12,9 @@ public class BS_Piano : MonoBehaviour, IMidiDeviceEventHandler, IMidiAllEventsHa
 {
     private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_Piano");
 
-    public BS_InsoleSide InsoleSide = BS_InsoleSide.Right;
+    public BS_Side InsoleSide = BS_Side.Right;
     public BS_SensorRate SensorRate = BS_SensorRate._40ms;
-    private BS_DevicePair DevicePair => BS_DevicePair.Instance;
+    private BS_DevicePair DevicePair => BS_DevicePair.Insoles;
     private BS_Device Device => DevicePair.Devices.ContainsKey(InsoleSide) ? DevicePair.Devices[InsoleSide] : null;
     private bool IsInsoleConnected => Device?.IsConnected == true;
 
@@ -824,9 +824,9 @@ public class BS_Piano : MonoBehaviour, IMidiDeviceEventHandler, IMidiAllEventsHa
     private readonly BS_Range PitchRange = new();
     public bool InvertPitch = false;
     private float Pitch = 0.0f;
-    private void OnDeviceQuaternion(BS_DevicePair devicePair, BS_InsoleSide insoleSide, BS_Device device, Quaternion quaternion, ulong timestamp)
+    private void OnDeviceQuaternion(BS_DevicePair devicePair, BS_Side side, BS_Device device, Quaternion quaternion, ulong timestamp)
     {
-        if (insoleSide != InsoleSide) { return; }
+        if (side != InsoleSide) { return; }
 
         var latestPitch = quaternion.GetPitch();
 

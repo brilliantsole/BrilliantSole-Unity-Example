@@ -1,6 +1,6 @@
 using System;
 using static BS_DeviceType;
-using static BS_InsoleSide;
+using static BS_Side;
 
 public partial class BS_Device
 {
@@ -34,10 +34,18 @@ public partial class BS_Device
         RightInsole => true,
         _ => false
     };
-    public BS_InsoleSide? InsoleSide => DeviceType switch
+    public bool IsGlove => DeviceType switch
+    {
+        LeftGlove => true,
+        RightGlove => true,
+        _ => false
+    };
+    public BS_Side? Side => DeviceType switch
     {
         LeftInsole => Left,
+        LeftGlove => Left,
         RightInsole => Right,
+        RightGlove => Right,
         _ => null
     };
 }

@@ -50,16 +50,16 @@ public partial class BS_DevicePair
         CheckIsHalfConnected();
     }
 
-    public Action<BS_DevicePair, BS_InsoleSide, BS_Device, BS_ConnectionStatus> OnDeviceConnectionStatus;
+    public Action<BS_DevicePair, BS_Side, BS_Device, BS_ConnectionStatus> OnDeviceConnectionStatus;
     private void onDeviceConnectionStatus(BS_Device device, BS_ConnectionStatus connectionStatus)
     {
-        OnDeviceConnectionStatus?.Invoke(this, (BS_InsoleSide)device.InsoleSide, device, connectionStatus);
+        OnDeviceConnectionStatus?.Invoke(this, (BS_Side)device.Side, device, connectionStatus);
     }
 
-    public Action<BS_DevicePair, BS_InsoleSide, BS_Device, bool> OnDeviceIsConnected;
+    public Action<BS_DevicePair, BS_Side, BS_Device, bool> OnDeviceIsConnected;
     private void onDeviceIsConnected(BS_Device device, bool isConnected)
     {
-        OnDeviceIsConnected?.Invoke(this, (BS_InsoleSide)device.InsoleSide, device, isConnected);
+        OnDeviceIsConnected?.Invoke(this, (BS_Side)device.Side, device, isConnected);
         CheckIsFullyConnected();
     }
 

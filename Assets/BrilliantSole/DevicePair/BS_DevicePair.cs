@@ -1,19 +1,23 @@
 public partial class BS_DevicePair
 {
     private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_DevicePair");
-    public static readonly BS_DevicePair Instance;
-    public bool IsInstance => Instance == this;
+    public static readonly BS_DevicePair Insoles;
+    public static readonly BS_DevicePair Gloves;
 
     static BS_DevicePair()
     {
         Logger.Log("initializing Instance...");
-        Instance = new();
+        Insoles = new(BS_DevicePairType.Insoles);
+        Gloves = new(BS_DevicePairType.Gloves);
         //BS_DeviceManager.OnDeviceConnected += (device) => { Instance.AddDevice(device); };
     }
 
-    public BS_DevicePair()
+    public readonly BS_DevicePairType Type;
+
+    private BS_DevicePair(BS_DevicePairType type)
     {
-        Logger.Log("initializing DevicePair...");
+        Type = type;
+        Logger.Log($"initializing {Type} DevicePair...");
         SetupSensorDataManager();
     }
 

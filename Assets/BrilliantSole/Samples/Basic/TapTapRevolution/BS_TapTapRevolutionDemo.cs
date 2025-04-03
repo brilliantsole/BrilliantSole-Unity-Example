@@ -3,14 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using static BS_InsoleSide;
+using static BS_Side;
 
 public class BS_TapTapRevolutionDemo : BS_BaseDemo
 {
     public GameObject TapTargetPrefab;
-    private readonly Dictionary<BS_InsoleSide, GameObject> TapTargets = new();
-    private readonly Dictionary<BS_InsoleSide, Renderer> TapTargetRenderers = new();
-    private readonly Dictionary<BS_InsoleSide, Color> TapTargetOriginalColors = new();
+    private readonly Dictionary<BS_Side, GameObject> TapTargets = new();
+    private readonly Dictionary<BS_Side, Renderer> TapTargetRenderers = new();
+    private readonly Dictionary<BS_Side, Color> TapTargetOriginalColors = new();
 
     private readonly float xSpacing = 3.0f;
 
@@ -19,18 +19,18 @@ public class BS_TapTapRevolutionDemo : BS_BaseDemo
         base.Start();
         Player.SetActive(false);
 
-        foreach (BS_InsoleSide insoleSide in Enum.GetValues(typeof(BS_InsoleSide)))
+        foreach (BS_Side side in Enum.GetValues(typeof(BS_Side)))
         {
             var TapTarget = Instantiate(TapTargetPrefab, Scene.transform.position, Quaternion.identity, Scene.transform);
             var localPosition = TapTarget.transform.localPosition;
             var xOffset = Size.x / xSpacing;
-            if (insoleSide == Left) { xOffset *= -1.0f; }
+            if (side == Left) { xOffset *= -1.0f; }
             localPosition.x = xOffset;
             TapTarget.transform.localPosition = localPosition;
-            TapTargets[insoleSide] = TapTarget;
+            TapTargets[side] = TapTarget;
             var TapTargetRenderer = TapTarget.transform.GetChild(0).GetComponent<Renderer>();
-            TapTargetRenderers[insoleSide] = TapTargetRenderer;
-            TapTargetOriginalColors[insoleSide] = TapTargetRenderer.material.color;
+            TapTargetRenderers[side] = TapTargetRenderer;
+            TapTargetOriginalColors[side] = TapTargetRenderer.material.color;
         }
     }
     public float ColorFlashDuration = 0.2f;
@@ -40,9 +40,9 @@ public class BS_TapTapRevolutionDemo : BS_BaseDemo
         yield return new WaitForSeconds(ColorFlashDuration);
         renderer.material.color = originalColor;
     }
-    private void FlashInsoleColor(BS_InsoleSide insoleSide, Color color)
+    private void FlashInsoleColor(BS_Side side, Color color)
     {
-        StartCoroutine(FlashColor(TapTargetRenderers[insoleSide], color, TapTargetOriginalColors[insoleSide]));
+        StartCoroutine(FlashColor(TapTargetRenderers[side], color, TapTargetOriginalColors[side]));
     }
     protected override void OnEnable()
     {
@@ -58,38 +58,38 @@ public class BS_TapTapRevolutionDemo : BS_BaseDemo
         DevicePair.SetTfliteInferencingEnabled(false);
     }
 
-    private void OnDeviceTfliteClassification(BS_DevicePair devicePair, BS_InsoleSide insoleSide, BS_Device device, string classification, float value, ulong timestamp)
+    private void OnDeviceTfliteClassification(BS_DevicePair devicePair, BS_Side side, BS_Device device, string classification, float value, ulong timestamp)
     {
-        Debug.Log($"{insoleSide} {classification}");
+        Debug.Log($"{side} {classification}");
         if (classification == "tap")
         {
-            OnTap(insoleSide);
+            OnTap(side);
         }
     }
 
     public Color TapHitColor = Color.green;
     public Color TapMissColor = Color.red;
-    private void OnTap(BS_InsoleSide insoleSide)
+    private void OnTap(BS_Side side)
     {
         if (!IsRunning) { return; }
 
-        Debug.Log($"{insoleSide} tap");
+        Debug.Log($"{side} tap");
 
-        var CorrectHit = PendingObstacles.ContainsKey(insoleSide);
+        var CorrectHit = PendingObstacles.ContainsKey(side);
         var color = CorrectHit ? TapHitColor : TapMissColor;
         var vibrationConfigurations = CorrectHit ? CollectableVibrationConfigurations : EnemyVibrationConfigurations;
 
         if (CorrectHit)
         {
-            RemoveObstacle(PendingObstacles[insoleSide]);
+            RemoveObstacle(PendingObstacles[side]);
             Score += TapScore;
         }
         else
         {
             Health -= MissTapDamage;
         }
-        FlashInsoleColor(insoleSide, color);
-        TriggerVibration(insoleSide, vibrationConfigurations);
+        FlashInsoleColor(side, color);
+        TriggerVibration(side, vibrationConfigurations);
     }
     public float MissTapDamage = 10.0f;
     public float TapScore = 100.0f;
@@ -134,7 +134,7 @@ public class BS_TapTapRevolutionDemo : BS_BaseDemo
 
         var obstaclePrefab = EnemyPrefab;
 
-        List<BS_InsoleSide> sides = new();
+        List<BS_Side> sides = new();
         if (DevicePair.IsHalfConnected)
         {
             if (UnityEngine.Random.value < 0.5f)
@@ -193,7 +193,7 @@ public class BS_TapTapRevolutionDemo : BS_BaseDemo
     }
 
     public Color TappableEnemyColor = Color.magenta;
-    private readonly Dictionary<BS_InsoleSide, GameObject> PendingObstacles = new();
+    private readonly Dictionary<BS_Side, GameObject> PendingObstacles = new();
     protected override void OnObstacleCollision(GameObject obstacle)
     {
         if (IsObstacleEnemy(obstacle))
@@ -208,7 +208,7 @@ public class BS_TapTapRevolutionDemo : BS_BaseDemo
             base.OnObstacleCollision(obstacle);
         }
     }
-    private BS_InsoleSide GetObstacleSide(GameObject obstacle) => obstacle.transform.localPosition.x < 0 ? Left : Right;
+    private BS_Side GetObstacleSide(GameObject obstacle) => obstacle.transform.localPosition.x < 0 ? Left : Right;
     protected override void RemoveObstacle(GameObject obstacle)
     {
         if (IsObstacleEnemy(obstacle))

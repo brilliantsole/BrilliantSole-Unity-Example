@@ -212,7 +212,7 @@ public class BS_DevicesScrollView : MonoBehaviour
         GameObject item = GetItemByDevice(device);
         if (item == null) { return; }
 
-        Debug.Log($"{device.InsoleSide} {className}");
+        Debug.Log($"{device.Side} {className}");
 
         var tfliteClassificationText = item.transform.Find("TfliteClassification").GetComponentInChildren<TextMeshProUGUI>();
         tfliteClassificationText.text = $"{className}";
