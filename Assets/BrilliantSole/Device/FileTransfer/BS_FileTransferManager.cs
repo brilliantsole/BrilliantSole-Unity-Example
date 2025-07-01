@@ -5,6 +5,7 @@ using static BS_FileTransferMessageType;
 using static BS_FileTransferStatus;
 using static BS_FileTransferCommand;
 using System.Threading.Tasks;
+using System.Linq;
 
 public class BS_FileTransferManager : BS_BaseManager<BS_FileTransferMessageType>
 {
@@ -20,6 +21,8 @@ public class BS_FileTransferManager : BS_BaseManager<BS_FileTransferMessageType>
 
     private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_FileTransferManager", BS_Logger.LogLevel.Log);
 
+
+    public event Action<BS_FileType[]> OnFileTypes;
     public event Action<ushort> OnMaxFileLength;
     public event Action<BS_FileTransferStatus> OnFileTransferStatus;
     public event Action<uint> OnFileChecksum;
@@ -41,6 +44,7 @@ public class BS_FileTransferManager : BS_BaseManager<BS_FileTransferMessageType>
     {
         base.Reset();
 
+        _fileTypes = Array.Empty<BS_FileType>();
         _maxFileLength = null;
         _fileType = null;
         _fileLength = null;
@@ -62,7 +66,7 @@ public class BS_FileTransferManager : BS_BaseManager<BS_FileTransferMessageType>
         switch (messageType)
         {
             case GetFileTypes:
-                Debug.Log("GetFileTypes");
+                ParseFileTypes(data);
                 break;
             case GetMaxFileLength:
                 ParseMaxFileLength(data);
@@ -95,6 +99,31 @@ public class BS_FileTransferManager : BS_BaseManager<BS_FileTransferMessageType>
                 break;
         }
     }
+
+    // FILE TYPES START
+    [SerializeField]
+    private BS_FileType[] _fileTypes = Array.Empty<BS_FileType>();
+    public BS_FileType[] FileTypes
+    {
+        get => _fileTypes;
+        private set
+        {
+            Logger.Log($"Updating FileTypes to {value}");
+            _fileTypes = value;
+            OnFileTypes?.Invoke(FileTypes);
+        }
+    }
+    private void ParseFileTypes(in byte[] data)
+    {
+        BS_FileType[] fileTypes = new BS_FileType[data.Length];
+        for (int i = 0; i < data.Length; i++)
+        {
+            fileTypes[i] = (BS_FileType)data[i];
+        }
+        Logger.Log($"Parsed fileTypes: {string.Join(", ", fileTypes)}");
+        FileTypes = fileTypes;
+    }
+    // FILE TYPES END
 
     // MAX FILE LENGTH START
     [SerializeField]
@@ -281,7 +310,11 @@ public class BS_FileTransferManager : BS_BaseManager<BS_FileTransferMessageType>
     // FILE BLOCK START
     public async Task<bool> SendFile(BS_FileMetadata fileMetadata)
     {
-
+        if (!FileTypes.Contains(fileMetadata.FileType))
+        {
+            Logger.LogError($"cannot send file - fileType {fileMetadata.FileType} is not supported");
+            return false;
+        }
         if (FileTransferStatus != Idle)
         {
             Logger.LogWarning($"cannot send file - transferStatus is {FileTransferStatus}");

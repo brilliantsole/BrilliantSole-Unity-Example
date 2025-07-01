@@ -1,4 +1,6 @@
 public enum BS_FileType : byte
 {
-    Tflite
+    Tflite,
+    WifiServerCert,
+    WifiServerKey,
 }
