@@ -1,10 +1,13 @@
+using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Net;
 using UnityEngine;
+
+#nullable enable
 
 public class BS_BleScanner : BS_BaseScanner<BS_BleScanner>
 {
-    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_BleScanner");
+    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_BleScanner", BS_Logger.LogLevel.Log);
 
     public override bool IsScanningAvailable
     {
@@ -134,11 +137,22 @@ public class BS_BleScanner : BS_BaseScanner<BS_BleScanner>
             deviceType = (BS_DeviceType)data[2];
             Logger.Log($"Device \"{name}\" is type \"{deviceType}\"");
         }
-        if (data.Length >= 7)
+        IPAddress? ipAddress = null;
+        bool? isWifiSecure = null;
+        if (data.Length >= 3 + 4)
         {
-            // TODO: - next 4 bytes for wifi ip address (for esp32)
+            byte[] ipBytes = new byte[4];
+            Array.Copy(data, 3, ipBytes, 0, 4);
+            ipAddress = new IPAddress(ipBytes);
+            Logger.Log($"Device \"{name}\" ipAddress: \"{ipAddress}\"");
+        }
+        if (data.Length >= 3 + 4 + 1)
+        {
+            isWifiSecure = data[3 + 4] != 0;
+            Logger.Log($"Device \"{name}\" isWifiSecure? {isWifiSecure}");
         }
 
+        // TODO: - integrate ipAddress and isWifiSecure
         if (_allDiscoveredDevices.TryGetValue(address, out var discoveredDevice))
         {
             discoveredDevice.Update(name, deviceType, rssi);

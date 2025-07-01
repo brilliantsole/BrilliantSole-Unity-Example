@@ -4,12 +4,12 @@ using UnityEngine;
 using static BS_FileTransferMessageType;
 using static BS_FileTransferStatus;
 using static BS_FileTransferCommand;
-using System.Data.Common;
 using System.Threading.Tasks;
 
 public class BS_FileTransferManager : BS_BaseManager<BS_FileTransferMessageType>
 {
     public static readonly BS_FileTransferMessageType[] RequiredMessageTypes = {
+        GetFileTypes,
         GetMaxFileLength,
         GetFileTransferType,
         GetFileLength,
@@ -18,7 +18,7 @@ public class BS_FileTransferManager : BS_BaseManager<BS_FileTransferMessageType>
     };
     public static byte[] RequiredTxRxMessageTypes => EnumArrayToTxRxArray(RequiredMessageTypes);
 
-    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_FileTransferManager");
+    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_FileTransferManager", BS_Logger.LogLevel.Log);
 
     public event Action<ushort> OnMaxFileLength;
     public event Action<BS_FileTransferStatus> OnFileTransferStatus;
@@ -61,6 +61,9 @@ public class BS_FileTransferManager : BS_BaseManager<BS_FileTransferMessageType>
         base.OnRxMessage(messageType, data);
         switch (messageType)
         {
+            case GetFileTypes:
+                Debug.Log("GetFileTypes");
+                break;
             case GetMaxFileLength:
                 ParseMaxFileLength(data);
                 break;

@@ -1,19 +1,23 @@
-using System;
 using System.Collections.Generic;
-using UnityEngine;
 
 public class BS_VibrationManager : BS_BaseManager<BS_VibrationMessageType>
 {
-    public static readonly BS_VibrationMessageType[] RequiredMessageTypes = { };
+    public static readonly BS_VibrationMessageType[] RequiredMessageTypes = {
+        BS_VibrationMessageType.GetVibrationLocations
+    };
     public static byte[] RequiredTxRxMessageTypes => EnumArrayToTxRxArray(RequiredMessageTypes);
 
-    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_VibrationManager");
+    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_VibrationManager", BS_Logger.LogLevel.Log);
 
     public override void OnRxMessage(BS_VibrationMessageType messageType, in byte[] data)
     {
         base.OnRxMessage(messageType, data);
         switch (messageType)
         {
+            case BS_VibrationMessageType.GetVibrationLocations:
+                // FILL
+                Logger.Log("GetVibrationLocations");
+                break;
             default:
                 Logger.LogError($"uncaught messageType {messageType}");
                 break;
