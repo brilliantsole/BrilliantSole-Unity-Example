@@ -28,6 +28,8 @@ public static class BS_DeviceEventMessageUtils
         AppendEnum<BS_SensorConfigurationMessageType>(ref offset, _enumStrings);
         AppendEnum<BS_SensorDataMessageType>(ref offset, _enumStrings);
         AppendEnum<BS_SensorType>(ref offset, _enumStrings);
+        AppendEnum<BS_VibrationMessageType>(ref offset, _enumStrings);
+        AppendEnum<BS_VibrationEventType>(ref offset, _enumStrings);
         AppendEnum<BS_FileTransferMessageType>(ref offset, _enumStrings);
         AppendEnum<BS_FileTransferEventType>(ref offset, _enumStrings);
         AppendEnum<BS_TfliteMessageType>(ref offset, _enumStrings);
