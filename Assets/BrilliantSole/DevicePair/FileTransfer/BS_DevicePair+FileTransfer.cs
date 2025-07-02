@@ -27,6 +27,7 @@ public partial class BS_DevicePair
     }
     private void RemoveDeviceFileTransferListeners(BS_Device device)
     {
+        device.OnFileTypes -= onDeviceFileTypes;
         device.OnMaxFileLength -= onDeviceMaxFileLength;
         device.OnFileTransferStatus -= onDeviceFileTransferStatus;
         device.OnFileChecksum -= onDeviceFileChecksum;

@@ -19,7 +19,7 @@ public class BS_FileTransferManager : BS_BaseManager<BS_FileTransferMessageType>
     };
     public static byte[] RequiredTxRxMessageTypes => EnumArrayToTxRxArray(RequiredMessageTypes);
 
-    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_FileTransferManager", BS_Logger.LogLevel.Log);
+    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_FileTransferManager");
 
 
     public event Action<BS_FileType[]> OnFileTypes;
