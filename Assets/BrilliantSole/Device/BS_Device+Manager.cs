@@ -12,8 +12,13 @@ public partial class BS_Device
         SetupSensorConfigurationManager();
         SetupSensorDataManager();
         SetupVibrationManager();
-        SetupTfliteManager();
         SetupFileTransferManager();
+        SetupTfliteManager();
+        // TODO
+        // SetupWifiManager();
+        // SetupCameraManager();
+        // SetupMicrophoneManager();
+        // SetupDisplayManager();
         foreach (var Manager in Managers) { Manager.SendTxMessages = SendTxMessages; }
     }
 

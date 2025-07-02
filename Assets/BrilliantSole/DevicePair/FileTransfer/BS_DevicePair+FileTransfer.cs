@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 public partial class BS_DevicePair
 {
+    public event Action<BS_DevicePair, BS_Side, BS_Device, BS_FileType[]> OnDeviceFileTypes;
     public event Action<BS_DevicePair, BS_Side, BS_Device, ushort> OnDeviceMaxFileLength;
     public event Action<BS_DevicePair, BS_Side, BS_Device, BS_FileTransferStatus> OnDeviceFileTransferStatus;
     public event Action<BS_DevicePair, BS_Side, BS_Device, uint> OnDeviceFileChecksum;
@@ -14,6 +15,7 @@ public partial class BS_DevicePair
 
     private void AddDeviceFileTransferListeners(BS_Device device)
     {
+        device.OnFileTypes += onDeviceFileTypes;
         device.OnMaxFileLength += onDeviceMaxFileLength;
         device.OnFileTransferStatus += onDeviceFileTransferStatus;
         device.OnFileChecksum += onDeviceFileChecksum;
@@ -25,6 +27,7 @@ public partial class BS_DevicePair
     }
     private void RemoveDeviceFileTransferListeners(BS_Device device)
     {
+        device.OnFileTypes -= onDeviceFileTypes;
         device.OnMaxFileLength -= onDeviceMaxFileLength;
         device.OnFileTransferStatus -= onDeviceFileTransferStatus;
         device.OnFileChecksum -= onDeviceFileChecksum;
@@ -35,6 +38,11 @@ public partial class BS_DevicePair
         device.OnFileReceived -= onDeviceFileReceived;
     }
 
+
+    private void onDeviceFileTypes(BS_Device device, BS_FileType[] fileTypes)
+    {
+        OnDeviceFileTypes?.Invoke(this, (BS_Side)device.Side, device, fileTypes);
+    }
     private void onDeviceMaxFileLength(BS_Device device, ushort maxFileLength)
     {
         OnDeviceMaxFileLength?.Invoke(this, (BS_Side)device.Side, device, maxFileLength);

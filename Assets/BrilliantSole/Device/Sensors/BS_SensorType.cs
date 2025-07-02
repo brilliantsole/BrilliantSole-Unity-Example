@@ -15,7 +15,12 @@ public enum BS_SensorType : byte
     StepCount,
     StepDetection,
     DeviceOrientation,
+    TapDetection,
 
-    Barometer
+    Barometer,
+
+    Camera,
+    Microphone
 }
+
 

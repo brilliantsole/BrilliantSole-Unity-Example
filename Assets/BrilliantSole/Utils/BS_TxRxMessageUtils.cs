@@ -22,8 +22,13 @@ public static class BS_TxRxMessageUtils
         BS_SensorConfigurationManager.InitTxRxEnum(ref offset, _enumStrings);
         BS_SensorDataManager.InitTxRxEnum(ref offset, _enumStrings);
         BS_VibrationManager.InitTxRxEnum(ref offset, _enumStrings);
-        BS_TfliteManager.InitTxRxEnum(ref offset, _enumStrings);
         BS_FileTransferManager.InitTxRxEnum(ref offset, _enumStrings);
+        BS_TfliteManager.InitTxRxEnum(ref offset, _enumStrings);
+        // TODO
+        // BS_WifiManager.InitTxRxEnum(ref offset, _enumStrings);
+        // BS_CameraManager.InitTxRxEnum(ref offset, _enumStrings);
+        // BS_MicrophoneManager.InitTxRxEnum(ref offset, _enumStrings);
+        // BS_DisplayManager.InitTxRxEnum(ref offset, _enumStrings);
         maxTxRxMessageType = offset;
 
         EnumStrings = new(_enumStrings);

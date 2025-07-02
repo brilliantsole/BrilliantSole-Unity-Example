@@ -53,9 +53,10 @@ public class BS_InformationManager : BS_BaseManager<BS_InformationMessageType>
         get => _mtu ?? 23;
         private set
         {
-            if (_mtu == value) { return; }
-            Logger.Log($"Updating Mtu to {value}");
-            _mtu = value;
+            var _value = Math.Min(value, (ushort)512);
+            if (_mtu == _value) { return; }
+            Logger.Log($"Updating Mtu to {_value}");
+            _mtu = _value;
             OnMtu?.Invoke(Mtu);
         }
     }

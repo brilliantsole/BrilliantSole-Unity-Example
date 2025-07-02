@@ -32,6 +32,15 @@ public static class BS_DeviceEventMessageUtils
         AppendEnum<BS_FileTransferEventType>(ref offset, _enumStrings);
         AppendEnum<BS_TfliteMessageType>(ref offset, _enumStrings);
         AppendEnum<BS_TfliteEventType>(ref offset, _enumStrings);
+        // TODO
+        // AppendEnum<BS_WifiMessageType>(ref offset, _enumStrings);
+        // AppendEnum<BS_WifiEventType>(ref offset, _enumStrings);
+        // AppendEnum<BS_CameraMessageType>(ref offset, _enumStrings);
+        // AppendEnum<BS_CameraEventType>(ref offset, _enumStrings);
+        // AppendEnum<BS_MicrophoneMessageType>(ref offset, _enumStrings);
+        // AppendEnum<BS_MicrophoneEventType>(ref offset, _enumStrings);
+        // AppendEnum<BS_DisplayMessageType>(ref offset, _enumStrings);
+        // AppendEnum<BS_DisplayEventType>(ref offset, _enumStrings);
         AppendEnum<BS_SmpMessageType>(ref offset, _enumStrings);
         AppendEnum<BS_SmpEventType>(ref offset, _enumStrings);
         maxDeviceEventMessageType = offset;

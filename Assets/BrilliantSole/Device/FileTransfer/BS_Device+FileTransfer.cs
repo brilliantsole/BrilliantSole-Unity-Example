@@ -6,6 +6,7 @@ public partial class BS_Device
 {
     private readonly BS_FileTransferManager FileTransferManager = new();
 
+    public event Action<BS_Device, BS_FileType[]> OnFileTypes;
     public event Action<BS_Device, ushort> OnMaxFileLength;
     public event Action<BS_Device, BS_FileTransferStatus> OnFileTransferStatus;
     public event Action<BS_Device, uint> OnFileChecksum;
@@ -21,6 +22,7 @@ public partial class BS_Device
 
         OnMtu += (device, mtu) => { FileTransferManager.MTU = mtu; };
 
+        FileTransferManager.OnFileTypes += fileTypes => OnFileTypes?.Invoke(this, fileTypes);
         FileTransferManager.OnMaxFileLength += fileLength => OnMaxFileLength?.Invoke(this, fileLength);
         FileTransferManager.OnFileTransferStatus += fileLength => OnFileTransferStatus?.Invoke(this, fileLength);
         FileTransferManager.OnFileChecksum += fileChecksum => OnFileChecksum?.Invoke(this, fileChecksum);
