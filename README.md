@@ -71,6 +71,10 @@ if (bytes.Length > 0)
     // MODIFY END
 ```
 
-## Dealing with optional Plugins for Piano demo
+## Dealing with optional Plugins for Piano demos
 
-When opening the project you may get some compiler issues - that's fine, you can select "Ignore" when opening. For the Piano demo, we require the Maestro - [Midi Player Tool Kit - Free](https://assetstore.unity.com/packages/tools/audio/maestro-midi-player-tool-kit-free-107994) plugin for playing sounds and the [MIDI Plugin for Mobile and Desktop](https://assetstore.unity.com/packages/tools/audio/midi-plugin-for-mobile-and-desktop-198917) plugin for connecting to a MIDI instrument via usb. If you don't want to use those plugins, you can delete the `/BrilliantSole-Unity-Plugin/Assets/BrilliantSole/Editor/Piano` folder and `/BrilliantSole-Unity-Plugin/Assets/BrilliantSole/Samples/Basic/Piano` folder.
+When opening the project you may get some compiler issues - that's fine, you can select "Ignore" when opening.  
+
+The Piano demos require the Maestro - [Midi Player Tool Kit - Free](https://assetstore.unity.com/packages/tools/audio/maestro-midi-player-tool-kit-free-107994) plugin for playing sounds and the [MIDI Plugin for Mobile and Desktop](https://assetstore.unity.com/packages/tools/audio/midi-plugin-for-mobile-and-desktop-198917) plugin for connecting to a MIDI instrument via usb.  
+
+If you don't want to use those plugins, you can delete the `/BrilliantSole-Unity-Plugin/Assets/BrilliantSole/Editor/Piano` folder and `/BrilliantSole-Unity-Plugin/Assets/BrilliantSole/Samples/Basic/Piano` folder.
