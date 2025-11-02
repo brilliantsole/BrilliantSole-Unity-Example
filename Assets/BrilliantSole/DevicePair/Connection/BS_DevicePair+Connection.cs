@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using static BS_ConnectionStatus;
 
 public partial class BS_DevicePair
 {
@@ -51,9 +52,28 @@ public partial class BS_DevicePair
     }
 
     public Action<BS_DevicePair, BS_Side, BS_Device, BS_ConnectionStatus> OnDeviceConnectionStatus;
+    public Action<BS_DevicePair, BS_Side, BS_Device> OnDeviceConnected;
+    public Action<BS_DevicePair, BS_Side, BS_Device> OnDeviceNotConnected;
+    public Action<BS_DevicePair, BS_Side, BS_Device> OnDeviceConnecting;
+    public Action<BS_DevicePair, BS_Side, BS_Device> OnDeviceDisconnecting;
     private void onDeviceConnectionStatus(BS_Device device, BS_ConnectionStatus connectionStatus)
     {
         OnDeviceConnectionStatus?.Invoke(this, (BS_Side)device.Side, device, connectionStatus);
+        switch (connectionStatus)
+        {
+            case NotConnected:
+                OnDeviceNotConnected?.Invoke(this, (BS_Side)device.Side, device);
+                break;
+            case Connecting:
+                OnDeviceConnecting?.Invoke(this, (BS_Side)device.Side, device);
+                break;
+            case Connected:
+                OnDeviceConnected?.Invoke(this, (BS_Side)device.Side, device);
+                break;
+            case Disconnecting:
+                OnDeviceDisconnecting?.Invoke(this, (BS_Side)device.Side, device);
+                break;
+        }
     }
 
     public Action<BS_DevicePair, BS_Side, BS_Device, bool> OnDeviceIsConnected;

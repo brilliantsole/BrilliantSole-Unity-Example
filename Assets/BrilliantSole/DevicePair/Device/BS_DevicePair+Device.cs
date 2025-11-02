@@ -48,6 +48,9 @@ public partial class BS_DevicePair
         devices.Add(side, device);
         AddDeviceListeners(device);
         CheckIsFullyConnected();
+
+        onDeviceConnectionStatus(device, device.ConnectionStatus);
+        onDeviceIsConnected(device, device.IsConnected);
     }
 
     public void RemoveDevice(BS_Device device)

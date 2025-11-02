@@ -1,7 +1,4 @@
 using System;
-using UnityEngine;
-
-using BS_SensorConfiguration = System.Collections.Generic.Dictionary<BS_SensorType, BS_SensorRate>;
 
 public partial class BS_DevicePair
 {

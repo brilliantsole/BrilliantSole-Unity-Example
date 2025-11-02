@@ -9,7 +9,11 @@ public partial class BS_Device
     public bool TfliteInferencingEnabled => TfliteManager.InferencingEnabled;
 
     public event Action<BS_Device, bool> OnIsTfliteReady;
-    public event Action<BS_Device, bool> OnTfliteInferencingEnabled;
+    public event Action<BS_Device> OnTfliteReady;
+    public event Action<BS_Device> OnTfliteNotReady;
+    public event Action<BS_Device, bool> OnIsTfliteInferencingEnabled;
+    public event Action<BS_Device> OnTfliteInferencingEnabled;
+    public event Action<BS_Device> OnTfliteInferencingDisabled;
     public event Action<BS_Device, List<float>, Dictionary<string, float>, ulong> OnTfliteInference;
     public event Action<BS_Device, string, float, ulong> OnTfliteClassification;
 
@@ -19,7 +23,7 @@ public partial class BS_Device
 
         TfliteManager.OnIsReady += onIsTfliteReady;
         TfliteManager.OnInference += onTfliteInference;
-        TfliteManager.OnInferencingEnabled += onTfliteInferencingEnabled;
+        TfliteManager.OnInferencingEnabled += onIsTfliteInferencingEnabled;
         TfliteManager.OnClassification += onTfliteClassification;
     }
 
@@ -40,10 +44,18 @@ public partial class BS_Device
     private void onIsTfliteReady(bool isTfliteReady)
     {
         OnIsTfliteReady?.Invoke(this, isTfliteReady);
+        if (isTfliteReady)
+        {
+            OnTfliteReady?.Invoke(this);
+        }
+        else
+        {
+            OnTfliteNotReady?.Invoke(this);
+        }
     }
-    private void onTfliteInferencingEnabled(bool inferencingEnabled)
+    private void onIsTfliteInferencingEnabled(bool inferencingEnabled)
     {
-        OnTfliteInferencingEnabled?.Invoke(this, inferencingEnabled);
+        OnIsTfliteInferencingEnabled?.Invoke(this, inferencingEnabled);
     }
     private void onTfliteInference(List<float> inference, Dictionary<string, float> inferenceMap, ulong timestamp)
     {

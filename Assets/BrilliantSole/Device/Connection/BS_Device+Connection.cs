@@ -65,6 +65,10 @@ public partial class BS_Device
 
     public event Action<BS_Device, BS_ConnectionStatus>? OnConnectionStatus;
     public event Action<BS_Device, bool>? OnIsConnected;
+    public event Action<BS_Device>? OnNotConnected;
+    public event Action<BS_Device>? OnConnecting;
+    public event Action<BS_Device>? OnConnected;
+    public event Action<BS_Device>? OnDisconnecting;
 
     [SerializeField]
     private BS_ConnectionStatus _connectionStatus;
@@ -83,6 +87,22 @@ public partial class BS_Device
                 case Connected:
                 case NotConnected:
                     OnIsConnected?.Invoke(this, IsConnected);
+                    break;
+            }
+
+            switch (ConnectionStatus)
+            {
+                case Connected:
+                    OnConnected?.Invoke(this);
+                    break;
+                case Connecting:
+                    OnConnecting?.Invoke(this);
+                    break;
+                case NotConnected:
+                    OnNotConnected?.Invoke(this);
+                    break;
+                case Disconnecting:
+                    OnDisconnecting?.Invoke(this);
                     break;
             }
         }

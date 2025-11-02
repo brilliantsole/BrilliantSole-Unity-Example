@@ -7,6 +7,10 @@ public partial class BS_BaseClient
 {
     public event Action<BS_BaseClient, BS_ConnectionStatus> OnConnectionStatus;
     public event Action<BS_BaseClient, bool> OnIsConnected;
+    public event Action<BS_BaseClient> OnConnected;
+    public event Action<BS_BaseClient> OnNotConnected;
+    public event Action<BS_BaseClient> OnConnecting;
+    public event Action<BS_BaseClient> OnDisconnecting;
 
     public bool ReconnectOnDisconnection = false;
     protected bool DisconnectedUnintentionally = false;
@@ -46,6 +50,22 @@ public partial class BS_BaseClient
                             DisconnectedUnintentionally = false;
                         }
                     }
+                    break;
+            }
+
+            switch (ConnectionStatus)
+            {
+                case Connected:
+                    OnConnected?.Invoke(this);
+                    break;
+                case NotConnected:
+                    OnNotConnected?.Invoke(this);
+                    break;
+                case Connecting:
+                    OnConnecting?.Invoke(this);
+                    break;
+                case Disconnecting:
+                    OnDisconnecting?.Invoke(this);
                     break;
             }
         }

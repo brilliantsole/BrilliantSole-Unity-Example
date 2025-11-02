@@ -13,7 +13,11 @@ public class BS_BleScanner : BS_BaseScanner<BS_BleScanner>
     {
         get
         {
+#if UNITY_2018_3_OR_NEWER && (UNITY_ANDROID || UNITY_EDITOR_OSX || UNITY_STANDALONE_OSX || UNITY_IOS || UNITY_TVOS)
             return true;
+#else
+            return false;
+#endif
         }
     }
 

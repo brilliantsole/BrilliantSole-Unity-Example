@@ -4,7 +4,6 @@ using static BS_SensorType;
 using static BS_SensorRate;
 using static BS_Side;
 
-using BS_SensorConfiguration = System.Collections.Generic.Dictionary<BS_SensorType, BS_SensorRate>;
 using System.Linq;
 using System.Collections.Generic;
 using System;

@@ -1,9 +1,24 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using static BS_SensorConfigurationMessageType;
 using static BS_SensorRate;
 
-using BS_SensorConfiguration = System.Collections.Generic.Dictionary<BS_SensorType, BS_SensorRate>;
+public class BS_SensorConfiguration : Dictionary<BS_SensorType, BS_SensorRate>
+{
+    public BS_SensorConfiguration() : base() { }
+
+    public BS_SensorConfiguration(IDictionary<BS_SensorType, BS_SensorRate> other)
+        : base(other) { }
+
+    public BS_SensorConfiguration(int capacity)
+        : base(capacity) { }
+
+    public override string ToString()
+    {
+        return string.Join(", ", this.Select(pair => $"{pair.Key}: {pair.Value}"));
+    }
+}
 
 public class BS_SensorConfigurationManager : BS_BaseManager<BS_SensorConfigurationMessageType>
 {
@@ -58,7 +73,7 @@ public class BS_SensorConfigurationManager : BS_BaseManager<BS_SensorConfigurati
         }
 
         SensorConfiguration = ParsedSensorConfiguration;
-        Logger.Log($"updated sensorConfiguration:\n{PrintSensorConfiguration(SensorConfiguration)}");
+        Logger.Log($"updated sensorConfiguration:\n{SensorConfiguration}");
         OnSensorConfiguration?.Invoke(SensorConfiguration);
     }
 
@@ -133,7 +148,7 @@ public class BS_SensorConfigurationManager : BS_BaseManager<BS_SensorConfigurati
             }
         }
 
-        Logger.Log($"setting sensorConfiguration to {PrintSensorConfiguration(TempSensorConfiguration)}");
+        Logger.Log($"setting sensorConfiguration to {TempSensorConfiguration}");
 
         BS_TxMessage[] Messages = { CreateMessage(BS_SensorConfigurationMessageType.SetSensorConfiguration, GetSensorConfigurationArray(TempSensorConfiguration)) };
         SendTxMessages(Messages, sendImmediately);
@@ -173,12 +188,5 @@ public class BS_SensorConfigurationManager : BS_BaseManager<BS_SensorConfigurati
         TempSensorConfiguration.Clear();
         foreach (var sensorType in SensorTypes) { TempSensorConfiguration.Add(sensorType, _0ms); }
         SetSensorConfiguration(TempSensorConfiguration, sendImmediately: sendImmediately);
-    }
-
-    public string PrintSensorConfiguration(in BS_SensorConfiguration sensorConfiguration)
-    {
-        string _string = "";
-        foreach (var pair in sensorConfiguration) { _string += $"{pair.Key}: {pair.Value}, "; }
-        return _string;
     }
 }
