@@ -177,12 +177,19 @@ public class BS_BleScanner : BS_BaseScanner<BS_BleScanner>
             Scan();
         }
 
-        foreach (var connectionManager in _connectionManagers.Values)
+        foreach (var device in _allDevices.Values)
         {
-            if (connectionManager.Stage != BS_BleConnectionStage.None)
+            if (device.ConnectionManager is BS_BleConnectionManager connectionManager)
             {
-                connectionManager.Update();
-                break;
+                if (connectionManager.Stage != BS_BleConnectionStage.None)
+                {
+                    connectionManager.Update();
+                    break;
+                }
+            }
+            else
+            {
+                Logger.LogError($"failed to cast connectionManager as BS_BleConnectionManager");
             }
         }
     }

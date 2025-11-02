@@ -6,7 +6,7 @@ using static BS_ConnectionStatus;
 #nullable enable
 public class BS_BleConnectionManager : BS_BaseConnectionManager
 {
-    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_BleConnectionManager", BS_Logger.LogLevel.Error);
+    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_BleConnectionManager", BS_Logger.LogLevel.Log);
 
     public override BS_ConnectionType Type => BS_ConnectionType.Ble;
 
@@ -21,12 +21,6 @@ public class BS_BleConnectionManager : BS_BaseConnectionManager
     {
         ResetUuids();
         Stage = BS_BleConnectionStage.None;
-
-        // if (PendingConnectionManagers.Contains(this))
-        // {
-        //     Logger.Log($"Removing Pending ConnectionManager...");
-        //     PendingConnectionManagers.Remove(this);
-        // }
     }
 
     private readonly HashSet<string> FoundServiceUuids = new();
@@ -128,40 +122,6 @@ public class BS_BleConnectionManager : BS_BaseConnectionManager
             Logger.Log($"Updating BS_BleConnectionStage to {value}");
             _Stage = value;
             UpdateTimeout();
-            // if (IsBusy && _Stage == BS_BleConnectionStage.None)
-            // {
-            //     IsBusy = false;
-            // }
-        }
-    }
-
-    // [SerializeField]
-    // private static List<BS_BleConnectionManager> PendingConnectionManagers = new();
-
-    [SerializeField]
-    private static bool _IsBusy = false;
-    public static bool IsBusy
-    {
-        get => _IsBusy;
-        private set
-        {
-            if (_IsBusy == value) { return; }
-            Logger.Log($"Updating IsBusy to {value}");
-            _IsBusy = value;
-            // if (!_IsBusy)
-            // {
-            //     if (PendingConnectionManagers.Count() > 0)
-            //     {
-            //         Logger.Log($"fetching next device to connect to");
-            //         BS_BleConnectionManager PendingConnectionManager = PendingConnectionManagers.First();
-            //         PendingConnectionManagers.Remove(PendingConnectionManager);
-            //         PendingConnectionManager.Connect();
-            //     }
-            //     else
-            //     {
-            //         Logger.Log("no more pendingConnectionManagers");
-            //     }
-            // }
         }
     }
 
@@ -169,16 +129,6 @@ public class BS_BleConnectionManager : BS_BaseConnectionManager
     {
         base.Connect(ref Continue);
         if (!Continue) { return; }
-        // if (IsBusy)
-        // {
-        //     Logger.Log($"Already busy connecting to a device...");
-        //     if (!PendingConnectionManagers.Contains(this))
-        //     {
-        //         PendingConnectionManagers.Add(this);
-        //     }
-        //     return;
-        // }
-        // IsBusy = true;
         Stage = BS_BleConnectionStage.Connecting;
     }
     private void ConnectToPeripheral()
