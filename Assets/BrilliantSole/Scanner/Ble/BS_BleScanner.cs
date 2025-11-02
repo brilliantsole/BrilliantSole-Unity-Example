@@ -181,9 +181,12 @@ public class BS_BleScanner : BS_BaseScanner<BS_BleScanner>
         {
             if (device.ConnectionManager is BS_BleConnectionManager connectionManager)
             {
-                if (connectionManager.Stage != BS_BleConnectionStage.None)
+                if (device.ConnectionStatus == BS_ConnectionStatus.Connecting)
                 {
-                    connectionManager.Update();
+                    if (connectionManager.Stage != BS_BleConnectionStage.None)
+                    {
+                        connectionManager.Update();
+                    }
                     break;
                 }
             }
