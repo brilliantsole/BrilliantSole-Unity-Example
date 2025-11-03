@@ -13,10 +13,10 @@ public class BS_MinimalExample : MonoBehaviour
     // helper global class instance to listen for insole events without manually adding/removing listeners on individual devices on connection/disconnection
     BS_DevicePair DevicePair => BS_DevicePair.Insoles;
 
-    // for scanning+connecting to devices via bluetooth (if the BLE Plugin is available for your system)
+    // global singleton for scanning+connecting to devices via bluetooth (if the BLE Plugin is available for your system)
     BS_BleScanner BleScanner => BS_BleScanner.Instance;
 
-    // for managing a connecting to the Node.js server via UDP (optional if the Ble Plugin isn't available for your system)
+    // global singleton for connecting to the Node.js server via UDP (optional if the Ble Plugin isn't available for your system) - https://github.com/brilliantsole/Brilliant-Sole-Basic-Server
     BS_UdpClientManager UdpClientManager => BS_UdpClientManager.Instance;
 
     // ENABLE/DISABLE
