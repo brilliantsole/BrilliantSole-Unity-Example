@@ -19,7 +19,11 @@ public partial class BS_DevicePair
 
     public void SetSensorConfiguration(BS_SensorConfiguration sensorConfiguration, bool clearRest = false)
     {
-        foreach (var device in devices.Values) { device.SetSensorConfiguration(sensorConfiguration, clearRest); }
+        foreach (var device in devices.Values)
+        {
+            Logger.Log($"SetSensorConfiguration \"{device.Name}\"");
+            device.SetSensorConfiguration(sensorConfiguration, clearRest);
+        }
     }
     public void SetSensorRate(BS_SensorType sensorType, BS_SensorRate sensorRate)
     {

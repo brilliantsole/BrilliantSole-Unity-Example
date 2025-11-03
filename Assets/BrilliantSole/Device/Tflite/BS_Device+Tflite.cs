@@ -56,6 +56,14 @@ public partial class BS_Device
     private void onIsTfliteInferencingEnabled(bool inferencingEnabled)
     {
         OnIsTfliteInferencingEnabled?.Invoke(this, inferencingEnabled);
+        if (inferencingEnabled)
+        {
+            OnTfliteInferencingEnabled?.Invoke(this);
+        }
+        else
+        {
+            OnTfliteInferencingDisabled?.Invoke(this);
+        }
     }
     private void onTfliteInference(List<float> inference, Dictionary<string, float> inferenceMap, ulong timestamp)
     {
