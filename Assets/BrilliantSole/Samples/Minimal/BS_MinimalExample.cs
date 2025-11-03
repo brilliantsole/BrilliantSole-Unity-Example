@@ -116,7 +116,6 @@ public class BS_MinimalExample : MonoBehaviour
         DevicePair.OnDeviceLinearAcceleration += OnDeviceLinearAcceleration;
         DevicePair.OnDeviceGameRotation += OnDeviceGameRotation;
         DevicePair.OnDeviceRotation += OnDeviceRotation;
-        DevicePair.OnDeviceOrientation += OnDeviceOrientation;
         DevicePair.OnDeviceGyroscope += OnDeviceGyroscope;
         DevicePair.OnDevicePressureData += OnDevicePressureData;
 
@@ -139,7 +138,6 @@ public class BS_MinimalExample : MonoBehaviour
         DevicePair.OnDeviceLinearAcceleration -= OnDeviceLinearAcceleration;
         DevicePair.OnDeviceGameRotation -= OnDeviceGameRotation;
         DevicePair.OnDeviceRotation -= OnDeviceRotation;
-        DevicePair.OnDeviceOrientation -= OnDeviceOrientation;
         DevicePair.OnDeviceGyroscope -= OnDeviceGyroscope;
         DevicePair.OnDevicePressureData -= OnDevicePressureData;
 
@@ -192,10 +190,6 @@ public class BS_MinimalExample : MonoBehaviour
     void OnDeviceRotation(BS_DevicePair pair, BS_Side side, BS_Device device, Quaternion quaternion, ulong timestamp)
     {
         Logger.Log($"[{timestamp}] OnDeviceRotation {side} {pair.Type}: {quaternion.eulerAngles}");
-    }
-    void OnDeviceOrientation(BS_DevicePair pair, BS_Side side, BS_Device device, Vector3 vector, ulong timestamp)
-    {
-        Logger.Log($"[{timestamp}] OnDeviceOrientation {side} {pair.Type}, {vector}");
     }
     void OnDeviceGyroscope(BS_DevicePair pair, BS_Side side, BS_Device device, Vector3 vector, ulong timestamp)
     {
@@ -300,11 +294,6 @@ public class BS_MinimalExample : MonoBehaviour
         {
             Logger.Log("Toggling Rotation...");
             DevicePair.ToggleSensorRate(Rotation, SensorRate);
-        }
-        if (Input.GetKeyDown(KeyCode.O))
-        {
-            Logger.Log("Toggling Orientation...");
-            DevicePair.ToggleSensorRate(Orientation, SensorRate);
         }
         if (Input.GetKeyDown(KeyCode.Y))
         {
