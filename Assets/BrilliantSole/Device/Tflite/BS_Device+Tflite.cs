@@ -6,7 +6,7 @@ public partial class BS_Device
     private readonly BS_TfliteManager TfliteManager = new();
 
     public bool IsTfliteReady => TfliteManager.IsReady && TfliteManager.TfliteModelMetadata != null;
-    public bool TfliteInferencingEnabled => TfliteManager.InferencingEnabled;
+    public bool TfliteInferencingEnabled => IsTfliteReady && TfliteManager.InferencingEnabled;
 
     public delegate void OnIsTfliteReadyDelegate(BS_Device device, bool isTfliteReady);
     public delegate void OnTfliteReadyDelegate(BS_Device device);
@@ -25,7 +25,6 @@ public partial class BS_Device
     public event OnTfliteInferencingDisabledDelegate OnTfliteInferencingDisabled;
     public event OnTfliteInferenceDelegate OnTfliteInference;
     public event OnTfliteClassificationDelegate OnTfliteClassification;
-
 
     private void SetupTfliteManager()
     {
@@ -53,8 +52,8 @@ public partial class BS_Device
 
     private void onIsTfliteReady(bool isTfliteReady)
     {
-        OnIsTfliteReady?.Invoke(this, isTfliteReady);
-        if (isTfliteReady)
+        OnIsTfliteReady?.Invoke(this, IsTfliteReady);
+        if (IsTfliteReady)
         {
             OnTfliteReady?.Invoke(this);
         }
@@ -65,8 +64,8 @@ public partial class BS_Device
     }
     private void onIsTfliteInferencingEnabled(bool inferencingEnabled)
     {
-        OnIsTfliteInferencingEnabled?.Invoke(this, inferencingEnabled);
-        if (inferencingEnabled)
+        OnIsTfliteInferencingEnabled?.Invoke(this, TfliteInferencingEnabled);
+        if (TfliteInferencingEnabled)
         {
             OnTfliteInferencingEnabled?.Invoke(this);
         }

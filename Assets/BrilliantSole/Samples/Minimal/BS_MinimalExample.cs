@@ -234,7 +234,6 @@ public class BS_MinimalExample : MonoBehaviour
 
     private void OnDeviceTfliteInference(BS_DevicePair pair, BS_Side side, BS_Device device, List<float> confidences, Dictionary<string, float> classificationConfidences, ulong timestamp)
     {
-        Logger.Log($"OnDeviceTfliteInference {side}");
         var inferenceString = string.Join(", ", classificationConfidences.Select(pair => $"{pair.Key}: {pair.Value}"));
         Logger.Log($"[{timestamp}] OnDeviceTfliteInference {side} {pair.Type}: {inferenceString}");
     }

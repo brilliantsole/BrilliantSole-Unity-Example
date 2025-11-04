@@ -460,7 +460,10 @@ public class BS_TfliteManager : BS_BaseManager<BS_TfliteMessageType>
         }
         Logger.Log($"parsed inference with {inference.Count} classes as {timestamp}ms");
 
-        OnInference?.Invoke(inference, inferenceMap, timestamp);
+        if (inferenceMap != null)
+        {
+            OnInference?.Invoke(inference, inferenceMap, timestamp);
+        }
         if (Task == Classification && maxClassName != null)
         {
             Logger.Log($"max class: {maxClassName} (#{maxIndex}) with {maxValue}");
