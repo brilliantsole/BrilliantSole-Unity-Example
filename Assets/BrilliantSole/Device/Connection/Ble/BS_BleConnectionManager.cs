@@ -140,7 +140,7 @@ public class BS_BleConnectionManager : BS_BaseConnectionManager
     private void ConnectToPeripheral()
     {
         Logger.Log($"Connecting to peripheral \"{Name}\"");
-        BluetoothLEHardwareInterface.ConnectToPeripheral(Address, OnConnectToPeripheral, OnPeripheralService, OnPeripheralCharacteristic, OnPeripheralDisconnect);
+        BluetoothLEHardwareInterface.ConnectToPeripheral(Address, OnConnectToPeripheral, OnPeripheralService, OnPeripheralCharacteristic, null);
     }
 
     private void OnConnectToPeripheral(string address)
@@ -164,7 +164,7 @@ public class BS_BleConnectionManager : BS_BaseConnectionManager
         FoundServiceUuids.Add(serviceUuid);
         CheckDidFindAllUuids();
     }
-    private void OnPeripheralDisconnect(string address)
+    public void OnPeripheralDisconnect(string address)
     {
         if (address != Address) { return; }
         Logger.Log("disconnected from peripheral");

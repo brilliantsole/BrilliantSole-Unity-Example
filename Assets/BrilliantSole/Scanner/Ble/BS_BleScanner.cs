@@ -30,7 +30,21 @@ public class BS_BleScanner : BS_BaseScanner<BS_BleScanner>
             return;
         }
         Logger.Log("initializing Ble");
+        BluetoothLEHardwareInterface.DisconnectedPeripheralAction += OnDisconnectedPeripheral;
         BluetoothLEHardwareInterface.Initialize(true, false, OnBleInitializationSuccess, OnBleInitializationError);
+    }
+
+    private void OnDisconnectedPeripheral(string Address)
+    {
+        Logger.Log($"OnDisconnectedPeripheral {Address}");
+        foreach (var connectionManager in _connectionManagers.Values)
+        {
+            if (connectionManager.Address == Address)
+            {
+                connectionManager.OnPeripheralDisconnect(Address);
+                break;
+            }
+        }
     }
 
     private void OnBleInitializationSuccess()
