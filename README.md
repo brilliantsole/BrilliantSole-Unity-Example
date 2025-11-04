@@ -113,11 +113,11 @@ If you don't want to use those plugins, you can delete the `/Assets/BrilliantSol
 
 When running the `BS_MinimalExample` level, it'll automatically scan for and connect to any devices (either directly via the BS_BleScanner ior indiretly via the BS_UdpClient on platforms Windows where the Ble Plugin isn't available), and then stop scanning. Once connected, you can use the keyboard to:
 
-`p` to enable/disable pressure data
-`r` to enable/disable rotation data (quaternion with magnetometer)
-`g` to enable/disable game rotation data (quaternion without magnetometer)
-`a` to enable/disable linear acceleration data
-`y` to enable/disable gyroscope data
-`t` to upload a tflite model
-`i` to enable/disable tflite inferencing (works after the tflite model is uploaded)
-`v` to trigger vibrations (you can play with the `Vibration Configurations` section of the `BS_Minimal Example (Script)` section of the Inspector for the `BS_MinimalExample` GameObject to experiment with different vibrations
+`p` to enable/disable pressure data  
+`r` to enable/disable rotation data (quaternion with magnetometer)  
+`g` to enable/disable game rotation data (quaternion without magnetometer)  
+`a` to enable/disable linear acceleration data  
+`y` to enable/disable gyroscope data  
+`t` to upload a tflite model  
+`i` to enable/disable tflite inferencing (works after the tflite model is uploaded)  
+`v` to trigger vibrations (you can play with the `Vibration Configurations` section of the `BS_Minimal Example (Script)` section of the Inspector for the `BS_MinimalExample` GameObject to experiment with different vibrations  
