@@ -17,6 +17,16 @@ In `BluetoothHardwareInterface.cs`, modify `public static void RequestMtu(string
     _iOSBluetoothLERequestMtu (name, mtu);
 ```
 
+and add this static property to the `BluetoothLEHardwareInterface` class:
+
+```
+public class BluetoothLEHardwareInterface
+{
+	// MODIFY START
+	public static Action<string> DisconnectedPeripheralAction;
+	// MODIFY END
+```
+
 in `BluetoothDeviceScript.cs`, add the lines at the end of `void Start()`:
 
 ```
@@ -53,6 +63,26 @@ else if (message.Length >= deviceDidUpdateNotificationStateForCharacteristic.Len
             parts[2] = BLEStandardUUIDs[parts[2].ToUpper()];
 #endif
         // MODIFY END
+```
+
+add well as these lines in `public void OnBluetoothMessage(string message)`:
+
+```
+else if (message.Length >= deviceDisconnectedPeripheral.Length && message.Substring(0, deviceDisconnectedPeripheral.Length) == deviceDisconnectedPeripheral)
+    {
+        if (parts.Length >= 2)
+        {
+            if (ConnectedDisconnectPeripheralAction != null)
+                ConnectedDisconnectPeripheralAction(parts[1]);
+
+            if (DisconnectedPeripheralAction != null)
+                DisconnectedPeripheralAction(parts[1]);
+
+            // MODIFY START
+            BluetoothLEHardwareInterface.DisconnectedPeripheralAction?.Invoke(parts[1]);
+            // MODIFY END
+        }
+    }
 ```
 
 and modify the lines in `public void OnBluetoothData(string deviceAddress, string characteristic, string base64Data)`:
