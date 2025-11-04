@@ -63,12 +63,17 @@ public partial class BS_Device
 
     public bool IsAvailable => ConnectionManager?.IsAvailable ?? false;
 
-    public event Action<BS_Device, BS_ConnectionStatus>? OnConnectionStatus;
-    public event Action<BS_Device, bool>? OnIsConnected;
-    public event Action<BS_Device>? OnNotConnected;
-    public event Action<BS_Device>? OnConnecting;
-    public event Action<BS_Device>? OnConnected;
-    public event Action<BS_Device>? OnDisconnecting;
+    public delegate void OnConnectionStatusDelegate(BS_Device device, BS_ConnectionStatus connectionStatus);
+    public delegate void OnIsConnectedDelegate(BS_Device device, bool isConnected);
+    public delegate void OnDeviceDelegate(BS_Device device);
+
+    public event OnConnectionStatusDelegate? OnConnectionStatus;
+    public event OnIsConnectedDelegate? OnIsConnected;
+    public event OnDeviceDelegate? OnNotConnected;
+    public event OnDeviceDelegate? OnConnecting;
+    public event OnDeviceDelegate? OnConnected;
+    public event OnDeviceDelegate? OnDisconnecting;
+
 
     [SerializeField]
     private BS_ConnectionStatus _connectionStatus;
@@ -80,7 +85,7 @@ public partial class BS_Device
             if (_connectionStatus == value) { return; }
             Logger.Log($"Updating Connection Status to {value}");
             _connectionStatus = value;
-            OnConnectionStatus?.Invoke(this, ConnectionStatus);
+            OnConnectionStatus?.Invoke(this, value);
 
             switch (ConnectionStatus)
             {

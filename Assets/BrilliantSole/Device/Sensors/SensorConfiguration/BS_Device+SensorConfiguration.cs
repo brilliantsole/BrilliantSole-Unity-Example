@@ -4,8 +4,8 @@ public partial class BS_Device
 {
     private readonly BS_SensorConfigurationManager SensorConfigurationManager = new();
 
-    public event Action<BS_Device, BS_SensorConfiguration> OnSensorConfiguration;
-
+    public delegate void OnSensorConfigurationDelegate(BS_Device device, BS_SensorConfiguration sensorConfiguration);
+    public event OnSensorConfigurationDelegate OnSensorConfiguration;
     private void SetupSensorConfigurationManager()
     {
         Managers.Add(SensorConfigurationManager);

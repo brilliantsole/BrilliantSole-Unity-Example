@@ -1,17 +1,76 @@
-using System;
 using System.Collections.Generic;
 
 public partial class BS_DevicePair
 {
-    public event Action<BS_DevicePair, BS_Side, BS_Device, BS_FileType[]> OnDeviceFileTypes;
-    public event Action<BS_DevicePair, BS_Side, BS_Device, ushort> OnDeviceMaxFileLength;
-    public event Action<BS_DevicePair, BS_Side, BS_Device, BS_FileTransferStatus> OnDeviceFileTransferStatus;
-    public event Action<BS_DevicePair, BS_Side, BS_Device, uint> OnDeviceFileChecksum;
-    public event Action<BS_DevicePair, BS_Side, BS_Device, uint> OnDeviceFileLength;
-    public event Action<BS_DevicePair, BS_Side, BS_Device, BS_FileType> OnDeviceFileType;
-    public event Action<BS_DevicePair, BS_Side, BS_Device, BS_FileType, BS_FileTransferDirection, float> OnDeviceFileTransferProgress;
-    public event Action<BS_DevicePair, BS_Side, BS_Device, BS_FileType, BS_FileTransferDirection> OnDeviceFileTransferComplete;
-    public event Action<BS_DevicePair, BS_Side, BS_Device, BS_FileType, List<byte>> OnDeviceFileReceived;
+    public delegate void OnDeviceFileTypesDelegate(
+        BS_DevicePair devicePair,
+        BS_Side side,
+        BS_Device device,
+        BS_FileType[] fileTypes
+    );
+    public delegate void OnDeviceMaxFileLengthDelegate(
+        BS_DevicePair devicePair,
+        BS_Side side,
+        BS_Device device,
+        ushort maxFileLength
+    );
+    public delegate void OnDeviceFileTransferStatusDelegate(
+        BS_DevicePair devicePair,
+        BS_Side side,
+        BS_Device device,
+        BS_FileTransferStatus fileTransferStatus
+    );
+    public delegate void OnDeviceFileChecksumDelegate(
+        BS_DevicePair devicePair,
+        BS_Side side,
+        BS_Device device,
+        uint fileChecksum
+    );
+    public delegate void OnDeviceFileLengthDelegate(
+        BS_DevicePair devicePair,
+        BS_Side side,
+        BS_Device device,
+        uint fileLength
+    );
+    public delegate void OnDeviceFileTypeDelegate(
+        BS_DevicePair devicePair,
+        BS_Side side,
+        BS_Device device,
+        BS_FileType fileType
+    );
+    public delegate void OnDeviceFileTransferProgressDelegate(
+        BS_DevicePair devicePair,
+        BS_Side side,
+        BS_Device device,
+        BS_FileType fileType,
+        BS_FileTransferDirection fileTransferDirection,
+        float fileTransferProgress
+    );
+    public delegate void OnDeviceFileTransferCompleteDelegate(
+        BS_DevicePair devicePair,
+        BS_Side side,
+        BS_Device device,
+        BS_FileType fileType,
+        BS_FileTransferDirection fileTransferDirection
+    );
+    public delegate void OnDeviceFileReceivedDelegate(
+        BS_DevicePair devicePair,
+        BS_Side side,
+        BS_Device device,
+        BS_FileType fileType,
+        List<byte> fileData
+    );
+
+    public event OnDeviceFileTypesDelegate OnDeviceFileTypes;
+    public event OnDeviceMaxFileLengthDelegate OnDeviceMaxFileLength;
+    public event OnDeviceFileTransferStatusDelegate OnDeviceFileTransferStatus;
+    public event OnDeviceFileChecksumDelegate OnDeviceFileChecksum;
+    public event OnDeviceFileLengthDelegate OnDeviceFileLength;
+    public event OnDeviceFileTypeDelegate OnDeviceFileType;
+    public event OnDeviceFileTransferProgressDelegate OnDeviceFileTransferProgress;
+    public event OnDeviceFileTransferCompleteDelegate OnDeviceFileTransferComplete;
+    public event OnDeviceFileReceivedDelegate OnDeviceFileReceived;
+
 
     private void AddDeviceFileTransferListeners(BS_Device device)
     {

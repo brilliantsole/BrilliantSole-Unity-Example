@@ -1,6 +1,6 @@
 public partial class BS_DevicePair
 {
-    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_DevicePair");
+    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_DevicePair", BS_Logger.LogLevel.Log);
     public static readonly BS_DevicePair Insoles;
     public static readonly BS_DevicePair Gloves;
 
@@ -25,4 +25,10 @@ public partial class BS_DevicePair
     {
         SensorDataManager.Reset();
     }
+
+    public delegate void OnDeviceDelegate(
+        BS_DevicePair devicePair,
+        BS_Side side,
+        BS_Device device
+    );
 }

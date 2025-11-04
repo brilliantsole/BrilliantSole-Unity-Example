@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 
 public partial class BS_BaseClient
@@ -7,8 +6,8 @@ public partial class BS_BaseClient
     protected readonly Dictionary<string, BS_DiscoveredDevice> _allDiscoveredDevices = new();
     public IReadOnlyDictionary<string, BS_DiscoveredDevice> DiscoveredDevices => _discoveredDevices;
 
-    public event Action<BS_DiscoveredDevice> OnDiscoveredDevice;
-    public event Action<BS_DiscoveredDevice> OnExpiredDevice;
+    public event IBS_Scanner.DiscoveredDeviceDelegate OnDiscoveredDevice;
+    public event IBS_Scanner.ExpiredDiscoveredDeviceDelegate OnExpiredDevice;
 
     private void AddDiscoveredDevice(BS_DiscoveredDevice DiscoveredDevice)
     {

@@ -8,14 +8,24 @@ public partial class BS_Device
     public bool IsTfliteReady => TfliteManager.IsReady && TfliteManager.TfliteModelMetadata != null;
     public bool TfliteInferencingEnabled => TfliteManager.InferencingEnabled;
 
-    public event Action<BS_Device, bool> OnIsTfliteReady;
-    public event Action<BS_Device> OnTfliteReady;
-    public event Action<BS_Device> OnTfliteNotReady;
-    public event Action<BS_Device, bool> OnIsTfliteInferencingEnabled;
-    public event Action<BS_Device> OnTfliteInferencingEnabled;
-    public event Action<BS_Device> OnTfliteInferencingDisabled;
-    public event Action<BS_Device, List<float>, Dictionary<string, float>, ulong> OnTfliteInference;
-    public event Action<BS_Device, string, float, ulong> OnTfliteClassification;
+    public delegate void OnIsTfliteReadyDelegate(BS_Device device, bool isTfliteReady);
+    public delegate void OnTfliteReadyDelegate(BS_Device device);
+    public delegate void OnTfliteNotReadyDelegate(BS_Device device);
+    public delegate void OnIsTfliteInferencingEnabledDelegate(BS_Device device, bool isTfliteInferencingEnabled);
+    public delegate void OnTfliteInferencingEnabledDelegate(BS_Device device);
+    public delegate void OnTfliteInferencingDisabledDelegate(BS_Device device);
+    public delegate void OnTfliteInferenceDelegate(BS_Device device, List<float> confidences, Dictionary<string, float> classificationConfidences, ulong timestamp);
+    public delegate void OnTfliteClassificationDelegate(BS_Device device, string classification, float confidence, ulong timestamp);
+
+    public event OnIsTfliteReadyDelegate OnIsTfliteReady;
+    public event OnTfliteReadyDelegate OnTfliteReady;
+    public event OnTfliteNotReadyDelegate OnTfliteNotReady;
+    public event OnIsTfliteInferencingEnabledDelegate OnIsTfliteInferencingEnabled;
+    public event OnTfliteInferencingEnabledDelegate OnTfliteInferencingEnabled;
+    public event OnTfliteInferencingDisabledDelegate OnTfliteInferencingDisabled;
+    public event OnTfliteInferenceDelegate OnTfliteInference;
+    public event OnTfliteClassificationDelegate OnTfliteClassification;
+
 
     private void SetupTfliteManager()
     {

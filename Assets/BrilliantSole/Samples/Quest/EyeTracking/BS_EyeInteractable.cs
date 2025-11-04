@@ -11,9 +11,13 @@ public class BS_EyeInteractable : MonoBehaviour
 
     public bool BlockUIRaycast = true;
 
-    public Action<BS_EyeInteractable> OnHover;
-    public Action<BS_EyeInteractable> OnUnhover;
-    public Action<BS_EyeInteractable, bool> OnIsHovered;
+    public delegate void EyeInteractableDelegate(BS_EyeInteractable eyeInteractable);
+    public delegate void OnIsEyeInteractableHoveredDelegate(BS_EyeInteractable eyeInteractable, bool isHovered);
+
+    public event EyeInteractableDelegate OnHover;
+    public event EyeInteractableDelegate OnUnhover;
+    public event OnIsEyeInteractableHoveredDelegate OnIsHovered;
+
 
     [HideInInspector]
     public BoxCollider _collider;

@@ -93,7 +93,8 @@ public class BS_PianoUI : MonoBehaviour
 
     private BS_PianoKeyData hoveredKeyData = null;
     public BS_PianoKeyData HoveredKeyData => hoveredKeyData;
-    public Action<BS_PianoKeyData, bool> OnHoveredKeyData;
+    public delegate void OnHoveredKeyDataDelegate(BS_PianoKeyData keyData, bool isHovered);
+    public event OnHoveredKeyDataDelegate OnHoveredKeyData;
     private void OnIsHovered(BS_EyeInteractable eyeInteractable, bool isHovered)
     {
         var keyData = eyeInteractable.transform.GetComponentInChildren<BS_PianoKeyData>();
@@ -109,8 +110,9 @@ public class BS_PianoUI : MonoBehaviour
         }
     }
 
-    public Action<BS_PianoKeyData> OnKeyDown;
-    public Action<BS_PianoKeyData> OnKeyUp;
+    public delegate void OnKeyDelegate(BS_PianoKeyData keyData);
+    public event OnKeyDelegate OnKeyDown;
+    public event OnKeyDelegate OnKeyUp;
 
     private readonly Dictionary<string, GameObject> keyMapping = new();
     private readonly Dictionary<int, GameObject> midiMapping = new();

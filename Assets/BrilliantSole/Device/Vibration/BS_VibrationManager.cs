@@ -13,7 +13,6 @@ public class BS_VibrationManager : BS_BaseManager<BS_VibrationMessageType>
 
     public event Action<BS_VibrationLocation[]> OnVibrationLocations;
 
-
     public override void OnRxMessage(BS_VibrationMessageType messageType, in byte[] data)
     {
         base.OnRxMessage(messageType, data);

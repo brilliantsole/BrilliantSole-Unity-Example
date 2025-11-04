@@ -232,15 +232,16 @@ public class BS_MinimalExample : MonoBehaviour
         Logger.Log($"OnIsDeviceTfliteInferencingEnabled {side} {pair.Type}: {isInferencngEnabled}");
     }
 
-    private void OnDeviceTfliteInference(BS_DevicePair pair, BS_Side side, BS_Device device, List<float> inference, Dictionary<string, float> inferenceMap, ulong timestamp)
+    private void OnDeviceTfliteInference(BS_DevicePair pair, BS_Side side, BS_Device device, List<float> confidences, Dictionary<string, float> classificationConfidences, ulong timestamp)
     {
-        var inferenceString = string.Join(", ", inferenceMap.Select(pair => $"{pair.Key}: {pair.Value}"));
+        Logger.Log($"OnDeviceTfliteInference {side}");
+        var inferenceString = string.Join(", ", classificationConfidences.Select(pair => $"{pair.Key}: {pair.Value}"));
         Logger.Log($"[{timestamp}] OnDeviceTfliteInference {side} {pair.Type}: {inferenceString}");
     }
 
-    private void OnDeviceTfliteClassification(BS_DevicePair pair, BS_Side side, BS_Device device, string className, float classValue, ulong timestamp)
+    private void OnDeviceTfliteClassification(BS_DevicePair pair, BS_Side side, BS_Device device, string classification, float confidence, ulong timestamp)
     {
-        Logger.Log($"OnDeviceTfliteInference {side} {pair.Type}: \"{className}\" with value {classValue}");
+        Logger.Log($"OnDeviceTfliteInference {side} {pair.Type}: \"{classification}\" with value {confidence}");
     }
 
     // START/UPDATE

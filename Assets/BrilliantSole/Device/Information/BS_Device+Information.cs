@@ -6,11 +6,19 @@ public partial class BS_Device
 {
     private readonly BS_InformationManager InformationManager = new();
 
-    public event Action<BS_Device, string> OnName;
-    public event Action<BS_Device, string> OnId;
-    public event Action<BS_Device, ulong> OnCurrentTime;
-    public event Action<BS_Device, BS_DeviceType> OnDeviceType;
-    public event Action<BS_Device, ushort> OnMtu;
+    public delegate void OnNameDelegate(BS_Device device, string name);
+    public delegate void OnIdDelegate(BS_Device device, string id);
+    public delegate void OnCurrentTimeDelegate(BS_Device device, ulong currentTime);
+    public delegate void OnDeviceTypeDelegate(BS_Device device, BS_DeviceType deviceType);
+    public delegate void OnMtuDelegate(BS_Device device, ushort mtu);
+
+    public event OnNameDelegate OnName;
+    public event OnIdDelegate OnId;
+    public event OnCurrentTimeDelegate OnCurrentTime;
+    public event OnDeviceTypeDelegate OnDeviceType;
+    public event OnMtuDelegate OnMtu;
+
+
     private void SetupInformationManager()
     {
         Managers.Add(InformationManager);

@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 
 public static class BS_DeviceManager
@@ -7,16 +6,23 @@ public static class BS_DeviceManager
 
     private static readonly HashSet<BS_Device> availableDevices = new();
     public static IReadOnlyCollection<BS_Device> AvailableDevices => availableDevices;
-    public static event Action<IReadOnlyCollection<BS_Device>> OnAvailableDevices;
-    public static event Action<BS_Device> OnAvailableDevice;
-    public static event Action<BS_Device> OnUnavailableDevice;
 
     private static readonly HashSet<BS_Device> connectedDevices = new();
     public static IReadOnlyCollection<BS_Device> ConnectedDevices => connectedDevices;
-    public static event Action<IReadOnlyCollection<BS_Device>> OnConnectedDevices;
-    public static event Action<BS_Device> OnDeviceConnected;
-    public static event Action<BS_Device> OnDeviceDisconnected;
-    public static event Action<BS_Device, bool> OnDeviceIsConnected;
+
+
+    public delegate void DevicesDelegate(IReadOnlyCollection<BS_Device> devices);
+    public delegate void DeviceDelegate(BS_Device device);
+    public delegate void DeviceIsConnectedDelegate(BS_Device device, bool isDeviceConnected);
+
+    public static event DevicesDelegate OnAvailableDevices;
+    public static event DeviceDelegate OnAvailableDevice;
+    public static event DeviceDelegate OnUnavailableDevice;
+
+    public static event DevicesDelegate OnConnectedDevices;
+    public static event DeviceDelegate OnDeviceConnected;
+    public static event DeviceDelegate OnDeviceDisconnected;
+    public static event DeviceIsConnectedDelegate OnDeviceIsConnected;
 
 
     public static void OnDeviceCreated(BS_Device device)

@@ -11,7 +11,14 @@ public partial class BS_DevicePair
         device.OnSensorConfiguration -= onDeviceSensorConfiguration;
     }
 
-    public event Action<BS_DevicePair, BS_Side, BS_Device, BS_SensorConfiguration> OnDeviceSensorConfiguration;
+    public delegate void OnDeviceSensorConfigurationDelegate(
+        BS_DevicePair devicePair,
+        BS_Side side,
+        BS_Device device,
+        BS_SensorConfiguration sensorConfiguration
+    );
+    public event OnDeviceSensorConfigurationDelegate OnDeviceSensorConfiguration;
+
     private void onDeviceSensorConfiguration(BS_Device device, BS_SensorConfiguration sensorConfiguration)
     {
         OnDeviceSensorConfiguration?.Invoke(this, (BS_Side)device.Side, device, sensorConfiguration);

@@ -20,7 +20,8 @@ public class BS_PianoTrack : MonoBehaviour
         }
     }
 
-    public Action<BS_PianoTrackColumn, bool> OnColumnIsHovered;
+    public delegate void OnColumnIsHoveredDelegate(BS_PianoTrackColumn column, bool isHovered);
+    public event OnColumnIsHoveredDelegate OnColumnIsHovered;
 
     private BS_PianoTrackColumn hoveredColumn;
     public BS_PianoTrackColumn HoveredColumn => hoveredColumn;
