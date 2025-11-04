@@ -77,7 +77,6 @@ public partial class BS_DevicePair
 
     private void onDeviceConnectionStatus(BS_Device device, BS_ConnectionStatus connectionStatus)
     {
-        Logger.Log($"onDeviceConnectionStatus {device.Side}");
         OnDeviceConnectionStatus?.Invoke(this, (BS_Side)device.Side, device, connectionStatus);
         switch (connectionStatus)
         {
