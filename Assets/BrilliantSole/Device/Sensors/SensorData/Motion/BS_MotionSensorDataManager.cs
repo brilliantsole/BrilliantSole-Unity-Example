@@ -175,11 +175,11 @@ public class BS_MotionSensorDataManager : BS_BaseSensorDataManager
     OnStepCount?.Invoke(stepCount, timestamp);
   }
 
-  public Action<BS_DeviceOrientation, ulong> OnDeviceOrienation;
+  public Action<BS_DeviceOrientation, ulong> OnDeviceOrientation;
   private void ParseDeviceOrientation(in byte[] data, in ulong timestamp)
   {
     var deviceOrientation = (BS_DeviceOrientation)data[0];
     Logger.Log($"deviceOrientation: {deviceOrientation}");
-    OnDeviceOrienation?.Invoke(deviceOrientation, timestamp);
+    OnDeviceOrientation?.Invoke(deviceOrientation, timestamp);
   }
 }

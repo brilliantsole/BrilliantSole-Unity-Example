@@ -3,8 +3,8 @@ using UnityEngine;
 
 public partial class BS_Device
 {
-    public event Action<BS_Device, byte> OnBatteryLevel;
-
+    public delegate void OnBatteryLevelDelegate(BS_Device device, byte batteryLevel);
+    public event OnBatteryLevelDelegate OnBatteryLevel;
     [SerializeField]
     private byte? _batteryLevel = null;
     public byte BatteryLevel

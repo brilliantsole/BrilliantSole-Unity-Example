@@ -13,7 +13,11 @@ public class BS_BleScanner : BS_BaseScanner<BS_BleScanner>
     {
         get
         {
+#if UNITY_2018_3_OR_NEWER && (UNITY_ANDROID || UNITY_EDITOR_OSX || UNITY_STANDALONE_OSX || UNITY_IOS || UNITY_TVOS)
             return true;
+#else
+            return false;
+#endif
         }
     }
 
@@ -26,7 +30,21 @@ public class BS_BleScanner : BS_BaseScanner<BS_BleScanner>
             return;
         }
         Logger.Log("initializing Ble");
+        BluetoothLEHardwareInterface.DisconnectedPeripheralAction += OnDisconnectedPeripheral;
         BluetoothLEHardwareInterface.Initialize(true, false, OnBleInitializationSuccess, OnBleInitializationError);
+    }
+
+    private void OnDisconnectedPeripheral(string Address)
+    {
+        Logger.Log($"OnDisconnectedPeripheral {Address}");
+        foreach (var connectionManager in _connectionManagers.Values)
+        {
+            if (connectionManager.Address == Address)
+            {
+                connectionManager.OnPeripheralDisconnect(Address);
+                break;
+            }
+        }
     }
 
     private void OnBleInitializationSuccess()
@@ -173,12 +191,22 @@ public class BS_BleScanner : BS_BaseScanner<BS_BleScanner>
             Scan();
         }
 
-        foreach (var connectionManager in _connectionManagers.Values)
+        foreach (var device in _allDevices.Values)
         {
-            if (connectionManager.Stage != BS_BleConnectionStage.None)
+            if (device.ConnectionManager is BS_BleConnectionManager connectionManager)
             {
-                connectionManager.Update();
-                break;
+                if (connectionManager.Stage != BS_BleConnectionStage.None)
+                {
+                    connectionManager.Update();
+                }
+                if (device.ConnectionStatus == BS_ConnectionStatus.Connecting || connectionManager.IsWriting)
+                {
+                    break;
+                }
+            }
+            else
+            {
+                Logger.LogError($"failed to cast connectionManager as BS_BleConnectionManager");
             }
         }
     }

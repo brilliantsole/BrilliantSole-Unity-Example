@@ -25,4 +25,10 @@ public partial class BS_DevicePair
     {
         SensorDataManager.Reset();
     }
+
+    public delegate void OnDeviceDelegate(
+        BS_DevicePair devicePair,
+        BS_Side side,
+        BS_Device device
+    );
 }

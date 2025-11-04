@@ -5,8 +5,8 @@ public partial class BS_Device
 {
     private readonly BS_VibrationManager VibrationManager = new();
 
-    public event Action<BS_Device, BS_VibrationLocation[]> OnVibrationLocations;
-
+    public delegate void OnVibrationLocationsDelegate(BS_Device device, BS_VibrationLocation[] vibrationLocations);
+    public event OnVibrationLocationsDelegate OnVibrationLocations;
 
     private void SetupVibrationManager()
     {

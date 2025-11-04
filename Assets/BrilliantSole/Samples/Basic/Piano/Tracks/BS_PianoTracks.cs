@@ -7,8 +7,18 @@ public class BS_PianoTracks : MonoBehaviour
     private readonly List<BS_PianoTrack> pianoTracks = new();
     public IReadOnlyList<BS_PianoTrack> PianoTracks => pianoTracks;
 
-    public Action<BS_PianoTrack, BS_PianoTrackColumn, bool> OnColumnIsHovered;
-    public Action<BS_PianoTrack, bool> OnTrackIsHovered;
+    public delegate void OnColumnIsHoveredDelegate(
+        BS_PianoTrack track,
+        BS_PianoTrackColumn column,
+        bool isHovered
+    );
+    public delegate void OnTrackIsHoveredDelegate(
+        BS_PianoTrack track,
+        bool isHovered
+    );
+
+    public event OnColumnIsHoveredDelegate OnColumnIsHovered;
+    public event OnTrackIsHoveredDelegate OnTrackIsHovered;
 
     private BS_PianoTrack hoveredTrack;
     public BS_PianoTrack HoveredTrack => hoveredTrack;

@@ -1,13 +1,12 @@
-using System;
 using UnityEngine;
 
 public partial class BS_BaseClient
 {
     [SerializeField]
     private bool _isScanningAvailable = false;
-    public event Action<IBS_Scanner, bool> OnIsScanningAvailable;
-    public event Action<IBS_Scanner> OnScanningIsAvailable;
-    public event Action<IBS_Scanner> OnScanningIsUnavailable;
+    public event IBS_Scanner.IsScanningAvailableDelegate OnIsScanningAvailable;
+    public event IBS_Scanner.ScannerDelegate OnScanningIsAvailable;
+    public event IBS_Scanner.ScannerDelegate OnScanningIsUnavailable;
     public bool IsScanningAvailable
     {
         get => _isScanningAvailable;
@@ -47,9 +46,9 @@ public partial class BS_BaseClient
 
     [SerializeField]
     private bool _isScanning = false;
-    public event Action<IBS_Scanner, bool> OnIsScanning;
-    public event Action<IBS_Scanner> OnScanStart;
-    public event Action<IBS_Scanner> OnScanStop;
+    public event IBS_Scanner.IsScanningDelegate OnIsScanning;
+    public event IBS_Scanner.ScannerDelegate OnScanStart;
+    public event IBS_Scanner.ScannerDelegate OnScanStop;
     public bool IsScanning
     {
         get => _isScanning;

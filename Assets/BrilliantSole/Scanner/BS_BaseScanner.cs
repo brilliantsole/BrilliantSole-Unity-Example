@@ -25,12 +25,12 @@ public abstract class BS_BaseScanner : IBS_Scanner
         }
     }
 
-    public event Action<IBS_Scanner, bool>? OnIsScanning;
-    public event Action<IBS_Scanner, bool>? OnIsScanningAvailable;
-    public event Action<IBS_Scanner>? OnScanningIsAvailable;
-    public event Action<IBS_Scanner>? OnScanningIsUnavailable;
-    public event Action<IBS_Scanner>? OnScanStart;
-    public event Action<IBS_Scanner>? OnScanStop;
+    public event IBS_Scanner.IsScanningDelegate? OnIsScanning;
+    public event IBS_Scanner.IsScanningAvailableDelegate? OnIsScanningAvailable;
+    public event IBS_Scanner.ScannerDelegate? OnScanningIsAvailable;
+    public event IBS_Scanner.ScannerDelegate? OnScanningIsUnavailable;
+    public event IBS_Scanner.ScannerDelegate? OnScanStart;
+    public event IBS_Scanner.ScannerDelegate? OnScanStop;
 
     [SerializeField]
     private bool _isScanning;
@@ -105,8 +105,8 @@ public abstract class BS_BaseScanner : IBS_Scanner
     protected readonly Dictionary<string, BS_Device> _allDevices = new();
     public IReadOnlyDictionary<string, BS_Device> Devices => _devices;
 
-    public event Action<BS_DiscoveredDevice>? OnDiscoveredDevice;
-    public event Action<BS_DiscoveredDevice>? OnExpiredDevice;
+    public event IBS_Scanner.DiscoveredDeviceDelegate? OnDiscoveredDevice;
+    public event IBS_Scanner.ExpiredDiscoveredDeviceDelegate? OnExpiredDevice;
 
     protected void AddDiscoveredDevice(BS_DiscoveredDevice DiscoveredDevice)
     {
@@ -191,7 +191,9 @@ public abstract class BS_BaseScanner : IBS_Scanner
 
     public virtual BS_Device ConnectToDiscoveredDevice(BS_DiscoveredDevice discoveredDevice)
     {
-        return GetDeviceByDiscoveredDevice(discoveredDevice, true)!;
+        BS_Device device = GetDeviceByDiscoveredDevice(discoveredDevice, true)!;
+        device.Connect();
+        return device;
     }
 
     public BS_Device? DisconnectFromDiscoveredDevice(BS_DiscoveredDevice discoveredDevice)

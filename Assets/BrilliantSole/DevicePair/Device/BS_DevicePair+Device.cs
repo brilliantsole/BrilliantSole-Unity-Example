@@ -13,7 +13,7 @@ public partial class BS_DevicePair
 
 
     public bool HasAllDevices => Devices.Count == 2;
-    private int ConnectedDevicesCount => Devices.Values.Select(device => device.IsConnected).Count();
+    private int ConnectedDevicesCount => Devices.Values.Where(device => device.IsConnected).Count();
 
     public void AddDevice(BS_Device device)
     {
@@ -48,6 +48,9 @@ public partial class BS_DevicePair
         devices.Add(side, device);
         AddDeviceListeners(device);
         CheckIsFullyConnected();
+
+        onDeviceConnectionStatus(device, device.ConnectionStatus);
+        onDeviceIsConnected(device, device.IsConnected);
     }
 
     public void RemoveDevice(BS_Device device)

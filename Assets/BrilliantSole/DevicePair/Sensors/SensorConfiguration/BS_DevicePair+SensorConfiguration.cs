@@ -1,7 +1,4 @@
 using System;
-using UnityEngine;
-
-using BS_SensorConfiguration = System.Collections.Generic.Dictionary<BS_SensorType, BS_SensorRate>;
 
 public partial class BS_DevicePair
 {
@@ -14,7 +11,14 @@ public partial class BS_DevicePair
         device.OnSensorConfiguration -= onDeviceSensorConfiguration;
     }
 
-    public event Action<BS_DevicePair, BS_Side, BS_Device, BS_SensorConfiguration> OnDeviceSensorConfiguration;
+    public delegate void OnDeviceSensorConfigurationDelegate(
+        BS_DevicePair devicePair,
+        BS_Side side,
+        BS_Device device,
+        BS_SensorConfiguration sensorConfiguration
+    );
+    public event OnDeviceSensorConfigurationDelegate OnDeviceSensorConfiguration;
+
     private void onDeviceSensorConfiguration(BS_Device device, BS_SensorConfiguration sensorConfiguration)
     {
         OnDeviceSensorConfiguration?.Invoke(this, (BS_Side)device.Side, device, sensorConfiguration);
@@ -22,7 +26,11 @@ public partial class BS_DevicePair
 
     public void SetSensorConfiguration(BS_SensorConfiguration sensorConfiguration, bool clearRest = false)
     {
-        foreach (var device in devices.Values) { device.SetSensorConfiguration(sensorConfiguration, clearRest); }
+        foreach (var device in devices.Values)
+        {
+            Logger.Log($"SetSensorConfiguration \"{device.Name}\"");
+            device.SetSensorConfiguration(sensorConfiguration, clearRest);
+        }
     }
     public void SetSensorRate(BS_SensorType sensorType, BS_SensorRate sensorRate)
     {

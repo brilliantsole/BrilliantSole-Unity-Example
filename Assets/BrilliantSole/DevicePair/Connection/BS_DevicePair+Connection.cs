@@ -1,9 +1,15 @@
 using System;
 using UnityEngine;
+using static BS_ConnectionStatus;
 
 public partial class BS_DevicePair
 {
-    public event Action<BS_DevicePair, bool> OnIsFullyConnected;
+    public delegate void OnIsFullyConnectedDelegate(BS_DevicePair devicePair, bool isFullyConnected);
+    public delegate void OnIsHalfConnectedDelegate(BS_DevicePair devicePair, bool isHalfConnected);
+
+    public event OnIsFullyConnectedDelegate OnIsFullyConnected;
+    public event OnIsHalfConnectedDelegate OnIsHalfConnected;
+
 
     [SerializeField]
     private bool isFullyConnected = false;
@@ -19,7 +25,6 @@ public partial class BS_DevicePair
         }
     }
 
-    public event Action<BS_DevicePair, bool> OnIsHalfConnected;
 
     [SerializeField]
     private bool isHalfConnected = false;
@@ -50,13 +55,46 @@ public partial class BS_DevicePair
         CheckIsHalfConnected();
     }
 
-    public Action<BS_DevicePair, BS_Side, BS_Device, BS_ConnectionStatus> OnDeviceConnectionStatus;
+    public delegate void OnDeviceConnectionStatusDelegate(
+        BS_DevicePair devicePair,
+        BS_Side side,
+        BS_Device device,
+        BS_ConnectionStatus connectionStatus
+    );
+    public delegate void OnDeviceIsConnectedDelegate(
+        BS_DevicePair devicePair,
+        BS_Side side,
+        BS_Device device,
+        bool isDeviceConnected
+    );
+
+    public event OnDeviceConnectionStatusDelegate OnDeviceConnectionStatus;
+    public event OnDeviceDelegate OnDeviceConnected;
+    public event OnDeviceDelegate OnDeviceNotConnected;
+    public event OnDeviceDelegate OnDeviceConnecting;
+    public event OnDeviceDelegate OnDeviceDisconnecting;
+    public event OnDeviceIsConnectedDelegate OnDeviceIsConnected;
+
     private void onDeviceConnectionStatus(BS_Device device, BS_ConnectionStatus connectionStatus)
     {
         OnDeviceConnectionStatus?.Invoke(this, (BS_Side)device.Side, device, connectionStatus);
+        switch (connectionStatus)
+        {
+            case NotConnected:
+                OnDeviceNotConnected?.Invoke(this, (BS_Side)device.Side, device);
+                break;
+            case Connecting:
+                OnDeviceConnecting?.Invoke(this, (BS_Side)device.Side, device);
+                break;
+            case Connected:
+                OnDeviceConnected?.Invoke(this, (BS_Side)device.Side, device);
+                break;
+            case Disconnecting:
+                OnDeviceDisconnecting?.Invoke(this, (BS_Side)device.Side, device);
+                break;
+        }
     }
 
-    public Action<BS_DevicePair, BS_Side, BS_Device, bool> OnDeviceIsConnected;
     private void onDeviceIsConnected(BS_Device device, bool isConnected)
     {
         OnDeviceIsConnected?.Invoke(this, (BS_Side)device.Side, device, isConnected);

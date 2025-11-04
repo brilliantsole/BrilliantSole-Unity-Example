@@ -12,7 +12,8 @@ public class BS_DevicePairPressureSensorDataManager
     private readonly BS_CenterOfPressureRange centerOfPressureRange = new();
     private readonly BS_Range normalizedSumRange = new();
 
-    public Action<BS_DevicePairPressureData, ulong> OnPressureData;
+    public delegate void OnPressureDataDelegate(BS_DevicePairPressureData pressureData, ulong timestamp);
+    public event OnPressureDataDelegate OnPressureData;
 
     public void OnDevicePressureData(BS_Side side, BS_PressureData pressureData, ulong timestamp)
     {

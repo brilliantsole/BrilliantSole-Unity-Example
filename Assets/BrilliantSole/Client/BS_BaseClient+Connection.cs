@@ -1,12 +1,19 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 using static BS_ConnectionStatus;
 
 public partial class BS_BaseClient
 {
-    public event Action<BS_BaseClient, BS_ConnectionStatus> OnConnectionStatus;
-    public event Action<BS_BaseClient, bool> OnIsConnected;
+    public delegate void OnConnectionStatusDelegate(BS_BaseClient client, BS_ConnectionStatus connectionStatus);
+    public delegate void OnIsConnectedDelegate(BS_BaseClient client, bool isConnected);
+    public delegate void ClientDelegate(BS_BaseClient client);
+
+    public event OnConnectionStatusDelegate OnConnectionStatus;
+    public event OnIsConnectedDelegate OnIsConnected;
+    public event ClientDelegate OnConnected;
+    public event ClientDelegate OnNotConnected;
+    public event ClientDelegate OnConnecting;
+    public event ClientDelegate OnDisconnecting;
 
     public bool ReconnectOnDisconnection = false;
     protected bool DisconnectedUnintentionally = false;
@@ -46,6 +53,22 @@ public partial class BS_BaseClient
                             DisconnectedUnintentionally = false;
                         }
                     }
+                    break;
+            }
+
+            switch (ConnectionStatus)
+            {
+                case Connected:
+                    OnConnected?.Invoke(this);
+                    break;
+                case NotConnected:
+                    OnNotConnected?.Invoke(this);
+                    break;
+                case Connecting:
+                    OnConnecting?.Invoke(this);
+                    break;
+                case Disconnecting:
+                    OnDisconnecting?.Invoke(this);
                     break;
             }
         }

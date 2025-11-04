@@ -87,7 +87,7 @@ public class BS_DevicesScrollView : MonoBehaviour
 
         var toggleTfliteButton = item.transform.Find("ToggleTflite/Button").GetComponent<Button>();
         toggleTfliteButton.onClick.AddListener(() => { device.ToggleTfliteInferencingEnabled(); });
-        device.OnTfliteInferencingEnabled += OnDeviceTfliteInferencingEnabled;
+        device.OnIsTfliteInferencingEnabled += OnIsDeviceTfliteInferencingEnabled;
         UpdateToggleTfliteButton(device);
 
         device.OnTfliteClassification += OnDeviceTfliteClassification;
@@ -131,7 +131,7 @@ public class BS_DevicesScrollView : MonoBehaviour
         device.OnConnectionStatus -= OnDeviceConnectionStatus;
         device.OnFileTransferStatus -= OnDeviceFileTransferStatus;
         device.OnFileTransferProgress -= OnDeviceFileTransferProgress;
-        device.OnTfliteInferencingEnabled -= OnDeviceTfliteInferencingEnabled;
+        device.OnIsTfliteInferencingEnabled -= OnIsDeviceTfliteInferencingEnabled;
         device.OnIsTfliteReady -= OnIsDeviceTfliteReady;
         device.OnTfliteClassification -= OnDeviceTfliteClassification;
         device.OnBatteryLevel -= OnDeviceBatteryLevel;
@@ -196,7 +196,7 @@ public class BS_DevicesScrollView : MonoBehaviour
         UpdateToggleTfliteButton(device);
     }
 
-    private void OnDeviceTfliteInferencingEnabled(BS_Device device, bool isEnabled)
+    private void OnIsDeviceTfliteInferencingEnabled(BS_Device device, bool isEnabled)
     {
         GameObject item = GetItemByDevice(device);
         if (item == null) { return; }

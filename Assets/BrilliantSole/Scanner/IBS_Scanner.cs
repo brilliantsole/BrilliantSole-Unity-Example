@@ -8,12 +8,16 @@ public interface IBS_Scanner
     public bool IsScanningAvailable { get; }
     bool IsScanning { get; }
 
-    event Action<IBS_Scanner, bool>? OnIsScanning;
-    event Action<IBS_Scanner, bool>? OnIsScanningAvailable;
-    event Action<IBS_Scanner>? OnScanningIsAvailable;
-    event Action<IBS_Scanner>? OnScanningIsUnavailable;
-    event Action<IBS_Scanner>? OnScanStart;
-    event Action<IBS_Scanner>? OnScanStop;
+    public delegate void ScannerDelegate(IBS_Scanner scanner);
+    public delegate void IsScanningDelegate(IBS_Scanner scanner, bool isScanning);
+    public delegate void IsScanningAvailableDelegate(IBS_Scanner scanner, bool isScanningAvailable);
+
+    public event IsScanningDelegate? OnIsScanning;
+    public event IsScanningAvailableDelegate? OnIsScanningAvailable;
+    public event ScannerDelegate? OnScanningIsAvailable;
+    public event ScannerDelegate? OnScanningIsUnavailable;
+    public event ScannerDelegate? OnScanStart;
+    public event ScannerDelegate? OnScanStop;
 
     bool StartScan();
     bool StopScan();
@@ -34,8 +38,10 @@ public interface IBS_Scanner
     IReadOnlyDictionary<string, BS_DiscoveredDevice> DiscoveredDevices { get; }
     IReadOnlyDictionary<string, BS_Device> Devices { get; }
 
-    event Action<BS_DiscoveredDevice>? OnDiscoveredDevice;
-    event Action<BS_DiscoveredDevice>? OnExpiredDevice;
+    public delegate void DiscoveredDeviceDelegate(BS_DiscoveredDevice discoveredDevice);
+    public event DiscoveredDeviceDelegate? OnDiscoveredDevice;
+    public delegate void ExpiredDiscoveredDeviceDelegate(BS_DiscoveredDevice expiredDiscoveredDevice);
+    public event ExpiredDiscoveredDeviceDelegate? OnExpiredDevice;
 
     BS_Device ConnectToDiscoveredDevice(BS_DiscoveredDevice discoveredDevice);
     BS_Device? DisconnectFromDiscoveredDevice(BS_DiscoveredDevice discoveredDevice);

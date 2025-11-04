@@ -51,6 +51,12 @@ public abstract class BS_BaseConnectionManager
             Continue = false;
             return;
         }
+        if (Status == Connecting)
+        {
+            Logger.Log("Already connecting");
+            Continue = false;
+            return;
+        }
         Status = Connecting;
         Logger.Log("Connecting...");
         Continue = true;

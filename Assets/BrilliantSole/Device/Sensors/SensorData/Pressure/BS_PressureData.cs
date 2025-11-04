@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using UnityEngine;
 
 [Serializable]
@@ -18,5 +19,10 @@ public readonly struct BS_PressureData
         NormalizedSum = normalizedSum;
         CenterOfPressure = centerOfPressure;
         NormalizedCenterOfPressure = normalizedCenterOfPressure;
+    }
+
+    public override readonly string ToString()
+    {
+        return string.Join("\n", Sensors.Select((sensor, index) => $"{index}: {sensor}"));
     }
 }

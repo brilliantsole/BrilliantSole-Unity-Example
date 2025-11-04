@@ -30,11 +30,11 @@ public class BS_ClientConnectionManager : BS_BaseConnectionManager
     private bool isConnected = false;
     public void SetIsConnected(bool newIsConnected)
     {
-        if (newIsConnected == isConnected)
-        {
-            Logger.Log($"redundant IsConected assignment {newIsConnected}");
-            return;
-        }
+        // if (newIsConnected == isConnected)
+        // {
+        //     Logger.Log($"redundant IsConected assignment {newIsConnected}");
+        //     return;
+        // }
         isConnected = newIsConnected;
         Logger.Log($"updated IsConnected to {IsConnected}");
         Status = IsConnected ? Connected : NotConnected;

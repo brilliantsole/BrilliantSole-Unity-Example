@@ -17,6 +17,8 @@ public class BS_BleConnectionManager : BS_BaseConnectionManager
     public override string? Name => DiscoveredDevice?.Name;
     public override BS_DeviceType? DeviceType => DiscoveredDevice?.DeviceType;
 
+    public bool IsWriting { get; private set; }
+
     private void Reset()
     {
         ResetUuids();
@@ -108,7 +110,7 @@ public class BS_BleConnectionManager : BS_BaseConnectionManager
             BS_BleConnectionStage.WritingTxCharacteristic => 0.001f,
             _ => 0f,
         };
-        Logger.Log($"timeout: {_timeout}");
+        Logger.Log($"timeout: {_timeout} for \"{Name}\"");
     }
 
     [SerializeField]
@@ -118,8 +120,12 @@ public class BS_BleConnectionManager : BS_BaseConnectionManager
         get => _Stage;
         private set
         {
-            if (_Stage == value) { return; }
-            Logger.Log($"Updating BS_BleConnectionStage to {value}");
+            if (_Stage == value)
+            {
+                Logger.Log($"redundant BS_BleConnectionStage {value} for \"{Name}\"");
+                return;
+            }
+            Logger.Log($"Updating BS_BleConnectionStage to {value} for \"{Name}\"");
             _Stage = value;
             UpdateTimeout();
         }
@@ -134,7 +140,7 @@ public class BS_BleConnectionManager : BS_BaseConnectionManager
     private void ConnectToPeripheral()
     {
         Logger.Log($"Connecting to peripheral \"{Name}\"");
-        BluetoothLEHardwareInterface.ConnectToPeripheral(Address, OnConnectToPeripheral, OnPeripheralService, OnPeripheralCharacteristic, OnPeripheralDisconnect);
+        BluetoothLEHardwareInterface.ConnectToPeripheral(Address, OnConnectToPeripheral, OnPeripheralService, OnPeripheralCharacteristic, null);
     }
 
     private void OnConnectToPeripheral(string address)
@@ -158,7 +164,7 @@ public class BS_BleConnectionManager : BS_BaseConnectionManager
         FoundServiceUuids.Add(serviceUuid);
         CheckDidFindAllUuids();
     }
-    private void OnPeripheralDisconnect(string address)
+    public void OnPeripheralDisconnect(string address)
     {
         if (address != Address) { return; }
         Logger.Log("disconnected from peripheral");
@@ -251,6 +257,7 @@ public class BS_BleConnectionManager : BS_BaseConnectionManager
         Logger.Log($"Wrote to characteristicUuid {characteristicUuid} for \"{Name}\"");
         Stage = BS_BleConnectionStage.None;
         OnSendTxData?.Invoke(this);
+        IsWriting = false;
     }
 
     private readonly HashSet<string> SubscribedCharacteristicUuids = new();
@@ -290,7 +297,7 @@ public class BS_BleConnectionManager : BS_BaseConnectionManager
     }
     private void OnCharacteristicNotify(string characteristicUuid, byte[] data)
     {
-        Logger.Log($"Was notified {data.Length} data from characteristicUuid {characteristicUuid} for \"{Name}\"");
+        //Logger.Log($"Was notified {data.Length} data from characteristicUuid {characteristicUuid} for \"{Name}\"");
         OnCharacteristicValue(characteristicUuid, data);
     }
     private void OnCharacteristicSubscribed(string characteristicUuid)
@@ -341,8 +348,7 @@ public class BS_BleConnectionManager : BS_BaseConnectionManager
 
     private void OnCharacteristicValue(string characteristicUuid, byte[] data)
     {
-
-        Logger.Log($"Received {data.Length} data from characteristicUuid {characteristicUuid} for \"{Name}\"");
+        //Logger.Log($"Received {data.Length} data from characteristicUuid {characteristicUuid} for \"{Name}\"");
         if (BS_BleUtils.AreUuidsEqual(characteristicUuid, BS_BleUtils.BatteryLevelCharacteristicUuid)) { OnBatteryLevel(this, data[0]); }
         else if (BS_BleUtils.AreUuidsEqual(characteristicUuid, BS_BleUtils.ManufacturerNameStringCharacteristicUuid)) { OnDeviceInformationValue(this, BS_DeviceInformationType.ManufacturerName, data); }
         else if (BS_BleUtils.AreUuidsEqual(characteristicUuid, BS_BleUtils.ModelNumberStringCharacteristicUuid)) { OnDeviceInformationValue(this, BS_DeviceInformationType.ModelNumber, data); }
@@ -369,7 +375,7 @@ public class BS_BleConnectionManager : BS_BaseConnectionManager
         }
         _timeout = 0;
 
-        Logger.Log($"Update Stage: {Stage}");
+        Logger.Log($"Update Stage for \"{Name}\": {Stage}");
 
         switch (Stage)
         {
@@ -408,6 +414,7 @@ public class BS_BleConnectionManager : BS_BaseConnectionManager
             return;
         }
         base.SendTxData(Data);
+        Logger.Log($"SendTxData \"{Name}\"");
         TxData = Data;
         Stage = BS_BleConnectionStage.WritingTxCharacteristic;
     }
@@ -419,6 +426,7 @@ public class BS_BleConnectionManager : BS_BaseConnectionManager
         Logger.Log($"Writing {data.Length} bytes to Tx for \"{Name}\"...");
         var mainCharacteristicUuid = GetFoundServiceUuid(BS_BleUtils.MainServiceUuid);
         var txCharacteristicUuid = GetFoundCharacteristicUuid(BS_BleUtils.TxCharacteristicUuid);
+        IsWriting = true;
         BluetoothLEHardwareInterface.WriteCharacteristic(Address, mainCharacteristicUuid, txCharacteristicUuid, data, data.Length, true, OnCharacteristicWrite);
         TxData = null;
     }

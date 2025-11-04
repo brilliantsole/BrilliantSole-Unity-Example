@@ -3,7 +3,8 @@ using UnityEngine;
 
 public class BS_ColliderBroadcaster : MonoBehaviour
 {
-    public Action<GameObject, Collider> OnCollider;
+    public delegate void OnColliderDelegate(GameObject gameObject, Collider other);
+    public event OnColliderDelegate OnCollider;
 
     private void Awake()
     {

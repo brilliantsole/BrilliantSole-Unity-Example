@@ -6,15 +6,26 @@ public partial class BS_Device
 {
     private readonly BS_FileTransferManager FileTransferManager = new();
 
-    public event Action<BS_Device, BS_FileType[]> OnFileTypes;
-    public event Action<BS_Device, ushort> OnMaxFileLength;
-    public event Action<BS_Device, BS_FileTransferStatus> OnFileTransferStatus;
-    public event Action<BS_Device, uint> OnFileChecksum;
-    public event Action<BS_Device, uint> OnFileLength;
-    public event Action<BS_Device, BS_FileType> OnFileType;
-    public event Action<BS_Device, BS_FileType, BS_FileTransferDirection, float> OnFileTransferProgress;
-    public event Action<BS_Device, BS_FileType, BS_FileTransferDirection> OnFileTransferComplete;
-    public event Action<BS_Device, BS_FileType, List<byte>> OnFileReceived;
+    public delegate void OnFileTypesDelegate(BS_Device device, BS_FileType[] fileTypes);
+    public delegate void OnMaxFileLengthDelegate(BS_Device device, ushort maxFileLength);
+    public delegate void OnFileTransferStatusDelegate(BS_Device device, BS_FileTransferStatus fileTransferStatus);
+    public delegate void OnFileChecksumDelegate(BS_Device device, uint fileChecksum);
+    public delegate void OnFileLengthDelegate(BS_Device device, uint fileLength);
+    public delegate void OnFileTypeDelegate(BS_Device device, BS_FileType fileType);
+    public delegate void OnFileTransferProgressDelegate(BS_Device device, BS_FileType fileType, BS_FileTransferDirection fileTransferDirection, float fileTransferProgress);
+    public delegate void OnFileTransferCompleteDelegate(BS_Device device, BS_FileType fileType, BS_FileTransferDirection fileTransferDirection);
+    public delegate void OnFileReceivedDelegate(BS_Device device, BS_FileType fileType, List<byte> fileData);
+
+    public event OnFileTypesDelegate OnFileTypes;
+    public event OnMaxFileLengthDelegate OnMaxFileLength;
+    public event OnFileTransferStatusDelegate OnFileTransferStatus;
+    public event OnFileChecksumDelegate OnFileChecksum;
+    public event OnFileLengthDelegate OnFileLength;
+    public event OnFileTypeDelegate OnFileType;
+    public event OnFileTransferProgressDelegate OnFileTransferProgress;
+    public event OnFileTransferCompleteDelegate OnFileTransferComplete;
+    public event OnFileReceivedDelegate OnFileReceived;
+
 
     private void SetupFileTransferManager()
     {

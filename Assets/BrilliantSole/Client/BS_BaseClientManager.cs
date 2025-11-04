@@ -5,7 +5,7 @@ public abstract partial class BS_BaseClientManager<TClientManager, TClient> : BS
     where TClient : BS_BaseClient
 {
     private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_BaseClientManager");
-    protected virtual TClient Client => null;
+    public virtual TClient Client => null;
     public void Update() { Client.Update(); }
 
     public IBS_Scanner Scanner => Client;

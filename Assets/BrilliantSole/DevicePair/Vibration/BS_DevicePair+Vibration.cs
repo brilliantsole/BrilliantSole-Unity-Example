@@ -3,7 +3,14 @@ using System.Collections.Generic;
 
 public partial class BS_DevicePair
 {
-    public event Action<BS_DevicePair, BS_Side, BS_Device, BS_VibrationLocation[]> OnDeviceVibrationLocations;
+    public delegate void OnDeviceVibrationLocationsDelegate(
+        BS_DevicePair devicePair,
+        BS_Side side,
+        BS_Device device,
+        BS_VibrationLocation[] vibrationLocations
+    );
+
+    public event OnDeviceVibrationLocationsDelegate OnDeviceVibrationLocations;
 
     private void AddDeviceVibrationListeners(BS_Device device)
     {

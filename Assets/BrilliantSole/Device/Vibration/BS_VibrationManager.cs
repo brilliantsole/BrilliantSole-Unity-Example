@@ -9,10 +9,9 @@ public class BS_VibrationManager : BS_BaseManager<BS_VibrationMessageType>
     };
     public static byte[] RequiredTxRxMessageTypes => EnumArrayToTxRxArray(RequiredMessageTypes);
 
-    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_VibrationManager", BS_Logger.LogLevel.Log);
+    private static readonly BS_Logger Logger = BS_Logger.GetLogger("BS_VibrationManager");
 
     public event Action<BS_VibrationLocation[]> OnVibrationLocations;
-
 
     public override void OnRxMessage(BS_VibrationMessageType messageType, in byte[] data)
     {
