@@ -10,7 +10,8 @@ public static class BS_BleUtils
 
     static public string GenerateUuid(string value)
     {
-        return string.Format("ea6d{0}-a725-4f9b-893d-c3913e33b39f", value).ToUpper();
+        return string.Format("4272{0}-696c-6c69-616e-742057656172", value).ToUpper();
+        // return string.Format("ea6d{0}-a725-4f9b-893d-c3913e33b39f", value).ToUpper();
     }
     static public string GenerateGenericUuid(string value, bool shorten = true)
     {
